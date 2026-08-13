@@ -3,12 +3,23 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:101010:13d28aa515312a63395f49ddff3c778967e1b20f:6c361b4ae3dc61a8",
-    "qualificationSubjectHash": "6c361b4ae3dc61a8",
-    "scenarioSetHash": "eca42d0ce3b24bf0",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:101010:829d628bff9476c489d03e152e9377fd8c8e9e3c:dbe2c77baf36a06a",
+    "qualificationSubjectHash": "dbe2c77baf36a06a",
+    "scenarioSetHash": "77cb81447452b619",
+    "scenarioIdentities": [
+      "m11-d-101010-visual-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m11-d-101010-visual-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-canonical-trace.png",
+        "screenshotSha256": "9c75dc7c59e298be2eeebb7327a412fa11da38524c9f883049dee33dc929c977"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m11-d-101010-visual-acceptance",
@@ -23,7 +34,9 @@
   },
   "ownerId": 101010,
   "fixturePath": "fixtures/character-acceptance/101010-visual.json",
-  "goldenReports": ["reports/m10/101010/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/101010/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10101062,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -127,8 +140,15 @@
     "operationPath": "payload.operation",
     "timePath": "timeMs",
     "durationMs": 10000,
-    "requiredOperations": ["transform", "refresh", "expire"],
-    "startOperations": ["transform", "refresh"],
+    "requiredOperations": [
+      "transform",
+      "refresh",
+      "expire"
+    ],
+    "startOperations": [
+      "transform",
+      "refresh"
+    ],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -174,28 +194,48 @@
       "actions": [
         {
           "id": "negative-window-before-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
             "actionKind": "charged-attack",
+            "physicalInput": {
+              "mode": "hold",
+              "pressFrame": 0,
+              "releaseFrame": null,
+              "executionFrame": 16
+            },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 16
+          }
         },
         {
           "id": "negative-window-start-minus-one",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
             "actionKind": "charged-attack",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 74 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 90
+          }
         }
       ],
-      "requiredExecutableActionIds": ["negative-window-before-source"],
+      "requiredExecutableActionIds": [
+        "negative-window-before-source"
+      ],
       "expectedIssue": {
         "actionId": "negative-window-start-minus-one",
         "code": "machine-axis-action-not-executable",
@@ -308,7 +348,16 @@
       "expectation": {
         "count": 8,
         "orderedValues": {
-          "absoluteFrame": [1125, 1125, 1129, 1129, 1133, 1133, 1137, 1137],
+          "absoluteFrame": [
+            1125,
+            1125,
+            1129,
+            1129,
+            1133,
+            1133,
+            1137,
+            1137
+          ],
           "actorId": [
             "actor-103002",
             "actor-101003",
@@ -320,8 +369,14 @@
             "actor-101003"
           ],
           "change": [
-            0.299988, 0.299988, 0.299988, 0.299988, 0.299988, 0.299988,
-            0.299988, 0.299988
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988
           ]
         }
       }
@@ -421,10 +476,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [272, 278, 284],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                272,
+                278,
+                284
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },
@@ -492,10 +563,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [219, 225, 231],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                219,
+                225,
+                231
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },

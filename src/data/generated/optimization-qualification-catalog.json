@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "eaf6307fbcda3055",
-  "manifestsHash": "bb3f6aae02f5f195",
-  "gapLedgerHash": "3c6248725fe07866",
-  "bindingMatrixHash": "a525454b1409827f",
-  "sourceSnapshotHash": "f7604a117fe0577a",
+  "rosterHash": "fbdf04dfec427c24",
+  "manifestsHash": "37669e2b1f2563c1",
+  "gapLedgerHash": "631b16c493b03ea8",
+  "bindingMatrixHash": "94b6b0eed55c2058",
+  "sourceSnapshotHash": "13f59868a5f1bb43",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -24,7 +24,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "50e68e2e70a7ee4d"
+      "manifestHash": "a0f4201b7f763ab4"
     },
     {
       "objectKind": "character",
@@ -33,7 +33,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "2f57b1609fb806bf"
+      "manifestHash": "129a1967cfe2ffe4"
     },
     {
       "objectKind": "character",
@@ -42,7 +42,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "ede96064f1303e19"
+      "manifestHash": "3bf26adf2aadca08"
     },
     {
       "objectKind": "character",
@@ -51,7 +51,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "49603def54590956"
+      "manifestHash": "b46b23c4e5909ced"
     },
     {
       "objectKind": "character",
@@ -60,7 +60,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "88529f7bd66d19f4"
+      "manifestHash": "5405e1846294922f"
     },
     {
       "objectKind": "character",
@@ -69,7 +69,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "f111fdd246993da4"
+      "manifestHash": "90d3c8a7d9e70159"
     },
     {
       "objectKind": "character",
@@ -78,7 +78,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "8b8c9c7e24a2498c"
+      "manifestHash": "e392bb0b0aedea3b"
     },
     {
       "objectKind": "character",
@@ -87,7 +87,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "c33a9eb18b4fb06a"
+      "manifestHash": "83fb2ef7147824ff"
     },
     {
       "objectKind": "character",
@@ -96,7 +96,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "5bea49fae6c8b56f"
+      "manifestHash": "4f7e095b636b18dc"
     },
     {
       "objectKind": "equipment",
@@ -2665,7 +2665,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "eaf6307fbcda3055",
+    "rosterHash": "fbdf04dfec427c24",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20637,7 +20637,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "a525454b1409827f"
+    "bindingMatrixHash": "94b6b0eed55c2058"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38321,5 +38321,5 @@
     "formalOptimizationUnlocked": true,
     "m12cLocked": false
   },
-  "catalogHash": "9c6866fe1d68a3fd"
+  "catalogHash": "67a8ec8745246dd3"
 }

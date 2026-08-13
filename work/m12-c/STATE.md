@@ -1,5 +1,16 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.0000 2026-08-13 20:31 charged-input owner 签收与发布前收口
+
+- 重击输入/时序实现基线为 `692c769cf0525044e3d33bba2fddb434b1d088aa`，全新视觉证据提交为 `829d628bff9476c489d03e152e9377fd8c8e9e3c`。10 个正式 owner 已逐一复核并签收；199001/199002 仅作为一个 `STARBORN` optimization object 联合签收，101003 继续 pending/unready。
+- 全量 owner 派生已恢复：10/10 runtime-integrated、visually-accepted、optimization-ready；101010 `202/202`、103002 `190/190`、199001/199002 各 `195/195`，全部 headless/canonical/Workbench 通过。101003 保持 41 blocked、13 source gap、34 acceptance gap、47 functional blockers，不进入正式分母。
+- `STARBORN` 联合对象为 `390/390` requirements、`3237/3237` assertions，bundle=`7fe94b34a6ced9c4`、product visual accepted、optimization-ready；两个 source alias 的 profile/source-contract/selection/canonical identity 继续各自独立。
+- qualification 已刷新为 `263/263` optimization-ready、零 blocking gap；hash 为 source snapshot `13f59868a5f1bb43`、roster `fbdf04dfec427c24`、manifests `37669e2b1f2563c1`、ledger `631b16c493b03ea8`、binding `94b6b0eed55c2058`、catalog `67a8ec8745246dd3`。E22 binding `22/22`、visual acceptance `254/254`。
+- production import audit 已把 AI 粗排/多核内层执行器两个新模块纳入正式 CLI 入口：239 source、235 production-reachable、4 allowed test-only、0 unexpected、0 unreferenced。聚焦 13 files / 182 tests PASS；`git diff --check` PASS。
+- 一次发布前 `audit:verified-combat` 子进程在工具命令超时后自然完成，但退出输出未被可靠收回，因此不计为 PASS；正式 `release:verify` 必须在最终 clean stable HEAD 自行重跑并给出 Gate V2 权威。
+- 保护项复核：主仓仍为 `bfccda35aa2655304779c1820137aa92b5a50e9a`；`.readonly-ruby-probe.mjs` SHA-256=`68CBE4D07C1A23C1FE7EB25029B2C6A12819B2027E651B64209D60C4D0109B4A`；`stash@{0}=900e193bf710b8f894b50e0bc966db70cbd7e717`。所有既有 untracked evidence、10 份本轮 runtime package 与三份 AI smoke 目录均保留且不得纳入提交。
+- 当前尚未获得 release/admission authority：下一步只允许形成最终 tracked commit、将其快进到 `master`，再从 clean HEAD 真实运行 `release:verify` 与独立 Formal Search Admission 15/15。两者全部通过并推送前不得启动或复用正式搜索。
+
 ## 0.000 2026-08-13 00:00 normal-input v2 最终修复与无人监管准入
 
 - clean `01a032ed1a59dd6bc8bb19f48df3067865d30d51` 上的第六次 release 已真实通过前五个独立 gate、247/247 Vitest files、2070/2070 tests、全部 assert-clean 审计、1903-module production build 与 64/64 production preview；runner outputs 成功恢复且 tracked postflight clean。随后在独立 Formal Search Admission 装载 live normal-input authority 时，原生 Node ESM 发现 `verifiedNormalAttackInputAuthority.js` 的 `canonicalSerialization` 与 `timebase` 两个相对 import 缺 `.js` 后缀；record=`98956a0729a08c92e3e598857ff4f8fd3625cd072c8a8a6eb860a37be9a627b7`、status=`interrupted`、failureStage=`orchestration`，因此仍不授予 release PASS/admission。两个后缀现已补齐，并新增真实 `node.exe` 导入 descriptor 回归；live authority v2 hash 保持 `530396bf773cc439`，聚焦 2 files / 21 tests PASS。bundle 仅同步该模块 `originalBytes 30885→30891`，initial `119981/120000`、Workbench `487872/500000`、total gzip `914424/920000` 三项预算仍全绿；须从新 clean HEAD 再完整建权。

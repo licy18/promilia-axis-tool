@@ -2,7 +2,10 @@
   "schemaVersion": 1,
   "contractName": "AzPrOptimizationObjectAliasAcceptanceRecipe",
   "optimizationObjectId": "STARBORN",
-  "requiredSourceCharacterIds": [199001, 199002],
+  "requiredSourceCharacterIds": [
+    199001,
+    199002
+  ],
   "sourceAliases": [
     {
       "sourceCharacterId": 199001,
@@ -29,12 +32,12 @@
     "requireAliasDistinctProfileInputDataTraceAndBuildHashes": true
   },
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
-    "acceptanceSubjectHash": null,
-    "formalAdmission": false,
-    "optimizationReady": false
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "optimization-object-product-acceptance:STARBORN:829d628bff9476c489d03e152e9377fd8c8e9e3c:e48fbc866c896d90",
+    "acceptanceSubjectHash": "e48fbc866c896d90",
+    "formalAdmission": true,
+    "optimizationReady": true
   },
   "outputPath": "reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json"
 }

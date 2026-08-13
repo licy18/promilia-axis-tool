@@ -2,12 +2,23 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:108003:13d28aa515312a63395f49ddff3c778967e1b20f:c7c62aa773bdfba5",
-    "qualificationSubjectHash": "c7c62aa773bdfba5",
-    "scenarioSetHash": "37bb88a781814277",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:108003:829d628bff9476c489d03e152e9377fd8c8e9e3c:fe56832c1fcbde94",
+    "qualificationSubjectHash": "fe56832c1fcbde94",
+    "scenarioSetHash": "d30ed4987ab4ddaf",
+    "scenarioIdentities": [
+      "m12-b3-e20-2-108003-s1-visual-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-108003-canonical-trace.png",
+        "screenshotSha256": "619035991e31b98fb8437844d8d6bda2f01c030c1c4fc71dc60bbb737c064d9b"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -22,7 +33,9 @@
   },
   "ownerId": 108003,
   "fixturePath": "fixtures/character-acceptance/108003-active-surface-closure.json",
-  "goldenReports": ["reports/m10/108003/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/108003/golden-trace.json"
+  ],
   "inputWindowBoundary": null,
   "probes": [
     {
@@ -85,9 +98,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [

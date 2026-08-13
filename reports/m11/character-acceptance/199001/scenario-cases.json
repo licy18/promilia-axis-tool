@@ -12,7 +12,7 @@
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/199001-starborn-visual.json"
       },
       "execution": {
-        "status": "failed",
+        "status": "passed",
         "stableReplay": true,
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
@@ -101148,7 +101148,7 @@
           "isolated:existing-tuning-mark-ultimate-all-zero": true,
           "isolated:existing-tuning-mark-ultimate-mixed-and-cap-four": true,
           "machine-axis-validation": true,
-          "optimization-object-source-alias-selection": false,
+          "optimization-object-source-alias-selection": true,
           "probe:variant-selection:starborn-f-a1": true,
           "probe:variant-selection:starborn-f-a2": true,
           "probe:variant-selection:starborn-f-a3": true,
@@ -101170,7 +101170,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "06ea07314f0f11be",
+      "traceProjectionHash": "7be917bf78d2c921",
       "assertions": [
         {
           "assertionIdentity": "blocked-hit-suppresses-damage",
@@ -137876,8 +137876,10 @@
           "expectation": {
             "minimumCount": 1
           },
-          "status": "blocked",
-          "actualProjectionIdentities": [],
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:optimization-object-source-alias-selection"
+          ],
           "actual": {
             "optimizationObjectId": "STARBORN",
             "requiredSourceCharacterIds": [
@@ -137894,13 +137896,10 @@
             "profileHash": "67aa41fcc20c6c1c4deb845392a4b59c7b607bc2be95d2cff29d391c6ae54e33",
             "sourceContractHash": "24056fee85607f626d1ce6e897ce295036662e97e34d482269b375789bb47303",
             "sourceIdentity": "src/data/generated/characters.json#items[id=199001]|NewTable/hero.rows[id=199001]",
-            "selectionHash": "1dcbc1d9efdf931f"
+            "selectionHash": "2335e4640b6affd2"
           },
-          "reasons": [
-            "canonical-scenario-assertion-failed",
-            "scenario-assertion-not-satisfied"
-          ],
-          "assertionHash": "0aa6aec9fe8561f5"
+          "reasons": [],
+          "assertionHash": "8d2f21671a9ca5c6"
         },
         {
           "assertionIdentity": "probe:variant-selection:starborn-f-a1",
@@ -139066,6 +139065,23 @@
           ],
           "reasons": [],
           "assertionHash": "bee1214967843864"
+        },
+        {
+          "assertionIdentity": "scenario-fact:optimization-object-source-alias-selection",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "optimization-object-source-alias-selection",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:optimization-object-source-alias-selection"
+          ],
+          "reasons": [],
+          "assertionHash": "9c76c1fb071d6d5c"
         },
         {
           "assertionIdentity": "scenario-fact:probe:variant-selection:starborn-f-a1",
@@ -200700,7 +200716,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "66691e22c361903b"
+      "scenarioCaseHash": "ba22280600bb1b36"
     },
     {
       "schemaVersion": 1,
@@ -205562,13 +205578,13 @@
   ],
   "summary": {
     "scenarioCount": 2,
-    "executionPassedCount": 1,
-    "assertionCount": 1596,
-    "assertionPassedCount": 1595,
+    "executionPassedCount": 2,
+    "assertionCount": 1597,
+    "assertionPassedCount": 1597,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "5cb556745b8fb635"
+  "scenarioSetHash": "6ea0eee21127f2d7"
 }

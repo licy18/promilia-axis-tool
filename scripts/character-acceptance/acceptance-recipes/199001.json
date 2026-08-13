@@ -3,12 +3,23 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:199001:13d28aa515312a63395f49ddff3c778967e1b20f:138965042f15f3bc",
-    "qualificationSubjectHash": "138965042f15f3bc",
-    "scenarioSetHash": "e754f8ccacbe99f3",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:199001:829d628bff9476c489d03e152e9377fd8c8e9e3c:34d459078b57e93a",
+    "qualificationSubjectHash": "34d459078b57e93a",
+    "scenarioSetHash": "bd69d5286b217377",
+    "scenarioIdentities": [
+      "m12-b3-starborn-199001-focused-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-199001-canonical-trace.png",
+        "screenshotSha256": "8f18d4a83242598d8f9ca37c91a2e1b84cc09dd9172f8bf98c989eb1de86148d"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
@@ -24,12 +35,17 @@
   "ownerId": 199001,
   "optimizationObjectAcceptance": {
     "optimizationObjectId": "STARBORN",
-    "requiredSourceCharacterIds": [199001, 199002],
+    "requiredSourceCharacterIds": [
+      199001,
+      199002
+    ],
     "sourceCharacterId": 199001,
     "sourceAliasIdentity": "STARBORN:source-alias:199001"
   },
   "fixturePath": "fixtures/character-acceptance/199001-starborn-visual.json",
-  "goldenReports": ["reports/m10/199001/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/199001/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 19900162,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -112,8 +128,13 @@
     "effectIdentity": "battle-element:199001049",
     "targetId": "actor-199001",
     "durationFrames": 1440,
-    "requiredOperations": ["apply", "expire"],
-    "startOperations": ["apply"],
+    "requiredOperations": [
+      "apply",
+      "expire"
+    ],
+    "startOperations": [
+      "apply"
+    ],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -294,7 +315,9 @@
           }
         }
       ],
-      "baselineRequiredExecutableActionIds": ["starborn-f-ultimate"],
+      "baselineRequiredExecutableActionIds": [
+        "starborn-f-ultimate"
+      ],
       "expectedIssue": {
         "actionId": "199001-ultimate-sp-insufficient",
         "code": "machine-axis-action-resource-insufficient"
@@ -398,7 +421,9 @@
           }
         }
       ],
-      "baselineRequiredExecutableActionIds": ["starborn-f-derived-thrust"],
+      "baselineRequiredExecutableActionIds": [
+        "starborn-f-derived-thrust"
+      ],
       "expectedIssue": {
         "actionId": "199001-thrust-window-a1",
         "code": "machine-axis-normal-attack-context-window-conflict"
@@ -784,7 +809,10 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": ["expire", "apply"]
+              "operation": [
+                "expire",
+                "apply"
+              ]
             }
           }
         }

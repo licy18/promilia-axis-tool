@@ -3,12 +3,23 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:107001:13d28aa515312a63395f49ddff3c778967e1b20f:4aa2a54123438a90",
-    "qualificationSubjectHash": "4aa2a54123438a90",
-    "scenarioSetHash": "89d7f1e8447e78b8",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:107001:829d628bff9476c489d03e152e9377fd8c8e9e3c:eb709a9eed536e13",
+    "qualificationSubjectHash": "eb709a9eed536e13",
+    "scenarioSetHash": "92f8ac26f7ec4a36",
+    "scenarioIdentities": [
+      "m12-b3-107001-focused-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-107001-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107001-canonical-trace.png",
+        "screenshotSha256": "3ea8da520606a0217709278064534269606a26d61877e3ee43041a0da34d4d26"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
@@ -31,7 +42,9 @@
   ],
   "ownerId": 107001,
   "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
-  "goldenReports": ["reports/m10/107001/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/107001/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10700162,
   "requirementPolicies": {
     "unselectedControlVariantsFromActionForms": true
@@ -75,7 +88,10 @@
       "actions": [
         {
           "id": "window-before-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10700101,
@@ -87,11 +103,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "window-outside-before",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10700101,
@@ -104,10 +126,15 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 19 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 19
+          }
         }
       ],
-      "requiredExecutableActionIds": ["window-before-source"],
+      "requiredExecutableActionIds": [
+        "window-before-source"
+      ],
       "expectedIssue": {
         "actionId": "window-outside-before",
         "code": "machine-axis-action-not-executable",
@@ -122,7 +149,10 @@
       "actions": [
         {
           "id": "window-after-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10700101,
@@ -134,11 +164,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "window-outside-after",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10700101,
@@ -151,10 +187,15 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 72 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 72
+          }
         }
       ],
-      "requiredExecutableActionIds": ["window-after-source"],
+      "requiredExecutableActionIds": [
+        "window-after-source"
+      ],
       "expectedIssue": {
         "actionId": "window-outside-after",
         "code": "machine-axis-action-not-executable",
@@ -167,7 +208,11 @@
     "effectIdentity": "battle-element:107001262",
     "targetId": "actor-107001",
     "durationFrames": 1440,
-    "requiredOperations": ["apply", "refresh", "expire"],
+    "requiredOperations": [
+      "apply",
+      "refresh",
+      "expire"
+    ],
     "rightOpenExpiry": true
   },
   "probes": [
@@ -393,9 +438,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [

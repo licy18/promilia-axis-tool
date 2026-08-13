@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contractName": "M12CChargedOwnerWorkbenchVisualReview",
-  "status": "pending-explicit-user-signoff",
+  "status": "accepted",
   "ownerId": 107002,
   "optimizationObjectId": null,
   "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
@@ -33,5 +33,14 @@
       "width": 1440,
       "height": 1400
     }
+  },
+  "evidenceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+  "userSignoff": {
+    "status": "authorized-and-recorded",
+    "signedAt": "2026-08-13T20:03:05.0616267+08:00",
+    "authorization": "current-user-request-owner-signoff-and-publish",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "optimizationObjectId": null,
+    "jointObjectSignoff": null
   }
 }

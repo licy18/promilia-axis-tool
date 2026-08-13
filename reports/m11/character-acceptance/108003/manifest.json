@@ -436,20 +436,32 @@
     ],
     "machineEvidence": [],
     "productVisualAcceptance": {
-      "status": "pending",
-      "scenarioIdentities": [],
-      "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-      "recordIdentity": "character-product-acceptance:108003:13d28aa515312a63395f49ddff3c778967e1b20f:c7c62aa773bdfba5",
-      "qualificationSubjectHash": "c7c62aa773bdfba5",
-      "scenarioSetHash": "37bb88a781814277",
-      "bindingStatus": "not-requested",
+      "status": "accepted",
+      "scenarioIdentities": [
+        "m12-b3-e20-2-108003-s1-visual-acceptance"
+      ],
+      "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+      "recordIdentity": "character-product-acceptance:108003:829d628bff9476c489d03e152e9377fd8c8e9e3c:fe56832c1fcbde94",
+      "qualificationSubjectHash": "fe56832c1fcbde94",
+      "scenarioSetHash": "d30ed4987ab4ddaf",
+      "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:108003:13d28aa515312a63395f49ddff3c778967e1b20f:fe56832c1fcbde94",
+        "recordIdentity": "character-product-acceptance:108003:829d628bff9476c489d03e152e9377fd8c8e9e3c:fe56832c1fcbde94",
         "qualificationSubjectHash": "fe56832c1fcbde94",
-        "scenarioSetHash": "09612b07b5ecb5a5",
-        "scenarioIdentities": []
+        "scenarioSetHash": "d30ed4987ab4ddaf",
+        "scenarioIdentities": [
+          "m12-b3-e20-2-108003-s1-visual-acceptance"
+        ]
       },
-      "automatedEvidence": []
+      "automatedEvidence": [
+        {
+          "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
+          "evidenceKind": "workbench-playwright-screenshot",
+          "status": "automated-workbench-import-passed",
+          "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-108003-canonical-trace.png",
+          "screenshotSha256": "619035991e31b98fb8437844d8d6bda2f01c030c1c4fc71dc60bbb737c064d9b"
+        }
+      ]
     }
   },
   "requirementInventory": {
@@ -112110,12 +112122,14 @@
   },
   "qualificationSubjectHash": "fe56832c1fcbde94",
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "optimization-ready",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
+    "optimizationReady": true,
     "facts": {
       "profileValid": true,
       "sourceEvidenceIndexed": true,
@@ -112125,7 +112139,7 @@
       "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": false,
+      "productVisualAccepted": true,
       "matrixRequiredCount": 134,
       "matrixPassedCount": 134,
       "matrixComplete": true,
@@ -112135,16 +112149,14 @@
     "gates": {
       "extracted": true,
       "runtimeIntegrated": true,
-      "visuallyAccepted": false,
-      "optimizationReady": false
+      "visuallyAccepted": true,
+      "optimizationReady": true
     },
-    "blockers": [
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "blockers": []
   },
   "validation": {
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "c4ab4b5816e3a8b8"
+  "manifestHash": "05eff17fa13673c9"
 }

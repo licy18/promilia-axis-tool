@@ -3,12 +3,23 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:314afdb71e2322d8",
-    "qualificationSubjectHash": "314afdb71e2322d8",
-    "scenarioSetHash": "983f79cbac9c221a",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:67a6fedbbd8963ab",
+    "qualificationSubjectHash": "67a6fedbbd8963ab",
+    "scenarioSetHash": "1fe9a92cf776d16e",
+    "scenarioIdentities": [
+      "m12-b3-103002-reload-window-boundaries"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-canonical-trace.png",
+        "screenshotSha256": "618014ef0caa89b54cd27921f82237b5e6bcf80f804f4c1c74b0f76a76561cd3"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m11-d-103002-visual-acceptance",
@@ -24,7 +35,9 @@
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
   "inputWindowBoundary": null,
-  "goldenReports": ["reports/m10/103002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/103002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
     {
@@ -202,7 +215,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -242,7 +257,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -290,7 +307,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -338,7 +357,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -400,7 +421,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -538,11 +563,26 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "triggerFrame": [173, 237],
-              "absoluteFrame": [1973, 2037],
-              "markCountAtJudgment": [1, 0],
-              "consumedCount": [1, 0],
-              "applied": [true, false],
+              "triggerFrame": [
+                173,
+                237
+              ],
+              "absoluteFrame": [
+                1973,
+                2037
+              ],
+              "markCountAtJudgment": [
+                1,
+                0
+              ],
+              "consumedCount": [
+                1,
+                0
+              ],
+              "applied": [
+                true,
+                false
+              ],
               "status": [
                 "verified-tuning-consume-applied",
                 "verified-tuning-consume-insufficient-marks"
@@ -615,18 +655,33 @@
           "actions": [
             {
               "id": "negative-reload-window-source",
-              "owner": { "kind": "actor", "slotId": "slot-1" },
+              "owner": {
+                "kind": "actor",
+                "slotId": "slot-1"
+              },
               "intent": {
                 "kind": "public-action",
                 "publicActionId": 10300201,
                 "actionKind": "charged-attack",
+                "physicalInput": {
+                  "mode": "hold",
+                  "pressFrame": 0,
+                  "releaseFrame": null,
+                  "executionFrame": 16
+                },
                 "level": 1
               },
-              "schedule": { "mode": "absolute", "frame": 0 }
+              "schedule": {
+                "mode": "absolute",
+                "frame": 16
+              }
             },
             {
               "id": "negative-reload-window-start-minus-one",
-              "owner": { "kind": "actor", "slotId": "slot-1" },
+              "owner": {
+                "kind": "actor",
+                "slotId": "slot-1"
+              },
               "intent": {
                 "kind": "public-action",
                 "publicActionId": 10300201,
@@ -637,10 +692,15 @@
                 },
                 "level": 1
               },
-              "schedule": { "mode": "absolute", "frame": 23 }
+              "schedule": {
+                "mode": "absolute",
+                "frame": 39
+              }
             }
           ],
-          "requiredExecutableActionIds": ["negative-reload-window-source"],
+          "requiredExecutableActionIds": [
+            "negative-reload-window-source"
+          ],
           "expectedIssue": {
             "actionId": "negative-reload-window-start-minus-one",
             "code": "machine-axis-action-not-executable",
@@ -658,7 +718,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -673,10 +737,17 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": ["expire", "apply"]
+              "operation": [
+                "expire",
+                "apply"
+              ]
             }
           },
-          "select": ["actionId", "operation", "absoluteFrame"]
+          "select": [
+            "actionId",
+            "operation",
+            "absoluteFrame"
+          ]
         }
       ]
     },
@@ -702,9 +773,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [

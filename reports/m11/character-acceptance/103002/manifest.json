@@ -1598,7 +1598,7 @@
       {
         "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
         "fixturePath": "fixtures/character-acceptance/103002-window-boundaries.json",
-        "status": "failed",
+        "status": "passed",
         "stableReplay": true,
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
@@ -1621,11 +1621,9 @@
         },
         "assertionSummary": {
           "assertionCount": 11,
-          "passedCount": 10,
-          "failedCount": 1,
-          "failedIdentities": [
-            "negative:reload-window-start-minus-one-23f-lane-overlap"
-          ]
+          "passedCount": 11,
+          "failedCount": 0,
+          "failedIdentities": []
         },
         "mechanismProbes": {
           "buffLifecycle": null,
@@ -1833,7 +1831,7 @@
           "negativeActionCases": [
             {
               "identity": "negative:reload-window-start-minus-one-23f-lane-overlap",
-              "passed": false,
+              "passed": true,
               "actual": {
                 "issue": {
                   "actionId": "negative-reload-window-start-minus-one",
@@ -1855,30 +1853,7 @@
                 "requiredExecutableActionIds": [
                   "negative-reload-window-source"
                 ],
-                "prerequisiteIssues": [
-                  {
-                    "severity": "error",
-                    "finalScoreEligible": false,
-                    "code": "charged-input-threshold-not-reached",
-                    "category": "readiness",
-                    "path": "actions.negative-reload-window-source.intent.physicalInput",
-                    "message": "Charged input schedule is invalid: charged-input-threshold-not-reached",
-                    "actionId": "negative-reload-window-source",
-                    "actionIds": [
-                      "negative-reload-window-source"
-                    ],
-                    "actorId": null,
-                    "status": "violated",
-                    "ruleCodes": [],
-                    "unresolvedCodes": [],
-                    "absoluteFrame": 0,
-                    "currentValue": 0,
-                    "ownerId": 103002,
-                    "requiredValue": 16,
-                    "sourceKind": "verified-charged-physical-input",
-                    "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:103002"
-                  }
-                ],
+                "prerequisiteIssues": [],
                 "baselineRequiredExecutableActionIds": [],
                 "baselinePrerequisiteIssues": [],
                 "baselineMissingActionIds": [],
@@ -1889,10 +1864,10 @@
                   "build": "3c86d2f7952d9462"
                 },
                 "canonicalHashes": {
-                  "input": "be59cba22e8f17d0",
+                  "input": "e12b0b07623dcd94",
                   "data": "d2a8388c556f22f4",
-                  "trace": "3155c27a6b38ca9d",
-                  "build": "b70a243c743aad5d"
+                  "trace": "6066540031679b94",
+                  "build": "abd85c42867ba78c"
                 },
                 "classification": {
                   "schemaStatus": "schema-valid",
@@ -3242,20 +3217,32 @@
       }
     ],
     "productVisualAcceptance": {
-      "status": "pending",
-      "scenarioIdentities": [],
-      "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-      "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:314afdb71e2322d8",
-      "qualificationSubjectHash": "314afdb71e2322d8",
-      "scenarioSetHash": "983f79cbac9c221a",
-      "bindingStatus": "not-requested",
+      "status": "accepted",
+      "scenarioIdentities": [
+        "m12-b3-103002-reload-window-boundaries"
+      ],
+      "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+      "recordIdentity": "character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:67a6fedbbd8963ab",
+      "qualificationSubjectHash": "67a6fedbbd8963ab",
+      "scenarioSetHash": "1fe9a92cf776d16e",
+      "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:ee5826d858b7b867",
-        "qualificationSubjectHash": "ee5826d858b7b867",
-        "scenarioSetHash": "09612b07b5ecb5a5",
-        "scenarioIdentities": []
+        "recordIdentity": "character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:67a6fedbbd8963ab",
+        "qualificationSubjectHash": "67a6fedbbd8963ab",
+        "scenarioSetHash": "1fe9a92cf776d16e",
+        "scenarioIdentities": [
+          "m12-b3-103002-reload-window-boundaries"
+        ]
       },
-      "automatedEvidence": []
+      "automatedEvidence": [
+        {
+          "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+          "evidenceKind": "workbench-playwright-screenshot",
+          "status": "automated-workbench-import-passed",
+          "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-canonical-trace.png",
+          "screenshotSha256": "618014ef0caa89b54cd27921f82237b5e6bcf80f804f4c1c74b0f76a76561cd3"
+        }
+      ]
     }
   },
   "requirementInventory": {
@@ -128296,7 +128283,7 @@
           "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/103002-window-boundaries.json"
         },
         "execution": {
-          "status": "failed",
+          "status": "passed",
           "stableReplay": true,
           "workbenchRoundTrip": "passed",
           "canonicalHashes": {
@@ -136387,7 +136374,7 @@
             "canonical-same-input-replay": true,
             "input-window-inside-outside-boundaries": true,
             "machine-axis-validation": true,
-            "negative:reload-window-start-minus-one-23f-lane-overlap": false,
+            "negative:reload-window-start-minus-one-23f-lane-overlap": true,
             "runtime-interruption:enhanced-marker-cutoff-at-trigger": true,
             "runtime-interruption:enhanced-marker-survives-post-trigger-interruption": true,
             "runtime-interruption:ultimate-thunder-judgment-after-173f": true,
@@ -136397,7 +136384,7 @@
             "workbench-import-export-round-trip": true
           }
         },
-        "traceProjectionHash": "edd83fda794b25d0",
+        "traceProjectionHash": "72ed6528d8e46d43",
         "assertions": [
           {
             "assertionIdentity": "canonical-same-input-replay",
@@ -136657,8 +136644,10 @@
             "expectation": {
               "minimumCount": 1
             },
-            "status": "blocked",
-            "actualProjectionIdentities": [],
+            "status": "passed",
+            "actualProjectionIdentities": [
+              "fact:negative:reload-window-start-minus-one-23f-lane-overlap"
+            ],
             "actual": {
               "issue": {
                 "actionId": "negative-reload-window-start-minus-one",
@@ -136680,30 +136669,7 @@
               "requiredExecutableActionIds": [
                 "negative-reload-window-source"
               ],
-              "prerequisiteIssues": [
-                {
-                  "severity": "error",
-                  "finalScoreEligible": false,
-                  "code": "charged-input-threshold-not-reached",
-                  "category": "readiness",
-                  "path": "actions.negative-reload-window-source.intent.physicalInput",
-                  "message": "Charged input schedule is invalid: charged-input-threshold-not-reached",
-                  "actionId": "negative-reload-window-source",
-                  "actionIds": [
-                    "negative-reload-window-source"
-                  ],
-                  "actorId": null,
-                  "status": "violated",
-                  "ruleCodes": [],
-                  "unresolvedCodes": [],
-                  "absoluteFrame": 0,
-                  "currentValue": 0,
-                  "ownerId": 103002,
-                  "requiredValue": 16,
-                  "sourceKind": "verified-charged-physical-input",
-                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:103002"
-                }
-              ],
+              "prerequisiteIssues": [],
               "baselineRequiredExecutableActionIds": [],
               "baselinePrerequisiteIssues": [],
               "baselineMissingActionIds": [],
@@ -136714,10 +136680,10 @@
                 "build": "3c86d2f7952d9462"
               },
               "canonicalHashes": {
-                "input": "be59cba22e8f17d0",
+                "input": "e12b0b07623dcd94",
                 "data": "d2a8388c556f22f4",
-                "trace": "3155c27a6b38ca9d",
-                "build": "b70a243c743aad5d"
+                "trace": "6066540031679b94",
+                "build": "abd85c42867ba78c"
               },
               "classification": {
                 "schemaStatus": "schema-valid",
@@ -136725,11 +136691,8 @@
                 "evidenceStatus": "not-evaluated"
               }
             },
-            "reasons": [
-              "canonical-scenario-assertion-failed",
-              "scenario-assertion-not-satisfied"
-            ],
-            "assertionHash": "1c3b86d4961528b2"
+            "reasons": [],
+            "assertionHash": "00a6633d53163f4e"
           },
           {
             "assertionIdentity": "runtime-interruption:enhanced-marker-cutoff-at-trigger",
@@ -137221,6 +137184,23 @@
             ],
             "reasons": [],
             "assertionHash": "bee1214967843864"
+          },
+          {
+            "assertionIdentity": "scenario-fact:negative:reload-window-start-minus-one-23f-lane-overlap",
+            "selector": {
+              "expectedValue": true,
+              "factIdentity": "negative:reload-window-start-minus-one-23f-lane-overlap",
+              "kind": "scenario-fact"
+            },
+            "expectation": {
+              "minimumCount": 1
+            },
+            "status": "passed",
+            "actualProjectionIdentities": [
+              "fact:negative:reload-window-start-minus-one-23f-lane-overlap"
+            ],
+            "reasons": [],
+            "assertionHash": "ab3393825062ae3a"
           },
           {
             "assertionIdentity": "scenario-fact:runtime-interruption:enhanced-marker-cutoff-at-trigger",
@@ -140510,20 +140490,20 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "c3e780df30b136a5"
+        "scenarioCaseHash": "481a59a322ae3a71"
       }
     ],
     "summary": {
       "scenarioCount": 6,
-      "executionPassedCount": 5,
-      "assertionCount": 1777,
-      "assertionPassedCount": 1776,
+      "executionPassedCount": 6,
+      "assertionCount": 1778,
+      "assertionPassedCount": 1778,
       "runnerKindCounts": {
         "canonical-character-golden": 1,
         "machine-axis": 5
       }
     },
-    "scenarioSetHash": "c348cc5a6c3182a2"
+    "scenarioSetHash": "282b92d4103adfa9"
   },
   "coverageContext": {
     "denominator": {
@@ -140777,6 +140757,21 @@
         "edgeIdentity": "coverage-edge:0359377f041ff7d2"
       },
       {
+        "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210|charged-attack",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-start-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "0945a8a64a09212a",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:04cf17583e3d68b3"
+      },
+      {
         "requirementIdentity": "protocol:103002:hit-landed-and-miss",
         "scenarioIdentity": "m11-d-103002-visual-acceptance",
         "assertionIdentity": "scenario-fact:critical:missSuppressesHit",
@@ -140815,6 +140810,21 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:0547f9553690ce77"
+      },
+      {
+        "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:window-outside-before",
+        "selector": {
+          "controlSkillId": 10300201,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "82dc6f396b6fd710",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:05694753aa6b184f"
       },
       {
         "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
@@ -141172,6 +141182,20 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:0e9adc3e3b5417ab"
+      },
+      {
+        "requirementIdentity": "protocol:103002:save-import-replay",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "workbench-import-export-round-trip",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "58a76707b981af64",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:0f7b493122bb013f"
       },
       {
         "requirementIdentity": "contract:variant-edge:variant-edge:61:55e678c5fe723370",
@@ -141592,6 +141616,20 @@
         "edgeIdentity": "coverage-edge:21ca51bf3e9345aa"
       },
       {
+        "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "scenario-fact:input-window-inside-outside-boundaries",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "input-window-inside-outside-boundaries",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "b14f4b977691be28",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:21cc67059750fea8"
+      },
+      {
         "requirementIdentity": "contract:hit:10300213|0|elements|31|-595230887097621602|189|10",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-active-surface-closure:60",
@@ -141712,6 +141750,19 @@
         "edgeIdentity": "coverage-edge:248a5bd126c9f959"
       },
       {
+        "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|26|3",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:3",
+        "selector": {
+          "hitIdentity": "10300201|1|elements|33|6530960959018090325|26|3",
+          "kind": "hit"
+        },
+        "assertionHash": "e38e363d097aa2e4",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:24935ea3ca8ad188"
+      },
+      {
         "requirementIdentity": "contract:control-window:control-window:4:cbd87c8176ddc3e0",
         "scenarioIdentity": "m11-d-103002-visual-acceptance",
         "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-103002-visual-acceptance-5",
@@ -141723,6 +141774,19 @@
         "traceProjectionHash": "e5267ed36fe82295",
         "status": "verified",
         "edgeIdentity": "coverage-edge:24c4a50efc22d282"
+      },
+      {
+        "requirementIdentity": "contract:variant-window:ruby-reload-quick-enhanced-entry",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-variant-window:machine-variantWindows-m12-b3-103002-reload-window-boundaries-1",
+        "selector": {
+          "bindingIdentity": "ruby-reload-quick-enhanced-entry",
+          "kind": "variant-window"
+        },
+        "assertionHash": "6ddf90feeed512e4",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:253111f91699b6f5"
       },
       {
         "requirementIdentity": "protocol:103002:critical-per-hit-modes",
@@ -141860,6 +141924,19 @@
         "edgeIdentity": "coverage-edge:2a81f6a23a705615"
       },
       {
+        "requirementIdentity": "contract:hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:7",
+        "selector": {
+          "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+          "kind": "hit"
+        },
+        "assertionHash": "54d92be382baf41f",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:2c2cf6ec8ffd0de4"
+      },
+      {
         "requirementIdentity": "protocol:103002:buff-apply-refresh-stack-expire",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -141885,6 +141962,20 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:2d3976ea82a91065"
+      },
+      {
+        "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "input-window-inside-outside-boundaries",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "input-window-inside-outside-boundaries",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "2f52182f00cbdd19",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:2e3898e7e660e8d9"
       },
       {
         "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|17|1",
@@ -142061,6 +142152,19 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:33c38288fd072c66"
+      },
+      {
+        "requirementIdentity": "contract:effect:effect:3:39e7626fc55105f7",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-103002-reload-window-boundaries:0:2",
+        "selector": {
+          "effectIdentity": "battle-element:103002276",
+          "kind": "effect"
+        },
+        "assertionHash": "eeb13c516301df67",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:352a3ae7c5f49d20"
       },
       {
         "requirementIdentity": "contract:variant-edge:variant-edge:68:ae4d3f6fcdfa56ce",
@@ -142809,6 +142913,21 @@
         "edgeIdentity": "coverage-edge:4b3cb6056f2e5df3"
       },
       {
+        "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210|charged-attack:default",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-before-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "a47aff55dc757da3",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:4b9ad09551b1334d"
+      },
+      {
         "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:2",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-active-surface-closure:103002-critical-non-critical-a2",
@@ -142900,6 +143019,32 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:4f21ac315df094db"
+      },
+      {
+        "requirementIdentity": "contract:hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:0",
+        "selector": {
+          "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+          "kind": "hit"
+        },
+        "assertionHash": "38a849d48b740a7a",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:4f59e311a53fe900"
+      },
+      {
+        "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|17|1",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:4",
+        "selector": {
+          "hitIdentity": "10300201|1|elements|33|6530960959018090325|17|1",
+          "kind": "hit"
+        },
+        "assertionHash": "346f1bf6d2453b13",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:4f82c3d2e6a5ea41"
       },
       {
         "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
@@ -143144,6 +143289,19 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:579d182bb5d39d87"
+      },
+      {
+        "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-reload-window-boundaries:4",
+        "selector": {
+          "kind": "resource",
+          "resourceIdentity": "actor:103002:element:103002047"
+        },
+        "assertionHash": "93e437e7e9c3b5a9",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:57be0cd4ddb35d5a"
       },
       {
         "requirementIdentity": "protocol:103002:save-import-replay",
@@ -143449,6 +143607,21 @@
         "edgeIdentity": "coverage-edge:653d2990f231f654"
       },
       {
+        "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210|charged-attack:default",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-after-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "598e5cd7992f846c",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:662cb249afd22ef8"
+      },
+      {
         "requirementIdentity": "contract:variant-edge:variant-edge:142:4b84700ea09d4263",
         "scenarioIdentity": "m12-b3-103002-marker-expiry-ordering",
         "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-marker-expiry-ordering-59",
@@ -143600,6 +143773,21 @@
         "edgeIdentity": "coverage-edge:6b8338079952cdaa"
       },
       {
+        "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210|charged-attack",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-before-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "a47aff55dc757da3",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:6bda4319e14dd5ab"
+      },
+      {
         "requirementIdentity": "contract:hit:10300204|2|elements|10|-7744082854167148367|45|4",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-active-surface-closure:117",
@@ -143637,6 +143825,21 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:6c5bbd0bf5e53121"
+      },
+      {
+        "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210|charged-attack",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-after-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "598e5cd7992f846c",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:6cf0c5ba1ffb5596"
       },
       {
         "requirementIdentity": "contract:effect:effect:3:39e7626fc55105f7",
@@ -143763,6 +143966,19 @@
         "edgeIdentity": "coverage-edge:717b82bac2be6a9b"
       },
       {
+        "requirementIdentity": "contract:passive:actor:103002:passive:10300261",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-passive:machine-passives-m12-b3-103002-reload-window-boundaries-1",
+        "selector": {
+          "kind": "passive",
+          "passiveIdentity": "actor:103002:passive:10300261"
+        },
+        "assertionHash": "4d9c323d5905eeb9",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:720cad2b4b04ea0b"
+      },
+      {
         "requirementIdentity": "contract:control-window:control-window:32:a80e5d5a1f88e512",
         "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
         "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b1:103002:120s-three-actor-golden-27",
@@ -143813,6 +144029,19 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:732edd2ae9c70642"
+      },
+      {
+        "requirementIdentity": "contract:control-window:control-window:87:79e465eabc371f8b",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-103002-reload-window-boundaries-10",
+        "selector": {
+          "kind": "control-window",
+          "windowIdentity": "actor:103002|control:10300210|sub:0|38-62|target:10300210/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_8068404130320522655__8068404130320522655.json#behaviorlineControl[0].behaviorList[pathId=-5670337514868925025]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_-5670337514868925025__-5670337514868925025.json"
+        },
+        "assertionHash": "0a76cb657f279c97",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:7334d61d60391636"
       },
       {
         "requirementIdentity": "contract:variant-window:ruby-ultimate-end-quick-enhanced-entry",
@@ -144029,6 +144258,32 @@
         "edgeIdentity": "coverage-edge:78789b2d938bbfcc"
       },
       {
+        "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-reload-window-boundaries:1",
+        "selector": {
+          "kind": "resource",
+          "resourceIdentity": "actor:103002:element:103002047"
+        },
+        "assertionHash": "e92d80ef43045cc1",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:7982296c3e96de69"
+      },
+      {
+        "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-reload-window-boundaries:2",
+        "selector": {
+          "kind": "resource",
+          "resourceIdentity": "actor:103002:element:103002047"
+        },
+        "assertionHash": "898a073f8d123722",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:7a027823eb0842e9"
+      },
+      {
         "requirementIdentity": "contract:effect:effect:13:c0b9ae74ee1af0a6",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-103002-active-surface-closure:55",
@@ -144067,6 +144322,21 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:7b9a0c97fa711bb1"
+      },
+      {
+        "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210|charged-attack:default",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-start-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "0945a8a64a09212a",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:7c11f62c12c35ab5"
       },
       {
         "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:3",
@@ -144362,6 +144632,19 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:8493b7fb999eaf29"
+      },
+      {
+        "requirementIdentity": "contract:effect:effect:29:4cf13c0754a96981",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-103002-reload-window-boundaries:3:2",
+        "selector": {
+          "effectIdentity": "battle-element:103002276",
+          "kind": "effect"
+        },
+        "assertionHash": "898aa0ac94a5d7ce",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:850eefd109e23fa2"
       },
       {
         "requirementIdentity": "contract:hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
@@ -144842,6 +145125,19 @@
       },
       {
         "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-reload-window-boundaries:5",
+        "selector": {
+          "kind": "resource",
+          "resourceIdentity": "actor:103002:element:103002047"
+        },
+        "assertionHash": "40235cf28cdf877f",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:928a99b2b481d12b"
+      },
+      {
+        "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
         "scenarioIdentity": "m12-b3-103002-marker-expiry-ordering",
         "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-marker-expiry-ordering:1",
         "selector": {
@@ -145105,6 +145401,19 @@
         "edgeIdentity": "coverage-edge:9ab07bd5612e4e94"
       },
       {
+        "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|17|1",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:1",
+        "selector": {
+          "hitIdentity": "10300201|1|elements|33|6530960959018090325|17|1",
+          "kind": "hit"
+        },
+        "assertionHash": "a2e2529c90c2382a",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:9b1f45e1c432ad59"
+      },
+      {
         "requirementIdentity": "contract:variant-edge:variant-edge:83:a711966f86a7aca3",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-active-surface-closure-84",
@@ -145161,6 +145470,19 @@
         "traceProjectionHash": "fcf8108f9e81800c",
         "status": "verified",
         "edgeIdentity": "coverage-edge:9c84fffe5fbb2f90"
+      },
+      {
+        "requirementIdentity": "contract:effect:effect:29:4cf13c0754a96981",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-103002-reload-window-boundaries:0:2",
+        "selector": {
+          "effectIdentity": "battle-element:103002276",
+          "kind": "effect"
+        },
+        "assertionHash": "eeb13c516301df67",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:9d189ce23789d0ea"
       },
       {
         "requirementIdentity": "contract:hit:10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
@@ -145348,6 +145670,19 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:a4bfd26671760c9d"
+      },
+      {
+        "requirementIdentity": "contract:effect:effect:3:39e7626fc55105f7",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-103002-reload-window-boundaries:3:2",
+        "selector": {
+          "effectIdentity": "battle-element:103002276",
+          "kind": "effect"
+        },
+        "assertionHash": "898aa0ac94a5d7ce",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:a550cfa66d301558"
       },
       {
         "requirementIdentity": "contract:hit:10300202|2|elements|12|6530960959018090325|24|2",
@@ -145576,6 +145911,21 @@
         "edgeIdentity": "coverage-edge:ad60780a36c36c4a"
       },
       {
+        "requirementIdentity": "contract:public-action:actor|103002|10300201|0|10300203|normal-attack",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:window-outside-before",
+        "selector": {
+          "controlSkillId": 10300201,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "82dc6f396b6fd710",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:adf9363836df033e"
+      },
+      {
         "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-active-surface-closure:13",
@@ -145715,6 +146065,21 @@
         "edgeIdentity": "coverage-edge:b270cfad87076365"
       },
       {
+        "requirementIdentity": "contract:public-action:actor|103002|10300201|1|10300210|charged-attack",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-end-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "b9495130e4b967a3",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:b2dc676dc0909720"
+      },
+      {
         "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-active-surface-closure:12",
@@ -145832,6 +146197,19 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:b638d64d6e2ceab9"
+      },
+      {
+        "requirementIdentity": "contract:variant-edge:variant-edge:5:23f700194a3209c6",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-reload-window-boundaries-6",
+        "selector": {
+          "edgeIdentity": "actor:103002|control:10300201|sub:1->actor:103002|control:10300201|sub:2->-2917409335481151685->3",
+          "kind": "variant-edge"
+        },
+        "assertionHash": "51e0a63bcf70355d",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:b67740f0bf86e71b"
       },
       {
         "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:1",
@@ -145983,6 +146361,19 @@
         "edgeIdentity": "coverage-edge:ba1f9b352815cfa5"
       },
       {
+        "requirementIdentity": "contract:variant-edge:variant-edge:7:54227b4ae1b67714",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-reload-window-boundaries-8",
+        "selector": {
+          "edgeIdentity": "actor:103002|control:10300201|sub:1->actor:103002|control:10300201|sub:2->-7614050540243982357->3",
+          "kind": "variant-edge"
+        },
+        "assertionHash": "0f4e9dcd52a19a06",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:bb7b4901253a7d0e"
+      },
+      {
         "requirementIdentity": "contract:hit:10300221|0|elements|5|5847071117717026074|82|5",
         "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
         "assertionIdentity": "trace-hit:golden-hit:m10-b1:103002:120s-three-actor-golden:65",
@@ -145994,6 +146385,19 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:bb97e9bdc8cc7367"
+      },
+      {
+        "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-reload-window-boundaries:3",
+        "selector": {
+          "kind": "resource",
+          "resourceIdentity": "actor:103002:element:103002047"
+        },
+        "assertionHash": "69d7c5c32dd5a67a",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:bbad612fb58f49a9"
       },
       {
         "requirementIdentity": "contract:effect:effect:29:4cf13c0754a96981",
@@ -146120,6 +146524,21 @@
         "edgeIdentity": "coverage-edge:bde080d54a05deac"
       },
       {
+        "requirementIdentity": "contract:action-form:actor|103002|10300201|1|10300210|charged-attack:default",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:reload-end-source",
+        "selector": {
+          "controlSkillId": 10300210,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "b9495130e4b967a3",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:be5b2ac80a3e9a86"
+      },
+      {
         "requirementIdentity": "contract:hit:10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-active-surface-closure:5",
@@ -146171,6 +146590,19 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:bf9338b79641fdd5"
+      },
+      {
+        "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|21|2",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:2",
+        "selector": {
+          "hitIdentity": "10300201|1|elements|33|6530960959018090325|21|2",
+          "kind": "hit"
+        },
+        "assertionHash": "896fa0eb2487ba1a",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:bff22a4ab8a2fd94"
       },
       {
         "requirementIdentity": "contract:hit:10300201|2|elements|12|6530960959018090325|24|2",
@@ -146238,6 +146670,19 @@
         "traceProjectionHash": "fcf8108f9e81800c",
         "status": "verified",
         "edgeIdentity": "coverage-edge:c2d71bb7905643b8"
+      },
+      {
+        "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|26|3",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:6",
+        "selector": {
+          "hitIdentity": "10300201|1|elements|33|6530960959018090325|26|3",
+          "kind": "hit"
+        },
+        "assertionHash": "2e59b296fb9caf0d",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:c31674d593a8a99a"
       },
       {
         "requirementIdentity": "contract:effect:effect:29:4cf13c0754a96981",
@@ -146361,6 +146806,19 @@
         "traceProjectionHash": "e5267ed36fe82295",
         "status": "verified",
         "edgeIdentity": "coverage-edge:c5a2710a2f38bb19"
+      },
+      {
+        "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-resource:machine-resource:m12-b3-103002-reload-window-boundaries:0",
+        "selector": {
+          "kind": "resource",
+          "resourceIdentity": "actor:103002:element:103002047"
+        },
+        "assertionHash": "01d29487da1bcd72",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:c5cba3fb7d74f211"
       },
       {
         "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
@@ -146918,6 +147376,21 @@
         "edgeIdentity": "coverage-edge:dab96aba4777a05b"
       },
       {
+        "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:window-outside-after",
+        "selector": {
+          "controlSkillId": 10300201,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "b288f497e613d86b",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:db5fd2cd8e45c10e"
+      },
+      {
         "requirementIdentity": "contract:variant-window:ruby-reload-quick-enhanced-entry",
         "scenarioIdentity": "m12-b3-103002-marker-expiry-ordering",
         "assertionIdentity": "trace-variant-window:machine-variantWindows-m12-b3-103002-marker-expiry-ordering-1",
@@ -146958,6 +147431,35 @@
         "edgeIdentity": "coverage-edge:dbf8999e9fc07caf"
       },
       {
+        "requirementIdentity": "protocol:103002:save-import-replay",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "workbench-import-export-round-trip",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "workbench-import-export-round-trip",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "1ebb23438e769331",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:dd7f72700b6766bc"
+      },
+      {
+        "requirementIdentity": "contract:public-action:actor|103002|10300201|0|10300203|normal-attack",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:window-outside-after",
+        "selector": {
+          "controlSkillId": 10300201,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 0
+        },
+        "assertionHash": "b288f497e613d86b",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:ddb3f301f7233a13"
+      },
+      {
         "requirementIdentity": "contract:hit:10300213|0|elements|31|-595230887097621602|141|4",
         "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
         "assertionIdentity": "trace-hit:golden-hit:m10-b1:103002:120s-three-actor-golden:28",
@@ -146984,6 +147486,19 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:def4bd5a53ddad46"
+      },
+      {
+        "requirementIdentity": "contract:variant-edge:variant-edge:142:4b84700ea09d4263",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-reload-window-boundaries-52",
+        "selector": {
+          "edgeIdentity": "actor:103002|control:10300210|sub:0->actor:103002|control:10300201|sub:1->-4356077336397377105->24",
+          "kind": "variant-edge"
+        },
+        "assertionHash": "41b0a6670739a9ad",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:df04aebeab2e4c75"
       },
       {
         "requirementIdentity": "contract:resource-profile:actor:103002:element:103002047",
@@ -147172,6 +147687,19 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:e7a4d2c53bc0a0da"
+      },
+      {
+        "requirementIdentity": "contract:control-window:control-window:4:cbd87c8176ddc3e0",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-103002-reload-window-boundaries-5",
+        "selector": {
+          "kind": "control-window",
+          "windowIdentity": "actor:103002|control:10300201|sub:1|24-210|target:10300201/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-1273027567896048609__-1273027567896048609.json#behaviorlineControl[0].behaviorList[pathId=2157836165541645343]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_2157836165541645343__2157836165541645343.json"
+        },
+        "assertionHash": "45d5e1ad7d0e3967",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:e82f224ff79a0962"
       },
       {
         "requirementIdentity": "contract:effect:effect:3:39e7626fc55105f7",
@@ -147412,6 +147940,21 @@
         "edgeIdentity": "coverage-edge:f08312581df0b7d6"
       },
       {
+        "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:1",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:window-inside-end",
+        "selector": {
+          "controlSkillId": 10300201,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 1
+        },
+        "assertionHash": "e4ae0a950ad07e24",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:f0cb637ff1c19501"
+      },
+      {
         "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:2",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-active-surface-closure:103002-critical-sampled-low-a2",
@@ -147492,6 +148035,19 @@
         "traceProjectionHash": "e6b646aca512ae53",
         "status": "verified",
         "edgeIdentity": "coverage-edge:f297f6514e9b04e5"
+      },
+      {
+        "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|21|2",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-reload-window-boundaries:5",
+        "selector": {
+          "hitIdentity": "10300201|1|elements|33|6530960959018090325|21|2",
+          "kind": "hit"
+        },
+        "assertionHash": "12bec70d3402315b",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:f345d0ed2fd44058"
       },
       {
         "requirementIdentity": "contract:effect:effect:38:ceb05068e4792142",
@@ -147612,6 +148168,21 @@
         "edgeIdentity": "coverage-edge:f9c3e21ccc09b4bb"
       },
       {
+        "requirementIdentity": "contract:action-form:ruby-enhanced-twelve-inputs:segment:1",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-reload-window-boundaries:window-inside-start",
+        "selector": {
+          "controlSkillId": 10300201,
+          "kind": "action-form",
+          "ownerId": 103002,
+          "subSkillIndex": 1
+        },
+        "assertionHash": "128acd4173a32487",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:fa1dd7bc2ce06cc0"
+      },
+      {
         "requirementIdentity": "contract:variant-edge:variant-edge:62:7041b63a46152838",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-active-surface-closure-63",
@@ -147677,6 +148248,19 @@
         "traceProjectionHash": "f2e057f0ae25e160",
         "status": "verified",
         "edgeIdentity": "coverage-edge:fb3681d02931024a"
+      },
+      {
+        "requirementIdentity": "contract:variant-edge:variant-edge:141:ca0a3fbb7eb76b62",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-reload-window-boundaries-51",
+        "selector": {
+          "edgeIdentity": "actor:103002|control:10300210|sub:0->actor:103002|control:10300201|sub:1->-315085305908719333->24",
+          "kind": "variant-edge"
+        },
+        "assertionHash": "91fad48707fdab30",
+        "traceProjectionHash": "72ed6528d8e46d43",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:fb6ff7f21a64ac6a"
       },
       {
         "requirementIdentity": "contract:effect:effect:11:fe54656f03f51d31",
@@ -147780,17 +148364,18 @@
       }
     },
     "summary": {
-      "edgeCount": 534,
-      "coveredRequirementCount": 189,
+      "edgeCount": 578,
+      "coveredRequirementCount": 190,
       "scenarioCounts": {
         "m10-b1:103002:120s-three-actor-golden": 129,
         "m11-d-103002-visual-acceptance": 36,
         "m12-b3-103002-active-surface-closure": 325,
         "m12-b3-103002-joint-attack-runtime": 2,
-        "m12-b3-103002-marker-expiry-ordering": 42
+        "m12-b3-103002-marker-expiry-ordering": 42,
+        "m12-b3-103002-reload-window-boundaries": 44
       }
     },
-    "coverageHash": "c80dcd8a1772eb75"
+    "coverageHash": "016772be071a64d6"
   },
   "matrix": {
     "schemaVersion": 1,
@@ -147971,12 +148556,17 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:4a99cc355849dce2",
+          "coverage-edge:4b9ad09551b1334d",
+          "coverage-edge:662cb249afd22ef8",
           "coverage-edge:6b8338079952cdaa",
-          "coverage-edge:6e7eed74d4466370"
+          "coverage-edge:6e7eed74d4466370",
+          "coverage-edge:7c11f62c12c35ab5",
+          "coverage-edge:be5b2ac80a3e9a86"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
@@ -148234,13 +148824,16 @@
           "coverage-edge:b77b82c253ed563e",
           "coverage-edge:cadb885063bec13f",
           "coverage-edge:cc9a830d33aebac8",
-          "coverage-edge:e4a7995edbfec53b"
+          "coverage-edge:e4a7995edbfec53b",
+          "coverage-edge:f0cb637ff1c19501",
+          "coverage-edge:fa1dd7bc2ce06cc0"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-1273027567896048609__-1273027567896048609.json#behaviorlineControl[0].behaviorList[pathId=2157836165541645343]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_2157836165541645343__2157836165541645343.json"
@@ -148561,6 +149154,7 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
+          "coverage-edge:05694753aa6b184f",
           "coverage-edge:0b9e6bc113798984",
           "coverage-edge:0e9adc3e3b5417ab",
           "coverage-edge:4033588c821ac12b",
@@ -148571,11 +149165,13 @@
           "coverage-edge:ac60338e4c4871f1",
           "coverage-edge:afc40c3a301471ac",
           "coverage-edge:bc0312efe854b110",
-          "coverage-edge:bc1945367efb2630"
+          "coverage-edge:bc1945367efb2630",
+          "coverage-edge:db5fd2cd8e45c10e"
         ],
         "evidenceScenarioIds": [
           "m11-d-103002-visual-acceptance",
-          "m12-b3-103002-active-surface-closure"
+          "m12-b3-103002-active-surface-closure",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_933726118132111140__933726118132111140.json#behaviorlineControl[0].behaviorList[pathId=6653198106543576868]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_6653198106543576868__6653198106543576868.json"
@@ -152010,13 +152606,15 @@
           "coverage-edge:24c4a50efc22d282",
           "coverage-edge:401fe7004d9c7547",
           "coverage-edge:844a2da12c583e84",
-          "coverage-edge:928445f7a3d5807a"
+          "coverage-edge:928445f7a3d5807a",
+          "coverage-edge:e82f224ff79a0962"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-1273027567896048609__-1273027567896048609.json#behaviorlineControl[0].behaviorList[pathId=2157836165541645343]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_2157836165541645343__2157836165541645343.json"
@@ -153687,11 +154285,13 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:478429c21c8736e5",
+          "coverage-edge:7334d61d60391636",
           "coverage-edge:eab130454107a24e"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_8068404130320522655__8068404130320522655.json#behaviorlineControl[0].behaviorList[pathId=-5670337514868925025]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_-5670337514868925025__-5670337514868925025.json"
@@ -155205,6 +155805,8 @@
           "coverage-edge:63da4f11fb9aaca0",
           "coverage-edge:6c41a2ad647ef160",
           "coverage-edge:747d68161655f1d4",
+          "coverage-edge:850eefd109e23fa2",
+          "coverage-edge:9d189ce23789d0ea",
           "coverage-edge:a0c7ba00ff6bae76",
           "coverage-edge:b51bc9e7ce3ddb81",
           "coverage-edge:bbbccd537b4b9968",
@@ -155218,7 +155820,8 @@
         "evidenceScenarioIds": [
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType",
@@ -155245,12 +155848,14 @@
           "coverage-edge:09834d4f8ae1496c",
           "coverage-edge:21ca51bf3e9345aa",
           "coverage-edge:248a5bd126c9f959",
+          "coverage-edge:352a3ae7c5f49d20",
           "coverage-edge:4f21ac315df094db",
           "coverage-edge:6d8b274330e59a51",
           "coverage-edge:891665ae7e884586",
           "coverage-edge:8cde8ba26bba78fc",
           "coverage-edge:936b1fd887738365",
           "coverage-edge:9c84fffe5fbb2f90",
+          "coverage-edge:a550cfa66d301558",
           "coverage-edge:a7d87832de1a7ee6",
           "coverage-edge:af15af0de2d87a40",
           "coverage-edge:b638d64d6e2ceab9",
@@ -155264,7 +155869,8 @@
         "evidenceScenarioIds": [
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType",
@@ -156349,8 +156955,10 @@
         "coverageEdgeIds": [
           "coverage-edge:17890c504cab5a3f",
           "coverage-edge:1e3ae99dd71cbc2e",
+          "coverage-edge:2c2cf6ec8ffd0de4",
           "coverage-edge:46d4079c022db6bd",
           "coverage-edge:4819b28ca59949d1",
+          "coverage-edge:4f59e311a53fe900",
           "coverage-edge:68fd3906e8a3dbdf",
           "coverage-edge:758ac6785e86aa2c",
           "coverage-edge:88f3aced90d377be",
@@ -156360,7 +156968,8 @@
         ],
         "evidenceScenarioIds": [
           "m11-d-103002-visual-acceptance",
-          "m12-b3-103002-active-surface-closure"
+          "m12-b3-103002-active-surface-closure",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002000"
@@ -156402,17 +157011,20 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:2e43909a09e13760",
+          "coverage-edge:4f82c3d2e6a5ea41",
           "coverage-edge:77c6e7cf4dd113c2",
           "coverage-edge:8d83854e4b420d73",
           "coverage-edge:8d9e0df7f6de6880",
           "coverage-edge:949c2d5f4128db4d",
+          "coverage-edge:9b1f45e1c432ad59",
           "coverage-edge:ecc302d6f7cae37f"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[33]|battle-element-assets.jsonl#path_id=6530960959018090325"
@@ -156436,15 +157048,18 @@
           "coverage-edge:6b6642d95baa0d12",
           "coverage-edge:8faa6e3af6ac3910",
           "coverage-edge:a74bfb0b421921a8",
+          "coverage-edge:bff22a4ab8a2fd94",
           "coverage-edge:c1726ec67a171e80",
           "coverage-edge:c7c239fbaedefd0c",
-          "coverage-edge:da0694b3304db928"
+          "coverage-edge:da0694b3304db928",
+          "coverage-edge:f345d0ed2fd44058"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[33]|battle-element-assets.jsonl#path_id=6530960959018090325"
@@ -156466,17 +157081,20 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:1a47b144c9a8c332",
+          "coverage-edge:24935ea3ca8ad188",
           "coverage-edge:4b2dbbfc87c946fe",
           "coverage-edge:6b2248d8c13a698c",
           "coverage-edge:835465e800481ed4",
           "coverage-edge:8b50ebc4659aca97",
-          "coverage-edge:94ecea55ee6c6785"
+          "coverage-edge:94ecea55ee6c6785",
+          "coverage-edge:c31674d593a8a99a"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[33]|battle-element-assets.jsonl#path_id=6530960959018090325"
@@ -160077,6 +160695,7 @@
         "coverageEdgeIds": [
           "coverage-edge:6a21f9dce37a1933",
           "coverage-edge:704b3b199bfaa86e",
+          "coverage-edge:720cad2b4b04ea0b",
           "coverage-edge:a7f22f4ca40e4870",
           "coverage-edge:ad2f841f3eb29f39"
         ],
@@ -160084,7 +160703,8 @@
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300261.asset/MonoBehaviour/skill_control_10300261__-7174706712401575073.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002256.asset/MonoBehaviour/ast_103002256__2509240266934390618.json#elementConfigId=103002256|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002275.asset/MonoBehaviour/ast_103002275__-5857702920164552208.json#elementConfigId=103002275|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002276.asset/MonoBehaviour/ast_103002276__4227003560910032429.json#elementConfigId=103002276|battle-effect:10300201:1:4227003560910032429:8035120178475158559:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_8035120178475158559__8035120178475158559.json#startFrame|directInjectTargetType|battle-effect:10300201:2:4227003560910032429:2854627700941619855:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_2854627700941619855__2854627700941619855.json#startFrame|directInjectTargetType|battle-effect:10300201:3:4227003560910032429:-9131853883231755220:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_-9131853883231755220__-9131853883231755220.json#startFrame|directInjectTargetType|battle-effect:10300202:1:4227003560910032429:-5529757565413790634:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_-5529757565413790634__-5529757565413790634.json#startFrame|directInjectTargetType|battle-effect:10300202:2:4227003560910032429:-6931472007645150379:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_-6931472007645150379__-6931472007645150379.json#startFrame|directInjectTargetType|battle-effect:10300202:3:4227003560910032429:-1432565730222761017:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/MonoBehaviour_-1432565730222761017__-1432565730222761017.json#startFrame|directInjectTargetType|battle-effect:10300203:1:4227003560910032429:-1496705248257481635:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_-1496705248257481635__-1496705248257481635.json#startFrame|directInjectTargetType|battle-effect:10300203:2:4227003560910032429:-568111810174491770:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_-568111810174491770__-568111810174491770.json#startFrame|directInjectTargetType|battle-effect:10300203:3:4227003560910032429:-6318952971273766747:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/MonoBehaviour_-6318952971273766747__-6318952971273766747.json#startFrame|directInjectTargetType|battle-effect:10300204:0:4227003560910032429:-2222897544586480824:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType|battle-effect:10300204:1:4227003560910032429:-5353622254098868888:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-5353622254098868888__-5353622254098868888.json#startFrame|directInjectTargetType|battle-effect:10300204:2:4227003560910032429:-3436032383153191763:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-3436032383153191763__-3436032383153191763.json#startFrame|directInjectTargetType|battle-effect:10300204:3:4227003560910032429:1529913207984149574:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_1529913207984149574__1529913207984149574.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002275.asset/MonoBehaviour/ast_103002275__-5857702920164552208.json#elementConfigId=103002275|skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_-5345265671158772002__-5345265671158772002.json#inject-wrapper@114F|Battle/Element/ast_103002275.asset#stack-buff|battle-effect:10300244:1:4227003560910032429:2953670771364380742:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300244.asset/MonoBehaviour/MonoBehaviour_2953670771364380742__2953670771364380742.json#startFrame|directInjectTargetType"
@@ -160111,17 +160731,20 @@
           "coverage-edge:5ae020ba78a754a8",
           "coverage-edge:67b5f20513588ce1",
           "coverage-edge:8c9a59a88a006528",
+          "coverage-edge:adf9363836df033e",
           "coverage-edge:b270cfad87076365",
           "coverage-edge:b46648e248dbbc49",
           "coverage-edge:c46f9812ee853cae",
           "coverage-edge:d8f1d5cc7ea31a07",
           "coverage-edge:d90eba88a011b981",
+          "coverage-edge:ddb3f301f7233a13",
           "coverage-edge:ef689bc85275a77d",
           "coverage-edge:fac1772f6959fa2e"
         ],
         "evidenceScenarioIds": [
           "m11-d-103002-visual-acceptance",
-          "m12-b3-103002-active-surface-closure"
+          "m12-b3-103002-active-surface-closure",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [],
         "reasons": []
@@ -160142,13 +160765,18 @@
           "subSkillIndex": 0
         },
         "coverageEdgeIds": [
+          "coverage-edge:04cf17583e3d68b3",
           "coverage-edge:68df9d821506ed54",
+          "coverage-edge:6bda4319e14dd5ab",
+          "coverage-edge:6cf0c5ba1ffb5596",
           "coverage-edge:8d3893298aa81edc",
-          "coverage-edge:9ffe4ac67b85d91e"
+          "coverage-edge:9ffe4ac67b85d91e",
+          "coverage-edge:b2dc676dc0909720"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [],
         "reasons": []
@@ -160472,17 +161100,23 @@
           "coverage-edge:4a8e6b3c224d18dc",
           "coverage-edge:4cb62b1b8c4086ba",
           "coverage-edge:511600d1533b11fd",
+          "coverage-edge:57be0cd4ddb35d5a",
           "coverage-edge:6a43f87c0b758968",
           "coverage-edge:6a7ff3269b45b441",
           "coverage-edge:78789b2d938bbfcc",
+          "coverage-edge:7982296c3e96de69",
+          "coverage-edge:7a027823eb0842e9",
           "coverage-edge:7b9a0c97fa711bb1",
           "coverage-edge:867658e122b8dc72",
           "coverage-edge:88db65a9ada46cda",
+          "coverage-edge:928a99b2b481d12b",
           "coverage-edge:92c3c12df6fffb6b",
           "coverage-edge:93fcbc2460b635bd",
           "coverage-edge:98ba76c5dcd7a615",
           "coverage-edge:aec7dbd088b9a04a",
           "coverage-edge:b2e2a9fcb7b12198",
+          "coverage-edge:bbad612fb58f49a9",
+          "coverage-edge:c5cba3fb7d74f211",
           "coverage-edge:c5e6b43b775e6c48",
           "coverage-edge:c7b04ccf5c39e2b7",
           "coverage-edge:ca1e6ae7e64821cb",
@@ -160496,7 +161130,8 @@
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ModuleChargingSkill103002._burstElementId|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002047.asset/MonoBehaviour/ast_103002047__3663436943335475859.json#elementConfigId=103002047"
@@ -162579,11 +163214,13 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:a9ea3a2f5e97b903",
-          "coverage-edge:f23bc9e5131f5520"
+          "coverage-edge:f23bc9e5131f5520",
+          "coverage-edge:fb6ff7f21a64ac6a"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[0].elements[17]|battle-element-assets.jsonl#path_id=-315085305908719333|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_868011296907042207__868011296907042207.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002246.asset/MonoBehaviour/ast_103002246__-315085305908719333.json#elementConfigId=103002246|skill_control_10300210.asset#skillResourceMaps[0].elements[elementConfigId=103002246]@24F|Battle/Element/ast_103002246.asset#duration=4000ms|skill_control_10300210.asset#control-transition[52,93)->10300201/sub1"
@@ -162605,11 +163242,13 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:6758eb4a64d63bbe",
-          "coverage-edge:d6e6c67f6ed2cb13"
+          "coverage-edge:d6e6c67f6ed2cb13",
+          "coverage-edge:df04aebeab2e4c75"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_868011296907042207__868011296907042207.json#startFrame|directInjectTargetType"
@@ -170991,13 +171630,15 @@
           "coverage-edge:00dcf8dae22405d3",
           "coverage-edge:43e51250c8541cfc",
           "coverage-edge:4777c1f69961d654",
-          "coverage-edge:86fac07f3fb939ad"
+          "coverage-edge:86fac07f3fb939ad",
+          "coverage-edge:b67740f0bf86e71b"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[7]|battle-element-assets.jsonl#path_id=-2917409335481151685|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_294024852374015007__294024852374015007.json#startFrame|directInjectTargetType"
@@ -171779,13 +172420,15 @@
           "coverage-edge:0653f8ecb38475e0",
           "coverage-edge:77ffd4959ce693f4",
           "coverage-edge:8faa06dccf5442ee",
+          "coverage-edge:bb7b4901253a7d0e",
           "coverage-edge:ce2c3bd5c3e9cf57"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[1].elements[6]|battle-element-assets.jsonl#path_id=-7614050540243982357|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/MonoBehaviour_294024852374015007__294024852374015007.json#startFrame|directInjectTargetType"
@@ -172949,12 +173592,14 @@
           "kind": "variant-window"
         },
         "coverageEdgeIds": [
+          "coverage-edge:253111f91699b6f5",
           "coverage-edge:dbe3a4b7b1c3391a",
           "coverage-edge:fdb7947ef429f7a8"
         ],
         "evidenceScenarioIds": [
           "m10-b1:103002:120s-three-actor-golden",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_103002246.asset/MonoBehaviour/ast_103002246__-315085305908719333.json#elementConfigId=103002246|skill_control_10300210.asset#skillResourceMaps[0].elements[elementConfigId=103002246]@24F|Battle/Element/ast_103002246.asset#duration=4000ms|skill_control_10300210.asset#control-transition[52,93)->10300201/sub1"
@@ -173405,7 +174050,7 @@
         "dimension": "window-boundary",
         "subjectIdentity": "input-window-inside-outside-boundaries",
         "required": true,
-        "status": "blocked",
+        "status": "passed",
         "contractStatus": "protocol-required",
         "sourceDisposition": "applied",
         "sourceRecordHash": "36929430ee767be9",
@@ -173414,14 +174059,17 @@
           "factIdentity": "input-window-inside-outside-boundaries",
           "kind": "scenario-fact"
         },
-        "coverageEdgeIds": [],
-        "evidenceScenarioIds": [],
+        "coverageEdgeIds": [
+          "coverage-edge:21cc67059750fea8",
+          "coverage-edge:2e3898e7e660e8d9"
+        ],
+        "evidenceScenarioIds": [
+          "m12-b3-103002-reload-window-boundaries"
+        ],
         "sourceIdentities": [
           "protocol:m11-d-character-acceptance-v1:owner:103002"
         ],
-        "reasons": [
-          "acceptance-scenario-coverage-missing"
-        ]
+        "reasons": []
       },
       {
         "requirementIdentity": "protocol:103002:normal-trigger-positive",
@@ -173488,6 +174136,7 @@
           "kind": "scenario-fact"
         },
         "coverageEdgeIds": [
+          "coverage-edge:0f7b493122bb013f",
           "coverage-edge:1f7f3fd5393a66d0",
           "coverage-edge:51d0314171147f83",
           "coverage-edge:5984053f2d451bf8",
@@ -173495,13 +174144,15 @@
           "coverage-edge:74728cef13123800",
           "coverage-edge:7fbb99555614014f",
           "coverage-edge:97f461ecea6b80f3",
-          "coverage-edge:a958e0b890c2916b"
+          "coverage-edge:a958e0b890c2916b",
+          "coverage-edge:dd7f72700b6766bc"
         ],
         "evidenceScenarioIds": [
           "m11-d-103002-visual-acceptance",
           "m12-b3-103002-active-surface-closure",
           "m12-b3-103002-joint-attack-runtime",
-          "m12-b3-103002-marker-expiry-ordering"
+          "m12-b3-103002-marker-expiry-ordering",
+          "m12-b3-103002-reload-window-boundaries"
         ],
         "sourceIdentities": [
           "protocol:m11-d-character-acceptance-v1:owner:103002"
@@ -173512,13 +174163,12 @@
     "summary": {
       "requirementCount": 696,
       "requiredCount": 190,
-      "passedCount": 189,
-      "blockedCount": 1,
+      "passedCount": 190,
+      "blockedCount": 0,
       "notApplicableCount": 506,
       "statusCounts": {
-        "blocked": 1,
         "not-applicable": 506,
-        "passed": 189
+        "passed": 190
       },
       "dimensionCounts": {
         "action-effect-binding": 3,
@@ -173547,40 +174197,14 @@
         "window-boundary": 1
       }
     },
-    "matrixHash": "ab21e608a5ad8f32"
+    "matrixHash": "86c93000916ce750"
   },
   "ledger": {
     "schemaVersion": 1,
     "kind": "character-acceptance-derived-ledger",
     "sourceGaps": [],
-    "acceptanceGaps": [
-      {
-        "category": "acceptance-scenario-gap",
-        "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "protocol:m11-d-character-acceptance-v1:owner:103002"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:d4e08854309c4bab",
-        "uniqueGapIdentity": "acceptance-gap:d4e08854309c4bab"
-      }
-    ],
-    "records": [
-      {
-        "category": "acceptance-scenario-gap",
-        "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
-        "status": "static-evidence-gap",
-        "reason": "acceptance-scenario-coverage-missing",
-        "sourceIdentities": [
-          "protocol:m11-d-character-acceptance-v1:owner:103002"
-        ],
-        "blocking": true,
-        "recordIdentity": "acceptance-gap:d4e08854309c4bab",
-        "uniqueGapIdentity": "acceptance-gap:d4e08854309c4bab"
-      }
-    ],
+    "acceptanceGaps": [],
+    "records": [],
     "nonBlockingRecords": [
       {
         "recordIdentity": "source-gap:008e0cbae33c4525",
@@ -180225,21 +180849,15 @@
       }
     ],
     "summary": {
-      "uniqueBlockingCount": 1,
+      "uniqueBlockingCount": 0,
       "sourceGapCount": 0,
-      "acceptanceGapCount": 1,
+      "acceptanceGapCount": 0,
       "nonBlockingCount": 368,
-      "statusCounts": {
-        "static-evidence-gap": 1
-      },
-      "reasonCounts": {
-        "acceptance-scenario-coverage-missing": 1
-      },
-      "categoryCounts": {
-        "acceptance-scenario-gap": 1
-      }
+      "statusCounts": {},
+      "reasonCounts": {},
+      "categoryCounts": {}
     },
-    "ledgerHash": "bb6fad355553cc95"
+    "ledgerHash": "3a98832790b860ce"
   },
   "notApplicableRecords": [
     {
@@ -197546,48 +198164,45 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "299a7a3d53e9258b"
+    "sourceOfTruthHash": "2b3b19b2781cdef3"
   },
-  "qualificationSubjectHash": "ee5826d858b7b867",
+  "qualificationSubjectHash": "67a6fedbbd8963ab",
   "maturity": {
-    "currentState": "extracted",
+    "currentState": "optimization-ready",
     "earnedStates": [
-      "extracted"
+      "extracted",
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
+    "optimizationReady": true,
     "facts": {
       "profileValid": true,
       "sourceEvidenceIndexed": true,
       "canonicalGoldenCount": 1,
       "canonicalGoldenPassed": true,
       "machineScenarioCount": 5,
-      "headlessReplayPassed": false,
+      "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": false,
+      "productVisualAccepted": true,
       "matrixRequiredCount": 190,
-      "matrixPassedCount": 189,
-      "matrixComplete": false,
-      "blockingLedgerCount": 1,
-      "functionalFailureCount": 1
+      "matrixPassedCount": 190,
+      "matrixComplete": true,
+      "blockingLedgerCount": 0,
+      "functionalFailureCount": 0
     },
     "gates": {
       "extracted": true,
-      "runtimeIntegrated": false,
-      "visuallyAccepted": false,
-      "optimizationReady": false
+      "runtimeIntegrated": true,
+      "visuallyAccepted": true,
+      "optimizationReady": true
     },
-    "blockers": [
-      "acceptance-headless-replay-gate-failed",
-      "acceptance-functional-failure-present",
-      "acceptance-product-visual-signoff-pending",
-      "acceptance-required-matrix-incomplete",
-      "acceptance-blocking-ledger-not-empty"
-    ]
+    "blockers": []
   },
   "validation": {
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "03d07b3246e85b92"
+  "manifestHash": "0716523267a30496"
 }

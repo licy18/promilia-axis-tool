@@ -3,7 +3,7 @@
   "contractName": "AzPrM12B3BindingMatrix",
   "kind": "azpr-m12-b3-binding-matrix",
   "phase": "M12-B3-E22",
-  "generatedAt": "2026-08-12T17:24:56.911Z",
+  "generatedAt": "2026-08-13T12:23:04.780Z",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -13,12 +13,12 @@
     "setSkills": 12
   },
   "hashes": {
-    "rosterHash": "eaf6307fbcda3055",
-    "manifestsHash": "bb3f6aae02f5f195",
-    "ledgerHash": "3c6248725fe07866",
-    "bindingMatrixHash": "a525454b1409827f",
-    "qualificationCatalogHash": "9c6866fe1d68a3fd",
-    "verifiedMechanicsPackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8"
+    "rosterHash": "fbdf04dfec427c24",
+    "manifestsHash": "37669e2b1f2563c1",
+    "ledgerHash": "631b16c493b03ea8",
+    "bindingMatrixHash": "94b6b0eed55c2058",
+    "qualificationCatalogHash": "67a8ec8745246dd3",
+    "verifiedMechanicsPackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216"
   },
   "staticMatrix": {
     "status": "passed",
@@ -968,9 +968,9 @@
         "identity": "artifact-hash-consistency",
         "passed": true,
         "detail": {
-          "rosterHash": "eaf6307fbcda3055",
-          "bindingMatrixHash": "a525454b1409827f",
-          "catalogHash": "9c6866fe1d68a3fd"
+          "rosterHash": "fbdf04dfec427c24",
+          "bindingMatrixHash": "94b6b0eed55c2058",
+          "catalogHash": "67a8ec8745246dd3"
         }
       }
     ]
@@ -1109,7 +1109,7 @@
           "identity": "same-frame-scenario-deterministic",
           "passed": true,
           "detail": {
-            "traceHash": "75e162692579024e",
+            "traceHash": "15b9c3aeb50ec84c",
             "effectEventCount": 15
           }
         }
@@ -1125,19 +1125,19 @@
           "detail": {
             "replayHashes": {
               "algorithm": "fnv1a64-utf8-v1",
-              "input": "bfbeb5e2db15340e",
-              "data": "0e22dfbdaf061165",
-              "trace": "775eff32aeb8dd06",
+              "input": "747baeae21722ae4",
+              "data": "8d610a503303cfd1",
+              "trace": "c0464ef7e3b8e187",
               "evaluation": "f97d7f73051e975c",
-              "build": "1b58796347275bda"
+              "build": "082353844f71b8cb"
             },
             "directHashes": {
               "algorithm": "fnv1a64-utf8-v1",
-              "input": "bfbeb5e2db15340e",
-              "data": "0e22dfbdaf061165",
-              "trace": "775eff32aeb8dd06",
+              "input": "747baeae21722ae4",
+              "data": "8d610a503303cfd1",
+              "trace": "c0464ef7e3b8e187",
               "evaluation": "f97d7f73051e975c",
-              "build": "1b58796347275bda"
+              "build": "082353844f71b8cb"
             }
           }
         },
@@ -1148,11 +1148,11 @@
           "detail": {
             "jsonHashes": {
               "algorithm": "fnv1a64-utf8-v1",
-              "input": "bfbeb5e2db15340e",
-              "data": "0e22dfbdaf061165",
-              "trace": "775eff32aeb8dd06",
+              "input": "747baeae21722ae4",
+              "data": "8d610a503303cfd1",
+              "trace": "c0464ef7e3b8e187",
               "evaluation": "f97d7f73051e975c",
-              "build": "1b58796347275bda"
+              "build": "082353844f71b8cb"
             }
           }
         }
@@ -1167,8 +1167,8 @@
           "passed": true,
           "detail": {
             "status": "closed",
-            "cycleHash": "7ca76ba8ffd48696",
-            "traceHash": "50dded458058fefa",
+            "cycleHash": "1397460c525baf78",
+            "traceHash": "c127427123e360c8",
             "normalAttackInputAuthorityHash": "530396bf773cc439",
             "rubyChainIdentity": "ruby-normal-default-three-inputs",
             "rubyContractInputs": [
@@ -1253,5 +1253,5 @@
     "blockedCount": 0,
     "allPassed": true
   },
-  "bindingMatrixHash": "2e1855d82b7ec7c6"
+  "bindingMatrixHash": "30a4025ffdb47558"
 }

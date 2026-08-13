@@ -15578,7 +15578,7 @@
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101010-visual.json"
       },
       "execution": {
-        "status": "failed",
+        "status": "passed",
         "stableReplay": true,
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
@@ -75601,7 +75601,7 @@
           "light-consume-success-produces-elemental-damage": true,
           "light-consume-success-produces-true-damage": true,
           "machine-axis-validation": true,
-          "negative:charged-input-window-start-minus-one-74f-lane-overlap": false,
+          "negative:charged-input-window-start-minus-one-74f-lane-overlap": true,
           "probe:variant-selection:window-inside-end": true,
           "probe:variant-selection:window-inside-start": true,
           "probe:variant-selection:xiaoyu-enhanced-charged": true,
@@ -75617,7 +75617,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "502b42571f6d8bcf",
+      "traceProjectionHash": "01901bc31a44ab58",
       "assertions": [
         {
           "assertionIdentity": "a4-four-landed-hits-share-direct-sp-to-two-allies",
@@ -81559,8 +81559,10 @@
           "expectation": {
             "minimumCount": 1
           },
-          "status": "blocked",
-          "actualProjectionIdentities": [],
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:charged-input-window-start-minus-one-74f-lane-overlap"
+          ],
           "actual": {
             "issue": {
               "actionId": "negative-window-start-minus-one",
@@ -81582,30 +81584,7 @@
             "requiredExecutableActionIds": [
               "negative-window-before-source"
             ],
-            "prerequisiteIssues": [
-              {
-                "severity": "error",
-                "finalScoreEligible": false,
-                "code": "charged-input-threshold-not-reached",
-                "category": "readiness",
-                "path": "actions.negative-window-before-source.intent.physicalInput",
-                "message": "Charged input schedule is invalid: charged-input-threshold-not-reached",
-                "actionId": "negative-window-before-source",
-                "actionIds": [
-                  "negative-window-before-source"
-                ],
-                "actorId": null,
-                "status": "violated",
-                "ruleCodes": [],
-                "unresolvedCodes": [],
-                "absoluteFrame": 0,
-                "currentValue": 0,
-                "ownerId": 101010,
-                "requiredValue": 16,
-                "sourceKind": "verified-charged-physical-input",
-                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:101010"
-              }
-            ],
+            "prerequisiteIssues": [],
             "baselineRequiredExecutableActionIds": [],
             "baselinePrerequisiteIssues": [],
             "baselineMissingActionIds": [],
@@ -81616,10 +81595,10 @@
               "build": "e64141548b154117"
             },
             "canonicalHashes": {
-              "input": "88976cb1380d2a59",
+              "input": "7dc04784ef4722d9",
               "data": "a62ff28821463468",
-              "trace": "d7bf1aba7198608c",
-              "build": "9a76a2f3aeb026c8"
+              "trace": "030c96e946942117",
+              "build": "ae00463635440fc9"
             },
             "classification": {
               "schemaStatus": "schema-valid",
@@ -81627,11 +81606,8 @@
               "evidenceStatus": "not-evaluated"
             }
           },
-          "reasons": [
-            "canonical-scenario-assertion-failed",
-            "scenario-assertion-not-satisfied"
-          ],
-          "assertionHash": "2967d0d9e7e0abb9"
+          "reasons": [],
+          "assertionHash": "9a60181d2273b514"
         },
         {
           "assertionIdentity": "probe:variant-selection:window-inside-end",
@@ -82648,6 +82624,23 @@
           ],
           "reasons": [],
           "assertionHash": "bee1214967843864"
+        },
+        {
+          "assertionIdentity": "scenario-fact:negative:charged-input-window-start-minus-one-74f-lane-overlap",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "negative:charged-input-window-start-minus-one-74f-lane-overlap",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:charged-input-window-start-minus-one-74f-lane-overlap"
+          ],
+          "reasons": [],
+          "assertionHash": "27a8980563b501fe"
         },
         {
           "assertionIdentity": "scenario-fact:probe:variant-selection:window-inside-end",
@@ -98713,7 +98706,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "a47ea28ba16442f4"
+      "scenarioCaseHash": "f936075e95a7f4f2"
     },
     {
       "schemaVersion": 1,
@@ -98725,7 +98718,7 @@
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101010-light-ultimate.json"
       },
       "execution": {
-        "status": "failed",
+        "status": "passed",
         "stableReplay": true,
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
@@ -107047,7 +107040,7 @@
           "canonical-same-input-replay": true,
           "isolated:a4-miss-and-blocked-no-direct-sp": true,
           "machine-axis-validation": true,
-          "negative:charged-input-window-start-minus-one-74f-lane-overlap": false,
+          "negative:charged-input-window-start-minus-one-74f-lane-overlap": true,
           "probe:variant-selection:xiaoyu-light-ultimate": true,
           "runtime-interruption:a4-interrupted-before-third-hit": true,
           "ultimate-light-does-not-consume-absent-wind": true,
@@ -107057,7 +107050,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "32c522cdf7b811a1",
+      "traceProjectionHash": "69b197af6a2c5be4",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -110921,8 +110914,10 @@
           "expectation": {
             "minimumCount": 1
           },
-          "status": "blocked",
-          "actualProjectionIdentities": [],
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:charged-input-window-start-minus-one-74f-lane-overlap"
+          ],
           "actual": {
             "issue": {
               "actionId": "negative-window-start-minus-one",
@@ -110944,30 +110939,7 @@
             "requiredExecutableActionIds": [
               "negative-window-before-source"
             ],
-            "prerequisiteIssues": [
-              {
-                "severity": "error",
-                "finalScoreEligible": false,
-                "code": "charged-input-threshold-not-reached",
-                "category": "readiness",
-                "path": "actions.negative-window-before-source.intent.physicalInput",
-                "message": "Charged input schedule is invalid: charged-input-threshold-not-reached",
-                "actionId": "negative-window-before-source",
-                "actionIds": [
-                  "negative-window-before-source"
-                ],
-                "actorId": null,
-                "status": "violated",
-                "ruleCodes": [],
-                "unresolvedCodes": [],
-                "absoluteFrame": 0,
-                "currentValue": 0,
-                "ownerId": 101010,
-                "requiredValue": 16,
-                "sourceKind": "verified-charged-physical-input",
-                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:101010"
-              }
-            ],
+            "prerequisiteIssues": [],
             "baselineRequiredExecutableActionIds": [],
             "baselinePrerequisiteIssues": [],
             "baselineMissingActionIds": [],
@@ -110978,10 +110950,10 @@
               "build": "2227067629e08e6a"
             },
             "canonicalHashes": {
-              "input": "460f5f44e6ec2155",
+              "input": "90e310e14459f4bf",
               "data": "a62ff28821463468",
-              "trace": "0c80f649bb01f75c",
-              "build": "25ae4dbf565a47b5"
+              "trace": "bc7b24521ccfd9b1",
+              "build": "1f774ff420ced284"
             },
             "classification": {
               "schemaStatus": "schema-valid",
@@ -110989,11 +110961,8 @@
               "evidenceStatus": "not-evaluated"
             }
           },
-          "reasons": [
-            "canonical-scenario-assertion-failed",
-            "scenario-assertion-not-satisfied"
-          ],
-          "assertionHash": "2588dc51792a9f4d"
+          "reasons": [],
+          "assertionHash": "115050d34a131064"
         },
         {
           "assertionIdentity": "probe:variant-selection:xiaoyu-light-ultimate",
@@ -111191,6 +111160,23 @@
           ],
           "reasons": [],
           "assertionHash": "bee1214967843864"
+        },
+        {
+          "assertionIdentity": "scenario-fact:negative:charged-input-window-start-minus-one-74f-lane-overlap",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "negative:charged-input-window-start-minus-one-74f-lane-overlap",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:charged-input-window-start-minus-one-74f-lane-overlap"
+          ],
+          "reasons": [],
+          "assertionHash": "27a8980563b501fe"
         },
         {
           "assertionIdentity": "scenario-fact:probe:variant-selection:xiaoyu-light-ultimate",
@@ -114252,7 +114238,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "4258409434954a3e"
+      "scenarioCaseHash": "194a38b50189a9ab"
     },
     {
       "schemaVersion": 1,
@@ -114264,7 +114250,7 @@
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101010-wind-ultimate.json"
       },
       "execution": {
-        "status": "failed",
+        "status": "passed",
         "stableReplay": true,
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
@@ -123263,7 +123249,7 @@
           "canonical-same-input-replay": true,
           "isolated:a4-miss-and-blocked-no-direct-sp": true,
           "machine-axis-validation": true,
-          "negative:charged-input-window-start-minus-one-74f-lane-overlap": false,
+          "negative:charged-input-window-start-minus-one-74f-lane-overlap": true,
           "probe:variant-selection:xiaoyu-wind-ultimate": true,
           "runtime-interruption:a4-interrupted-before-third-hit": true,
           "ultimate-wind-does-not-consume-absent-light": true,
@@ -123272,7 +123258,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "d7dd312981237d95",
+      "traceProjectionHash": "f83cddab2f0c076e",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -127242,8 +127228,10 @@
           "expectation": {
             "minimumCount": 1
           },
-          "status": "blocked",
-          "actualProjectionIdentities": [],
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:charged-input-window-start-minus-one-74f-lane-overlap"
+          ],
           "actual": {
             "issue": {
               "actionId": "negative-window-start-minus-one",
@@ -127265,30 +127253,7 @@
             "requiredExecutableActionIds": [
               "negative-window-before-source"
             ],
-            "prerequisiteIssues": [
-              {
-                "severity": "error",
-                "finalScoreEligible": false,
-                "code": "charged-input-threshold-not-reached",
-                "category": "readiness",
-                "path": "actions.negative-window-before-source.intent.physicalInput",
-                "message": "Charged input schedule is invalid: charged-input-threshold-not-reached",
-                "actionId": "negative-window-before-source",
-                "actionIds": [
-                  "negative-window-before-source"
-                ],
-                "actorId": null,
-                "status": "violated",
-                "ruleCodes": [],
-                "unresolvedCodes": [],
-                "absoluteFrame": 0,
-                "currentValue": 0,
-                "ownerId": 101010,
-                "requiredValue": 16,
-                "sourceKind": "verified-charged-physical-input",
-                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:101010"
-              }
-            ],
+            "prerequisiteIssues": [],
             "baselineRequiredExecutableActionIds": [],
             "baselinePrerequisiteIssues": [],
             "baselineMissingActionIds": [],
@@ -127299,10 +127264,10 @@
               "build": "10054cc0554080e4"
             },
             "canonicalHashes": {
-              "input": "affa78121ed1393f",
+              "input": "9d7ea62568d0fcf5",
               "data": "a62ff28821463468",
-              "trace": "f40c15ae4d061d90",
-              "build": "8416bd680cd56c01"
+              "trace": "5e1c1033c0ceccd9",
+              "build": "7ab29032333b095c"
             },
             "classification": {
               "schemaStatus": "schema-valid",
@@ -127310,11 +127275,8 @@
               "evidenceStatus": "not-evaluated"
             }
           },
-          "reasons": [
-            "canonical-scenario-assertion-failed",
-            "scenario-assertion-not-satisfied"
-          ],
-          "assertionHash": "48e413aca355aea1"
+          "reasons": [],
+          "assertionHash": "4fbeb68942252c26"
         },
         {
           "assertionIdentity": "probe:variant-selection:xiaoyu-wind-ultimate",
@@ -127512,6 +127474,23 @@
           ],
           "reasons": [],
           "assertionHash": "bee1214967843864"
+        },
+        {
+          "assertionIdentity": "scenario-fact:negative:charged-input-window-start-minus-one-74f-lane-overlap",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "negative:charged-input-window-start-minus-one-74f-lane-overlap",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:charged-input-window-start-minus-one-74f-lane-overlap"
+          ],
+          "reasons": [],
+          "assertionHash": "27a8980563b501fe"
         },
         {
           "assertionIdentity": "scenario-fact:probe:variant-selection:xiaoyu-wind-ultimate",
@@ -130582,18 +130561,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "5b6ad0c391d6f54f"
+      "scenarioCaseHash": "cd79f7a6bfbd4fd5"
     }
   ],
   "summary": {
     "scenarioCount": 4,
-    "executionPassedCount": 1,
-    "assertionCount": 1309,
-    "assertionPassedCount": 1306,
+    "executionPassedCount": 4,
+    "assertionCount": 1312,
+    "assertionPassedCount": 1312,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 3
     }
   },
-  "scenarioSetHash": "f8302c214df344eb"
+  "scenarioSetHash": "061d19847095d49c"
 }

@@ -94163,7 +94163,7 @@
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/103002-window-boundaries.json"
       },
       "execution": {
-        "status": "failed",
+        "status": "passed",
         "stableReplay": true,
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
@@ -102254,7 +102254,7 @@
           "canonical-same-input-replay": true,
           "input-window-inside-outside-boundaries": true,
           "machine-axis-validation": true,
-          "negative:reload-window-start-minus-one-23f-lane-overlap": false,
+          "negative:reload-window-start-minus-one-23f-lane-overlap": true,
           "runtime-interruption:enhanced-marker-cutoff-at-trigger": true,
           "runtime-interruption:enhanced-marker-survives-post-trigger-interruption": true,
           "runtime-interruption:ultimate-thunder-judgment-after-173f": true,
@@ -102264,7 +102264,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "edd83fda794b25d0",
+      "traceProjectionHash": "72ed6528d8e46d43",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -102524,8 +102524,10 @@
           "expectation": {
             "minimumCount": 1
           },
-          "status": "blocked",
-          "actualProjectionIdentities": [],
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:reload-window-start-minus-one-23f-lane-overlap"
+          ],
           "actual": {
             "issue": {
               "actionId": "negative-reload-window-start-minus-one",
@@ -102547,30 +102549,7 @@
             "requiredExecutableActionIds": [
               "negative-reload-window-source"
             ],
-            "prerequisiteIssues": [
-              {
-                "severity": "error",
-                "finalScoreEligible": false,
-                "code": "charged-input-threshold-not-reached",
-                "category": "readiness",
-                "path": "actions.negative-reload-window-source.intent.physicalInput",
-                "message": "Charged input schedule is invalid: charged-input-threshold-not-reached",
-                "actionId": "negative-reload-window-source",
-                "actionIds": [
-                  "negative-reload-window-source"
-                ],
-                "actorId": null,
-                "status": "violated",
-                "ruleCodes": [],
-                "unresolvedCodes": [],
-                "absoluteFrame": 0,
-                "currentValue": 0,
-                "ownerId": 103002,
-                "requiredValue": 16,
-                "sourceKind": "verified-charged-physical-input",
-                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:103002"
-              }
-            ],
+            "prerequisiteIssues": [],
             "baselineRequiredExecutableActionIds": [],
             "baselinePrerequisiteIssues": [],
             "baselineMissingActionIds": [],
@@ -102581,10 +102560,10 @@
               "build": "3c86d2f7952d9462"
             },
             "canonicalHashes": {
-              "input": "be59cba22e8f17d0",
+              "input": "e12b0b07623dcd94",
               "data": "d2a8388c556f22f4",
-              "trace": "3155c27a6b38ca9d",
-              "build": "b70a243c743aad5d"
+              "trace": "6066540031679b94",
+              "build": "abd85c42867ba78c"
             },
             "classification": {
               "schemaStatus": "schema-valid",
@@ -102592,11 +102571,8 @@
               "evidenceStatus": "not-evaluated"
             }
           },
-          "reasons": [
-            "canonical-scenario-assertion-failed",
-            "scenario-assertion-not-satisfied"
-          ],
-          "assertionHash": "1c3b86d4961528b2"
+          "reasons": [],
+          "assertionHash": "00a6633d53163f4e"
         },
         {
           "assertionIdentity": "runtime-interruption:enhanced-marker-cutoff-at-trigger",
@@ -103088,6 +103064,23 @@
           ],
           "reasons": [],
           "assertionHash": "bee1214967843864"
+        },
+        {
+          "assertionIdentity": "scenario-fact:negative:reload-window-start-minus-one-23f-lane-overlap",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "negative:reload-window-start-minus-one-23f-lane-overlap",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:negative:reload-window-start-minus-one-23f-lane-overlap"
+          ],
+          "reasons": [],
+          "assertionHash": "ab3393825062ae3a"
         },
         {
           "assertionIdentity": "scenario-fact:runtime-interruption:enhanced-marker-cutoff-at-trigger",
@@ -106377,18 +106370,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "c3e780df30b136a5"
+      "scenarioCaseHash": "481a59a322ae3a71"
     }
   ],
   "summary": {
     "scenarioCount": 6,
-    "executionPassedCount": 5,
-    "assertionCount": 1777,
-    "assertionPassedCount": 1776,
+    "executionPassedCount": 6,
+    "assertionCount": 1778,
+    "assertionPassedCount": 1778,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 5
     }
   },
-  "scenarioSetHash": "c348cc5a6c3182a2"
+  "scenarioSetHash": "282b92d4103adfa9"
 }

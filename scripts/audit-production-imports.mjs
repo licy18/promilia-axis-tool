@@ -50,6 +50,8 @@ const testEntryFiles = [
 const productionEntryFiles = [
   path.join(sourceRoot, 'main.js'),
   path.join(repositoryRoot, 'scripts', 'machine-axis-cli-entry.mjs'),
+  path.join(repositoryRoot, 'scripts', 'run-ai-local-search.mjs'),
+  path.join(repositoryRoot, 'scripts', 'run-ai-local-search-worker.mjs'),
   path.join(sourceRoot, 'machine-axis', 'workbenchMachineAxisAdapter.js'),
 ];
 

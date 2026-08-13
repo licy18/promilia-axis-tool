@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerProductVisualSignoff",
+  "status": "owner-signoff-recorded-awaiting-release-gates",
+  "signedAt": "2026-08-13T20:03:05.0616267+08:00",
+  "evidenceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+  "ownerCount": 10,
+  "optimizationObjectCount": 9,
+  "starborn": {
+    "optimizationObjectId": "STARBORN",
+    "sourceOwnerIds": [199001, 199002],
+    "signoffMode": "single-object-joint-signoff",
+    "acceptanceSubjectHash": "e48fbc866c896d90",
+    "recordIdentity": "optimization-object-product-acceptance:STARBORN:829d628bff9476c489d03e152e9377fd8c8e9e3c:e48fbc866c896d90",
+    "optimizationReady": true
+  },
+  "owners": [
+    {
+      "ownerId": 101010,
+      "scenarioIdentity": "m11-d-101010-visual-acceptance",
+      "qualificationSubjectHash": "dbe2c77baf36a06a",
+      "scenarioSetHash": "77cb81447452b619",
+      "canonicalTraceHash": "0b447cfb61e86705",
+      "control": "control 10101010 / sub 2",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-canonical-trace.png",
+      "screenshotSha256": "9c75dc7c59e298be2eeebb7327a412fa11da38524c9f883049dee33dc929c977"
+    },
+    {
+      "ownerId": 102001,
+      "scenarioIdentity": "m12-b3-102001-zero-distance-acceptance",
+      "qualificationSubjectHash": "df07ff882e9ec710",
+      "scenarioSetHash": "e7ffa512662fd369",
+      "canonicalTraceHash": "4080549360045f8a",
+      "control": "control 10200110 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-102001-canonical-trace.png",
+      "screenshotSha256": "0d7e288fd82b1a59140dda68759e0da29815559303713ea3229a261ba59b58a8"
+    },
+    {
+      "ownerId": 103002,
+      "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+      "qualificationSubjectHash": "67a6fedbbd8963ab",
+      "scenarioSetHash": "1fe9a92cf776d16e",
+      "canonicalTraceHash": "ea55eda7a1dfc932",
+      "control": "control 10300210 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-canonical-trace.png",
+      "screenshotSha256": "618014ef0caa89b54cd27921f82237b5e6bcf80f804f4c1c74b0f76a76561cd3"
+    },
+    {
+      "ownerId": 107001,
+      "scenarioIdentity": "m12-b3-107001-focused-acceptance",
+      "qualificationSubjectHash": "eb709a9eed536e13",
+      "scenarioSetHash": "92f8ac26f7ec4a36",
+      "canonicalTraceHash": "e2899b090c13fc52",
+      "control": "control 10700110 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107001-canonical-trace.png",
+      "screenshotSha256": "3ea8da520606a0217709278064534269606a26d61877e3ee43041a0da34d4d26"
+    },
+    {
+      "ownerId": 107002,
+      "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
+      "qualificationSubjectHash": "ae4da5c88b34b11a",
+      "scenarioSetHash": "78502763924dc058",
+      "canonicalTraceHash": "25f9afdbd5a2eb1e",
+      "control": "control 10700210 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107002-canonical-trace.png",
+      "screenshotSha256": "a4aaa609a2cae9a9af869dcb3cf2d81805886aae92251afc7b1b8baac9a6b8e9"
+    },
+    {
+      "ownerId": 108003,
+      "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
+      "qualificationSubjectHash": "fe56832c1fcbde94",
+      "scenarioSetHash": "d30ed4987ab4ddaf",
+      "canonicalTraceHash": "3c7aa098a5e9729f",
+      "control": "control 10800342 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-108003-canonical-trace.png",
+      "screenshotSha256": "619035991e31b98fb8437844d8d6bda2f01c030c1c4fc71dc60bbb737c064d9b"
+    },
+    {
+      "ownerId": 109001,
+      "scenarioIdentity": "m11-d-109001-visual-acceptance",
+      "qualificationSubjectHash": "aa00dff986f54f3d",
+      "scenarioSetHash": "f854ed99d52ada0c",
+      "canonicalTraceHash": "7086d47aebcdbd40",
+      "control": "control 10900110 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-109001-canonical-trace.png",
+      "screenshotSha256": "cfb5c179b6910e1e23c2f673a758019d3a42d65ad019810e1ebf21c3aadc099e"
+    },
+    {
+      "ownerId": 112001,
+      "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
+      "qualificationSubjectHash": "687053ac01261ad8",
+      "scenarioSetHash": "4b2dbcae7cbf263e",
+      "canonicalTraceHash": "bc7da2686f144f0c",
+      "control": "control 11200141 / sub 2",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-112001-canonical-trace.png",
+      "screenshotSha256": "b1fafb2f80707ac320e105eaf939aba4d50988f9ed4bb54a582115144334f8a7"
+    },
+    {
+      "ownerId": 199001,
+      "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
+      "qualificationSubjectHash": "34d459078b57e93a",
+      "scenarioSetHash": "bd69d5286b217377",
+      "canonicalTraceHash": "7336b80f1ad0efe6",
+      "control": "control 19900110 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-199001-canonical-trace.png",
+      "screenshotSha256": "8f18d4a83242598d8f9ca37c91a2e1b84cc09dd9172f8bf98c989eb1de86148d"
+    },
+    {
+      "ownerId": 199002,
+      "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
+      "qualificationSubjectHash": "e521e825335354c2",
+      "scenarioSetHash": "330008c6d9cdd96c",
+      "canonicalTraceHash": "d7df1f9358e30fe6",
+      "control": "control 19900210 / sub 0",
+      "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-199002-canonical-trace.png",
+      "screenshotSha256": "ccd5e509a8347e1b4f87e080627f46fa158a898ac7c63868c6216d615ce3447d"
+    }
+  ]
+}
