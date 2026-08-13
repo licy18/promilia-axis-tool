@@ -2773,20 +2773,6 @@
       "edgeIdentity": "coverage-edge:5bdcea2947513657"
     },
     {
-      "requirementIdentity": "protocol:107001:input-window-inside-outside-boundaries",
-      "scenarioIdentity": "m12-b3-107001-focused-acceptance",
-      "assertionIdentity": "input-window-inside-outside-boundaries",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "input-window-inside-outside-boundaries",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "76912ef0f2de3431",
-      "traceProjectionHash": "76137de3da12c34d",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:5bf0d25878d86527"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:64:df14cd1c32e80e31",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-focused-acceptance:13:3",
@@ -7183,6 +7169,20 @@
       "edgeIdentity": "coverage-edge:eb64d3a0974551bc"
     },
     {
+      "requirementIdentity": "protocol:107001:input-window-inside-outside-boundaries",
+      "scenarioIdentity": "m12-b3-107001-focused-acceptance",
+      "assertionIdentity": "input-window-inside-outside-boundaries",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "input-window-inside-outside-boundaries",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "2a5ca16e004893a2",
+      "traceProjectionHash": "76137de3da12c34d",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ebdd5d2d46d2344e"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:9:cc8552a24f626f8e",
       "scenarioIdentity": "m12-b3-107001-sifliya-focused-golden",
       "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3-107001-sifliya-focused-golden:1",
@@ -7848,5 +7848,5 @@
       "m12-b3-107001-wind-expiry-boundary": 36
     }
   },
-  "coverageHash": "ddcf098e5fa3340b"
+  "coverageHash": "ed5799a47c189bd1"
 }

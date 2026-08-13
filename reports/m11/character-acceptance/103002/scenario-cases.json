@@ -11934,9 +11934,9 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "abad9705c39117b0",
           "data": "66a63cfbd3b5b7a0",
-          "trace": "db9d4295df9a3ce6",
+          "trace": "8162ffc540049f06",
           "evaluation": "b0acda242f007986",
-          "build": "0dd5b6617b12cbc3"
+          "build": "fc7d0eb66573c113"
         }
       },
       "traceProjection": {
@@ -14521,7 +14521,7 @@
             "attackSequenceIndex": 1,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-chain-a3",
             "contextualInputScheduling": null,
             "controlSkillId": 10300201,
             "edgeIdentity": null,
@@ -14532,7 +14532,7 @@
             "subSkillIndex": 1
           },
           "reasons": [],
-          "assertionHash": "26dc103120bf5a29"
+          "assertionHash": "20495bcc82304ed3"
         },
         {
           "assertionIdentity": "runtime-interruption:enhanced-marker-cutoff-at-trigger",
@@ -17663,7 +17663,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "a7f2dae200377e34"
+      "scenarioCaseHash": "666f4043af270dbd"
     },
     {
       "schemaVersion": 1,
@@ -17682,9 +17682,9 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "1f6a9596c3752c0d",
           "data": "a0e66767ae93244c",
-          "trace": "94f8b7c46d11fd1b",
+          "trace": "a5df2d7693d119a1",
           "evaluation": "009654b3cfb789bb",
-          "build": "baef39e251b9b396"
+          "build": "df8cafb2d3386240"
         }
       },
       "traceProjection": {
@@ -64605,7 +64605,7 @@
             "attackSequenceIndex": 1,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-ultimate",
             "contextualInputScheduling": null,
             "controlSkillId": 10300201,
             "edgeIdentity": null,
@@ -64616,7 +64616,7 @@
             "subSkillIndex": 1
           },
           "reasons": [],
-          "assertionHash": "2b7b346b4250d349"
+          "assertionHash": "9d837efc5577e40a"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e10",
@@ -64656,7 +64656,7 @@
             "attackSequenceIndex": 10,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e9",
             "contextualInputScheduling": null,
             "controlSkillId": 10300204,
             "edgeIdentity": null,
@@ -64667,7 +64667,7 @@
             "subSkillIndex": 0
           },
           "reasons": [],
-          "assertionHash": "cfde4143b870efca"
+          "assertionHash": "bf588fbc71d42e0c"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e11",
@@ -64707,7 +64707,7 @@
             "attackSequenceIndex": 11,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e10",
             "contextualInputScheduling": null,
             "controlSkillId": 10300204,
             "edgeIdentity": null,
@@ -64718,7 +64718,7 @@
             "subSkillIndex": 1
           },
           "reasons": [],
-          "assertionHash": "b97bc31adac46c88"
+          "assertionHash": "1b4911b0e5ead3b4"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e12",
@@ -64758,7 +64758,7 @@
             "attackSequenceIndex": 12,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e11",
             "contextualInputScheduling": null,
             "controlSkillId": 10300204,
             "edgeIdentity": null,
@@ -64769,7 +64769,7 @@
             "subSkillIndex": 2
           },
           "reasons": [],
-          "assertionHash": "2a52991a5da3ba22"
+          "assertionHash": "b3aa66ef27a801ff"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e2",
@@ -64809,7 +64809,7 @@
             "attackSequenceIndex": 2,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e1",
             "contextualInputScheduling": null,
             "controlSkillId": 10300201,
             "edgeIdentity": null,
@@ -64820,7 +64820,7 @@
             "subSkillIndex": 2
           },
           "reasons": [],
-          "assertionHash": "457f2ac97f02bdb8"
+          "assertionHash": "397988f2aced80b6"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e3",
@@ -64860,7 +64860,7 @@
             "attackSequenceIndex": 3,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e2",
             "contextualInputScheduling": null,
             "controlSkillId": 10300201,
             "edgeIdentity": null,
@@ -64871,7 +64871,7 @@
             "subSkillIndex": 3
           },
           "reasons": [],
-          "assertionHash": "d03567294b3c2985"
+          "assertionHash": "fc50ba32a95d79a8"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e4",
@@ -64911,7 +64911,7 @@
             "attackSequenceIndex": 4,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e3",
             "contextualInputScheduling": null,
             "controlSkillId": 10300202,
             "edgeIdentity": null,
@@ -64922,7 +64922,7 @@
             "subSkillIndex": 1
           },
           "reasons": [],
-          "assertionHash": "e21a192fccef0ec3"
+          "assertionHash": "38ffdb1d3e8598e3"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e5",
@@ -64962,7 +64962,7 @@
             "attackSequenceIndex": 5,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e4",
             "contextualInputScheduling": null,
             "controlSkillId": 10300202,
             "edgeIdentity": null,
@@ -64973,7 +64973,7 @@
             "subSkillIndex": 2
           },
           "reasons": [],
-          "assertionHash": "4118a71d7ac6f3fd"
+          "assertionHash": "97c27694490856fa"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e6",
@@ -65013,7 +65013,7 @@
             "attackSequenceIndex": 6,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e5",
             "contextualInputScheduling": null,
             "controlSkillId": 10300202,
             "edgeIdentity": null,
@@ -65024,7 +65024,7 @@
             "subSkillIndex": 3
           },
           "reasons": [],
-          "assertionHash": "c7b755ccb93b537d"
+          "assertionHash": "890eb868940effad"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e7",
@@ -65064,7 +65064,7 @@
             "attackSequenceIndex": 7,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e6",
             "contextualInputScheduling": null,
             "controlSkillId": 10300203,
             "edgeIdentity": null,
@@ -65075,7 +65075,7 @@
             "subSkillIndex": 1
           },
           "reasons": [],
-          "assertionHash": "d1344b1cc9d682f5"
+          "assertionHash": "ce6a118422815fc2"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e8",
@@ -65115,7 +65115,7 @@
             "attackSequenceIndex": 8,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e7",
             "contextualInputScheduling": null,
             "controlSkillId": 10300203,
             "edgeIdentity": null,
@@ -65126,7 +65126,7 @@
             "subSkillIndex": 2
           },
           "reasons": [],
-          "assertionHash": "df9153d9b00e8afc"
+          "assertionHash": "568030b50ff385d2"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-e9",
@@ -65166,7 +65166,7 @@
             "attackSequenceIndex": 9,
             "attackSequenceTotal": 12,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "ruby-e8",
             "contextualInputScheduling": null,
             "controlSkillId": 10300203,
             "edgeIdentity": null,
@@ -65177,7 +65177,7 @@
             "subSkillIndex": 3
           },
           "reasons": [],
-          "assertionHash": "e88e286931fc4c10"
+          "assertionHash": "8956648c303776fb"
         },
         {
           "assertionIdentity": "probe:variant-selection:ruby-star-skill",
@@ -84126,7 +84126,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "ece031cef63bdb4c"
+      "scenarioCaseHash": "14a978bb959369f8"
     },
     {
       "schemaVersion": 1,
@@ -86442,9 +86442,9 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "42a7e56c3f2570ee",
           "data": "ee887db9f36289d4",
-          "trace": "c199b0e5880e0914",
+          "trace": "7900eb33c37cd253",
           "evaluation": "f3b545c2f03ca084",
-          "build": "4b0f84020c346f1a"
+          "build": "713eb997b32f1dbe"
         }
       },
       "traceProjection": {
@@ -94151,7 +94151,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "11d5427d8487ec26"
+      "scenarioCaseHash": "9be317e0845a90ba"
     },
     {
       "schemaVersion": 1,
@@ -94170,9 +94170,9 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "bf0f9b76c63714c7",
           "data": "f6e5651ca5fb433c",
-          "trace": "3a54628e13bfd951",
+          "trace": "0e2850d35d4555a4",
           "evaluation": "979a671363a8299f",
-          "build": "3c86d2f7952d9462"
+          "build": "37a27dfc2bb86a69"
         }
       },
       "traceProjection": {
@@ -102381,7 +102381,7 @@
                   "attackSequenceIndex": 1,
                   "attackSequenceTotal": 12,
                   "chargingRelease": null,
-                  "contextActionId": null,
+                  "contextActionId": "reload-start-source",
                   "contextualInputScheduling": null,
                   "controlSkillId": 10300201,
                   "edgeIdentity": null,
@@ -102495,7 +102495,7 @@
             ]
           },
           "reasons": [],
-          "assertionHash": "2f52182f00cbdd19"
+          "assertionHash": "3829dd67ec5dca7a"
         },
         {
           "assertionIdentity": "machine-axis-validation",
@@ -102556,8 +102556,8 @@
             "baselineCanonicalHashes": {
               "input": "bf0f9b76c63714c7",
               "data": "f6e5651ca5fb433c",
-              "trace": "3a54628e13bfd951",
-              "build": "3c86d2f7952d9462"
+              "trace": "0e2850d35d4555a4",
+              "build": "37a27dfc2bb86a69"
             },
             "canonicalHashes": {
               "input": "e12b0b07623dcd94",
@@ -102572,7 +102572,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "00a6633d53163f4e"
+          "assertionHash": "0888687afb4eedea"
         },
         {
           "assertionIdentity": "runtime-interruption:enhanced-marker-cutoff-at-trigger",
@@ -106370,7 +106370,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "481a59a322ae3a71"
+      "scenarioCaseHash": "d5c52d1634f08a17"
     }
   ],
   "summary": {
@@ -106383,5 +106383,5 @@
       "machine-axis": 5
     }
   },
-  "scenarioSetHash": "282b92d4103adfa9"
+  "scenarioSetHash": "813a254d52402309"
 }

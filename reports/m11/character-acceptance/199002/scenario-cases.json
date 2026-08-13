@@ -19,9 +19,9 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "e12a0b31e5e0f0f3",
           "data": "44d86b5f6bd3b9b7",
-          "trace": "0ebb2d460d731b24",
+          "trace": "a08e8bb4a8370d16",
           "evaluation": "63597e31bdb38761",
-          "build": "503d71362ae0c087"
+          "build": "d9f93faaffb046e9"
         }
       },
       "traceProjection": {
@@ -138835,7 +138835,7 @@
             "attackSequenceIndex": 2,
             "attackSequenceTotal": 5,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "starborn-m-a1",
             "contextualInputScheduling": null,
             "controlSkillId": 19900202,
             "edgeIdentity": null,
@@ -138846,7 +138846,7 @@
             "subSkillIndex": 0
           },
           "reasons": [],
-          "assertionHash": "65a04f3e059e5c6e"
+          "assertionHash": "a0b8e11b8bbd632b"
         },
         {
           "assertionIdentity": "probe:variant-selection:starborn-m-a3",
@@ -138886,7 +138886,7 @@
             "attackSequenceIndex": 3,
             "attackSequenceTotal": 5,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "starborn-m-a2",
             "contextualInputScheduling": null,
             "controlSkillId": 19900203,
             "edgeIdentity": null,
@@ -138897,7 +138897,7 @@
             "subSkillIndex": 0
           },
           "reasons": [],
-          "assertionHash": "28b1fde68a371452"
+          "assertionHash": "fb2f4098b53c3342"
         },
         {
           "assertionIdentity": "probe:variant-selection:starborn-m-a4",
@@ -138937,7 +138937,7 @@
             "attackSequenceIndex": 4,
             "attackSequenceTotal": 5,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "starborn-m-a3",
             "contextualInputScheduling": null,
             "controlSkillId": 19900204,
             "edgeIdentity": null,
@@ -138948,7 +138948,7 @@
             "subSkillIndex": 0
           },
           "reasons": [],
-          "assertionHash": "e4ed047b0b310511"
+          "assertionHash": "947bd359653a29c6"
         },
         {
           "assertionIdentity": "probe:variant-selection:starborn-m-a5",
@@ -138988,7 +138988,7 @@
             "attackSequenceIndex": 5,
             "attackSequenceTotal": 5,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "starborn-m-a4",
             "contextualInputScheduling": null,
             "controlSkillId": 19900205,
             "edgeIdentity": null,
@@ -138999,7 +138999,7 @@
             "subSkillIndex": 0
           },
           "reasons": [],
-          "assertionHash": "0f4c1d525e2561a5"
+          "assertionHash": "22bd7705ed36c303"
         },
         {
           "assertionIdentity": "probe:variant-selection:starborn-m-charged-default",
@@ -139502,8 +139502,8 @@
             "baselineCanonicalHashes": {
               "input": "e12a0b31e5e0f0f3",
               "data": "44d86b5f6bd3b9b7",
-              "trace": "0ebb2d460d731b24",
-              "build": "503d71362ae0c087"
+              "trace": "a08e8bb4a8370d16",
+              "build": "d9f93faaffb046e9"
             },
             "canonicalHashes": {
               "input": "97177cd5bb31126f",
@@ -139518,7 +139518,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "953e4769acc0697c"
+          "assertionHash": "1fba577e159d5078"
         },
         {
           "assertionIdentity": "scenario-fact:blocked-hit-suppresses-damage",
@@ -168878,8 +168878,8 @@
             "baselineCanonicalHashes": {
               "input": "e12a0b31e5e0f0f3",
               "data": "44d86b5f6bd3b9b7",
-              "trace": "0ebb2d460d731b24",
-              "build": "503d71362ae0c087"
+              "trace": "a08e8bb4a8370d16",
+              "build": "d9f93faaffb046e9"
             },
             "canonicalHashes": {
               "input": null,
@@ -168893,7 +168893,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "80d8b70012691104"
+          "assertionHash": "8b94a02c5b11bf38"
         },
         {
           "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-starborn-199002-focused-acceptance:199002-blocked-hit-negative",
@@ -202288,7 +202288,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "8d9538c9c28e7a1a"
+      "scenarioCaseHash": "1df62134fc86ca5c"
     },
     {
       "schemaVersion": 1,
@@ -207291,5 +207291,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "aff7bdef6c18acd3"
+  "scenarioSetHash": "e7b0c946f6febeda"
 }

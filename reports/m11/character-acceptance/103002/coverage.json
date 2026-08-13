@@ -1422,20 +1422,6 @@
       "edgeIdentity": "coverage-edge:2d3976ea82a91065"
     },
     {
-      "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
-      "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
-      "assertionIdentity": "input-window-inside-outside-boundaries",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "input-window-inside-outside-boundaries",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "2f52182f00cbdd19",
-      "traceProjectionHash": "72ed6528d8e46d43",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:2e3898e7e660e8d9"
-    },
-    {
       "requirementIdentity": "contract:hit:10300201|1|elements|33|6530960959018090325|17|1",
       "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
       "assertionIdentity": "trace-hit:golden-hit:m10-b1:103002:120s-three-actor-golden:50",
@@ -2937,6 +2923,20 @@
       "traceProjectionHash": "f2e057f0ae25e160",
       "status": "verified",
       "edgeIdentity": "coverage-edge:5f0a784d5b02851c"
+    },
+    {
+      "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
+      "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+      "assertionIdentity": "input-window-inside-outside-boundaries",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "input-window-inside-outside-boundaries",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "3829dd67ec5dca7a",
+      "traceProjectionHash": "72ed6528d8e46d43",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:605cd02c24ade1c8"
     },
     {
       "requirementIdentity": "protocol:103002:critical-integer-threshold-boundary",
@@ -7833,5 +7833,5 @@
       "m12-b3-103002-reload-window-boundaries": 44
     }
   },
-  "coverageHash": "016772be071a64d6"
+  "coverageHash": "40d2ccad55e81e4e"
 }

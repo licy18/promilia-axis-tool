@@ -15585,9 +15585,9 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "6d6ef75d3a8d90cd",
           "data": "25be5c0a8fa43ad0",
-          "trace": "0b447cfb61e86705",
+          "trace": "29b1a5cf197fd4f6",
           "evaluation": "a753f6788d66964d",
-          "build": "e64141548b154117"
+          "build": "bbe425fd922e84b7"
         }
       },
       "traceProjection": {
@@ -76243,9 +76243,9 @@
               "algorithm": "fnv1a64-utf8-v1",
               "input": "6571480ccca8d5cf",
               "data": "30a59f5a6b0a756b",
-              "trace": "bb1444aa3247069e",
+              "trace": "2fdd9ea8337b1710",
               "evaluation": "3d600c053ad2a407",
-              "build": "111416b7c8be69b4"
+              "build": "672f7631dfed227e"
             },
             "stableReplay": true,
             "probeResults": [
@@ -81476,7 +81476,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "25dd8f6bd4896997"
+          "assertionHash": "62bc7f07a826f54a"
         },
         {
           "assertionIdentity": "light-consume-success-produces-elemental-damage",
@@ -81591,8 +81591,8 @@
             "baselineCanonicalHashes": {
               "input": "6d6ef75d3a8d90cd",
               "data": "25be5c0a8fa43ad0",
-              "trace": "0b447cfb61e86705",
-              "build": "e64141548b154117"
+              "trace": "29b1a5cf197fd4f6",
+              "build": "bbe425fd922e84b7"
             },
             "canonicalHashes": {
               "input": "7dc04784ef4722d9",
@@ -81607,7 +81607,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "9a60181d2273b514"
+          "assertionHash": "db5696f2e7a7187a"
         },
         {
           "assertionIdentity": "probe:variant-selection:window-inside-end",
@@ -98706,7 +98706,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "f936075e95a7f4f2"
+      "scenarioCaseHash": "f0e4f536b82213c9"
     },
     {
       "schemaVersion": 1,
@@ -107088,9 +107088,9 @@
               "algorithm": "fnv1a64-utf8-v1",
               "input": "45913c4aba951c99",
               "data": "30a59f5a6b0a756b",
-              "trace": "386655d31e0aee92",
+              "trace": "7b2bff59d15be734",
               "evaluation": "9cdf49e14062ffd7",
-              "build": "f0e8d574cd0d4b9b"
+              "build": "7d5911705ae6ccbb"
             },
             "stableReplay": true,
             "probeResults": [
@@ -110885,7 +110885,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "6fb170d8da312bd7"
+          "assertionHash": "b1300d2e14c82439"
         },
         {
           "assertionIdentity": "machine-axis-validation",
@@ -114238,7 +114238,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "194a38b50189a9ab"
+      "scenarioCaseHash": "bdd29bec48c14cb2"
     },
     {
       "schemaVersion": 1,
@@ -123296,9 +123296,9 @@
               "algorithm": "fnv1a64-utf8-v1",
               "input": "25a1f40ec62a835b",
               "data": "30a59f5a6b0a756b",
-              "trace": "963ac8998b31ec63",
+              "trace": "c0d9b559c34f7a05",
               "evaluation": "b82a44395ecd35f7",
-              "build": "4b1680bd0eda301f"
+              "build": "7baad25505c39d38"
             },
             "stableReplay": true,
             "probeResults": [
@@ -127199,7 +127199,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "b7054d54f4dadc98"
+          "assertionHash": "e518e79d690f6ccc"
         },
         {
           "assertionIdentity": "machine-axis-validation",
@@ -130561,7 +130561,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "cd79f7a6bfbd4fd5"
+      "scenarioCaseHash": "75a0e567814a9ac9"
     }
   ],
   "summary": {
@@ -130574,5 +130574,5 @@
       "machine-axis": 3
     }
   },
-  "scenarioSetHash": "061d19847095d49c"
+  "scenarioSetHash": "9999a835d0b09f1c"
 }

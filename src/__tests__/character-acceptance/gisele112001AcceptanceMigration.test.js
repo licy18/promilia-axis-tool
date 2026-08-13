@@ -411,9 +411,9 @@ describe('M12-C 112001 acceptance normal-input migration', () => {
       status: 'accepted',
       acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       recordIdentity:
-        'character-product-acceptance:112001:829d628bff9476c489d03e152e9377fd8c8e9e3c:687053ac01261ad8',
-      qualificationSubjectHash: '687053ac01261ad8',
-      scenarioSetHash: '4b2dbcae7cbf263e',
+        'character-product-acceptance:112001:829d628bff9476c489d03e152e9377fd8c8e9e3c:314df2338dbf3ed9',
+      qualificationSubjectHash: '314df2338dbf3ed9',
+      scenarioSetHash: 'f5f9f9a127f59a19',
       automatedEvidence: [
         expect.objectContaining({
           screenshotSha256:

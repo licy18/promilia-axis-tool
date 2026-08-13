@@ -3036,20 +3036,6 @@
       "edgeIdentity": "coverage-edge:2bdf44a0534cb8fd"
     },
     {
-      "requirementIdentity": "protocol:199001:resource-exact-and-insufficient",
-      "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
-      "assertionIdentity": "resource-exact-and-insufficient",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "resource-exact-and-insufficient",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "3e59b30d6658301e",
-      "traceProjectionHash": "7be917bf78d2c921",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:2beb611e65bf0430"
-    },
-    {
       "requirementIdentity": "contract:action-effect-binding:starborn-199001-star-input-permission-34",
       "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
       "assertionIdentity": "trace-hit:machine-isolated-hit:m12-b3-starborn-199001-focused-acceptance--isolated--star-follow-up-interrupts-late-hit:3",
@@ -5996,6 +5982,20 @@
       "traceProjectionHash": "7be917bf78d2c921",
       "status": "verified",
       "edgeIdentity": "coverage-edge:55a7127ac97afe29"
+    },
+    {
+      "requirementIdentity": "protocol:199001:resource-exact-and-insufficient",
+      "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
+      "assertionIdentity": "resource-exact-and-insufficient",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "resource-exact-and-insufficient",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "8124a1efa6fb212d",
+      "traceProjectionHash": "7be917bf78d2c921",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:55ee32ca9d5cfead"
     },
     {
       "requirementIdentity": "contract:effect:effect:98:c0f70fb640ad3124",
@@ -17707,5 +17707,5 @@
       "m12-b3-starborn:199001:120s-source-alias-golden": 129
     }
   },
-  "coverageHash": "f24168609e08c624"
+  "coverageHash": "7de6e6dca15f50f1"
 }

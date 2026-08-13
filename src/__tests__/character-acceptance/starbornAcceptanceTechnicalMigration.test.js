@@ -15,9 +15,9 @@ const aliases = [
     recipe: femaleRecipe,
     acceptance: {
       recordIdentity:
-        'character-product-acceptance:199001:829d628bff9476c489d03e152e9377fd8c8e9e3c:34d459078b57e93a',
-      qualificationSubjectHash: '34d459078b57e93a',
-      scenarioSetHash: 'bd69d5286b217377',
+        'character-product-acceptance:199001:829d628bff9476c489d03e152e9377fd8c8e9e3c:e43c78ab47c7a985',
+      qualificationSubjectHash: 'e43c78ab47c7a985',
+      scenarioSetHash: 'b8eeecaa1e107312',
       screenshotSha256:
         '8f18d4a83242598d8f9ca37c91a2e1b84cc09dd9172f8bf98c989eb1de86148d',
       supersededFixtureSha256:
@@ -31,9 +31,9 @@ const aliases = [
     recipe: maleRecipe,
     acceptance: {
       recordIdentity:
-        'character-product-acceptance:199002:829d628bff9476c489d03e152e9377fd8c8e9e3c:e521e825335354c2',
-      qualificationSubjectHash: 'e521e825335354c2',
-      scenarioSetHash: '330008c6d9cdd96c',
+        'character-product-acceptance:199002:829d628bff9476c489d03e152e9377fd8c8e9e3c:e157122b6c07855a',
+      qualificationSubjectHash: 'e157122b6c07855a',
+      scenarioSetHash: 'e2122b9dbfb19d2f',
       screenshotSha256:
         'ccd5e509a8347e1b4f87e080627f46fa158a898ac7c63868c6216d615ce3447d',
       supersededFixtureSha256:

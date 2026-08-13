@@ -5268,6 +5268,20 @@
       "edgeIdentity": "coverage-edge:4d8e353c20d17680"
     },
     {
+      "requirementIdentity": "protocol:199002:resource-exact-and-insufficient",
+      "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
+      "assertionIdentity": "resource-exact-and-insufficient",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "resource-exact-and-insufficient",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "1fba577e159d5078",
+      "traceProjectionHash": "dabd2af94d696ee8",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4d9bdfdeb688041d"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:32:3d9412b7e9b82544",
       "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-starborn-199002-focused-acceptance--isolated--star-carry-cooldown-exact-right-open:0:752",
@@ -6125,20 +6139,6 @@
       "traceProjectionHash": "dabd2af94d696ee8",
       "status": "verified",
       "edgeIdentity": "coverage-edge:5aa2a44eb8e9c9a3"
-    },
-    {
-      "requirementIdentity": "protocol:199002:resource-exact-and-insufficient",
-      "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
-      "assertionIdentity": "resource-exact-and-insufficient",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "resource-exact-and-insufficient",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "953e4769acc0697c",
-      "traceProjectionHash": "dabd2af94d696ee8",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:5aae2b56ce0b1fd4"
     },
     {
       "requirementIdentity": "contract:hit:19900210|1|elements|4|-215733332709764470|23|1",
@@ -17707,5 +17707,5 @@
       "m12-b3-starborn:199002:120s-source-alias-golden": 129
     }
   },
-  "coverageHash": "4c2915d5c19a9241"
+  "coverageHash": "8ae7410ef9958cd5"
 }

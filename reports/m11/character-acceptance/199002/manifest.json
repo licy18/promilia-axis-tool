@@ -53,14 +53,14 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "e12a0b31e5e0f0f3",
           "data": "44d86b5f6bd3b9b7",
-          "trace": "0ebb2d460d731b24",
+          "trace": "a08e8bb4a8370d16",
           "evaluation": "63597e31bdb38761",
-          "build": "503d71362ae0c087"
+          "build": "d9f93faaffb046e9"
         },
         "actionCount": 48,
         "executedActionCount": 50,
         "traceIndex": {
-          "traceHash": "0ebb2d460d731b24",
+          "traceHash": "a08e8bb4a8370d16",
           "actionCount": 50,
           "hitCount": 190,
           "effectEventCount": 78,
@@ -315,8 +315,8 @@
                 "baselineCanonicalHashes": {
                   "input": "e12a0b31e5e0f0f3",
                   "data": "44d86b5f6bd3b9b7",
-                  "trace": "0ebb2d460d731b24",
-                  "build": "503d71362ae0c087"
+                  "trace": "a08e8bb4a8370d16",
+                  "build": "d9f93faaffb046e9"
                 },
                 "canonicalHashes": {
                   "input": "97177cd5bb31126f",
@@ -360,8 +360,8 @@
                 "baselineCanonicalHashes": {
                   "input": "e12a0b31e5e0f0f3",
                   "data": "44d86b5f6bd3b9b7",
-                  "trace": "0ebb2d460d731b24",
-                  "build": "503d71362ae0c087"
+                  "trace": "a08e8bb4a8370d16",
+                  "build": "d9f93faaffb046e9"
                 },
                 "canonicalHashes": {
                   "input": null,
@@ -65442,7 +65442,7 @@
               "attackSequenceIndex": 2,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a1",
               "contextualInputScheduling": null,
               "controlSkillId": 19900202,
               "edgeIdentity": null,
@@ -65480,7 +65480,7 @@
               "attackSequenceIndex": 3,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a2",
               "contextualInputScheduling": null,
               "controlSkillId": 19900203,
               "edgeIdentity": null,
@@ -65518,7 +65518,7 @@
               "attackSequenceIndex": 4,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a3",
               "contextualInputScheduling": null,
               "controlSkillId": 19900204,
               "edgeIdentity": null,
@@ -65556,7 +65556,7 @@
               "attackSequenceIndex": 5,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a4",
               "contextualInputScheduling": null,
               "controlSkillId": 19900205,
               "edgeIdentity": null,
@@ -65912,14 +65912,14 @@
         "m12-b3-starborn-199002-focused-acceptance"
       ],
       "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-      "recordIdentity": "character-product-acceptance:199002:829d628bff9476c489d03e152e9377fd8c8e9e3c:e521e825335354c2",
-      "qualificationSubjectHash": "e521e825335354c2",
-      "scenarioSetHash": "330008c6d9cdd96c",
+      "recordIdentity": "character-product-acceptance:199002:829d628bff9476c489d03e152e9377fd8c8e9e3c:e157122b6c07855a",
+      "qualificationSubjectHash": "e157122b6c07855a",
+      "scenarioSetHash": "e2122b9dbfb19d2f",
       "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:199002:829d628bff9476c489d03e152e9377fd8c8e9e3c:e521e825335354c2",
-        "qualificationSubjectHash": "e521e825335354c2",
-        "scenarioSetHash": "330008c6d9cdd96c",
+        "recordIdentity": "character-product-acceptance:199002:829d628bff9476c489d03e152e9377fd8c8e9e3c:e157122b6c07855a",
+        "qualificationSubjectHash": "e157122b6c07855a",
+        "scenarioSetHash": "e2122b9dbfb19d2f",
         "scenarioIdentities": [
           "m12-b3-starborn-199002-focused-acceptance"
         ]
@@ -73921,9 +73921,9 @@
             "algorithm": "fnv1a64-utf8-v1",
             "input": "e12a0b31e5e0f0f3",
             "data": "44d86b5f6bd3b9b7",
-            "trace": "0ebb2d460d731b24",
+            "trace": "a08e8bb4a8370d16",
             "evaluation": "63597e31bdb38761",
-            "build": "503d71362ae0c087"
+            "build": "d9f93faaffb046e9"
           }
         },
         "traceProjection": {
@@ -212737,7 +212737,7 @@
               "attackSequenceIndex": 2,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a1",
               "contextualInputScheduling": null,
               "controlSkillId": 19900202,
               "edgeIdentity": null,
@@ -212748,7 +212748,7 @@
               "subSkillIndex": 0
             },
             "reasons": [],
-            "assertionHash": "65a04f3e059e5c6e"
+            "assertionHash": "a0b8e11b8bbd632b"
           },
           {
             "assertionIdentity": "probe:variant-selection:starborn-m-a3",
@@ -212788,7 +212788,7 @@
               "attackSequenceIndex": 3,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a2",
               "contextualInputScheduling": null,
               "controlSkillId": 19900203,
               "edgeIdentity": null,
@@ -212799,7 +212799,7 @@
               "subSkillIndex": 0
             },
             "reasons": [],
-            "assertionHash": "28b1fde68a371452"
+            "assertionHash": "fb2f4098b53c3342"
           },
           {
             "assertionIdentity": "probe:variant-selection:starborn-m-a4",
@@ -212839,7 +212839,7 @@
               "attackSequenceIndex": 4,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a3",
               "contextualInputScheduling": null,
               "controlSkillId": 19900204,
               "edgeIdentity": null,
@@ -212850,7 +212850,7 @@
               "subSkillIndex": 0
             },
             "reasons": [],
-            "assertionHash": "e4ed047b0b310511"
+            "assertionHash": "947bd359653a29c6"
           },
           {
             "assertionIdentity": "probe:variant-selection:starborn-m-a5",
@@ -212890,7 +212890,7 @@
               "attackSequenceIndex": 5,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "starborn-m-a4",
               "contextualInputScheduling": null,
               "controlSkillId": 19900205,
               "edgeIdentity": null,
@@ -212901,7 +212901,7 @@
               "subSkillIndex": 0
             },
             "reasons": [],
-            "assertionHash": "0f4c1d525e2561a5"
+            "assertionHash": "22bd7705ed36c303"
           },
           {
             "assertionIdentity": "probe:variant-selection:starborn-m-charged-default",
@@ -213404,8 +213404,8 @@
               "baselineCanonicalHashes": {
                 "input": "e12a0b31e5e0f0f3",
                 "data": "44d86b5f6bd3b9b7",
-                "trace": "0ebb2d460d731b24",
-                "build": "503d71362ae0c087"
+                "trace": "a08e8bb4a8370d16",
+                "build": "d9f93faaffb046e9"
               },
               "canonicalHashes": {
                 "input": "97177cd5bb31126f",
@@ -213420,7 +213420,7 @@
               }
             },
             "reasons": [],
-            "assertionHash": "953e4769acc0697c"
+            "assertionHash": "1fba577e159d5078"
           },
           {
             "assertionIdentity": "scenario-fact:blocked-hit-suppresses-damage",
@@ -242780,8 +242780,8 @@
               "baselineCanonicalHashes": {
                 "input": "e12a0b31e5e0f0f3",
                 "data": "44d86b5f6bd3b9b7",
-                "trace": "0ebb2d460d731b24",
-                "build": "503d71362ae0c087"
+                "trace": "a08e8bb4a8370d16",
+                "build": "d9f93faaffb046e9"
               },
               "canonicalHashes": {
                 "input": null,
@@ -242795,7 +242795,7 @@
               }
             },
             "reasons": [],
-            "assertionHash": "80d8b70012691104"
+            "assertionHash": "8b94a02c5b11bf38"
           },
           {
             "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-starborn-199002-focused-acceptance:199002-blocked-hit-negative",
@@ -276190,7 +276190,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "8d9538c9c28e7a1a"
+        "scenarioCaseHash": "1df62134fc86ca5c"
       },
       {
         "schemaVersion": 1,
@@ -281193,7 +281193,7 @@
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "aff7bdef6c18acd3"
+    "scenarioSetHash": "e7b0c946f6febeda"
   },
   "coverageContext": {
     "denominator": {
@@ -286500,6 +286500,20 @@
         "edgeIdentity": "coverage-edge:4d8e353c20d17680"
       },
       {
+        "requirementIdentity": "protocol:199002:resource-exact-and-insufficient",
+        "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
+        "assertionIdentity": "resource-exact-and-insufficient",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "resource-exact-and-insufficient",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "1fba577e159d5078",
+        "traceProjectionHash": "dabd2af94d696ee8",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:4d9bdfdeb688041d"
+      },
+      {
         "requirementIdentity": "contract:effect:effect:32:3d9412b7e9b82544",
         "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
         "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-starborn-199002-focused-acceptance--isolated--star-carry-cooldown-exact-right-open:0:752",
@@ -287357,20 +287371,6 @@
         "traceProjectionHash": "dabd2af94d696ee8",
         "status": "verified",
         "edgeIdentity": "coverage-edge:5aa2a44eb8e9c9a3"
-      },
-      {
-        "requirementIdentity": "protocol:199002:resource-exact-and-insufficient",
-        "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
-        "assertionIdentity": "resource-exact-and-insufficient",
-        "selector": {
-          "expectedValue": true,
-          "factIdentity": "resource-exact-and-insufficient",
-          "kind": "scenario-fact"
-        },
-        "assertionHash": "953e4769acc0697c",
-        "traceProjectionHash": "dabd2af94d696ee8",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:5aae2b56ce0b1fd4"
       },
       {
         "requirementIdentity": "contract:hit:19900210|1|elements|4|-215733332709764470|23|1",
@@ -298939,7 +298939,7 @@
         "m12-b3-starborn:199002:120s-source-alias-golden": 129
       }
     },
-    "coverageHash": "4c2915d5c19a9241"
+    "coverageHash": "8ae7410ef9958cd5"
   },
   "matrix": {
     "schemaVersion": 1,
@@ -309519,7 +309519,7 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:0637062918727461",
-          "coverage-edge:5aae2b56ce0b1fd4",
+          "coverage-edge:4d9bdfdeb688041d",
           "coverage-edge:c3496daaecf25466"
         ],
         "evidenceScenarioIds": [
@@ -309592,7 +309592,7 @@
         "window-boundary": 1
       }
     },
-    "matrixHash": "f369b3ae7b43329a"
+    "matrixHash": "3a124a2e1bf2b419"
   },
   "ledger": {
     "schemaVersion": 1,
@@ -312564,9 +312564,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "1d81d7189876278c"
+    "sourceOfTruthHash": "82a7f32ffa2dcac1"
   },
-  "qualificationSubjectHash": "e521e825335354c2",
+  "qualificationSubjectHash": "e157122b6c07855a",
   "maturity": {
     "currentState": "optimization-ready",
     "earnedStates": [
@@ -312604,5 +312604,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "fbaf1f8a18f3a25a"
+  "manifestHash": "23728100d9635c1d"
 }

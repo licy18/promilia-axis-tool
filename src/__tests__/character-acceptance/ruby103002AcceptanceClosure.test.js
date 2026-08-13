@@ -212,9 +212,9 @@ describe('Ruby 103002 acceptance closure', () => {
       status: 'accepted',
       acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       recordIdentity:
-        'character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:67a6fedbbd8963ab',
-      qualificationSubjectHash: '67a6fedbbd8963ab',
-      scenarioSetHash: '1fe9a92cf776d16e',
+        'character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:af39e2ab7808d82b',
+      qualificationSubjectHash: 'af39e2ab7808d82b',
+      scenarioSetHash: 'f8fa50a894427c98',
       bindingStatus: 'verified',
     });
     expect(manifest.maturity).toMatchObject({

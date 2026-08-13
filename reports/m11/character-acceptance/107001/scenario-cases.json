@@ -19,9 +19,9 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "da9a6394d908702d",
           "data": "b90ed7c43a10606e",
-          "trace": "a0d4eae08448e896",
+          "trace": "cde93b81c029189f",
           "evaluation": "f19c38eb331bb52a",
-          "build": "29d64a4b7c91c272"
+          "build": "bafbaf63fd646019"
         }
       },
       "traceProjection": {
@@ -39514,7 +39514,7 @@
                   "attackSequenceIndex": 2,
                   "attackSequenceTotal": 3,
                   "chargingRelease": null,
-                  "contextActionId": null,
+                  "contextActionId": "window-start-source",
                   "contextualInputScheduling": null,
                   "controlSkillId": 10700102,
                   "edgeIdentity": null,
@@ -39559,7 +39559,7 @@
                   "attackSequenceIndex": 2,
                   "attackSequenceTotal": 3,
                   "chargingRelease": null,
-                  "contextActionId": null,
+                  "contextActionId": "window-end-source",
                   "contextualInputScheduling": null,
                   "controlSkillId": 10700102,
                   "edgeIdentity": null,
@@ -39618,7 +39618,7 @@
             ]
           },
           "reasons": [],
-          "assertionHash": "76912ef0f2de3431"
+          "assertionHash": "2a5ca16e004893a2"
         },
         {
           "assertionIdentity": "lumi-charged-at-three-marks-enhanced-branch",
@@ -40228,8 +40228,8 @@
             "baselineCanonicalHashes": {
               "input": "da9a6394d908702d",
               "data": "b90ed7c43a10606e",
-              "trace": "a0d4eae08448e896",
-              "build": "29d64a4b7c91c272"
+              "trace": "cde93b81c029189f",
+              "build": "bafbaf63fd646019"
             },
             "canonicalHashes": {
               "input": "8eaf8b4ec6cedf27",
@@ -40244,7 +40244,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "17f9cc98df76e772"
+          "assertionHash": "1dfeb7e95f200166"
         },
         {
           "assertionIdentity": "negative:input-window-outside-before-19f-recovery-locked",
@@ -40313,8 +40313,8 @@
             "baselineCanonicalHashes": {
               "input": "da9a6394d908702d",
               "data": "b90ed7c43a10606e",
-              "trace": "a0d4eae08448e896",
-              "build": "29d64a4b7c91c272"
+              "trace": "cde93b81c029189f",
+              "build": "bafbaf63fd646019"
             },
             "canonicalHashes": {
               "input": "7785e804e76360f4",
@@ -40329,7 +40329,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "c26de49a751945b9"
+          "assertionHash": "684b61a96eac06dd"
         },
         {
           "assertionIdentity": "probe:special-resource-change:107001-critical-sampled-low",
@@ -40463,7 +40463,7 @@
             "attackSequenceIndex": 2,
             "attackSequenceTotal": 3,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "sifliya-a1-cycle-1",
             "contextualInputScheduling": null,
             "controlSkillId": 10700102,
             "edgeIdentity": null,
@@ -40474,7 +40474,7 @@
             "subSkillIndex": 4
           },
           "reasons": [],
-          "assertionHash": "1ccf23eef11e8296"
+          "assertionHash": "1bb4c4448930e1d8"
         },
         {
           "assertionIdentity": "probe:variant-selection:sifliya-a3-cycle-1",
@@ -40514,7 +40514,7 @@
             "attackSequenceIndex": 3,
             "attackSequenceTotal": 3,
             "chargingRelease": null,
-            "contextActionId": null,
+            "contextActionId": "sifliya-a2-cycle-1",
             "contextualInputScheduling": null,
             "controlSkillId": 10700103,
             "edgeIdentity": null,
@@ -40525,7 +40525,7 @@
             "subSkillIndex": 4
           },
           "reasons": [],
-          "assertionHash": "be833040a75dd0bc"
+          "assertionHash": "93cf9345561b1ce9"
         },
         {
           "assertionIdentity": "probe:variant-selection:sifliya-charged-with-lumi",
@@ -52261,7 +52261,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "a2f3210726455dbe"
+      "scenarioCaseHash": "f2ba71fa0ea593d5"
     },
     {
       "schemaVersion": 1,
@@ -71716,5 +71716,5 @@
       "machine-axis": 4
     }
   },
-  "scenarioSetHash": "f3995d08b757fb37"
+  "scenarioSetHash": "56613a09f11c3cb5"
 }

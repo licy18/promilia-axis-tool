@@ -325,9 +325,9 @@ describe('Xiaoyu 101010 acceptance closure', () => {
       status: 'accepted',
       acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       recordIdentity:
-        'character-product-acceptance:101010:829d628bff9476c489d03e152e9377fd8c8e9e3c:dbe2c77baf36a06a',
-      qualificationSubjectHash: 'dbe2c77baf36a06a',
-      scenarioSetHash: '77cb81447452b619',
+        'character-product-acceptance:101010:829d628bff9476c489d03e152e9377fd8c8e9e3c:6a3877d3e52d8431',
+      qualificationSubjectHash: '6a3877d3e52d8431',
+      scenarioSetHash: 'f47ed3bbb4551a6b',
       bindingStatus: 'verified',
       automatedEvidence: [
         expect.objectContaining({

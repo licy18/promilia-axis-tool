@@ -53,14 +53,14 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "8a82ef9e87458e27",
           "data": "74f991d439e64485",
-          "trace": "b0f84fe288d7391f",
+          "trace": "f589ce53d905f26b",
           "evaluation": "6538894b2964b7e7",
-          "build": "6bc0da6c2f84d021"
+          "build": "27479124c905d278"
         },
         "actionCount": 44,
         "executedActionCount": 46,
         "traceIndex": {
-          "traceHash": "b0f84fe288d7391f",
+          "traceHash": "f589ce53d905f26b",
           "actionCount": 46,
           "hitCount": 293,
           "effectEventCount": 100,
@@ -144,7 +144,7 @@
               "attackSequenceIndex": 3,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "misa-a2",
               "contextualInputScheduling": null,
               "controlSkillId": 10700203,
               "edgeIdentity": null,
@@ -174,7 +174,7 @@
               "attackSequenceIndex": 4,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "misa-a3",
               "contextualInputScheduling": null,
               "controlSkillId": 10700204,
               "edgeIdentity": null,
@@ -258,14 +258,14 @@
         "m12-b3-107002-reduced-action-surface-acceptance"
       ],
       "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-      "recordIdentity": "character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:ae4da5c88b34b11a",
-      "qualificationSubjectHash": "ae4da5c88b34b11a",
-      "scenarioSetHash": "78502763924dc058",
+      "recordIdentity": "character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:82b68738f6bb892d",
+      "qualificationSubjectHash": "82b68738f6bb892d",
+      "scenarioSetHash": "cc2e46fb607d25c5",
       "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:ae4da5c88b34b11a",
-        "qualificationSubjectHash": "ae4da5c88b34b11a",
-        "scenarioSetHash": "78502763924dc058",
+        "recordIdentity": "character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:82b68738f6bb892d",
+        "qualificationSubjectHash": "82b68738f6bb892d",
+        "scenarioSetHash": "cc2e46fb607d25c5",
         "scenarioIdentities": [
           "m12-b3-107002-reduced-action-surface-acceptance"
         ]
@@ -5744,9 +5744,9 @@
             "algorithm": "fnv1a64-utf8-v1",
             "input": "8a82ef9e87458e27",
             "data": "74f991d439e64485",
-            "trace": "b0f84fe288d7391f",
+            "trace": "f589ce53d905f26b",
             "evaluation": "6538894b2964b7e7",
-            "build": "6bc0da6c2f84d021"
+            "build": "27479124c905d278"
           }
         },
         "traceProjection": {
@@ -78940,7 +78940,7 @@
               "attackSequenceIndex": 3,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "misa-a2",
               "contextualInputScheduling": null,
               "controlSkillId": 10700203,
               "edgeIdentity": null,
@@ -78951,7 +78951,7 @@
               "subSkillIndex": 0
             },
             "reasons": [],
-            "assertionHash": "90161fe2087269f4"
+            "assertionHash": "f71af46ef4236dc9"
           },
           {
             "assertionIdentity": "probe:variant-selection:misa-a4",
@@ -78983,7 +78983,7 @@
               "attackSequenceIndex": 4,
               "attackSequenceTotal": 5,
               "chargingRelease": null,
-              "contextActionId": null,
+              "contextActionId": "misa-a3",
               "contextualInputScheduling": null,
               "controlSkillId": 10700204,
               "edgeIdentity": null,
@@ -78994,7 +78994,7 @@
               "subSkillIndex": 0
             },
             "reasons": [],
-            "assertionHash": "d381d4f6d647dda8"
+            "assertionHash": "404925b657cce4ba"
           },
           {
             "assertionIdentity": "probe:variant-selection:misa-charged",
@@ -100284,7 +100284,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "59feaa95764fa599"
+        "scenarioCaseHash": "e7c32e8c15342686"
       },
       {
         "schemaVersion": 1,
@@ -107302,7 +107302,7 @@
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "05f1f78efb9e25fd"
+    "scenarioSetHash": "2ae2313914af238f"
   },
   "coverageContext": {
     "denominator": {
@@ -123900,9 +123900,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "dd94b6d2f35c0108"
+    "sourceOfTruthHash": "083248c7042f6fda"
   },
-  "qualificationSubjectHash": "ae4da5c88b34b11a",
+  "qualificationSubjectHash": "82b68738f6bb892d",
   "maturity": {
     "currentState": "optimization-ready",
     "earnedStates": [
@@ -123940,5 +123940,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "f6153153d2383e2d"
+  "manifestHash": "21708806a6d6f559"
 }

@@ -43,7 +43,7 @@ describe('M12-B3-107002 owner acceptance closure', () => {
     expect(first.hashes).toMatchObject({
       input: '8a82ef9e87458e27',
       data: '74f991d439e64485',
-      trace: 'b0f84fe288d7391f',
+      trace: 'f589ce53d905f26b',
       evaluation: '6538894b2964b7e7',
     });
     expect(second.hashes).toEqual(first.hashes);
@@ -335,15 +335,15 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       status: 'accepted',
       acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       recordIdentity:
-        'character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:ae4da5c88b34b11a',
-      qualificationSubjectHash: 'ae4da5c88b34b11a',
-      scenarioSetHash: '78502763924dc058',
+        'character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:82b68738f6bb892d',
+      qualificationSubjectHash: '82b68738f6bb892d',
+      scenarioSetHash: 'cc2e46fb607d25c5',
       bindingStatus: 'verified',
       bindingExpectation: {
         recordIdentity:
-          'character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:ae4da5c88b34b11a',
-        qualificationSubjectHash: 'ae4da5c88b34b11a',
-        scenarioSetHash: '78502763924dc058',
+          'character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:82b68738f6bb892d',
+        qualificationSubjectHash: '82b68738f6bb892d',
+        scenarioSetHash: 'cc2e46fb607d25c5',
       },
     });
     expect(misaManifest.maturity).toMatchObject({

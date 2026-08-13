@@ -1,5 +1,14 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.0000000000 2026-08-14 03:40 Gate V2 stale trace 身份闭合
+
+- clean `master@c15ce4d597aefb936b13ee4e2beb968d36129c7e` 的第二次完整 Gate V2 在 character-combat、visual `254/254`、binding `22/22`、Kibo headless 与 settlement 全部通过后，于 full Vitest 诚实失败：`249/251 files`、`2097/2103 tests`，共 6 个 stale canonical trace hash 断言；release record=`6cd71ec6c00aaa90f314c2c032a3f115995f43e9607e47ad248eb21b634df078`、`status=fail`、`failureStage=test`。runner restoration 零残留，HEAD/remote 相等且 tracked clean；该 FAIL 不产生新 admission，搜索任务继续 idle。
+- 6 个失败均保持 input/data/evaluation hash 不变，只因已验证的 input-derived successor candidate 现在进入 canonical trace。显式 fixture 新 trace：101010=`29b1a5cf197fd4f6`、103002=`0925f2d1732c9700`、109001=`68ccfb659f8eb692`、108003=`6b0763f7a68abaef`、107002=`f589ce53d905f26b`；未删除或放宽断言。
+- 权威 character generator 的全量 pending 探针进一步证明 10 个正式 owner 的 product scenario 都包含该合法续段投影，因此全部 subject 都真实漂移。按既有用户无人监管签收授权重新绑定 10 个 owner，并恢复 `10/10` visually accepted、optimization-ready；101003 仍 pending/unready。199001/199002 仍只联合为一个 `STARBORN` 对象，新 object subject=`1817ace2a1b05e96`、bundle=`3ef27e3854a8b0ea`，`390/390` requirements、`3237/3237` assertions、零 gap。
+- 最终 character acceptance `--assert-clean` 通过；qualification 仍为 `263/263`、零 blocker，新 hash 为 source snapshot `3c00684bb6300262`、roster `303421ced9f6f720`、manifests `86c747adbb2271ec`、ledger `96a5a0f07dc936c3`、binding `296cf266686e15a9`、catalog `1c179cc44e6c1dbb`；E22 binding `22/22`、visual acceptance `254/254`。character/qualification 聚焦目录首轮已有 28 files / 201 tests 通过，修正后其余 5 files / 27 tests 通过，合计覆盖 33 files / 228 tests 全绿。
+- production import、Workbench data、action status、optimization scenario policy 均 clean；bundle 未抬预算且 PASS：initial `119996/120000`、Workbench `488805/500000`、total JavaScript gzip `918476/920000`，projection guards 全真。下一步只允许提交并推送本批签收身份与派生镜像，再从新 clean HEAD 完整重跑 Gate V2；executed PASS、独立 Formal Search Admission `15/15` 与 live authority 复核前不得恢复旧 run 或启动新搜索。
+- 保护项未变：所有既有 untracked evidence 保留；`.readonly-ruby-probe.mjs` SHA-256=`68CBE4D07C1A23C1FE7EB25029B2C6A12819B2027E651B64209D60C4D0109B4A`；`stash@{0}=900e193bf710b8f894b50e0bc966db70cbd7e717`，两份污染配置未读取、未使用。
+
 ## 0.000000000 2026-08-14 03:03 新 HEAD Gate V2 首轮 binding 派生漂移
 
 - clean `master@1f98f6321b9d11a05b4d3cfced4335a75bdc7e5a` 已推送并执行完整 Gate V2；character-combat 与 visual acceptance `254/254` 通过，随后 binding gate 按设计 fail closed。release record=`e31346613e20a5e63db33c15303da7a3f02c28f2357199218df8a193dd0977cf`、`status=fail`、`failureStage=binding`，没有产生新 Formal Search Admission，原搜索继续停止。
