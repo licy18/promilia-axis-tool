@@ -1,5 +1,12 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.000000000 2026-08-14 03:03 新 HEAD Gate V2 首轮 binding 派生漂移
+
+- clean `master@1f98f6321b9d11a05b4d3cfced4335a75bdc7e5a` 已推送并执行完整 Gate V2；character-combat 与 visual acceptance `254/254` 通过，随后 binding gate 按设计 fail closed。release record=`e31346613e20a5e63db33c15303da7a3f02c28f2357199218df8a193dd0977cf`、`status=fail`、`failureStage=binding`，没有产生新 Formal Search Admission，原搜索继续停止。
+- 漂移仅为 103002 canonical successor trace 修复引起的 E22 smoke identity 更新：cycle hash `1397460c525baf78 -> ec435ce5c50defca`、trace hash `c127427123e360c8 -> eda093098990bf02`；normal-input authority 仍为 `530396bf773cc439`，verified mechanics package 仍为 `04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216`。
+- 两份 generator-owned binding matrix 已由权威生成器刷新，binding matrix hash `30a4025ffdb47558 -> 72f6e52502b3855b`；`--assert-clean` 为 `22/22 PASS`，binding/formal admission/outer pool+service/normal authority/search state 共 `6 files / 61 tests PASS`。
+- 下一步：提交并推送这两份派生镜像和本状态记录；再从新的 clean HEAD 完整重跑 Gate V2。新 executed PASS、独立 Formal Search Admission `15/15` 和 live authority 复核全部完成前，不恢复或复用任何搜索结果。
+
 ## 0.00000000 2026-08-14 02:41 103002 successor canonical replay 集成修复进行中
 
 - 唯一全新 run `m12c-moyin-top5-fresh-20260813-231115989-f30892fe58f6` 已在两条冻结 A1 canary 后 fail closed 停止；当前无搜索 Node 进程，三目标 Top-5 尚未完成。旧 `0e02c64` release/admission 对受影响搜索已失效，不得恢复或复用结果。
