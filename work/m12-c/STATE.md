@@ -1,5 +1,16 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.00000 2026-08-13 21:09 Gate V2 首轮失败与重击循环复放修复
+
+- owner/STARBORN 签收与发布基线已在 `master@3feca4571c6dc7fc7fabf2adb320e5529adc9dd3` 形成三笔提交：`692c769c` 重击输入 authority、`829d628b` 全新 owner 视觉证据、`3feca457` 签收派生。199001/199002 仍只联合为一个 STARBORN optimization object；101003 保持 pending/unready。
+- 首个 launcher 因 PowerShell 引号拆分在进入 release 前退出，不计 Gate 尝试。修正后的 `authorized-release-3feca4571c6d-20260813-retry1` 于 clean HEAD 真实执行；character-combat、visual `254/254`、binding `22/22`、Kibo headless 与 settlement 均通过，随后 full Vitest 为 `238/251 files`、`2076/2102 tests`，共 `13 files / 26 tests` 失败。Gate V2 诚实落盘 `status=fail`、`failureStage=test`，release record=`9db9190603e7fd35f3d149c185b5399031944a067192565c6f6d10dad58a6a99`；runner output restoration 无残留 tracked drift。
+- 失败主体是新签收/新 golden 已生效但测试仍绑定旧 `13d28aa` 证据、旧哈希或旧 pool-stale 状态；这些断言已改绑 `829d628b` 当前视觉证据，并区分当前 automated evidence 与历史 superseded evidence。107002/Gisele 由旧 pending 期望改为当前 accepted/optimization-ready；STARBORN 仍以双 alias 证据联合约束单一对象。
+- 唯一生产分层违规已关闭：角色 ID、客户端/审计身份与动作表整体下沉到 `src/data/verifiedChargedInputAuthorityData.js`，`src/domain/verifiedChargedInputAuthority.js` 只保留通用解析/调度。拆分前后 charged authority hash 均为 `d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446`，payload 字节语义未变；production import 已刷新为 240 source / 236 production-reachable / 4 allowed test-only / 0 unexpected / 0 unreferenced。
+- 定点调试发现并修复真实循环缺陷：`createLoopReplayPlan` 曾把第一轮重击的绝对 `physicalInput` 原样复制到第二轮，造成 execution-frame mismatch，合法的一动作重击循环被 `machine-axis-cycle-second-replay-not-runnable` 错拒。现在第二轮移除陈旧声明，由 canonical charged proof 按实际前序重新派生 `release -> repress -> prehold`；M12-C outer integration `7/7` 重新通过，单动作重击循环恢复进入评分候选，threshold/rearm/108003 Charging reopen 证明仍 fail closed。
+- 扩大聚焦复验覆盖 CLI、outer、charged proof、全部受影响 owner/STARBORN、golden 与验收派生：首轮 `13 files / 161 tests PASS`；格式化后的最终提交前复验为 `15 files / 210 tests PASS`，charged authority hash 仍为 `d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446`。角色 identity 分层单测与首轮全部失败点亦通过，`git diff --check` PASS。尚未把任何定点结果冒充 release authority。
+- 当前下一步仅允许：提交本轮修复形成新 clean stable HEAD；从该 HEAD 重新真实执行完整 `release:verify`；PASS 后再独立执行 Formal Search Admission `15/15` 并推送 `origin/master`。在这三步完成前继续禁止创建/运行/复用正式搜索或读取两份污染配置。
+- 保护项未变：所有既有 untracked evidence 原样保留；`.readonly-ruby-probe.mjs` SHA-256=`68CBE4D07C1A23C1FE7EB25029B2C6A12819B2027E651B64209D60C4D0109B4A`；`stash@{0}=900e193bf710b8f894b50e0bc966db70cbd7e717`，未读取、弹出或改写。
+
 ## 0.0000 2026-08-13 20:31 charged-input owner 签收与发布前收口
 
 - 重击输入/时序实现基线为 `692c769cf0525044e3d33bba2fddb434b1d088aa`，全新视觉证据提交为 `829d628bff9476c489d03e152e9377fd8c8e9e3c`。10 个正式 owner 已逐一复核并签收；199001/199002 仅作为一个 `STARBORN` optimization object 联合签收，101003 继续 pending/unready。

@@ -1,7 +1,3 @@
-import { createHash } from 'node:crypto';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import femaleFixture from '../../../fixtures/character-acceptance/199001-starborn-visual.json';
 import maleFixture from '../../../fixtures/character-acceptance/199002-starborn-visual.json';
 import femaleRecipe from '../../../scripts/character-acceptance/acceptance-recipes/199001.json';
@@ -11,25 +7,38 @@ import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombat
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import { createWorkbenchMachineAxisAdapter } from '../../machine-axis/workbenchMachineAxisAdapter';
 
-const REPO_ROOT = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '..',
-  '..',
-  '..'
-);
-
 const aliases = [
   {
     ownerId: 199001,
     prefix: 'starborn-f',
     fixture: femaleFixture,
     recipe: femaleRecipe,
+    acceptance: {
+      recordIdentity:
+        'character-product-acceptance:199001:829d628bff9476c489d03e152e9377fd8c8e9e3c:34d459078b57e93a',
+      qualificationSubjectHash: '34d459078b57e93a',
+      scenarioSetHash: 'bd69d5286b217377',
+      screenshotSha256:
+        '8f18d4a83242598d8f9ca37c91a2e1b84cc09dd9172f8bf98c989eb1de86148d',
+      supersededFixtureSha256:
+        '2b7c00a9c2f78fda7b8321eccc960dddc3ce3bdacecea8dd5de8f22ef15d4b32',
+    },
   },
   {
     ownerId: 199002,
     prefix: 'starborn-m',
     fixture: maleFixture,
     recipe: maleRecipe,
+    acceptance: {
+      recordIdentity:
+        'character-product-acceptance:199002:829d628bff9476c489d03e152e9377fd8c8e9e3c:e521e825335354c2',
+      qualificationSubjectHash: 'e521e825335354c2',
+      scenarioSetHash: '330008c6d9cdd96c',
+      screenshotSha256:
+        'ccd5e509a8347e1b4f87e080627f46fa158a898ac7c63868c6216d615ce3447d',
+      supersededFixtureSha256:
+        'a1b9741e3cdbc22852d19bc96e953c70372717209962e8092ff1b700e60693ab',
+    },
   },
 ];
 
@@ -114,21 +123,22 @@ describe('STARBORN acceptance technical migration', () => {
 
   it.each(aliases)(
     'binds $ownerId visual evidence to the jointly accepted STARBORN object',
-    ({ fixture, recipe }) => {
+    ({ fixture, recipe, acceptance }) => {
       const evidence = recipe.productVisualAcceptance.automatedEvidence[0];
-      const actualFixtureHash = createHash('sha256')
-        .update(fs.readFileSync(path.join(REPO_ROOT, evidence.fixturePath)))
-        .digest('hex');
+      const supersededEvidence =
+        recipe.productVisualAcceptance.supersededAutomatedEvidence[0];
 
       expect(recipe.productVisualAcceptance).toMatchObject({
         status: 'accepted',
-        acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
-        recordIdentity: expect.stringContaining(
-          'character-product-acceptance:'
-        ),
-        qualificationSubjectHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+        acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
+        recordIdentity: acceptance.recordIdentity,
+        qualificationSubjectHash: acceptance.qualificationSubjectHash,
+        scenarioSetHash: acceptance.scenarioSetHash,
       });
-      expect(evidence.fixtureSha256).toBe(actualFixtureHash);
+      expect(evidence.screenshotSha256).toBe(acceptance.screenshotSha256);
+      expect(supersededEvidence.fixtureSha256).toBe(
+        acceptance.supersededFixtureSha256
+      );
       expect(fixture.metadata.optimizationObjectSourceAliasSelection).toEqual(
         expect.objectContaining({
           optimizationObjectId: 'STARBORN',

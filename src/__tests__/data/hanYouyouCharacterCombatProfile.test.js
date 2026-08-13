@@ -72,7 +72,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       passiveCount: 1,
       switchTriggerCount: 1,
     });
-    expect(sourceManifest.summary.identityCount).toBe(535);
+    expect(sourceManifest.summary.identityCount).toBe(536);
     expect(reachableGraph.summary).toMatchObject({
       controlCount: 29,
       exclusionCount: 7,

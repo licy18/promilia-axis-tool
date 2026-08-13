@@ -209,7 +209,7 @@ describe('generated character acceptance manifests', () => {
         manifest.matrix.summary.blockedCount === 0 &&
         manifest.ledger.summary.uniqueBlockingCount === 0;
       const acceptanceCommit = productAccepted
-        ? '13d28aa515312a63395f49ddff3c778967e1b20f'
+        ? '829d628bff9476c489d03e152e9377fd8c8e9e3c'
         : null;
       const runtimeIntegrated = manifest.maturity.gates.runtimeIntegrated;
       expect(manifest.maturity).toMatchObject({
@@ -245,7 +245,7 @@ describe('generated character acceptance manifests', () => {
         ).toEqual([
           expect.objectContaining({
             scenarioIdentity:
-              manifest.evidence.machineScenarios[0].scenarioIdentity,
+              manifest.evidence.productVisualAcceptance.scenarioIdentities[0],
             status: 'automated-workbench-import-passed',
             screenshotSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
           }),

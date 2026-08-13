@@ -406,14 +406,20 @@ describe('M12-C 112001 acceptance normal-input migration', () => {
     ).toEqual([]);
   }, 60_000);
 
-  it('invalidates the old visual authority after the charged timing repair', () => {
+  it('binds renewed visual authority after the charged timing repair', () => {
     expect(giseleRecipe.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      status: 'accepted',
+      acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       recordIdentity:
-        'character-product-acceptance:112001:13d28aa515312a63395f49ddff3c778967e1b20f:aae0ae0f9ebc0700',
-      qualificationSubjectHash: 'aae0ae0f9ebc0700',
-      scenarioSetHash: 'd66afb989d3e65ac',
+        'character-product-acceptance:112001:829d628bff9476c489d03e152e9377fd8c8e9e3c:687053ac01261ad8',
+      qualificationSubjectHash: '687053ac01261ad8',
+      scenarioSetHash: '4b2dbcae7cbf263e',
+      automatedEvidence: [
+        expect.objectContaining({
+          screenshotSha256:
+            'b1fafb2f80707ac320e105eaf939aba4d50988f9ed4bb54a582115144334f8a7',
+        }),
+      ],
       supersededAutomatedEvidence: [
         expect.objectContaining({
           fixtureSha256:

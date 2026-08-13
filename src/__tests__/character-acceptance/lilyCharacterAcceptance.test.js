@@ -51,7 +51,7 @@ describe('Lily M12-B3 owner character acceptance', () => {
     });
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       bindingStatus: 'verified',
       scenarioIdentities: ['m12-b3-102001-zero-distance-acceptance'],
       automatedEvidence: [
@@ -59,13 +59,10 @@ describe('Lily M12-B3 owner character acceptance', () => {
           scenarioIdentity: 'm12-b3-102001-zero-distance-acceptance',
           status: 'automated-workbench-import-passed',
           evidenceKind: 'workbench-playwright-screenshot',
-          fixturePath: 'fixtures/character-acceptance/102001-visual.json',
-          fixtureSha256:
-            'b055a761a9e3bb9d9cd4fb8a083c540dd53656ed208d52a81a87f2b9d3ed6eea',
           screenshotPath:
-            'work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-102001-canonical-trace.png',
+            'work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-102001-canonical-trace.png',
           screenshotSha256:
-            '1a0a318f5af664b5fa29dd51d8dcc0a542f55bfb6bec3d41d6b85642218b2ecf',
+            '0d7e288fd82b1a59140dda68759e0da29815559303713ea3229a261ba59b58a8',
         },
       ],
     });

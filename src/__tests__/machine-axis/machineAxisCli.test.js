@@ -113,19 +113,22 @@ describe('Machine Axis CLI', () => {
     expect(parseJson(harness.output.stdout).hashes).toEqual(fileResult.hashes);
   }, 30_000);
 
-  it('blocks the stale M12-C outer pool after mechanics authority changes', async () => {
+  it('publishes the refreshed M12-C outer pool with current mechanics authority', async () => {
     const poolHarness = createHarness();
     const poolExit = await runMachineAxisCli(
       ['m12c-outer-pool'],
       poolHarness.io
     );
     const pool = parseJson(poolHarness.output.stdout);
-    expect(poolExit).toBe(MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION);
+    expect(poolExit).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
     expect(pool).toMatchObject({
-      kind: 'azpr-machine-axis-cli-error',
-      error: {
-        code: 'machine-axis-cli-validation-failed',
-        issues: ['machine-axis-m12c-mechanics-package-authority-mismatch'],
+      kind: 'azpr-m12c-outer-build-pool',
+      authority: {
+        verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
+      },
+      summary: {
+        teamCount: 28,
+        sourceConfigCount: 35,
       },
     });
   }, 30_000);

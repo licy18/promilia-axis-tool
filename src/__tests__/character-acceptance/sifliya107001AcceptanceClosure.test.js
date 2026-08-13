@@ -152,7 +152,7 @@ describe('Sifliya 107001 acceptance closure', () => {
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       bindingStatus: 'verified',
     });
     expect(
@@ -164,14 +164,10 @@ describe('Sifliya 107001 acceptance closure', () => {
           scenarioIdentity: 'm12-b3-107001-focused-acceptance',
           evidenceKind: 'workbench-playwright-screenshot',
           status: 'automated-workbench-import-passed',
-          fixturePath:
-            'fixtures/character-acceptance/107001-active-surface-closure.json',
-          fixtureSha256:
-            'dc1cbc9cec361b9975be5f5525af56e5319c7d5c40aecc4e73d120ff4e1f3bcf',
           screenshotPath:
-            'work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107001-canonical-trace.png',
+            'work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107001-canonical-trace.png',
           screenshotSha256:
-            '195b980d9f464e887b24ba242b9e675df82bae5d79da34de063aa3b5c340bfea',
+            '3ea8da520606a0217709278064534269606a26d61877e3ee43041a0da34d4d26',
         }),
       ]
     );
@@ -182,7 +178,7 @@ describe('Sifliya 107001 acceptance closure', () => {
       expect.objectContaining({
         scenarioIdentity: 'm12-b3-107001-wind-expiry-boundary',
         evidenceKind: 'machine-axis-trace',
-        canonicalTraceHash: '75e162692579024e',
+        canonicalTraceHash: '15b9c3aeb50ec84c',
         traceSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
       }),
     ]);

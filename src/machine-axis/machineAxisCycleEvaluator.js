@@ -1256,6 +1256,15 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
       offsetFrames: 0,
       actionId: null,
     };
+    if (
+      clone.intent?.actionKind === 'charged-attack' &&
+      clone.intent?.physicalInput
+    ) {
+      // The replayed charge has a different predecessor and absolute frame.
+      // Let the charged-input proof derive release -> repress -> prehold from
+      // that canonical replay context instead of copying first-cycle frames.
+      delete clone.intent.physicalInput;
+    }
     if (clone.intent?.attackInput?.groupId) {
       clone.intent.attackInput.groupId = `${clone.intent.attackInput.groupId}:cycle-2`;
     }

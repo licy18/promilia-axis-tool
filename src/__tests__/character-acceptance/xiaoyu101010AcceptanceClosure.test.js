@@ -323,24 +323,21 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      acceptanceCommit: '829d628bff9476c489d03e152e9377fd8c8e9e3c',
       recordIdentity:
-        'character-product-acceptance:101010:13d28aa515312a63395f49ddff3c778967e1b20f:6c361b4ae3dc61a8',
-      qualificationSubjectHash: '6c361b4ae3dc61a8',
-      scenarioSetHash: 'eca42d0ce3b24bf0',
+        'character-product-acceptance:101010:829d628bff9476c489d03e152e9377fd8c8e9e3c:dbe2c77baf36a06a',
+      qualificationSubjectHash: 'dbe2c77baf36a06a',
+      scenarioSetHash: '77cb81447452b619',
       bindingStatus: 'verified',
       automatedEvidence: [
         expect.objectContaining({
           scenarioIdentity: 'm11-d-101010-visual-acceptance',
           evidenceKind: 'workbench-playwright-screenshot',
           status: 'automated-workbench-import-passed',
-          fixturePath: 'fixtures/character-acceptance/101010-visual.json',
-          fixtureSha256:
-            '0b9128883b509b8c7cd0a096b9d9c36ad7f5407a74864a9d1b6b21ff8d2a914a',
           screenshotPath:
-            'work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-101010-canonical-trace.png',
+            'work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-canonical-trace.png',
           screenshotSha256:
-            '05005798c185bf4c7bff789f2256694317e0fc336eea65c248364bb173a66cfa',
+            '9c75dc7c59e298be2eeebb7327a412fa11da38524c9f883049dee33dc929c977',
         }),
       ],
     });
