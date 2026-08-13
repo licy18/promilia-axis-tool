@@ -389,7 +389,8 @@ export function createMachineAxisSearchGenerator({
                 level: 1,
                 startFrame: chargedInput.startFrame,
                 physicalInput: chargedInput.physicalInput,
-                semanticVariant,
+                semanticVariant:
+                  projectGeneratedActionSemanticVariant(semanticVariant),
               }),
               ownerId: `actor:${activeCharacterId}`,
               ownerKind: 'actor',
@@ -810,6 +811,23 @@ function createGeneratedChargedSemanticVariants(authority) {
     semanticName: tier.semanticName ?? tier.tierIdentity,
     sourceIdentity: authority.sourceIdentity,
   }));
+}
+
+function projectGeneratedActionSemanticVariant(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const publishedKeys = [
+    'selectorIdentity',
+    'selectorKind',
+    'publicVariantIndex',
+    'chargeTier',
+    'inputFrame',
+    'mode',
+  ];
+  return Object.fromEntries(
+    publishedKeys
+      .filter(key => Object.prototype.hasOwnProperty.call(value, key))
+      .map(key => [key, value[key]])
+  );
 }
 
 function resolveGeneratedPreviousInputBoundary({ previous, authority }) {

@@ -1,5 +1,13 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.00000000000 2026-08-14 04:59 108003 generator/schema fail-closed 与中央最小修复
+
+- 唯一新 run `m12c-moyin-top5-6e1610f5-20260814-043250243-2fdf4a98` 在 Phase 1 计划生成前按 production-defect policy 停止并封账：未生成 105-shard plan、未启动 worker、未建立 objective front、未产出 Top-5。旧 `0e02c64` 产物和两份污染配置仍未读取或复用；停止报告为 `work/m12-c/runs/<runId>/STOP_REPORT.json`，SHA-256=`1c52c55c0f47b1bbfa5a07be8eabf9852b821e3666672d9fea5f1b6155f02679`。
+- 最小复现确认当前 production generator 为 108003 三档重击生成的 `intent.semanticVariant` 除 schema 已发布字段外，还携带 candidate-only 的 `semanticName` 与 `sourceIdentity`；Machine Axis schema 以 `additionalProperties=false` 确定性拒绝，issue=`machine-axis-schema-any-of @ actions.0.intent.semanticVariant`。输入/结果 SHA-256 分别为 `8437a3fad8bcdaacb704e8d0f7cd3192a6534f38d1c7802967ac0bf77a966587` / `5f541c5db2fe0df510925c0fb91696230091c9a5a6f63a617469edba409b4e63`。
+- 中央最小 production WIP 仅在生成 action 时投影 schema 发布的 `selectorIdentity/selectorKind/publicVariantIndex/chargeTier/inputFrame/mode`；`semanticName/sourceIdentity` 继续保留在外层 candidate label/provenance，不扩 schema、不降 legality、不改重击 authority。新增 108003 light/medium/full 三档真实 generator -> `prepare()` -> `simulate()` 回归；单文件 `14/14 PASS`，随后搜索 generator/engine/local result/outer pool+service/charged proof+authority/formal admission 共 `8 files / 69 tests PASS`。
+- 提交前复核：Prettier/ESLint/`node --check`/`git diff --check` PASS，production build PASS，`audit:production-imports:check` 为 `236 production-reachable / 4 allowed test-only / 0 unexpected / 0 unreferenced`；`audit:bundle:check` 三项 PASS（initial `119997/120000`、Workbench `488805/500000`、total JS gzip `918573/920000`），其中 initial 仅余 `3 bytes`，属于需保留的近预算风险而非阻断。bundle 派生报告已随 production 变化刷新。
+- 从 tracked production 发生上述 WIP 起，`6e1610f5` release/admission 对后续搜索即失效；本次封账 run 不得 resume。下一步只允许完成格式/静态/生产构建与聚焦复核，形成新的 clean commit 并推送，再从新 HEAD 完整执行 Gate V2 和独立 Formal Search Admission `15/15`；新 authority 建立后另建不同 run，仍不得复用本次 run 的 checkpoint/results。
+
 ## 0.0000000000 2026-08-14 03:40 Gate V2 stale trace 身份闭合
 
 - clean `master@c15ce4d597aefb936b13ee4e2beb968d36129c7e` 的第二次完整 Gate V2 在 character-combat、visual `254/254`、binding `22/22`、Kibo headless 与 settlement 全部通过后，于 full Vitest 诚实失败：`249/251 files`、`2097/2103 tests`，共 6 个 stale canonical trace hash 断言；release record=`6cd71ec6c00aaa90f314c2c032a3f115995f43e9607e47ad248eb21b634df078`、`status=fail`、`failureStage=test`。runner restoration 零残留，HEAD/remote 相等且 tracked clean；该 FAIL 不产生新 admission，搜索任务继续 idle。

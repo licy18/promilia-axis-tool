@@ -136,6 +136,30 @@ describe('Machine Axis search generator', () => {
           candidate.action.intent.physicalInput.executionFrame === 16
       )
     ).toBe(true);
+    expect(
+      candidates.every(
+        candidate =>
+          !('semanticName' in candidate.action.intent.semanticVariant) &&
+          !('sourceIdentity' in candidate.action.intent.semanticVariant) &&
+          candidate.label.includes('重击') &&
+          candidate.sourceIdentity.includes('owner:108003')
+      )
+    ).toBe(true);
+    for (const candidate of candidates) {
+      const generatedAxis = {
+        ...axis,
+        actions: [candidate.action],
+      };
+      const prepared = service.prepare(generatedAxis);
+      expect(prepared.valid).toBe(true);
+      expect(prepared.issues).toEqual([]);
+      const run = service.simulate(generatedAxis);
+      expect(run.actionResolutions).toHaveLength(1);
+      expect(run.actionResolutions[0]).toMatchObject({
+        publicActionId: 10800301,
+        actionKind: 'charged-attack',
+      });
+    }
   });
 
   it('exposes only a legal opener and then the exact sourced successor with one stable group', () => {
