@@ -101,6 +101,13 @@ describe('verified Kibo periodic-heal runtime', () => {
         ],
       },
     });
+    // 相对契约：真实周期治疗必须 requestedChange>0、change>0、HP 确实上升、前后值守恒
+    const { beforeValue, requestedChange, change, afterValue } =
+      periodicHeal.payload;
+    expect(requestedChange).toBeGreaterThan(0);
+    expect(change).toBeGreaterThan(0);
+    expect(afterValue).toBeGreaterThan(beforeValue);
+    expect(afterValue).toBe(beforeValue + change);
     expect(nonDamageEventGeneration.events).toEqual([
       expect.objectContaining({
         actionId: null,
@@ -118,6 +125,8 @@ describe('verified Kibo periodic-heal runtime', () => {
         durationMs: expect.any(Number),
       }),
     ]);
+    // 相对契约：set-skill 效果命令必须携带正时长（零时长实现不得通过）
+    expect(soulGeneration.effectCommands[0].durationMs).toBeGreaterThan(0);
     expect(
       timeline.events.filter(event =>
         event.effectId?.startsWith('set-skill:5:4:')
@@ -223,6 +232,19 @@ describe('verified Kibo periodic-heal runtime', () => {
       expect(events[i].payload.thresholdMs).toBeGreaterThan(
         events[i - 1].payload.thresholdMs
       );
+      // 相对契约：tick 结算时间严格递增（零推进/停滞实现不得通过）
+      expect(events[i].timeMs).toBeGreaterThan(events[i - 1].timeMs);
+    }
+    // 相对契约：每个 tick 都是真实治疗，数量>0、HP 确实上升、前后值守恒
+    for (const event of events) {
+      expect(event.payload.requestedChange).toBeGreaterThan(0);
+      expect(event.payload.change).toBeGreaterThan(0);
+      expect(event.payload.afterValue).toBeGreaterThan(
+        event.payload.beforeValue
+      );
+      expect(event.payload.afterValue).toBe(
+        event.payload.beforeValue + event.payload.change
+      );
     }
     // every tick fires on the first frame strictly after its own threshold
     expectPeriodicTickFrames(events, harness.scenario.time.fps);
@@ -271,6 +293,18 @@ describe('verified Kibo periodic-heal runtime', () => {
     expect(actorEvent.payload.afterValue).toBeLessThanOrEqual(
       actorEvent.payload.maxValue
     );
+    // 相对契约：真实治疗必须 requestedChange>0、change>0、HP 确实上升且前后值守恒
+    expect(actorEvent.payload.requestedChange).toBeGreaterThan(0);
+    expect(actorEvent.payload.change).toBeGreaterThan(0);
+    expect(actorEvent.payload.afterValue).toBeGreaterThan(
+      actorEvent.payload.beforeValue
+    );
+    expect(actorEvent.payload.afterValue).toBe(
+      actorEvent.payload.beforeValue + actorEvent.payload.change
+    );
+    // 缺血钳制：HP 回到满血，change 被 maxValue 截断，overheal 为正
+    expect(actorEvent.payload.afterValue).toBe(actorEvent.payload.maxValue);
+    expect(actorEvent.payload.overheal).toBeGreaterThan(0);
     expect(kiboEvent).toMatchObject({
       type: 'VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL',
       targetId: SOURCE_ACTOR_ID,
@@ -298,6 +332,18 @@ describe('verified Kibo periodic-heal runtime', () => {
     expect(kiboEvent.payload.afterValue).toBeLessThanOrEqual(
       kiboEvent.payload.maxValue
     );
+    // 相对契约：真实治疗必须 requestedChange>0、change>0、HP 确实上升且前后值守恒
+    expect(kiboEvent.payload.requestedChange).toBeGreaterThan(0);
+    expect(kiboEvent.payload.change).toBeGreaterThan(0);
+    expect(kiboEvent.payload.afterValue).toBeGreaterThan(
+      kiboEvent.payload.beforeValue
+    );
+    expect(kiboEvent.payload.afterValue).toBe(
+      kiboEvent.payload.beforeValue + kiboEvent.payload.change
+    );
+    // 未触发钳制：change 全额应用、overheal 为 0
+    expect(kiboEvent.payload.overheal).toBe(0);
+    expect(kiboEvent.payload.change).toBe(kiboEvent.payload.requestedChange);
     expect(runtime.finalState.actorVitals).toContainEqual(
       expect.objectContaining({
         actorId: SOURCE_ACTOR_ID,
@@ -313,6 +359,17 @@ describe('verified Kibo periodic-heal runtime', () => {
         maximumHp: 10000,
       })
     );
+    // 相对契约：终态 HP 与治疗事件的 afterValue 守恒（治疗未落盘实现不得通过）
+    expect(
+      runtime.finalState.actorVitals.find(
+        vital => vital.actorId === SOURCE_ACTOR_ID
+      ).currentHp
+    ).toBe(actorEvent.payload.afterValue);
+    expect(
+      runtime.finalState.kiboVitals.find(
+        vital => vital.kiboId === SOURCE_KIBO_ID
+      ).currentHp
+    ).toBe(kiboEvent.payload.afterValue);
   });
 
   it('consumes full-health and dead-target ticks without changing either HP pool', () => {
@@ -362,6 +419,13 @@ describe('verified Kibo periodic-heal runtime', () => {
     expect(event.type).toBe('VERIFIED_KIBO_PASSIVE_PERIODIC_HEAL');
     expect(event.payload.sourceMaxHp).toBeCloseTo(15999.908447, 6);
     expect(event.payload.requestedChange).toEqual(expect.any(Number));
+    // 相对契约：真实治疗必须 requestedChange>0、change>0、HP 确实上升且前后值守恒
+    expect(event.payload.requestedChange).toBeGreaterThan(0);
+    expect(event.payload.change).toBeGreaterThan(0);
+    expect(event.payload.afterValue).toBeGreaterThan(event.payload.beforeValue);
+    expect(event.payload.afterValue).toBe(
+      event.payload.beforeValue + event.payload.change
+    );
     const initialKiboVital = runtime.initialState.kiboVitals.find(
       vital => vital.actorId === SOURCE_ACTOR_ID
     );
@@ -446,6 +510,14 @@ describe('verified Kibo periodic-heal runtime', () => {
         }),
       },
     });
+    // 相对契约：canonical trace 中的真实治疗必须 requestedChange>0、change>0、
+    // HP 确实上升且前后值守恒（零治疗实现不得通过）
+    expect(event.payload.requestedChange).toBeGreaterThan(0);
+    expect(event.payload.change).toBeGreaterThan(0);
+    expect(event.payload.afterValue).toBeGreaterThan(event.payload.beforeValue);
+    expect(event.payload.afterValue).toBe(
+      event.payload.beforeValue + event.payload.change
+    );
   });
 
   it('keeps periodic event ordering deterministic when scenario actor storage order changes', () => {
@@ -791,6 +863,17 @@ describe('verified Kibo periodic-heal runtime', () => {
       },
     });
     expect(events[1].payload.maxValue).toBeCloseTo(5999.984741, 6);
+    // 相对契约：失败 full-health tick 之后，MAXHP 提高的下一个严格阈值 tick
+    // 必须是真实治疗：时间严格递增、change>0、HP 确实上升、前后值守恒
+    expect(events[0].timeMs).toBeLessThan(events[1].timeMs);
+    expect(events[1].payload.requestedChange).toBeGreaterThan(0);
+    expect(events[1].payload.change).toBeGreaterThan(0);
+    expect(events[1].payload.afterValue).toBeGreaterThan(
+      events[1].payload.beforeValue
+    );
+    expect(events[1].payload.afterValue).toBe(
+      events[1].payload.beforeValue + events[1].payload.change
+    );
   });
 
   it('stops later ticks after the persistent root is explicitly removed', () => {
@@ -813,6 +896,16 @@ describe('verified Kibo periodic-heal runtime', () => {
     // the later tick still fires strictly after the first one before stopping
     expect(events[0].timeMs).toBeLessThan(events[1].timeMs);
     expectPeriodicTickFrames(events, harness.scenario.time.fps);
+    // 相对契约：被移除前的首个 tick 必须是真实治疗：change>0、HP 确实上升、
+    // 前后值守恒（零治疗实现不得通过）
+    expect(events[0].payload.requestedChange).toBeGreaterThan(0);
+    expect(events[0].payload.change).toBeGreaterThan(0);
+    expect(events[0].payload.afterValue).toBeGreaterThan(
+      events[0].payload.beforeValue
+    );
+    expect(events[0].payload.afterValue).toBe(
+      events[0].payload.beforeValue + events[0].payload.change
+    );
   });
 
   it('does not schedule a later threshold after the battle duration ends', () => {
@@ -834,6 +927,15 @@ describe('verified Kibo periodic-heal runtime', () => {
       },
     });
     expectPeriodicTickFrames(events, harness.scenario.time.fps);
+    // 相对契约：唯一 tick 必须是真实治疗：change>0、HP 确实上升、前后值守恒
+    expect(events[0].payload.requestedChange).toBeGreaterThan(0);
+    expect(events[0].payload.change).toBeGreaterThan(0);
+    expect(events[0].payload.afterValue).toBeGreaterThan(
+      events[0].payload.beforeValue
+    );
+    expect(events[0].payload.afterValue).toBe(
+      events[0].payload.beforeValue + events[0].payload.change
+    );
   });
 });
 

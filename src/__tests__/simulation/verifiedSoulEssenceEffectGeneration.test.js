@@ -542,11 +542,10 @@ describe('verified soul essence effect generation', () => {
   });
 
   it('binds the real 10098 AfterDamage charged-hit stacking contract', () => {
-    expect(
-      soulEssenceEffectCatalog.definitions.find(
-        definition => definition.soulEssenceId === 10098
-      )
-    ).toMatchObject({
+    const definition10098 = soulEssenceEffectCatalog.definitions.find(
+      definition => definition.soulEssenceId === 10098
+    );
+    expect(definition10098).toMatchObject({
       name: '此身为枪',
       effectSkillId: 1900670,
       runtimeStatus: 'runtime-applied',
@@ -577,6 +576,10 @@ describe('verified soul essence effect generation', () => {
       activationPrerequisites: [],
       runtimeGaps: [],
     });
+    // 相对契约：伤害增益数值必须为正（零增益实现不得通过）
+    expect(
+      definition10098.effect.valuesByStar.every(row => Number(row.valueRaw) > 0)
+    ).toBe(true);
   });
 
   it('keeps 10018 gated by its outer tuning-mark 250 activation condition', () => {
@@ -702,6 +705,10 @@ describe('verified soul essence effect generation', () => {
       },
       runtimeGaps: [],
     });
+    // 相对契约：伤害增益数值必须为正（零增益实现不得通过）
+    expect(
+      definition.effect.valuesByStar.every(row => Number(row.valueRaw) > 0)
+    ).toBe(true);
   });
 
   it('covers every runtime-integrated soul through one data-driven trigger contract', () => {
@@ -797,6 +804,16 @@ describe('verified soul essence effect generation', () => {
       ],
       runtimeGaps: [],
     });
+    // 相对契约：10107 SP/治疗数值必须为正（零收益实现不得通过）
+    expect(
+      definition.immediateEffects.every(
+        immediateEffect =>
+          Number(immediateEffect.sourceRawValue) > 0 &&
+          (immediateEffect.valuesByStar ?? []).every(
+            row => Number(row.valueRaw) > 0
+          )
+      )
+    ).toBe(true);
 
     const result = createRealSoulScenario({
       actorCharacterId: 101007,
@@ -846,6 +863,13 @@ describe('verified soul essence effect generation', () => {
         },
       });
     }
+    // 相对契约：SP 与治疗必须产生正收益（零收益实现不得通过）
+    expect(
+      generation.directSpEvents.every(event => Number(event.value) > 0)
+    ).toBe(true);
+    expect(
+      generation.directHpEvents.every(event => Number(event.value) > 0)
+    ).toBe(true);
     expect(generation.effectCommands).toEqual([]);
 
     const starTwo = createRealSoulScenario({
@@ -910,6 +934,16 @@ describe('verified soul essence effect generation', () => {
       ],
       runtimeGaps: [],
     });
+    // 相对契约：10216 直接 SP 数值必须为正（零收益实现不得通过）
+    expect(
+      definition.immediateEffects.every(
+        immediateEffect =>
+          Number(immediateEffect.sourceRawValue) > 0 &&
+          (immediateEffect.valuesByStar ?? []).every(
+            row => Number(row.valueRaw) > 0
+          )
+      )
+    ).toBe(true);
 
     const teamSlots = createDefaultWorkbenchTeamSlots();
     const actorConfigs = createDefaultWorkbenchActorConfigs(
@@ -999,6 +1033,11 @@ describe('verified soul essence effect generation', () => {
         },
       },
     });
+    // 相对契约：直接 SP 必须为正（零收益实现不得通过）
+    expect(Number(generation.directSpEvents[0].value)).toBeGreaterThan(0);
+    expect(
+      Number(generation.directSpEvents[0].formulaResult.sourceRawA)
+    ).toBeGreaterThan(0);
     expect(generation.directHpEvents).toEqual([]);
     expect(generation.suppressions).not.toEqual(
       expect.arrayContaining([
@@ -1197,6 +1236,15 @@ describe('verified soul essence effect generation', () => {
       ],
       runtimeGaps: [],
     });
+    // 相对契约：10032 攻击增益与团队治疗必须为正（零效果实现不得通过）
+    expect(
+      definition.effect.valuesByStar.every(row => Number(row.valueRaw) > 0)
+    ).toBe(true);
+    expect(
+      definition.immediateEffects[0].valuesByStar.every(
+        row => Number(row.valueRaw) > 0
+      )
+    ).toBe(true);
 
     const actorId = 'actor-soul-10032';
     const simulate = star => {
@@ -1258,7 +1306,7 @@ describe('verified soul essence effect generation', () => {
           command.targetKind === 'actor' &&
           command.modifiers[0].attributeId === 1 &&
           command.modifiers[0].sourceElementId === 19003403 &&
-          typeof command.modifiers[0].sourceRawA === 'number'
+          Number(command.modifiers[0].sourceRawA) > 0
       )
     ).toBe(true);
     expect(generation.directHpEvents).toHaveLength(2);
@@ -1281,7 +1329,7 @@ describe('verified soul essence effect generation', () => {
     expect(
       starTwoGeneration.effectCommands
         .filter(command => command.sourceSoulEssenceId === 10032)
-        .every(command => typeof command.modifiers[0].sourceRawA === 'number')
+        .every(command => Number(command.modifiers[0].sourceRawA) > 0)
     ).toBe(true);
     expect(
       starTwoGeneration.directHpEvents.every(
@@ -1380,6 +1428,8 @@ describe('verified soul essence effect generation', () => {
         }),
       ],
     });
+    // 相对契约：调律增益数值必须为正（零增益实现不得通过）
+    expect(Number(commands[0].modifiers[0].sourceRawA)).toBeGreaterThan(0);
     expect(generation.suppressions).toEqual([]);
     expect(generation.unresolved).toEqual([]);
   });
@@ -1418,6 +1468,12 @@ describe('verified soul essence effect generation', () => {
       ],
       runtimeGaps: [],
     });
+    // 相对契约：10063 击杀自疗数值必须为正（零治疗实现不得通过）
+    expect(
+      definition.immediateEffects[0].valuesByStar.every(
+        row => Number(row.valueRaw) > 0
+      )
+    ).toBe(true);
 
     const simulate = star => {
       const selection = {
@@ -1517,6 +1573,8 @@ describe('verified soul essence effect generation', () => {
         },
       },
     });
+    // 相对契约：治疗量必须为正（零治疗实现不得通过）
+    expect(Number(heals[0].value)).toBeGreaterThan(0);
     expect(starOneGeneration.unresolved).toEqual([]);
 
     const starTwo = simulate(2);
@@ -1584,7 +1642,7 @@ describe('verified soul essence effect generation', () => {
           command.targetId === 'actor-101007' &&
           command.modifiers[0].attributeId === 52 &&
           command.modifiers[0].sourceElementId === 19005303 &&
-          typeof command.modifiers[0].sourceRawA === 'number'
+          Number(command.modifiers[0].sourceRawA) > 0
       )
     ).toBe(true);
     expect(
@@ -1829,6 +1887,8 @@ describe('verified soul essence effect generation', () => {
         }),
       }),
     });
+    // 相对契约：全队暴击伤害增益必须为正（零增益实现不得通过）
+    expect(Number(commands[0].modifiers[0].valueRaw)).toBeGreaterThan(0);
     expect(damage(withSoul, 'teammate-critical-active')).toBeGreaterThan(
       damage(withoutSoul, 'teammate-critical-active')
     );
@@ -1982,6 +2042,8 @@ describe('verified soul essence effect generation', () => {
           }),
         ],
       });
+      // 相对契约：超限伤害增益必须为正（零增益实现不得通过）
+      expect(Number(command.modifiers[0].valueRaw)).toBeGreaterThan(0);
       expect(tuningDamage(withSoul).payload.rawDamage).toBeCloseTo(
         tuningDamage(withoutSoul).payload.rawDamage,
         6
@@ -2347,6 +2409,9 @@ describe('verified soul essence effect generation', () => {
         }),
       ],
     });
+    // 相对契约：风印调律增益必须为正（零增益实现不得通过）
+    expect(Number(commands[0].modifiers[0].sourceRawA)).toBeGreaterThan(0);
+    expect(Number(commands[0].modifiers[0].evaluatedValue)).toBeGreaterThan(0);
     expect(activeWithSoul.mastery - activeWithoutSoul.mastery).toBeGreaterThan(
       0
     );
@@ -2614,6 +2679,9 @@ describe('verified soul essence effect generation', () => {
         }),
       ],
     });
+    // 相对契约：火印调律增益必须为正（零增益实现不得通过）
+    expect(Number(commands[0].modifiers[0].sourceRawA)).toBeGreaterThan(0);
+    expect(Number(commands[0].modifiers[0].evaluatedValue)).toBeGreaterThan(0);
     expect(activeWithSoul.mastery - activeWithoutSoul.mastery).toBeGreaterThan(
       0
     );
@@ -3022,6 +3090,22 @@ describe('verified soul essence effect generation', () => {
       healUpFactor: expect.any(Number),
       roundingPolicy: 'nearest-ties-to-even',
     });
+    // 相对契约：治疗前后值守恒、治疗为正且星阶增益放大治疗（零治疗实现不得通过）
+    for (const event of [...star1.heals, ...star4.heals]) {
+      expect(event.payload.afterValue).toBe(
+        event.payload.beforeValue + event.payload.change
+      );
+      expect(Number(event.payload.change)).toBeGreaterThan(0);
+    }
+    expect(star1.heals[1].payload.requestedChange).toBeGreaterThan(
+      star1.heals[0].payload.requestedChange
+    );
+    expect(star4.heals[1].payload.requestedChange).toBeGreaterThan(
+      star1.heals[1].payload.requestedChange
+    );
+    expect(Number(star1.heals[1].payload.sourceShootHealUpRaw)).toBeGreaterThan(
+      0
+    );
     expect(baseline.heals.map(event => event.payload.requestedChange)).toEqual([
       100, 100, 100,
     ]);
@@ -3040,6 +3124,14 @@ describe('verified soul essence effect generation', () => {
       overheal: expect.any(Number),
       sourceShootHealUpRaw: expect.any(Number),
     });
+    // 相对契约：封顶治疗必须请求正量、存在溢疗且前后值守恒
+    expect(clamped.heals[0].payload.afterValue).toBe(
+      clamped.heals[0].payload.beforeValue + clamped.heals[0].payload.change
+    );
+    expect(Number(clamped.heals[0].payload.overheal)).toBeGreaterThan(0);
+    expect(Number(clamped.heals[0].payload.requestedChange)).toBeGreaterThan(
+      Number(clamped.heals[0].payload.change)
+    );
 
     const sameFrame = run({
       soulEssenceStar: 1,
@@ -3050,6 +3142,10 @@ describe('verified soul essence effect generation', () => {
     });
     expect(sameFrame.heals.map(event => event.payload.requestedChange)).toEqual(
       [100, expect.any(Number)]
+    );
+    // 相对契约：同帧触发后治疗必须放大（未命中的零增益实现不得通过）
+    expect(sameFrame.heals[1].payload.requestedChange).toBeGreaterThan(
+      sameFrame.heals[0].payload.requestedChange
     );
   });
 
@@ -3279,6 +3375,11 @@ describe('verified soul essence effect generation', () => {
       100,
       expect.any(Number),
     ]);
+    // 相对契约：生成治疗必须为正（零治疗实现不得通过）
+    expect(Number(requestedChanges(baseline)[1])).toBeGreaterThan(0);
+    expect(
+      Number(requestedChanges(withUnexecutedDescriptors)[1])
+    ).toBeGreaterThan(0);
 
     const legacyGenerated = {
       ...generated,
@@ -3637,6 +3738,9 @@ describe('verified soul essence effect generation', () => {
         }),
       ],
     });
+    // 相对契约：火系伤害增益必须为正（零增益实现不得通过）
+    expect(Number(fireCommand.modifiers[0].sourceRawA)).toBeGreaterThan(0);
+    expect(Number(fireCommand.modifiers[0].evaluatedValue)).toBeGreaterThan(0);
     expect(fireDamageWithSoul.payload.rawDamage).toBeGreaterThan(
       fireDamageWithoutSoul.payload.rawDamage
     );
@@ -3776,6 +3880,8 @@ describe('verified soul essence effect generation', () => {
         }),
       ],
     });
+    // 相对契约：风系伤害增益必须为正（零增益实现不得通过）
+    expect(Number(windCommand.modifiers[0].sourceRawA)).toBeGreaterThan(0);
     expect(
       tuningDamage(windWithSoul, windActionId, 'wind').payload.rawDamage
     ).toBeGreaterThan(
@@ -4230,6 +4336,8 @@ describe('verified soul essence effect generation', () => {
         }),
       ],
     });
+    // 相对契约：风系伤害增益必须为正（零增益实现不得通过）
+    expect(Number(command.modifiers[0].sourceRawA)).toBeGreaterThan(0);
     expect(tuningDamage(withSoul).payload.rawDamage).toBeGreaterThan(
       tuningDamage(withoutSoul).payload.rawDamage
     );
@@ -4557,6 +4665,13 @@ describe('verified soul essence effect generation', () => {
         ],
       }),
     ]);
+    // 相对契约：极限技击增益必须为正（零增益实现不得通过）
+    expect(
+      Number(generation.effectCommands[0].modifiers[0].sourceRawA)
+    ).toBeGreaterThan(0);
+    expect(
+      Number(generation.effectCommands[0].modifiers[0].evaluatedValue)
+    ).toBeGreaterThan(0);
     expect(
       resolveActiveEffectsAt(timeline, action.startMs, {
         targetKind: 'actor',
@@ -5678,6 +5793,8 @@ describe('verified soul essence effect generation', () => {
         star: 1,
       }),
     });
+    // 相对契约：蓄力攻击伤害增益必须为正（零增益实现不得通过）
+    expect(Number(firstCommand.modifiers[0].valueRaw)).toBeGreaterThan(0);
     expect(
       result.effectTimeline.events.some(
         event =>
@@ -5749,6 +5866,16 @@ describe('verified soul essence effect generation', () => {
     expect(damageUpTrace(secondActionHits[0])).toMatchObject({
       dynamicExtraRaw: expect.any(Number),
     });
+    // 相对契约：命中叠层伤害增益必须为正（零增益实现不得通过）
+    expect(
+      Number(damageUpTrace(firstActionHits[1]).dynamicExtraRaw)
+    ).toBeGreaterThan(0);
+    expect(
+      Number(damageUpTrace(firstActionHits.at(-1)).dynamicExtraRaw)
+    ).toBeGreaterThan(0);
+    expect(
+      Number(damageUpTrace(secondActionHits[0]).dynamicExtraRaw)
+    ).toBeGreaterThan(0);
     expect(
       result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
         command => command.sourceSoulEssenceId === 10098
@@ -5781,6 +5908,8 @@ describe('verified soul essence effect generation', () => {
     expect(damageUpTrace(hits[1])).toMatchObject({
       dynamicExtraRaw: expect.any(Number),
     });
+    // 相对契约：后续命中伤害增益必须为正（零增益实现不得通过）
+    expect(Number(damageUpTrace(hits[1]).dynamicExtraRaw)).toBeGreaterThan(0);
     const commands =
       result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
         command => command.sourceSoulEssenceId === 10101
@@ -6099,7 +6228,7 @@ describe('verified soul essence effect generation', () => {
           command.effectId === 'soulessence:10095:element:19003203' &&
           command.modifiers[0].attributeId === 1 &&
           command.modifiers[0].sourceElementId === 19003203 &&
-          typeof command.modifiers[0].sourceRawA === 'number'
+          Number(command.modifiers[0].sourceRawA) > 0
       )
     ).toBe(true);
     expect(
@@ -6513,6 +6642,10 @@ describe('verified soul essence effect generation', () => {
     expect(
       commands.every(command => command.sourceActionId === chargedAction.id)
     ).toBe(true);
+    // 相对契约：10132 为减益，valueRaw 必须为负（零效果实现不得通过）
+    expect(
+      commands.every(command => Number(command.modifiers[0].valueRaw) < 0)
+    ).toBe(true);
     expect(
       generation.suppressions.some(
         suppression =>
@@ -6607,6 +6740,12 @@ describe('verified soul essence effect generation', () => {
           }),
         ])
       );
+      // 相对契约：匹配技能标签的命中伤害增益必须为正（零增益实现不得通过）
+      expect(
+        sourceTraces(expected.matchingActionId).some(
+          trace => Number(trace.dynamicExtraRaw) > 0
+        )
+      ).toBe(true);
       expect(sourceTraces(expected.rejectedActionId)).toEqual([]);
       expect(sourceTraces(expected.otherSkillActionId)).toEqual([]);
     }
@@ -6727,6 +6866,8 @@ describe('verified soul essence effect generation', () => {
           }),
         }),
       });
+      // 相对契约：入场韧性伤害增益必须为正（零增益实现不得通过）
+      expect(Number(command.modifiers[0].valueRaw)).toBeGreaterThan(0);
       expect(toughness(withSoul, 'entry-soul-active-charged')).toBeGreaterThan(
         toughness(withoutSoul, 'entry-soul-active-charged')
       );
@@ -7274,6 +7415,8 @@ describe('verified soul essence effect generation', () => {
         ],
       }),
     ]);
+    // 相对契约：受疗目标攻击增益必须为正（零增益实现不得通过）
+    expect(Number(commands[0].modifiers[0].sourceRawA)).toBeGreaterThan(0);
 
     const replayAt = (actionId, startFrame) =>
       replayRealActionWithSoulCommands({
@@ -7576,6 +7719,10 @@ describe('verified soul essence effect generation', () => {
       },
     });
     expect(periodicHeal.payload.change).toBeGreaterThan(0);
+    // 相对契约：周期治疗前后值守恒（无变化实现不得通过）
+    expect(periodicHeal.payload.afterValue).toBe(
+      periodicHeal.payload.beforeValue + periodicHeal.payload.change
+    );
     expect(afterHeal).toMatchObject({
       eventId: 44,
       actionId: sourceActionId,
@@ -7775,6 +7922,9 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
         }),
       ],
     });
+    // 相对契约：套装 2 暴击增益必须为正（零增益实现不得通过）
+    expect(Number(commands[0].modifiers[0].sourceRawA)).toBeGreaterThan(0);
+    expect(Number(commands[0].modifiers[0].evaluatedValue)).toBeGreaterThan(0);
     const last = commands.at(-1);
     const active = resolveActiveEffectsAt(
       result.effectTimeline,
@@ -7862,6 +8012,10 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
         actionSkillTagIds: expect.arrayContaining([1]),
       },
     });
+    // 相对契约：套装 4 攻击增益必须为正（零增益实现不得通过）
+    expect(Number(commands[0].modifiers[0].sourceRawA)).toBeGreaterThan(0);
+    expect(Number(commands[0].modifiers[0].valueRaw)).toBeGreaterThan(0);
+    expect(Number(commands[0].modifiers[0].evaluatedValue)).toBeGreaterThan(0);
     const first = commands[0];
     const replay = replayRealActionWithSoulCommands({
       actorCharacterId: OWNER_ID,
@@ -7901,6 +8055,12 @@ describe('M12-B3-C10 four-piece BeforeDamage stacking properties', () => {
         ],
       })
     );
+    // 相对契约：套装 4 百分比攻击增益必须为正（零增益实现不得通过）
+    expect(
+      withCurrentHit.payload.dynamicPropertyTrace.source.some(
+        trace => trace.attributeId === 1 && Number(trace.dynamicPercentRaw) > 0
+      )
+    ).toBe(true);
   });
 
   it('keeps Self ownership through switch and suppresses miss or blocked packets', () => {
@@ -8077,6 +8237,12 @@ describe('M12-B3-C13 AfterDamage target weakness absorption', () => {
         ],
       },
     });
+    // 相对契约：套装 6 目标减益以正向值表达增伤（零效果实现不得通过）
+    expect(
+      definition.effect.propertyEffects.every(
+        propertyEffect => Number(propertyEffect.sourceRawA) > 0
+      )
+    ).toBe(true);
   });
 
   it('counts one native trigger occurrence and fail-closes after a finite event-trigger limit', () => {
@@ -8170,6 +8336,10 @@ describe('M12-B3-C13 AfterDamage target weakness absorption', () => {
         }),
       ],
     });
+    // 相对契约：套装 6 减益 valueRaw 必须为正（零效果实现不得通过）
+    expect(
+      commands[0].modifiers.every(modifier => Number(modifier.valueRaw) > 0)
+    ).toBe(true);
     expect(
       result.verifiedSoulEssenceEffectGeneration.triggerCounterStates
     ).toEqual([
@@ -8788,6 +8958,10 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
         ],
       }),
     ]);
+    // 相对契约：套装 5 攻击增益必须为正（零增益实现不得通过）
+    expect(
+      Number(generation.effectCommands[0].modifiers[0].sourceRawA)
+    ).toBeGreaterThan(0);
   });
 
   it('uses native direct and periodic AfterHeal transactions and changes only the healed target during the right-open lifetime', () => {
@@ -8959,6 +9133,10 @@ describe('M12-B3-C11 AfterHeal Source-to-Target and native Block', () => {
         }),
       ])
     );
+    // 相对契约：套装 5 攻击增益必须为正（零增益实现不得通过）
+    expect(
+      commands.every(command => Number(command.modifiers[0].sourceRawA) > 0)
+    ).toBe(true);
 
     const targetCommand = commands.find(
       command => command.targetId === targetActorId
@@ -9320,6 +9498,11 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
           generation.directSpEvents[0].transactionRootIdentity
       )
     ).toBe(true);
+    // 相对契约：共享 SP 与全队治疗必须为正（零收益实现不得通过）
+    expect(Number(generation.directSpEvents[0].value)).toBeGreaterThan(0);
+    expect(
+      generation.directHpEvents.every(event => Number(event.value) > 0)
+    ).toBe(true);
   });
 
   it('targets exactly the actors present in one- and two-actor scenarios', () => {
@@ -9566,6 +9749,16 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       );
       expect(event.payload.baseRequestedChange).toBeCloseTo(expectedBase, 6);
     }
+    // 相对契约：SP 与治疗必须产生正收益且前后值守恒（零变化实现不得通过）
+    expect(
+      actorSp.every(event => Number(event.payload.change ?? event.change) > 0)
+    ).toBe(true);
+    for (const event of heals) {
+      expect(event.payload.afterValue).toBe(
+        event.payload.beforeValue + event.payload.change
+      );
+      expect(Number(event.payload.change)).toBeGreaterThan(0);
+    }
     expect(heals).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -9720,7 +9913,8 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       return { actorEvents, kiboEvents };
     };
 
-    expect(replay()).toMatchObject({
+    const teamShare = replay();
+    expect(teamShare).toMatchObject({
       actorEvents: [
         { actorId: 'actor-101003', change: expect.any(Number), share: 1 },
         { actorId: 'actor-101007', change: expect.any(Number), share: 1 },
@@ -9728,7 +9922,12 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       ],
       kiboEvents: [],
     });
-    expect(replay({ shareType: 0, mainPetShareType: 1 })).toMatchObject({
+    // 相对契约：团队 SP 分享必须产生正收益（零收益实现不得通过）
+    expect(teamShare.actorEvents.every(event => Number(event.change) > 0)).toBe(
+      true
+    );
+    const mainPetShare = replay({ shareType: 0, mainPetShareType: 1 });
+    expect(mainPetShare).toMatchObject({
       actorEvents: [
         { actorId: sourceActorId, change: expect.any(Number), share: 1 },
       ],
@@ -9741,7 +9940,14 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         },
       ],
     });
-    expect(replay({ shareType: 0, petShareType: 1 })).toMatchObject({
+    // 相对契约：主宠 SP 分享必须产生正收益（零收益实现不得通过）
+    expect(
+      [...mainPetShare.actorEvents, ...mainPetShare.kiboEvents].every(
+        event => Number(event.change) > 0
+      )
+    ).toBe(true);
+    const petShare = replay({ shareType: 0, petShareType: 1 });
+    expect(petShare).toMatchObject({
       actorEvents: [
         { actorId: sourceActorId, change: expect.any(Number), share: 1 },
       ],
@@ -9760,14 +9966,19 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         },
       ],
     });
+    // 相对契约：宠物 SP 分享必须产生正收益（零收益实现不得通过）
     expect(
-      replay({
-        targetKind: 'kibo',
-        shareType: 0,
-        mainPetShareType: 0,
-        petShareType: 0,
-      })
-    ).toMatchObject({
+      [...petShare.actorEvents, ...petShare.kiboEvents].every(
+        event => Number(event.change) > 0
+      )
+    ).toBe(true);
+    const kiboTargetShare = replay({
+      targetKind: 'kibo',
+      shareType: 0,
+      mainPetShareType: 0,
+      petShareType: 0,
+    });
+    expect(kiboTargetShare).toMatchObject({
       actorEvents: [],
       kiboEvents: [
         {
@@ -9778,6 +9989,10 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         },
       ],
     });
+    // 相对契约：Kibo 直充 SP 必须产生正收益（零收益实现不得通过）
+    expect(
+      kiboTargetShare.kiboEvents.every(event => Number(event.change) > 0)
+    ).toBe(true);
     expect(
       replay({
         shareType: 0,
@@ -9808,13 +10023,12 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         withoutKibos: true,
       }).kiboEvents
     ).toEqual([]);
-    expect(
-      replay({
-        shareType: 0,
-        mainPetShareType: 1,
-        controlledActorId: 'actor-101003',
-      }).kiboEvents
-    ).toEqual([
+    const controlledShare = replay({
+      shareType: 0,
+      mainPetShareType: 1,
+      controlledActorId: 'actor-101003',
+    });
+    expect(controlledShare.kiboEvents).toEqual([
       {
         actorId: sourceActorId,
         slotId: expect.any(String),
@@ -9822,6 +10036,10 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         share: 0.5,
       },
     ]);
+    // 相对契约：受控角色切换后主宠分享仍产生正收益（零收益实现不得通过）
+    expect(
+      controlledShare.kiboEvents.every(event => Number(event.change) > 0)
+    ).toBe(true);
     expect(generatedEvent.sourceSequencePath).toEqual(expect.any(Array));
   });
 
@@ -10057,6 +10275,8 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
     ).change;
     expect(ownerClampedChange).toBeGreaterThan(0);
     expect(ownerClampedChange).toBeLessThan(teammateFullChange);
+    // 相对契约：所有 SP 收益必须为正（零收益实现不得通过）
+    expect(actorSp.every(event => Number(event.change) > 0)).toBe(true);
     expect(heals).toHaveLength(3);
     expect(heals.find(event => event.targetId === sourceActorId)).toMatchObject(
       {
@@ -10301,6 +10521,12 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       [61, expect.any(Number)],
       [121, expect.any(Number)],
     ]);
+    // 相对契约：周期结算 tick 严格递增且每次 tick 数值为正
+    expect(
+      breakEfficiency.verifiedSoulEssenceEffectGeneration.effectCommands.every(
+        command => Number(command.modifiers[0].sourceRawA) > 0
+      )
+    ).toBe(true);
     expect(
       kiboDamage.verifiedSoulEssenceEffectGeneration.effectCommands.map(
         command => [
@@ -10314,6 +10540,12 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       [1, 'kibo', PROPERTY_TAG_TEST_KIBO_ID, expect.any(Number)],
       [121, 'kibo', PROPERTY_TAG_TEST_KIBO_ID, expect.any(Number)],
     ]);
+    // 相对契约：Kibo 周期增益每次 tick 数值为正（零增益实现不得通过）
+    expect(
+      kiboDamage.verifiedSoulEssenceEffectGeneration.effectCommands.every(
+        command => Number(command.modifiers[0].sourceRawA) > 0
+      )
+    ).toBe(true);
     expect(
       soulEssenceEffectCatalog.definitions.find(
         definition => definition.soulEssenceId === 10078
@@ -10346,7 +10578,7 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
           command.targetKind === 'actor' &&
           command.modifiers[0].attributeId === 21 &&
           command.modifiers[0].sourceElementId === 19004601 &&
-          typeof command.modifiers[0].sourceRawA === 'number' &&
+          Number(command.modifiers[0].sourceRawA) > 0 &&
           JSON.stringify(command.modifiers[0].propertyTags) === '[302,303]' &&
           command.modifiers[0].propertyTagMatchMode ===
             'any-overlap-event-driven'

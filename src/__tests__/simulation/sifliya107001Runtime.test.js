@@ -208,6 +208,22 @@ describe('107001 Sifliya source contract', () => {
         }),
       ])
     );
+    // 相对契约——风语状态增益与伤害模板系数必须为正（零值/负值实现不得通过）
+    const stateEffectModifier = transition.effectGrants[0].modifiers[0];
+    expect(stateEffectModifier.valueRaw).toBeGreaterThan(0);
+    const volleyGroup =
+      transition.companionProfile.periodicAttack.conditionalDamageGroup;
+    expect(volleyGroup.baseTemplate.coefficientRaw).toBeGreaterThan(0);
+    expect(volleyGroup.enhancedTemplate.coefficientRaw).toBeGreaterThan(0);
+    const chargedResponse = transition.companionProfile.actionResponses.find(
+      response => response.skillId === 48005602
+    );
+    expect(
+      chargedResponse.conditionalDamageGroup.baseTemplate.coefficientRaw
+    ).toBeGreaterThan(0);
+    expect(
+      chargedResponse.conditionalDamageGroup.enhancedTemplate.coefficientRaw
+    ).toBeGreaterThan(0);
 
     expect(contracts.tuningMarkConditionalDamageGroups).toHaveLength(8);
     expect(
@@ -271,6 +287,8 @@ describe('107001 Sifliya source contract', () => {
         ],
       }),
     ]);
+    // 相对契约——风语 ATK% 被动增益必须为正（零值/减益实现不得通过）
+    expect(contracts.passives[0].modifiers[0].valueRaw).toBeGreaterThan(0);
 
     expect(findControl(10700110).logic).toMatchObject({
       cooldownMs: 0,
@@ -452,6 +470,28 @@ describe('107001 Sifliya focused runtime', () => {
         targetKind: 'enemy',
       },
     ]);
+    // 相对契约——周期 volley 结算必须严格递增且每轮攻击次数为正（零轮/乱序实现不得通过）
+    const periodicEvents = result.actionRuntime.companionEvents.filter(
+      event => event.kind === 'periodic'
+    );
+    expect(periodicEvents.length).toBeGreaterThan(0);
+    expect(
+      periodicEvents.every(
+        (event, index) =>
+          index === 0 || event.timeMs > periodicEvents[index - 1].timeMs
+      )
+    ).toBe(true);
+    expect(
+      periodicEvents.every(event => Number(event.payload.attackCount) > 0)
+    ).toBe(true);
+    const attackTimes = result.actionRuntime.companionAttackTransactions.map(
+      transaction => transaction.timeMs
+    );
+    expect(
+      attackTimes.every(
+        (time, index) => index === 0 || time > attackTimes[index - 1]
+      )
+    ).toBe(true);
     expect(companionResults).toHaveLength(6);
     expect(
       companionResults.every(
@@ -892,6 +932,16 @@ describe('107001 Sifliya focused runtime', () => {
           event.payload.damageEventContext?.sourceKind === 'conditional-hit'
       )
     ).toBe(true);
+    // 相对契约——条件命中必须真实结算扣血：伤害>0、HP 确实下降且前后值守恒（零伤害/无变化实现不得通过）
+    for (const event of conditionalHits) {
+      const { rawDamage, stateTransaction } = event.payload;
+      const { before, delta, after } = stateTransaction;
+      expect(rawDamage).toBeGreaterThan(0);
+      expect(delta.enemyHp).toBeLessThan(0);
+      expect(delta.enemyHp).toBeCloseTo(-rawDamage, 4);
+      expect(after.hp).toBeCloseTo(before.hp + delta.enemyHp, 6);
+      expect(after.hp).toBeLessThan(before.hp);
+    }
   });
 
   it('uses a right-open twenty-four-second effect interval for refresh versus reapply', () => {

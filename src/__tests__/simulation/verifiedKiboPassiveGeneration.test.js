@@ -117,6 +117,14 @@ describe('verified kibo passive generation', () => {
         }),
       ],
     });
+    // 相对契约：防御减益修饰必须为负值（valueRaw<0），零/正值的防御实现不得通过
+    const defenseModifiers = generation.effectCommands[0].modifiers.filter(
+      modifier => [3, 4].includes(modifier.attributeId)
+    );
+    expect(defenseModifiers).toHaveLength(2);
+    expect(defenseModifiers.every(modifier => modifier.valueRaw < 0)).toBe(
+      true
+    );
     const firstHitTime = Math.min(
       ...withPassive.damageEvents
         .filter(event => event.actionId === action.id)
@@ -291,6 +299,11 @@ describe('verified kibo passive generation', () => {
         }),
       ],
     });
+    // 相对契约：debuff 修饰必须为负值、持续时长必须>0（零效果/零时长实现不得通过）
+    expect(command.durationMs).toBeGreaterThan(0);
+    expect(command.modifiers.every(modifier => modifier.valueRaw < 0)).toBe(
+      true
+    );
     expect(
       resolveActiveEffectsAt(timeline, command.timeMs - 0.001, {
         targetKind: 'enemy',
@@ -298,23 +311,26 @@ describe('verified kibo passive generation', () => {
         calculatorOnly: true,
       })
     ).toEqual([]);
-    expect(
-      resolveActiveEffectsAt(
-        timeline,
-        command.timeMs + command.durationMs - 0.001,
-        {
-          targetKind: 'enemy',
-          targetId: 'enemy-300032',
-          calculatorOnly: true,
-        }
-      )
-    ).toEqual([
+    const activeBeforeExpiry = resolveActiveEffectsAt(
+      timeline,
+      command.timeMs + command.durationMs - 0.001,
+      {
+        targetKind: 'enemy',
+        targetId: 'enemy-300032',
+        calculatorOnly: true,
+      }
+    );
+    expect(activeBeforeExpiry).toEqual([
       expect.objectContaining({
         effectId: 'kibo-passive:520050:520050002',
         stacks: 1,
         expiresAtMs: expect.any(Number),
       }),
     ]);
+    // 相对契约：过期时间必须与 生效时刻+持续时长 严格守恒
+    expect(activeBeforeExpiry[0].expiresAtMs).toBe(
+      command.timeMs + command.durationMs
+    );
     expect(
       resolveActiveEffectsAt(timeline, command.timeMs + command.durationMs, {
         targetKind: 'enemy',
@@ -556,6 +572,11 @@ describe('verified kibo passive generation', () => {
         reason: 'kibo-passive-internal-cooldown-active',
       }),
     ]);
+    // 相对契约：debuff 必须带正持续时长、ICD 必须为正冷却
+    expect(positive.effectCommands[0].durationMs).toBeGreaterThan(0);
+    expect(
+      positive.internalCooldownSuppressions[0].internalCooldownMs
+    ).toBeGreaterThan(0);
     const positiveCommand = positive.effectCommands[0];
     expect(
       resolveActiveEffectsAt(
@@ -666,6 +687,12 @@ describe('verified kibo passive generation', () => {
     const timedSelfCommand = generation.effectCommands.find(
       command => command.effectId === 'kibo-passive:520057:520057001'
     );
+    // 相对契约：限时自我增益必须带正持续时长、增益修饰为正（valueRaw>0）
+    expect(timedSelfCommand.durationMs).toBeGreaterThan(0);
+    expect(
+      timedSelfCommand.modifiers.find(modifier => modifier.attributeId === 45)
+        .valueRaw
+    ).toBeGreaterThan(0);
     expect(
       resolveActiveEffectsAt(
         timeline,
@@ -804,6 +831,23 @@ describe('verified kibo passive generation', () => {
         }),
       ])
     );
+    // 相对契约：蛮力双根都必须带正持续时长；攻击增益为正、22 号减益为负
+    const attackSelfCommand = generation.effectCommands.find(
+      command => command.effectId === 'kibo-passive:520080:520080001'
+    );
+    const extraSelfCommand = generation.effectCommands.find(
+      command => command.effectId === 'kibo-passive:520080:520080002'
+    );
+    expect(attackSelfCommand.durationMs).toBeGreaterThan(0);
+    expect(extraSelfCommand.durationMs).toBeGreaterThan(0);
+    expect(
+      attackSelfCommand.modifiers.find(modifier => modifier.attributeId === 1)
+        .valueRaw
+    ).toBeGreaterThan(0);
+    expect(
+      extraSelfCommand.modifiers.find(modifier => modifier.attributeId === 22)
+        .valueRaw
+    ).toBeLessThan(0);
     expect(sumDamage(withPassive, action.id)).toBeGreaterThan(
       sumDamage(withoutPassive, action.id)
     );
@@ -931,6 +975,11 @@ describe('verified kibo passive generation', () => {
         }),
       }),
     });
+    // 相对契约：破甲 debuff 必须带正持续时长、每个修饰均为负值（减防/减益），零实现不得通过
+    expect(passiveCommand.durationMs).toBeGreaterThan(0);
+    expect(
+      passiveCommand.modifiers.every(modifier => modifier.valueRaw < 0)
+    ).toBe(true);
     expect(generation.triggerLimitSuppressions.length).toBeGreaterThan(0);
     expect(generation.triggerLimitSuppressions).toEqual(
       expect.arrayContaining([
@@ -1093,6 +1142,8 @@ describe('verified kibo passive generation', () => {
         }),
       }),
     ]);
+    // 相对契约：战前攻击增益必须带正持续时长（零时长实现不得生效）
+    expect(passiveCommands.every(command => command.durationMs > 0)).toBe(true);
     expect(
       resolveActiveEffectsAt(effectTimeline, action.startMs, {
         targetId: action.actorId,
@@ -1149,8 +1200,9 @@ describe('verified kibo passive generation', () => {
       dotSchedule.derivedPeriodic.dot.formula.coefficientRaw;
     const healCoefficientRaw =
       healSchedule.derivedPeriodic.heal.formula.coefficientRaw;
-    expect(dotCoefficientRaw).toEqual(expect.any(Number));
-    expect(healCoefficientRaw).toEqual(expect.any(Number));
+    // 相对契约：dot 与自疗公式系数必须为正（零系数/吸血实现不得通过）
+    expect(dotCoefficientRaw).toBeGreaterThan(0);
+    expect(healCoefficientRaw).toBeGreaterThan(0);
     const dotRatio = dotCoefficientRaw / 10000;
     const healRatio = healCoefficientRaw / 10000;
     expect(generation.unresolved).toEqual([]);
@@ -1175,6 +1227,7 @@ describe('verified kibo passive generation', () => {
     }
     for (const event of dotEvents) {
       expect(event.payload.appliedToCalculators).toBe(true);
+      expect(event.payload.rawDamage).toBeGreaterThan(0);
       expect(event.payload.damageType).toEqual(expect.any(Number));
       expect(event.payload.toughnessDamage).toBeGreaterThanOrEqual(0);
       const expectedLower = Math.floor(event.payload.attack * dotRatio - 1);
@@ -1478,7 +1531,15 @@ describe('verified kibo passive generation', () => {
         ],
       }),
     ]);
+    // 相对契约：效果必须晚于触发 hit 结算（activationDelayMs>0），两个根的修饰均为减益负值
+    expect(passiveCommands[0].timeMs).toBeGreaterThan(firstHitTime);
     expect(passiveCommands[0].timeMs).toBe(passiveCommands[1].timeMs);
+    expect(
+      passiveCommands[0].modifiers.every(modifier => modifier.valueRaw < 0)
+    ).toBe(true);
+    expect(
+      passiveCommands[1].modifiers.every(modifier => modifier.valueRaw < 0)
+    ).toBe(true);
     expect(firstHitTargetTrace).toEqual([]);
     const maxObservedPriorStacks = Math.min(
       Math.max(damageHits.length - 1, 0),
@@ -1656,6 +1717,11 @@ describe('verified kibo passive generation', () => {
         }),
       ],
     });
+    // 相对契约：静态抗性为增益（valueRaw>0），零抗性实现不得通过
+    expect(
+      staticCommand.modifiers.find(modifier => modifier.attributeId === 67)
+        .valueRaw
+    ).toBeGreaterThan(0);
     expect(damageCommands).toHaveLength(6);
     expect(generation.runtimeStates).toContainEqual(
       expect.objectContaining({
@@ -1689,6 +1755,12 @@ describe('verified kibo passive generation', () => {
         }),
       ],
     });
+    // 相对契约：伤害触发 debuff 必须带正持续时长、修饰为减益负值
+    expect(damageCommands[0].durationMs).toBeGreaterThan(0);
+    expect(
+      damageCommands[0].modifiers.find(modifier => modifier.attributeId === 67)
+        .valueRaw
+    ).toBeLessThan(0);
     expect(
       damageCommands.every(command => command.sourceActionId === action.id)
     ).toBe(true);
@@ -1828,6 +1900,16 @@ describe('verified kibo passive generation', () => {
         },
       },
     });
+    // 相对契约：派生伤害公式倍率/系数必须为正，破防与 SP 收益不得为负
+    const derivedFormula = generation.derivedDamageCommands[0].hit.formula;
+    const derivedHitDamage = generation.derivedDamageCommands[0].hit.damage;
+    expect(derivedFormula.coefficientRaw).toBeGreaterThan(0);
+    expect(derivedFormula.ratiosByLevel[1]).toBeGreaterThan(0);
+    expect(
+      derivedHitDamage.weakBreakDamageRateBasisPoints
+    ).toBeGreaterThanOrEqual(0);
+    expect(derivedHitDamage.recoverSp).toBeGreaterThanOrEqual(0);
+    expect(derivedHitDamage.petRecoverSp).toBeGreaterThanOrEqual(0);
     expect(derivedEvents).toHaveLength(1);
     expect(derivedEvents[0].timeMs).toBe(originalEvents[0].timeMs + 0.001);
     expect(derivedEvents[0].payload).toMatchObject({
@@ -1847,6 +1929,8 @@ describe('verified kibo passive generation', () => {
         elementId: 520041002,
       }),
     });
+    // 相对契约：派生伤害段倍率必须为正（零倍率实现不得产生伤害）
+    expect(derivedEvents[0].payload.segment.multiplier).toBeGreaterThan(0);
     expect(derivedEvents[0].payload.rawDamage).toBeGreaterThan(0);
     expect(derivedEvents[0].payload.toughnessDamage).toBeGreaterThan(0);
     expect(withPassive.summary.kiboPassiveDerivedDamageEventCount).toBe(1);
@@ -2076,6 +2160,13 @@ describe('verified kibo passive generation', () => {
         triggerEffectTargetName: 'Self',
       }),
     });
+    // 相对契约：锐利武器自增益必须带正持续时长、攻击增幅为正（valueRaw>0）
+    expect(generation.effectCommands[0].durationMs).toBeGreaterThan(0);
+    expect(
+      generation.effectCommands[0].modifiers.find(
+        modifier => modifier.attributeId === 1
+      ).valueRaw
+    ).toBeGreaterThan(0);
     expect(firstWithPassiveEvent.payload.rawDamage).toBe(
       firstWithoutPassiveEvent.payload.rawDamage
     );
@@ -2172,6 +2263,12 @@ describe('verified kibo passive generation', () => {
         receiveDamageEventIdentity: 'test:receive:520018',
       }),
     });
+    // 相对契约：低体温减益必须带正持续时长、修饰为负值（valueRaw<0）
+    expect(commands[0].durationMs).toBeGreaterThan(0);
+    expect(
+      commands[0].modifiers.find(modifier => modifier.attributeId === 66)
+        .valueRaw
+    ).toBeLessThan(0);
     expect(generation.unresolved.some(row => row.skillId === 520018)).toBe(
       false
     );
@@ -2259,6 +2356,17 @@ describe('verified kibo passive generation', () => {
         appliedToCalculators: true,
       },
     });
+    // 相对契约：反击伤害的韧性伤害与破防/魔法比率不得为负（零伤害实现由 rawDamage>0 拦截）
+    expect(retaliationHits[0].payload.toughnessDamage).toBeGreaterThanOrEqual(
+      0
+    );
+    const retaliationDamageConfig = commands[0].hit.damage;
+    expect(
+      retaliationDamageConfig.weakBreakDamageRateBasisPoints
+    ).toBeGreaterThanOrEqual(0);
+    expect(
+      retaliationDamageConfig.magicRatioBasisPoints
+    ).toBeGreaterThanOrEqual(0);
     expect(retaliationHits[0].payload.rawDamage).toBeGreaterThan(0);
 
     const suppressed = createVerifiedKiboPassiveGeneration({
@@ -2341,6 +2449,11 @@ describe('verified kibo passive generation', () => {
         directInjectTargetName: 'PetOwner',
       }),
     });
+    // 相对契约：能量体 PetOwner 增益修饰必须为正（valueRaw>0）
+    expect(
+      ownerCommand.modifiers.find(modifier => modifier.attributeId === 105)
+        .valueRaw
+    ).toBeGreaterThan(0);
     expect(
       generation.effectCommands.some(
         command =>
@@ -2431,6 +2544,12 @@ describe('verified kibo passive generation', () => {
         }),
       }),
     ]);
+    // 相对契约：飘浮移速增益修饰必须为正（valueRaw>0），零移速实现不得通过
+    expect(
+      movementCommands[0].modifiers.find(
+        modifier => modifier.attributeId === 45
+      ).valueRaw
+    ).toBeGreaterThan(0);
     expect(movementCommands.flatMap(command => command.modifiers)).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -2667,7 +2786,7 @@ describe('verified kibo passive generation', () => {
           modifier =>
             modifier.attributeId === 45 &&
             modifier.bucket === 'dynamicExtra' &&
-            typeof modifier.valueRaw === 'number' &&
+            modifier.valueRaw > 0 &&
             modifier.sourceElementId === 520054001
         )
       )
@@ -2684,7 +2803,7 @@ describe('verified kibo passive generation', () => {
         effect =>
           effect.stacks === 1 &&
           effect.modifiers.length === 1 &&
-          typeof effect.modifiers[0].valueRaw === 'number'
+          effect.modifiers[0].valueRaw > 0
       )
     ).toBe(true);
 
@@ -2834,6 +2953,11 @@ describe('verified kibo passive generation', () => {
         }),
       },
     });
+    // 相对契约：雷属性注入增益必须为正（valueRaw>0），零加成实现不得通过
+    expect(
+      thunderCommands[0].modifiers.find(modifier => modifier.attributeId === 58)
+        .valueRaw
+    ).toBeGreaterThan(0);
     expect(
       thunderCommands.flatMap(command => [
         command.sourceIdentity.effectElementId,
