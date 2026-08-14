@@ -66,7 +66,7 @@
     "test:e2e:production-preview": "npm run audit:applied-source-bindings:check && npm run build && playwright test --config playwright.production.config.js",
     "test:e2e:workbench-performance": "npm run build && playwright test --config playwright.performance.config.js",
     "test:e2e:workbench-flow": "playwright test e2e/workbench-continuous-edit.spec.js -g @workbench-main-flow",
-    "test:trial-release": "npm run test -- --run && npm run db:validate && npm run audit:runtime-capture-manifest && npm run audit:production-imports:check && npm run audit:workbench-data:check && npm run audit:action-status:check && npm run audit:verified-combat && npm run audit:optimization-scenario-policy && npm run audit:character-acceptance && npm run audit:optimization-qualification && npm run audit:bundle:check && npm run test:e2e:production-preview && git diff --check",
+    "test:trial-release": "node scripts/refresh-derived-reports.mjs --ensure && npm run test -- --run && npm run db:validate && npm run audit:runtime-capture-manifest && npm run audit:production-imports:check && npm run audit:workbench-data:check && npm run audit:action-status:check && npm run audit:verified-combat && npm run audit:optimization-scenario-policy && npm run audit:character-acceptance && npm run audit:optimization-qualification && npm run audit:bundle:check && npm run test:e2e:production-preview && git diff --check",
     "release:verify": "node scripts/release-verify.mjs",
     "test:coverage": "vitest run --coverage",
     "machine-axis": "node scripts/run-machine-axis-cli.mjs",

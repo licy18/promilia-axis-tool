@@ -13,6 +13,7 @@
 // 生成器本身是权威源；本脚本只负责按序执行并报告退出码，不修改任何生成逻辑。
 
 import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -33,10 +34,12 @@ const LIGHT_COMMANDS = Object.freeze([
   'node scripts/generate-machine-axis-enemy-settlement-evidence.mjs',
 ]);
 
-// 重生成器：依赖 C:\PC2\Codex\AzPr 等本地源，耗时很长，仅 --full 时执行。
+// 重生成器：依赖 C:\PC2\Codex\AzPr 等本地源，耗时很长，仅 --full / --ensure（缺失时）执行。
+// 顺序要求：底层产物（主包/角色数据/golden）先于依赖它们的轻量审计生成器。
 const FULL_COMMANDS = Object.freeze([
   'node scripts/sync-verified-combat-mechanics.mjs --write',
   'node scripts/sync-character-combat-profile.mjs --write',
+  'node scripts/generate-kibo-headless-census.mjs --write',
 ]);
 
 function run(commands) {
@@ -62,6 +65,23 @@ function run(commands) {
   return failed;
 }
 
+// 测试静态依赖的关键报告（干净 checkout 缺失时需先生成；本机已生成则快速跳过）
+const REQUIRED_REPORTS = Object.freeze([
+  'reports/verified-combat-mechanics-audit.json',
+  'reports/verified-combat-action-coverage.json',
+  'reports/m10/101010/golden-trace.json',
+  'reports/m10/103002/golden-trace.json',
+  'reports/m11/character-acceptance/101010/manifest.json',
+  'reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json',
+  'reports/m12/m12-b3-binding-matrix.json',
+  'reports/m12/m12-b3-optimization-qualification-summary.json',
+  'reports/m12/visual-acceptance/manifests/equipment/1010111.json',
+]);
+
+function missingRequiredReports() {
+  return REQUIRED_REPORTS.filter(file => !fs.existsSync(path.join(REPO_ROOT, file)));
+}
+
 const args = process.argv.slice(2);
 if (args.includes('--list')) {
   console.log('LIGHT:');
@@ -70,8 +90,20 @@ if (args.includes('--list')) {
   for (const c of FULL_COMMANDS) console.log('  ' + c);
   process.exit(0);
 }
+if (args.includes('--ensure')) {
+  const missing = missingRequiredReports();
+  if (missing.length === 0) {
+    process.stdout.write('All required derived reports present.\n');
+    process.exit(0);
+  }
+  process.stdout.write(`Missing derived reports (${missing.length}): ${missing.join(', ')}\n`);
+  process.stdout.write('Regenerating full derived reports...\n');
+  const failed = run([...FULL_COMMANDS, ...LIGHT_COMMANDS]);
+  process.exitCode = failed ? 1 : 0;
+  process.exit(process.exitCode);
+}
 const commands = args.includes('--full')
-  ? [...LIGHT_COMMANDS, ...FULL_COMMANDS]
+  ? [...FULL_COMMANDS, ...LIGHT_COMMANDS]
   : [...LIGHT_COMMANDS];
 process.stdout.write('Refreshing derived reports...\n');
 const failed = run(commands);
