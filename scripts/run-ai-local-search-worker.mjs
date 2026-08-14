@@ -11,6 +11,25 @@ const inputPath = resolveRequiredPath('--shard-input');
 const outputPath = resolveRequiredPath('--shard-output');
 const shard = JSON.parse(await fs.readFile(inputPath, 'utf8'));
 validateShardEnvelope(shard);
+// P1-3：worker 从冻结数据库快照读取评分输入
+const databaseDir = readOptionalPath('--database-dir') ??
+  path.join(projectRoot, 'src', 'data', 'database');
+// P1-4：worker 在读取评分数据前 fail-closed 验证输入指纹与当前 authority/数据库一致
+const {
+  createSearchFingerprint,
+  verifyArtifactFingerprint,
+} = await import('./search-fingerprint.mjs');
+{
+  const fingerprintCheck = verifyArtifactFingerprint(
+    shard,
+    createSearchFingerprint({ databaseDir })
+  );
+  if (!fingerprintCheck.valid) {
+    throw new Error(
+      `shard input fingerprint mismatch: ${fingerprintCheck.mismatches.join(', ')}`
+    );
+  }
+}
 
 const startedAt = new Date().toISOString();
 const startedAtMs = Date.now();
@@ -36,16 +55,10 @@ const mechanicsPackage = JSON.parse(
 // P1-3b：评分输入使用数据库快照（可编辑数值），覆盖 package 中对应的动作目录/效果/控制绑定。
 // 搜索不校验数值正确性，但必须基于当前数据库评分；数据库编辑后即使未重新导出 package 也生效。
 const databaseActions = JSON.parse(
-  await fs.readFile(
-    path.join(projectRoot, 'src/data/database/actions.json'),
-    'utf8'
-  )
+  await fs.readFile(path.join(databaseDir, 'actions.json'), 'utf8')
 );
 const databaseEffects = JSON.parse(
-  await fs.readFile(
-    path.join(projectRoot, 'src/data/database/effects.json'),
-    'utf8'
-  )
+  await fs.readFile(path.join(databaseDir, 'effects.json'), 'utf8')
 );
 mechanicsPackage.actionMappings = databaseActions.actionMappings;
 mechanicsPackage.controlBindings = databaseActions.controlBindings;
@@ -154,11 +167,15 @@ try {
     rejections,
     results,
   };
-  const output = {
+  // P1-4：resultHash 必须覆盖完整 payload（含 inputFingerprint），否则 resume 端重算必然不匹配。
+  const outputBody = {
     ...body,
     // P1-2：shard result 继承 shard 输入指纹（供 resume/聚合 fail-closed 比对）
     inputFingerprint: shard.inputFingerprint ?? null,
-    resultHash: canonicalModule.hashCanonicalValue(body),
+  };
+  const output = {
+    ...outputBody,
+    resultHash: canonicalModule.hashCanonicalValue(outputBody),
   };
   await writeJsonAtomically(outputPath, output);
   process.stdout.write(
@@ -232,6 +249,11 @@ function validateShardEnvelope(value) {
   if (value.candidates.length > Number(value.budget.maxCandidates)) {
     throw new Error('local-search shard candidate budget exceeded');
   }
+}
+
+function readOptionalPath(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] ?? null : null;
 }
 
 function resolveRequiredPath(name) {

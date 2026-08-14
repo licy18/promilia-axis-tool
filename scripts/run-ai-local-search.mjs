@@ -39,8 +39,22 @@ if (pollutedInputs.has(planPath.toLowerCase())) {
 }
 await prepareOutputRoot(outputRoot, resume);
 
-// P1-2：本 run 的输入指纹（现场计算），嵌入 plan/shard/result/checkpoint，resume 时 fail-closed 比对。
-const inputFingerprint = createSearchFingerprint();
+// P1-3：冻结数据库快照到 run 目录——worker 读冻结副本（不可变），fingerprint 基于冻结快照计算。
+const frozenDatabaseDir = await freezeDatabase(outputRoot);
+// P1-2：本 run 的输入指纹（基于冻结快照），嵌入 plan/shard/result/checkpoint，resume 时 fail-closed 比对。
+const inputFingerprint = createSearchFingerprint({ databaseDir: frozenDatabaseDir });
+// P1-4：resume 时先校验既有 run 的 authority/数据库指纹，不一致直接拒绝（不覆盖原目录）。
+if (resume) {
+  const priorFingerprint = await readPriorRunFingerprint(outputRoot);
+  if (priorFingerprint) {
+    const priorCheck = verifyArtifactFingerprint(priorFingerprint, inputFingerprint);
+    if (!priorCheck.valid) {
+      throw new Error(
+        `resume authority mismatch (${priorCheck.mismatches.join(', ')}) — use a fresh outputRoot/runId`
+      );
+    }
+  }
+}
 const rawPlan = JSON.parse(await fs.readFile(planPath, 'utf8'));
 const plan = normalizeMachineAxisCoarsePlan(rawPlan);
 const candidateSet = createMachineAxisLocalCandidates(plan);
@@ -213,6 +227,8 @@ async function runShardProcess(shard, workerIndex) {
     inputPath,
     '--shard-output',
     outputPath,
+    '--database-dir',
+    frozenDatabaseDir,
   ];
   const child = spawn(process.execPath, args, {
     cwd: projectRoot,
@@ -244,9 +260,14 @@ async function runShardProcess(shard, workerIndex) {
   if (!timedOut && exit.code === 0) {
     try {
       const result = JSON.parse(await fs.readFile(outputPath, 'utf8'));
+      const resultFingerprintOk = verifyArtifactFingerprint(
+        result,
+        inputFingerprint
+      ).valid;
       if (
         result.shardId === shard.shardId &&
-        result.planHash === plan.planHash
+        result.planHash === plan.planHash &&
+        resultFingerprintOk
       ) {
         return result;
       }
@@ -267,6 +288,32 @@ async function runShardProcess(shard, workerIndex) {
   });
   await writeJsonAtomically(outputPath, failure);
   return failure;
+}
+
+async function readPriorRunFingerprint(outputRoot) {
+  for (const candidate of ['checkpoint.json', 'progress.json', 'plan.normalized.json']) {
+    const filePath = path.join(outputRoot, candidate);
+    try {
+      const parsed = JSON.parse(await fs.readFile(filePath, 'utf8'));
+      const fingerprint = parsed?.inputFingerprint ?? null;
+      if (fingerprint) return fingerprint;
+    } catch {
+      // continue to next candidate
+    }
+  }
+  return null;
+}
+
+async function freezeDatabase(outputRoot) {
+  const sourceDir = path.join(projectRoot, 'src', 'data', 'database');
+  const frozenDir = path.join(outputRoot, 'frozen-database');
+  await fs.mkdir(frozenDir, { recursive: true });
+  for (const file of await fs.readdir(sourceDir)) {
+    if (file.endsWith('.json')) {
+      await fs.copyFile(path.join(sourceDir, file), path.join(frozenDir, file));
+    }
+  }
+  return frozenDir;
 }
 
 async function readExistingShardResult(shard) {
@@ -306,6 +353,7 @@ function queueProgressWrite() {
       schemaVersion: 1,
       contractName: 'AzPrMachineAxisLocalSearchProgress',
       kind: 'azpr-machine-axis-local-search-progress',
+      inputFingerprint,
       planId: plan.planId,
       planHash: plan.planHash,
       updatedAt: new Date().toISOString(),
@@ -329,6 +377,7 @@ function queueProgressWrite() {
       schemaVersion: 1,
       contractName: 'AzPrMachineAxisLocalSearchCheckpoint',
       kind: 'azpr-machine-axis-local-search-checkpoint',
+      inputFingerprint,
       planId: plan.planId,
       planHash: plan.planHash,
       completedShardResults: completed.map(result => ({
@@ -363,6 +412,7 @@ function createFailedShardResult(
     shardId: shard.shardId,
     planId: shard.planId,
     planHash: shard.planHash,
+    inputFingerprint: shard.inputFingerprint ?? null,
     status,
     stopReason,
     budget: structuredClone(shard.budget),

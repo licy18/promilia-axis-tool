@@ -30,8 +30,8 @@ export const SEARCH_FINGERPRINT_FIELDS = Object.freeze([
   'packageHash',
 ]);
 
-export function createSearchFingerprint() {
-  const identity = createRunIdentity();
+export function createSearchFingerprint({ databaseDir } = {}) {
+  const identity = createRunIdentity({ databaseDir });
   return {
     authorityHead: identity.authorityHead,
     databaseContentHash: identity.databaseContentHash,

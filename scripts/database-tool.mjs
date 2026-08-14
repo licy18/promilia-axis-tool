@@ -40,15 +40,10 @@ const DATA_FILES = Object.freeze([
 ]);
 
 // 导出时递归剥离的溯源字段（绝对路径 / evidence 噪声），保留语义字段
-const SOURCE_FIELD_NAMES = new Set([
-  'source',
-  'sourceIdentity',
-  'sourceIdentities',
-  'bindingSourceIdentity',
-  'controlVariantSourceIdentity',
-  'sourcePath',
-  'sourceAssetPath',
-]);
+// P1-1 修复：只剥离顶层证据字段 'source'（生成来源记录）；
+// sourceIdentity/bindingSourceIdentity/sourcePath 等是正式评分运行时（effectGraph/action binding/
+// 控制绑定校验）必需的身份字段，必须完整保留——数据库覆盖包才能通过 install 校验。
+const SOURCE_FIELD_NAMES = new Set(['source', 'sourceAssetPath']);
 
 function sha256Utf8(value) {
   return crypto.createHash('sha256').update(value, 'utf8').digest('hex');
@@ -88,10 +83,10 @@ function writeJson(filePath, value) {
   fs.writeFileSync(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
-function readDatabaseContent() {
+function readDatabaseContent(databaseDir = DATABASE) {
   const content = {};
   for (const name of DATA_FILES) {
-    const filePath = path.join(DATABASE, name);
+    const filePath = path.join(databaseDir, name);
     if (!fs.existsSync(filePath)) {
       throw new Error(`database file missing: ${name} (run export first)`);
     }
@@ -100,8 +95,8 @@ function readDatabaseContent() {
   return content;
 }
 
-export function computeContentHash() {
-  return sha256Utf8(stableStringify(readDatabaseContent()));
+export function computeContentHash(databaseDir = DATABASE) {
+  return sha256Utf8(stableStringify(readDatabaseContent(databaseDir)));
 }
 
 // ---------------------------------------------------------------------------
@@ -248,6 +243,12 @@ export function validate() {
       if (missingIds > 0) {
         issues.push(`${name} has ${missingIds} item(s) missing required id`);
       }
+      const invalidIdTypes = data.items.filter(
+        item => item.id != null && !['string', 'number'].includes(typeof item.id)
+      ).length;
+      if (invalidIdTypes > 0) {
+        issues.push(`${name} has ${invalidIdTypes} item(s) with invalid id type`);
+      }
       const duplicates = ids.filter(
         (value, index) => ids.indexOf(value) !== index
       );
@@ -264,6 +265,14 @@ export function validate() {
       if (missingIdentities > 0) {
         issues.push(
           `${name} has ${missingIdentities} action(s) missing required identity`
+        );
+      }
+      const invalidIdentityTypes = data.actionMappings.filter(
+        item => item.identity != null && typeof item.identity !== 'string'
+      ).length;
+      if (invalidIdentityTypes > 0) {
+        issues.push(
+          `${name} has ${invalidIdentityTypes} action(s) with non-string identity`
         );
       }
       const identities = data.actionMappings.map(item => item.identity);
@@ -285,6 +294,14 @@ export function validate() {
           `${name} has ${missingKeys} effect(s) missing required semanticKey`
         );
       }
+      const invalidKeyTypes = data.semanticEffects.filter(
+        item => item.semanticKey != null && typeof item.semanticKey !== 'string'
+      ).length;
+      if (invalidKeyTypes > 0) {
+        issues.push(
+          `${name} has ${invalidKeyTypes} effect(s) with non-string semanticKey`
+        );
+      }
       const keys = data.semanticEffects.map(item => item.semanticKey);
       const dupKeys = keys.filter(
         (value, index) => keys.indexOf(value) !== index
@@ -302,6 +319,15 @@ export function validate() {
       if (missingFormulaIds > 0) {
         issues.push(
           `${name} has ${missingFormulaIds} formula(s) missing required formulaIdentity`
+        );
+      }
+      const invalidFormulaIdTypes = data.formulas.filter(
+        item =>
+          item.formulaIdentity != null && typeof item.formulaIdentity !== 'string'
+      ).length;
+      if (invalidFormulaIdTypes > 0) {
+        issues.push(
+          `${name} has ${invalidFormulaIdTypes} formula(s) with non-string formulaIdentity`
         );
       }
       const formulaIds = data.formulas.map(item => item.formulaIdentity);
@@ -376,11 +402,12 @@ export function validate() {
 // run-identity：搜索 run 的输入指纹集（阶段 C：只记录哈希，不验证正确性）
 // ---------------------------------------------------------------------------
 
-export function createRunIdentity() {
+export function createRunIdentity({ databaseDir } = {}) {
   // P1-3a：现场计算 contentHash（不信任 manifest 记录值）——数据库被编辑但未刷新 manifest 时仍记录真实哈希。
+  // P1-3：支持冻结快照目录（databaseDir），确保指纹与评分输入同一快照。
   let databaseContentHash = null;
   try {
-    databaseContentHash = computeContentHash();
+    databaseContentHash = computeContentHash(databaseDir);
   } catch {
     databaseContentHash = null;
   }

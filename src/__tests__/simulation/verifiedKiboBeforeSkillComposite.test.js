@@ -147,13 +147,27 @@ describe('verified Kibo BeforeSkill composite runtime', () => {
       },
     });
     // P2-6：相对契约——真实 self-damage 必须伤害>0、HP 确实下降、前后值守恒（零伤害实现不得通过）
-    const { beforeValue, requestedDamage, appliedDamage, change, afterValue } =
-      vitalEvent.payload;
+    const {
+      beforeValue,
+      currentHpSnapshot,
+      requestedDamage,
+      appliedDamage,
+      change,
+      afterValue,
+    } = vitalEvent.payload;
     expect(requestedDamage).toBeGreaterThan(0);
     expect(appliedDamage).toBeGreaterThan(0);
     expect(beforeValue).toBeGreaterThan(afterValue);
     expect(afterValue).toBe(beforeValue + change);
     expect(change).toBeLessThan(0);
+    // 守恒：快照即结算前 HP、伤害即扣减、最终 runtime HP 与事件一致
+    expect(currentHpSnapshot).toBe(beforeValue);
+    expect(appliedDamage).toBe(-change);
+    expect(
+      runtime.finalState.kiboVitals.find(
+        vital => vital.kiboId === LEOPARD_KIBO_ID
+      )?.currentHp
+    ).toBe(afterValue);
     expect(runtime.summary.kiboPassiveVitalDamageEventCount).toBe(1);
     expect(
       integrated.verifiedCombatRuntime.vitalEvents.find(
