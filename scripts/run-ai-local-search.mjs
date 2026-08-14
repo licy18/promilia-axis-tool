@@ -55,18 +55,18 @@ if (resume) {
   const currentForCheck = createSearchFingerprint({
     databaseDir: hasExistingFrozen ? existingFrozenDir : undefined,
   });
+  // 第七轮：旧 plan 必须存在且经 canonical 重算（篡改正文保留旧 planHash 会被 normalize 拒绝）。
   const priorPlan = await readPriorNormalizedPlan(outputRoot);
-  const newPlan = priorPlan
-    ? normalizeMachineAxisCoarsePlan(
-        JSON.parse(await fs.readFile(planPath, 'utf8'))
-      )
-    : null;
+  const newPlan = normalizeMachineAxisCoarsePlan(
+    JSON.parse(await fs.readFile(planPath, 'utf8'))
+  );
   const continuationCheck = validateResumeContinuation({
     priorFingerprint,
     priorPlan,
     newPlan,
     currentFingerprint: currentForCheck,
     verifyFingerprint: verifyArtifactFingerprint,
+    requiredPlan: true,
   });
   if (!continuationCheck.valid) {
     throw new Error(
@@ -303,8 +303,10 @@ async function runShardProcess(shard, workerIndex) {
       const resultHashOk =
         typeof declaredResultHash === 'string' &&
         declaredResultHash === hashCanonicalValue(resultPayload);
-      // P2-1：envelope 合法（单一实现见 search-resume-validation.mjs）。
-      const envelopeOk = validateShardResultEnvelope(result).valid;
+      // P2-1：envelope 合法（单一实现见 search-resume-validation.mjs）——绑定实际 shard 候选数。
+      const envelopeOk = validateShardResultEnvelope(result, {
+        expectedAssignedCandidateCount: shard.candidates.length,
+      }).valid;
       if (
         result.shardId === shard.shardId &&
         result.planHash === plan.planHash &&
@@ -336,7 +338,9 @@ async function runShardProcess(shard, workerIndex) {
 async function readPriorNormalizedPlan(outputRoot) {
   const filePath = path.join(outputRoot, 'plan.normalized.json');
   try {
-    return JSON.parse(await fs.readFile(filePath, 'utf8'));
+    // 第七轮：canonical 重算并校验声明 planHash——篡改正文会抛错（返回 null → requiredPlan 拒绝）。
+    const parsed = JSON.parse(await fs.readFile(filePath, 'utf8'));
+    return normalizeMachineAxisCoarsePlan(parsed);
   } catch {
     return null;
   }

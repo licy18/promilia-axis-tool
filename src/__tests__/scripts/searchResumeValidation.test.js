@@ -98,7 +98,70 @@ describe('search resume validation (sixth-round review)', () => {
         rejectedCandidateCount: 1,
         unevaluatedCandidateCount: 1,
       },
+      results: new Array(8).fill({}),
+      rejections: new Array(1).fill({}),
     });
     expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('accepts a legal truncated shard envelope (seventh-round review)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'truncated',
+      summary: {
+        assignedCandidateCount: 8,
+        evaluatedCandidateCount: 5,
+        rejectedCandidateCount: 1,
+        unevaluatedCandidateCount: 2,
+      },
+    });
+    expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('rejects resume when prior plan is missing (requiredPlan)', () => {
+    const result = validateResumeContinuation({
+      priorFingerprint: okFingerprint(),
+      priorPlan: null,
+      newPlan: { planHash: 'x' },
+      currentFingerprint: okFingerprint(),
+      verifyFingerprint: verifyArtifactFingerprint,
+      requiredPlan: true,
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-prior-plan');
+  });
+
+  it('rejects shard envelope when assigned does not match expected shard size', () => {
+    const result = validateShardResultEnvelope(
+      {
+        status: 'complete',
+        summary: {
+          assignedCandidateCount: 0,
+          evaluatedCandidateCount: 0,
+          rejectedCandidateCount: 0,
+          unevaluatedCandidateCount: 0,
+        },
+        results: [],
+        rejections: [],
+      },
+      { expectedAssignedCandidateCount: 8 }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('assigned-mismatch:0!=8');
+  });
+
+  it('rejects shard envelope with zero results on complete status', () => {
+    const result = validateShardResultEnvelope({
+      status: 'complete',
+      summary: {
+        assignedCandidateCount: 8,
+        evaluatedCandidateCount: 8,
+        rejectedCandidateCount: 0,
+        unevaluatedCandidateCount: 0,
+      },
+      results: [],
+      rejections: [],
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('results-count-mismatch');
   });
 });
