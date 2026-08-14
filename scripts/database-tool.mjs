@@ -146,8 +146,14 @@ export function exportFromGenerated() {
     schemaVersion: DATABASE_SCHEMA_VERSION,
     kind: 'azpr-edit-database-actions',
     actionMappings: stripSource(pkg.actionMappings ?? []),
+    // P1-3b：controlBindings（动作->命中/效果数值解析）随数据库导出，搜索评分从数据库快照读取
+    controlBindings: stripSource(pkg.controlBindings ?? []),
+    actionVariantControlBindings: stripSource(
+      pkg.actionVariantControlBindings ?? []
+    ),
     summary: {
       actionMappingCount: pkg.actionMappings?.length ?? 0,
+      controlBindingCount: pkg.controlBindings?.length ?? 0,
     },
   };
   writeJson(path.join(DATABASE, 'actions.json'), actions);
@@ -238,6 +244,10 @@ export function validate() {
         );
       }
       const ids = data.items.map(item => item.id);
+      const missingIds = data.items.filter(item => item.id == null).length;
+      if (missingIds > 0) {
+        issues.push(`${name} has ${missingIds} item(s) missing required id`);
+      }
       const duplicates = ids.filter(
         (value, index) => ids.indexOf(value) !== index
       );
@@ -248,6 +258,14 @@ export function validate() {
       }
     }
     if (Array.isArray(data.actionMappings)) {
+      const missingIdentities = data.actionMappings.filter(
+        item => !item.identity
+      ).length;
+      if (missingIdentities > 0) {
+        issues.push(
+          `${name} has ${missingIdentities} action(s) missing required identity`
+        );
+      }
       const identities = data.actionMappings.map(item => item.identity);
       const dupIdentities = identities.filter(
         (value, index) => identities.indexOf(value) !== index
@@ -259,6 +277,14 @@ export function validate() {
       }
     }
     if (Array.isArray(data.semanticEffects)) {
+      const missingKeys = data.semanticEffects.filter(
+        item => !item.semanticKey
+      ).length;
+      if (missingKeys > 0) {
+        issues.push(
+          `${name} has ${missingKeys} effect(s) missing required semanticKey`
+        );
+      }
       const keys = data.semanticEffects.map(item => item.semanticKey);
       const dupKeys = keys.filter(
         (value, index) => keys.indexOf(value) !== index
@@ -270,6 +296,14 @@ export function validate() {
       }
     }
     if (Array.isArray(data.formulas)) {
+      const missingFormulaIds = data.formulas.filter(
+        item => !item.formulaIdentity
+      ).length;
+      if (missingFormulaIds > 0) {
+        issues.push(
+          `${name} has ${missingFormulaIds} formula(s) missing required formulaIdentity`
+        );
+      }
       const formulaIds = data.formulas.map(item => item.formulaIdentity);
       const dupFormulaIds = formulaIds.filter(
         (value, index) => formulaIds.indexOf(value) !== index
@@ -343,10 +377,10 @@ export function validate() {
 // ---------------------------------------------------------------------------
 
 export function createRunIdentity() {
+  // P1-3a：现场计算 contentHash（不信任 manifest 记录值）——数据库被编辑但未刷新 manifest 时仍记录真实哈希。
   let databaseContentHash = null;
   try {
-    databaseContentHash =
-      readJson(path.join(DATABASE, 'manifest.json'))?.contentHash ?? null;
+    databaseContentHash = computeContentHash();
   } catch {
     databaseContentHash = null;
   }

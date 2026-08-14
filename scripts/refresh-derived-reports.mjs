@@ -24,6 +24,7 @@ const REPO_ROOT = path.resolve(SCRIPT_ROOT, '..');
 const LIGHT_COMMANDS = Object.freeze([
   'node scripts/audit-production-imports.mjs',
   'node scripts/audit-build-bundle.mjs',
+  'node scripts/audit-applied-source-bindings.mjs',
   'node scripts/generate-action-status-catalog.mjs --write',
   'node scripts/generate-runtime-capture-hook-manifest.mjs',
   'node scripts/generate-m12-b3-binding-matrix.mjs --write',
@@ -125,7 +126,15 @@ if (args.includes('--ensure')) {
   );
   process.stdout.write('Regenerating full derived reports...\n');
   const failed = run([...FULL_COMMANDS, ...LIGHT_COMMANDS]);
-  process.exitCode = failed ? 1 : 0;
+  const stillMissing = missingRequiredReports();
+  if (failed || stillMissing.length > 0) {
+    process.stderr.write(
+      `Still missing after regeneration (${stillMissing.length}): ${stillMissing.join(', ')}\n`
+    );
+    process.exitCode = 1;
+  } else {
+    process.exitCode = 0;
+  }
   process.exit(process.exitCode);
 }
 const commands = args.includes('--full')

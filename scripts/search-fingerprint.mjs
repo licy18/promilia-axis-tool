@@ -112,4 +112,14 @@ function runCli() {
   process.exitCode = 1;
 }
 
-runCli();
+function isDirectExecution() {
+  if (!process.argv[1]) return false;
+  return (
+    path.resolve(process.argv[1]).toLowerCase() ===
+    fileURLToPath(import.meta.url).toLowerCase()
+  );
+}
+
+if (isDirectExecution()) {
+  runCli();
+}

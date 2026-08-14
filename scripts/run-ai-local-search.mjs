@@ -12,6 +12,10 @@ import {
 } from '../src/machine-axis/machineAxisCoarsePlan.js';
 import { createMachineAxisLocalSearchAggregate } from '../src/machine-axis/machineAxisLocalSearchResult.js';
 import { hashCanonicalValue } from '../src/simulation/headless/canonicalSerialization.js';
+import {
+  createSearchFingerprint,
+  verifyArtifactFingerprint,
+} from './search-fingerprint.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, '..');
@@ -35,6 +39,8 @@ if (pollutedInputs.has(planPath.toLowerCase())) {
 }
 await prepareOutputRoot(outputRoot, resume);
 
+// P1-2：本 run 的输入指纹（现场计算），嵌入 plan/shard/result/checkpoint，resume 时 fail-closed 比对。
+const inputFingerprint = createSearchFingerprint();
 const rawPlan = JSON.parse(await fs.readFile(planPath, 'utf8'));
 const plan = normalizeMachineAxisCoarsePlan(rawPlan);
 const candidateSet = createMachineAxisLocalCandidates(plan);
@@ -43,20 +49,23 @@ const inputDirectory = path.join(outputRoot, 'shards', 'input');
 const resultDirectory = path.join(outputRoot, 'shards', 'result');
 await fs.mkdir(inputDirectory, { recursive: true });
 await fs.mkdir(resultDirectory, { recursive: true });
-await writeJsonAtomically(path.join(outputRoot, 'plan.normalized.json'), plan);
-await writeJsonAtomically(
-  path.join(outputRoot, 'candidates.manifest.json'),
-  candidateSet
-);
-await writeJsonAtomically(
-  path.join(outputRoot, 'shards.manifest.json'),
-  shardSet
-);
+await writeJsonAtomically(path.join(outputRoot, 'plan.normalized.json'), {
+  ...plan,
+  inputFingerprint,
+});
+await writeJsonAtomically(path.join(outputRoot, 'candidates.manifest.json'), {
+  ...candidateSet,
+  inputFingerprint,
+});
+await writeJsonAtomically(path.join(outputRoot, 'shards.manifest.json'), {
+  ...shardSet,
+  inputFingerprint,
+});
 
 for (const shard of shardSet.shards) {
   await writeJsonAtomically(
     path.join(inputDirectory, `${shard.shardId}.json`),
-    shard
+    { ...shard, inputFingerprint }
   );
 }
 
@@ -133,11 +142,15 @@ const orchestrationStatus = hardFailure
     : aggregate.authority.truncated
       ? 'bounded-truncated'
       : 'bounded-complete';
-await writeJsonAtomically(path.join(outputRoot, 'result.json'), aggregate);
+await writeJsonAtomically(path.join(outputRoot, 'result.json'), {
+  ...aggregate,
+  inputFingerprint,
+});
 await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
   schemaVersion: 1,
   contractName: 'AzPrMachineAxisLocalSearchCheckpoint',
   kind: 'azpr-machine-axis-local-search-checkpoint',
+  inputFingerprint,
   planId: plan.planId,
   planHash: plan.planHash,
   completedShardResults: shardResults.map(shard => ({
@@ -263,10 +276,12 @@ async function readExistingShardResult(shard) {
     const payload = structuredClone(result);
     const declaredResultHash = payload.resultHash;
     delete payload.resultHash;
+    const fingerprintOk = verifyArtifactFingerprint(result).valid;
     if (
       result.shardId === shard.shardId &&
       result.planHash === plan.planHash &&
       result.status === 'complete' &&
+      fingerprintOk &&
       Number(result.summary?.assignedCandidateCount) ===
         shard.candidates.length &&
       typeof declaredResultHash === 'string' &&

@@ -146,6 +146,14 @@ describe('verified Kibo BeforeSkill composite runtime', () => {
         appliedToCalculators: true,
       },
     });
+    // P2-6：相对契约——真实 self-damage 必须伤害>0、HP 确实下降、前后值守恒（零伤害实现不得通过）
+    const { beforeValue, requestedDamage, appliedDamage, change, afterValue } =
+      vitalEvent.payload;
+    expect(requestedDamage).toBeGreaterThan(0);
+    expect(appliedDamage).toBeGreaterThan(0);
+    expect(beforeValue).toBeGreaterThan(afterValue);
+    expect(afterValue).toBe(beforeValue + change);
+    expect(change).toBeLessThan(0);
     expect(runtime.summary.kiboPassiveVitalDamageEventCount).toBe(1);
     expect(
       integrated.verifiedCombatRuntime.vitalEvents.find(
@@ -263,9 +271,7 @@ describe('verified Kibo BeforeSkill composite runtime', () => {
       runtime.damageEvents
         .filter(event => event.actionId === action.id)
         .flatMap(event => event.payload.dynamicPropertyTrace?.source ?? [])
-        .some(
-          trace => trace.attributeId === 21
-        )
+        .some(trace => trace.attributeId === 21)
     ).toBe(false);
   });
 

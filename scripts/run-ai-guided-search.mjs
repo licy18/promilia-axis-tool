@@ -63,6 +63,18 @@ const initialState = initialStateJson ? JSON.parse(initialStateJson) : null;
 const mechanicsPackage = await readJson(
   'src/data/generated/verified-combat-mechanics-package.json'
 );
+// P1-3b：评分输入使用数据库快照（可编辑数值），覆盖 package 中对应的动作目录/效果/控制绑定。
+const databaseActions = await readJson('src/data/database/actions.json');
+const databaseEffects = await readJson('src/data/database/effects.json');
+mechanicsPackage.actionMappings = databaseActions.actionMappings;
+mechanicsPackage.controlBindings = databaseActions.controlBindings;
+mechanicsPackage.actionVariantControlBindings =
+  databaseActions.actionVariantControlBindings;
+mechanicsPackage.semanticEffectCatalog = {
+  ...mechanicsPackage.semanticEffectCatalog,
+  formulas: databaseEffects.formulas,
+  semanticEffects: databaseEffects.semanticEffects,
+};
 const vite = await createServer({
   root: projectRoot,
   server: { middlewareMode: true },

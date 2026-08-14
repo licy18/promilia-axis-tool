@@ -33,6 +33,29 @@ const mechanicsPackage = JSON.parse(
     'utf8'
   )
 );
+// P1-3b：评分输入使用数据库快照（可编辑数值），覆盖 package 中对应的动作目录/效果/控制绑定。
+// 搜索不校验数值正确性，但必须基于当前数据库评分；数据库编辑后即使未重新导出 package 也生效。
+const databaseActions = JSON.parse(
+  await fs.readFile(
+    path.join(projectRoot, 'src/data/database/actions.json'),
+    'utf8'
+  )
+);
+const databaseEffects = JSON.parse(
+  await fs.readFile(
+    path.join(projectRoot, 'src/data/database/effects.json'),
+    'utf8'
+  )
+);
+mechanicsPackage.actionMappings = databaseActions.actionMappings;
+mechanicsPackage.controlBindings = databaseActions.controlBindings;
+mechanicsPackage.actionVariantControlBindings =
+  databaseActions.actionVariantControlBindings;
+mechanicsPackage.semanticEffectCatalog = {
+  ...mechanicsPackage.semanticEffectCatalog,
+  formulas: databaseEffects.formulas,
+  semanticEffects: databaseEffects.semanticEffects,
+};
 const vite = await createServer({
   root: projectRoot,
   server: { middlewareMode: true },
@@ -133,6 +156,8 @@ try {
   };
   const output = {
     ...body,
+    // P1-2：shard result 继承 shard 输入指纹（供 resume/聚合 fail-closed 比对）
+    inputFingerprint: shard.inputFingerprint ?? null,
     resultHash: canonicalModule.hashCanonicalValue(body),
   };
   await writeJsonAtomically(outputPath, output);

@@ -223,6 +223,39 @@ const DATA_SCALAR_FIELDS = Object.freeze({
   actionVariantControlBindings: [],
 });
 
+// 绑定数组里允许进数据侧的对象/数组容器字段（hits/effects/变体/时序等开放内容）。
+// 新增的任何非骨架容器字段都必须显式列入此处，否则 fail-closed（防止新机制结构静默落数据层）。
+const DATA_CONTAINER_FIELDS = Object.freeze({
+  actionMappings: [
+    'selectedHitIdentities',
+    'selectedEffectIdentities',
+    'reasons',
+    'dimensionSummary',
+    'effectDimensionSummary',
+    'actionTiming',
+    'actionScheduling',
+    'attackInputSegments',
+    'attackInputSourceSegments',
+    'publicActionExecutionForms',
+    'attackInputMechanicWindows',
+  ],
+  actionBindings: [],
+  controlBindings: [
+    'frameCounts',
+    'variants',
+    'hits',
+    'effects',
+    'effectGraph',
+  ],
+  actionVariantControlBindings: [
+    'frameCounts',
+    'variants',
+    'hits',
+    'effects',
+    'effectGraph',
+  ],
+});
+
 export function assertPartitionComplete(pkg) {
   const partitioned = new Set([
     ...MECHANISM_TOP_KEYS,
@@ -251,6 +284,9 @@ export function assertPartitionComplete(pkg) {
   for (const arrayKey of BINDING_ARRAY_KEYS) {
     const skeleton = new Set(BINDING_SKELETON_FIELDS[arrayKey]);
     const allowedDataScalars = new Set(DATA_SCALAR_FIELDS[arrayKey] ?? []);
+    const allowedDataContainers = new Set(
+      DATA_CONTAINER_FIELDS[arrayKey] ?? []
+    );
     for (const entry of pkg[arrayKey] ?? []) {
       for (const [key, value] of Object.entries(entry)) {
         if (skeleton.has(key)) continue;
@@ -260,6 +296,10 @@ export function assertPartitionComplete(pkg) {
               `Mechanics layer partition incomplete: unclassified scalar field ${arrayKey}.${key} (add to BINDING_SKELETON_FIELDS or DATA_SCALAR_FIELDS)`
             );
           }
+        } else if (!allowedDataContainers.has(key)) {
+          throw new Error(
+            `Mechanics layer partition incomplete: unclassified container field ${arrayKey}.${key} (add to BINDING_SKELETON_FIELDS or DATA_CONTAINER_FIELDS)`
+          );
         }
       }
     }
