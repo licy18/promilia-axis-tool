@@ -12,7 +12,7 @@ async function freezeDatabase() {
     projectRoot,
     'work',
     'm12-c',
-    `frozen-database-${Date.now()}`
+    `frozen-database-${process.pid}-${Date.now()}`
   );
   await fs.mkdir(frozenDir, { recursive: true });
   const sourceDir = path.join(projectRoot, 'src', 'data', 'database');
@@ -21,11 +21,23 @@ async function freezeDatabase() {
       await fs.copyFile(path.join(sourceDir, file), path.join(frozenDir, file));
     }
   }
+  await fs.writeFile(
+    path.join(frozenDir, 'frozen-database.descriptor.json'),
+    `${JSON.stringify({ kind: 'azpr-guided-frozen-database', pid: process.pid, createdAt: new Date().toISOString(), source: 'src/data/database' }, null, 2)}
+`,
+    'utf8'
+  );
   return frozenDir;
 }
 
+// P1-1：readJson 识别绝对路径（冻结目录已是绝对路径，避免 path.join 拼出无效双盘符路径）。
 const readJson = async file =>
-  JSON.parse(await fs.readFile(path.join(projectRoot, file), 'utf8'));
+  JSON.parse(
+    await fs.readFile(
+      path.isAbsolute(file) ? file : path.join(projectRoot, file),
+      'utf8'
+    )
+  );
 
 function readArgument(name, fallback = null) {
   const index = process.argv.indexOf(name);

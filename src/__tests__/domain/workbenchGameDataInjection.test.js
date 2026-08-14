@@ -94,11 +94,18 @@ describe('workbench injected gameData (P1-2)', () => {
     expect(enemyMaxHp?.value).toBe(987654321);
   });
 
-  it('injected equipment id is accepted by loadout normalization (P2-5)', () => {
+  it('injected brand-new equipment id is accepted by loadout normalization (P2-2)', () => {
     const dbGameData = loadDatabaseGameData();
     const injected = structuredClone(dbGameData);
     const equipment = injected.equipment.find(item => item.type === '武器');
     expect(equipment).toBeDefined();
+    // 克隆为全新 ID（静态目录不存在），旧静态目录实现必须拒绝——当前实现应接受。
+    const brandNewEquipment = {
+      ...equipment,
+      id: 999999,
+      name: 'INJECTED_WEAPON_' + equipment.name,
+    };
+    injected.equipment = [...injected.equipment, brandNewEquipment];
 
     setWorkbenchInjectedGameData(injected);
     const project = createWorkbenchProject(
@@ -120,7 +127,7 @@ describe('workbench injected gameData (P1-2)', () => {
           {
             characterId: injected.characters[0].id,
             loadout: {
-              equipment: { weapon: equipment.id },
+              equipment: { weapon: brandNewEquipment.id },
             },
           },
         ],
@@ -128,6 +135,49 @@ describe('workbench injected gameData (P1-2)', () => {
     );
 
     const firstActor = project.actors[0];
-    expect(firstActor.loadout.equipment.weapon).toBe(equipment.id);
+    expect(firstActor.loadout.equipment.weapon).toBe(brandNewEquipment.id);
+  });
+
+  it('injected brand-new kibo id is accepted by loadout normalization (P2-2)', () => {
+    const dbGameData = loadDatabaseGameData();
+    const injected = structuredClone(dbGameData);
+    const kibo = injected.kibos[0];
+    expect(kibo).toBeDefined();
+    const brandNewKibo = {
+      ...kibo,
+      id: 999888,
+      name: 'INJECTED_KIBO_' + kibo.name,
+    };
+    injected.kibos = [...injected.kibos, brandNewKibo];
+
+    setWorkbenchInjectedGameData(injected);
+    const project = createWorkbenchProject(
+      {
+        characterId: injected.characters[0].id,
+        secondaryCharacterId: injected.characters[1]?.id,
+        enemyId: injected.enemies[0]?.id,
+      },
+      {
+        durationMs: 30000,
+        teamSlots: [
+          {
+            slotId: 'team-slot-1',
+            position: 0,
+            characterId: injected.characters[0].id,
+          },
+        ],
+        actorConfigs: [
+          {
+            characterId: injected.characters[0].id,
+            loadout: {
+              kiboId: brandNewKibo.id,
+            },
+          },
+        ],
+      }
+    );
+
+    const firstActor = project.actors[0];
+    expect(firstActor.loadout.kiboId).toBe(brandNewKibo.id);
   });
 });

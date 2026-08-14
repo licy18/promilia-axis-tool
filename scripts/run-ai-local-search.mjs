@@ -16,6 +16,10 @@ import {
   createSearchFingerprint,
   verifyArtifactFingerprint,
 } from './search-fingerprint.mjs';
+import {
+  validateResumeContinuation,
+  validateShardResultEnvelope,
+} from './search-resume-validation.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, '..');
@@ -42,6 +46,7 @@ await prepareOutputRoot(outputRoot, resume);
 // P1-3：先只读校验既有 run，再决定冻结/复用——resume 不覆盖原冻结证据。
 const existingFrozenDir = path.join(outputRoot, 'frozen-database');
 if (resume) {
+  // P1-2/P1-3：缺失指纹、指纹不匹配、planHash 不匹配均拒绝（单一实现见 search-resume-validation.mjs）。
   const priorFingerprint = await readPriorRunFingerprint(outputRoot);
   const hasExistingFrozen = await fs
     .access(existingFrozenDir)
@@ -50,16 +55,23 @@ if (resume) {
   const currentForCheck = createSearchFingerprint({
     databaseDir: hasExistingFrozen ? existingFrozenDir : undefined,
   });
-  if (priorFingerprint) {
-    const priorCheck = verifyArtifactFingerprint(
-      priorFingerprint,
-      currentForCheck
+  const priorPlan = await readPriorNormalizedPlan(outputRoot);
+  const newPlan = priorPlan
+    ? normalizeMachineAxisCoarsePlan(
+        JSON.parse(await fs.readFile(planPath, 'utf8'))
+      )
+    : null;
+  const continuationCheck = validateResumeContinuation({
+    priorFingerprint,
+    priorPlan,
+    newPlan,
+    currentFingerprint: currentForCheck,
+    verifyFingerprint: verifyArtifactFingerprint,
+  });
+  if (!continuationCheck.valid) {
+    throw new Error(
+      `resume rejected (${continuationCheck.errors.join(', ')}) — use a fresh outputRoot/runId`
     );
-    if (!priorCheck.valid) {
-      throw new Error(
-        `resume authority mismatch (${priorCheck.mismatches.join(', ')}) — use a fresh outputRoot/runId`
-      );
-    }
   }
   if (!hasExistingFrozen) {
     throw new Error(
@@ -291,11 +303,14 @@ async function runShardProcess(shard, workerIndex) {
       const resultHashOk =
         typeof declaredResultHash === 'string' &&
         declaredResultHash === hashCanonicalValue(resultPayload);
+      // P2-1：envelope 合法（单一实现见 search-resume-validation.mjs）。
+      const envelopeOk = validateShardResultEnvelope(result).valid;
       if (
         result.shardId === shard.shardId &&
         result.planHash === plan.planHash &&
         resultFingerprintOk &&
-        resultHashOk
+        resultHashOk &&
+        envelopeOk
       ) {
         return result;
       }
@@ -316,6 +331,15 @@ async function runShardProcess(shard, workerIndex) {
   });
   await writeJsonAtomically(outputPath, failure);
   return failure;
+}
+
+async function readPriorNormalizedPlan(outputRoot) {
+  const filePath = path.join(outputRoot, 'plan.normalized.json');
+  try {
+    return JSON.parse(await fs.readFile(filePath, 'utf8'));
+  } catch {
+    return null;
+  }
 }
 
 async function readPriorRunFingerprint(outputRoot) {
