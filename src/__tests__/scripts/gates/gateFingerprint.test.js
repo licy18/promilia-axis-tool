@@ -69,7 +69,10 @@ describe('gate dependency fingerprint', () => {
 
   it('changes when the dependency map version changes', () => {
     const inventory = withSystemEntries([entry('vite.config.js', 'vite')]);
-    const authorityV2 = computeGateSystemAuthority({ inventory });
+    const authorityV2 = computeGateSystemAuthority({
+      inventory,
+      dependencyMapVersion: 2,
+    });
     const authorityV3 = computeGateSystemAuthority({
       inventory,
       dependencyMapVersion: 3,

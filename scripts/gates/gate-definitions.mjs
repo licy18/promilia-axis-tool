@@ -1,5 +1,5 @@
 export const GATE_FINGERPRINT_SCHEMA_VERSION = 2;
-export const GATE_DEPENDENCY_MAP_VERSION = 2;
+export const GATE_DEPENDENCY_MAP_VERSION = 3;
 export const GATE_LEDGER_SCHEMA_VERSION = 1;
 
 export const GATE_SYSTEM_FILES = Object.freeze([
@@ -58,16 +58,23 @@ const playwrightConfig = [
   'playwright.production.config.*',
   'scripts/production-preview-reporter.mjs',
 ];
-const runtimeSources = [
+// 机制源码：决定「怎么算」（数值数据 JSON 见 dataSources）
+const mechanismSources = [
   'src/simulation/**',
   'src/domain/**',
   'src/runtime/**',
-  'src/data/azprGenerated.js',
-  'src/data/generated/verified-combat-mechanics-package.json',
-  'src/data/generated/character-combat-profiles/**',
+  'src/machine-axis/**',
+  'src/data/verifiedChargedInputAuthorityData.js',
+  'src/data/verifiedCombatMechanicsPackage.js',
+  'src/data/workbenchActionStatusCatalog.js',
+  'src/data/workbenchKiboActionCatalog.js',
+  'src/data/workbenchLoadoutDetailCatalog.js',
   'fixtures/machine-axis/**',
   'fixtures/character-acceptance/**',
 ];
+
+// 数值数据：决定「算什么」（生成 JSON + 访问层）
+const dataSources = ['src/data/generated/**', 'src/data/azprGenerated.js'];
 const machineAxisSources = [
   'src/machine-axis/**',
   'scripts/machine-axis/**',
@@ -265,14 +272,14 @@ export const GATE_DEFINITIONS = deepFreeze([
     kind: 'targeted',
     description: 'Simulation runtime, canonical replay and state transitions',
     dependencies: [
-      ...runtimeSources,
+      ...mechanismSources,
       'src/__tests__/simulation/**',
       'src/__tests__/domain/initialRuntimeState.test.js',
       'src/__tests__/domain/verified*.test.js',
       ...packageAndTestConfig,
     ],
     smartTriggers: [
-      ...runtimeSources,
+      ...mechanismSources,
       'src/__tests__/simulation/**',
       'src/__tests__/domain/initialRuntimeState.test.js',
       'src/__tests__/domain/verified*.test.js',
@@ -345,7 +352,7 @@ export const GATE_DEFINITIONS = deepFreeze([
       ...machineAxisSources,
       'src/__tests__/machine-axis/**',
       'src/__tests__/domain/machineAxisContract.test.js',
-      ...runtimeSources,
+      ...mechanismSources,
       ...packageAndTestConfig,
     ],
     smartTriggers: [
@@ -441,7 +448,7 @@ export const GATE_DEFINITIONS = deepFreeze([
       'M12-C build, state, CLI, objective, cycle and replay determinism',
     dependencies: [
       ...machineAxisSources,
-      ...runtimeSources,
+      ...mechanismSources,
       ...workbenchSources,
       ...FORMAL_DETERMINISM_TEST_FILES,
       'src/data/generated/optimization-qualification-catalog.json',
@@ -526,7 +533,7 @@ export const GATE_DEFINITIONS = deepFreeze([
       'scripts/generate-action-status-catalog.mjs',
       'src/data/generated/workbench-action-status-catalog.json',
       'src/data/generated/verified-combat-mechanics-package.json',
-      ...runtimeSources,
+      ...mechanismSources,
     ],
     smartTriggers: [
       'scripts/generate-action-status-catalog.mjs',
@@ -543,7 +550,7 @@ export const GATE_DEFINITIONS = deepFreeze([
     dependencies: [
       'scripts/audit-applied-source-bindings.mjs',
       'src/data/generated/**',
-      ...runtimeSources,
+      ...mechanismSources,
       ...workbenchSources,
     ],
     smartTriggers: [
@@ -785,7 +792,7 @@ export const GATE_DEFINITIONS = deepFreeze([
       ...buildConfig,
       ...playwrightConfig,
       ...workbenchSources,
-      ...runtimeSources,
+      ...mechanismSources,
       ...machineAxisSources,
       'e2e/workbench-production-preview.spec.js',
       'e2e/helpers/**',

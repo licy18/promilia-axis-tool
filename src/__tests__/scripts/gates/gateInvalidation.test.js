@@ -69,6 +69,13 @@ describe('gate invalidation matrix', () => {
     expect(decision(plan, 'verified-mechanics').decision).toBe('run');
     expect(decision(plan, 'qualification').decision).toBe('run');
     expect(decision(plan, 'binding').decision).toBe('run');
+    // Step 4 拆分：determinism 只由机制代码驱动（数据值变更不改变同输入同输出）
+    expect(decision(plan, 'determinism').decision).toBe('reuse');
+  });
+
+  it('runs determinism for mechanism code changes', () => {
+    const plan = scenario(['src/simulation/runtime/actionRuleDiagnostics.js']);
+    expect(decision(plan, 'runtime-targeted').decision).toBe('run');
     expect(decision(plan, 'determinism').decision).toBe('run');
   });
 
