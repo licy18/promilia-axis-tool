@@ -72,7 +72,8 @@ export function validateShardResultEnvelope(result, options = {}) {
       );
     }
   }
-  if (result?.status === 'complete') {
+  // 第八轮：complete 与 truncated 都必须绑定 results/rejections 数量（不能声称已评估却不提供评分行）。
+  if (result?.status === 'complete' || result?.status === 'truncated') {
     const resultCount = Array.isArray(result.results)
       ? result.results.length
       : 0;
@@ -85,6 +86,13 @@ export function validateShardResultEnvelope(result, options = {}) {
     if (rejectionCount !== summary.rejectedCandidateCount) {
       errors.push('rejections-count-mismatch');
     }
+  }
+  // 第八轮：complete 不得残留 unevaluated（否则可能错误形成 bounded-complete）。
+  if (
+    result?.status === 'complete' &&
+    summary.unevaluatedCandidateCount !== 0
+  ) {
+    errors.push('complete-unevaluated-nonzero');
   }
   return { valid: errors.length === 0, errors };
 }

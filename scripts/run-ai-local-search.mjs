@@ -47,7 +47,14 @@ await prepareOutputRoot(outputRoot, resume);
 const existingFrozenDir = path.join(outputRoot, 'frozen-database');
 if (resume) {
   // P1-2/P1-3：缺失指纹、指纹不匹配、planHash 不匹配均拒绝（单一实现见 search-resume-validation.mjs）。
-  const priorFingerprint = await readPriorRunFingerprint(outputRoot);
+  // 第八轮：所有存在产物（checkpoint/progress/plan）的指纹逐一独立认证——
+  // 任何产物缺失或不一致都拒绝，不能用首个有效值掩盖其余产物。
+  const priorArtifacts = await readPriorRunFingerprints(outputRoot);
+  if (priorArtifacts.length === 0) {
+    throw new Error(
+      'resume requested but no prior run artifacts found; use a fresh outputRoot/runId'
+    );
+  }
   const hasExistingFrozen = await fs
     .access(existingFrozenDir)
     .then(() => true)
@@ -55,13 +62,29 @@ if (resume) {
   const currentForCheck = createSearchFingerprint({
     databaseDir: hasExistingFrozen ? existingFrozenDir : undefined,
   });
+  for (const { artifact, fingerprint } of priorArtifacts) {
+    if (!fingerprint) {
+      throw new Error(
+        `resume rejected: ${artifact} missing inputFingerprint; use a fresh outputRoot/runId`
+      );
+    }
+    const artifactCheck = verifyArtifactFingerprint(
+      fingerprint,
+      currentForCheck
+    );
+    if (!artifactCheck.valid) {
+      throw new Error(
+        `resume rejected: ${artifact} fingerprint mismatch (${artifactCheck.mismatches.join(', ')}); use a fresh outputRoot/runId`
+      );
+    }
+  }
   // 第七轮：旧 plan 必须存在且经 canonical 重算（篡改正文保留旧 planHash 会被 normalize 拒绝）。
   const priorPlan = await readPriorNormalizedPlan(outputRoot);
   const newPlan = normalizeMachineAxisCoarsePlan(
     JSON.parse(await fs.readFile(planPath, 'utf8'))
   );
   const continuationCheck = validateResumeContinuation({
-    priorFingerprint,
+    priorFingerprint: priorArtifacts[0].fingerprint,
     priorPlan,
     newPlan,
     currentFingerprint: currentForCheck,
@@ -346,7 +369,10 @@ async function readPriorNormalizedPlan(outputRoot) {
   }
 }
 
-async function readPriorRunFingerprint(outputRoot) {
+// 第八轮：返回所有存在续跑产物的指纹列表（checkpoint/progress/plan 各自独立）——
+// 任何产物的指纹缺失或不一致都必须拒绝，不能用首个有效值掩盖其余产物。
+async function readPriorRunFingerprints(outputRoot) {
+  const fingerprints = [];
   for (const candidate of [
     'checkpoint.json',
     'progress.json',
@@ -356,12 +382,17 @@ async function readPriorRunFingerprint(outputRoot) {
     try {
       const parsed = JSON.parse(await fs.readFile(filePath, 'utf8'));
       const fingerprint = parsed?.inputFingerprint ?? null;
-      if (fingerprint) return fingerprint;
+      if (fingerprint) {
+        fingerprints.push({ artifact: candidate, fingerprint });
+      } else if (parsed && typeof parsed === 'object') {
+        // 产物存在但无指纹：显式记录为缺失（校验时拒绝）
+        fingerprints.push({ artifact: candidate, fingerprint: null });
+      }
     } catch {
-      // continue to next candidate
+      // 文件不存在或损坏：不视为续跑证据
     }
   }
-  return null;
+  return fingerprints;
 }
 
 async function freezeDatabase(outputRoot) {
@@ -384,13 +415,16 @@ async function readExistingShardResult(shard) {
     const declaredResultHash = payload.resultHash;
     delete payload.resultHash;
     const fingerprintOk = verifyArtifactFingerprint(result).valid;
+    // 第八轮：resume 复用旧 shard 走统一信封校验（results/rejections/unevaluated 语义闭合）。
+    const envelopeOk = validateShardResultEnvelope(result, {
+      expectedAssignedCandidateCount: shard.candidates.length,
+    }).valid;
     if (
       result.shardId === shard.shardId &&
       result.planHash === plan.planHash &&
       result.status === 'complete' &&
       fingerprintOk &&
-      Number(result.summary?.assignedCandidateCount) ===
-        shard.candidates.length &&
+      envelopeOk &&
       typeof declaredResultHash === 'string' &&
       declaredResultHash === hashCanonicalValue(payload)
     ) {

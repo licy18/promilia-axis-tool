@@ -101,7 +101,21 @@ describe('search resume validation (sixth-round review)', () => {
       results: new Array(8).fill({}),
       rejections: new Array(1).fill({}),
     });
-    expect(result).toMatchObject({ valid: true, errors: [] });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('complete-unevaluated-nonzero');
+
+    const closed = validateShardResultEnvelope({
+      status: 'complete',
+      summary: {
+        assignedCandidateCount: 9,
+        evaluatedCandidateCount: 8,
+        rejectedCandidateCount: 1,
+        unevaluatedCandidateCount: 0,
+      },
+      results: new Array(8).fill({}),
+      rejections: new Array(1).fill({}),
+    });
+    expect(closed).toMatchObject({ valid: true, errors: [] });
   });
 
   it('accepts a legal truncated shard envelope (seventh-round review)', () => {
@@ -113,6 +127,8 @@ describe('search resume validation (sixth-round review)', () => {
         rejectedCandidateCount: 1,
         unevaluatedCandidateCount: 2,
       },
+      results: new Array(5).fill({}),
+      rejections: new Array(1).fill({}),
     });
     expect(result).toMatchObject({ valid: true, errors: [] });
   });
@@ -163,5 +179,52 @@ describe('search resume validation (sixth-round review)', () => {
     });
     expect(result).toMatchObject({ valid: false });
     expect(result.errors).toContain('results-count-mismatch');
+  });
+
+  it('rejects truncated shard claiming evaluated rows without results (eighth-round)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'truncated',
+      summary: {
+        assignedCandidateCount: 8,
+        evaluatedCandidateCount: 8,
+        rejectedCandidateCount: 0,
+        unevaluatedCandidateCount: 0,
+      },
+      results: [],
+      rejections: [],
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('results-count-mismatch');
+  });
+
+  it('rejects complete shard with unevaluated candidates remaining (eighth-round)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'complete',
+      summary: {
+        assignedCandidateCount: 8,
+        evaluatedCandidateCount: 0,
+        rejectedCandidateCount: 0,
+        unevaluatedCandidateCount: 8,
+      },
+      results: [],
+      rejections: [],
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('complete-unevaluated-nonzero');
+  });
+
+  it('rejects truncated shard with unevaluated candidates (eighth-round)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'truncated',
+      summary: {
+        assignedCandidateCount: 8,
+        evaluatedCandidateCount: 3,
+        rejectedCandidateCount: 1,
+        unevaluatedCandidateCount: 4,
+      },
+      results: new Array(3).fill({}),
+      rejections: new Array(1).fill({}),
+    });
+    expect(result).toMatchObject({ valid: true, errors: [] });
   });
 });
