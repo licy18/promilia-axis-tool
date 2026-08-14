@@ -47,6 +47,9 @@ if (pollutedInputs.has(planPath.toLowerCase())) {
 // 指纹/plan/预算账本任一校验失败都不得留下被改写的续跑证据。
 const existingFrozenDir = path.join(outputRoot, 'frozen-database');
 let priorLedger = null;
+// 第十三轮：preflight 验证过的快照提升到外层——后续写入只复用这些值，禁止校验后再次读取可变输入（TOCTOU）。
+let validatedPlan = null;
+let validatedFingerprint = null;
 if (resume) {
   // P1-2/P1-3：缺失指纹、指纹不匹配、planHash 不匹配均拒绝（单一实现见 search-resume-validation.mjs）。
   // 第八轮：所有存在产物（checkpoint/progress/plan）的指纹逐一独立认证——
@@ -114,6 +117,9 @@ if (resume) {
     outputRoot,
     Number(newPlan.budget.maxWallTimeMs)
   );
+  // 第十三轮：只记录 preflight 已验证的 plan 与指纹；后续任何写入都不得重新读取 planPath/数据库。
+  validatedPlan = newPlan;
+  validatedFingerprint = currentForCheck;
 }
 
 // 第十二轮：全部 resume preflight 通过后才允许写操作。
@@ -123,11 +129,15 @@ const frozenDatabaseDir = resume
   ? existingFrozenDir
   : await freezeDatabase(outputRoot);
 // P1-2：本 run 的输入指纹（基于冻结快照），嵌入 plan/shard/result/checkpoint，resume 时 fail-closed 比对。
-const inputFingerprint = createSearchFingerprint({
-  databaseDir: frozenDatabaseDir,
-});
-const rawPlan = JSON.parse(await fs.readFile(planPath, 'utf8'));
-const plan = normalizeMachineAxisCoarsePlan(rawPlan);
+// 第十三轮：resume 直接复用 preflight 已验证的指纹与 plan（同一快照）；仅 fresh run 在此读取一次可变输入。
+const inputFingerprint = resume
+  ? validatedFingerprint
+  : createSearchFingerprint({ databaseDir: frozenDatabaseDir });
+const plan = resume
+  ? validatedPlan
+  : normalizeMachineAxisCoarsePlan(
+      JSON.parse(await fs.readFile(planPath, 'utf8'))
+    );
 const candidateSet = createMachineAxisLocalCandidates(plan);
 const shardSet = createMachineAxisLocalSearchShards(plan, candidateSet);
 const inputDirectory = path.join(outputRoot, 'shards', 'input');

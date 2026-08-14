@@ -11,9 +11,11 @@ scripts/machine-axis/evidence/*.json text eol=lf
 fixtures/character-acceptance/*.json text eol=lf
 
 # Keep release-gate sources and evidence documentation Prettier-stable on Windows.
+scripts/*.mjs text eol=lf
 scripts/gates/** text eol=lf
-scripts/release-verify.mjs text eol=lf
+src/__tests__/scripts/*.test.js text eol=lf
 src/__tests__/scripts/gates/** text eol=lf
+src/__tests__/optimization-qualification/*.test.js text eol=lf
 src/domain/kiboAxisActionScopePolicy.js text eol=lf
 work/m12-c/gates/** text eol=lf
 work/m12-c/STATE.md text eol=lf
