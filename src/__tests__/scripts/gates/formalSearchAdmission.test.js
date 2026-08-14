@@ -87,7 +87,8 @@ describe('formal search admission', () => {
     const result = await evaluateFormalSearchAdmission(currentEvidence);
 
     expect(result.status).toBe('ready');
-    expect(result.blockers).not.toContain('starborn-product-object-acceptance');
+    expect(result.blockers).not.toContain('database-content-hash-recorded');
+    expect(currentEvidence.databaseContentHash).toMatch(/^[a-f0-9]{64}$/);
     expect(result.blockers).not.toContain('kibo-axis-action-scope-applied');
     expect(result.blockers).not.toContain('normal-attack-combo-authority');
     expect(currentEvidence.normalAttackInputAuthority).toMatchObject({

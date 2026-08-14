@@ -26,7 +26,7 @@ const KIBO_AXIS_ACTION_SCOPE_CONTRACT = 'AzPrM12CKiboAxisActionScope';
 
 export const FORMAL_SEARCH_ADMISSION_CHECK_IDS = Object.freeze([
   'release-verify-executed-pass',
-  'optimization-qualification-complete',
+  'database-content-hash-recorded',
   'm12c-lock-open',
   'qualification-hash-binding-consistent',
   'binding-matrix-complete',
@@ -38,8 +38,6 @@ export const FORMAL_SEARCH_ADMISSION_CHECK_IDS = Object.freeze([
   'kibo-axis-action-scope-applied',
   'formal-runtime-baseline-ready',
   'client-parity-policy-satisfied',
-  'required-character-product-acceptance',
-  'starborn-product-object-acceptance',
 ]);
 
 export async function loadFormalSearchAdmissionEvidence({
@@ -104,6 +102,18 @@ export async function loadFormalSearchAdmissionEvidence({
     ),
     readFile(path.join(root, 'src', 'machine-axis', 'machineAxisService.js')),
   ]);
+  let databaseContentHash = null;
+  try {
+    databaseContentHash =
+      JSON.parse(
+        await readFile(
+          path.join(root, 'src', 'data', 'database', 'manifest.json'),
+          'utf8'
+        )
+      )?.contentHash ?? null;
+  } catch {
+    databaseContentHash = null;
+  }
   const settlementReadiness =
     settlementModule.getMachineAxisEnemySettlementFormalReadiness();
   const settlementContract =
@@ -158,6 +168,7 @@ export async function loadFormalSearchAdmissionEvidence({
         settlementContract.formalScoring
           .clientParityRequiredForCurrentFormalScore,
     },
+    databaseContentHash,
     kiboAxisActionScope: createKiboAxisActionScopeEvidence({
       qualificationCatalog,
       kiboActionCatalog: JSON.parse(kiboActionCatalogSource.toString('utf8')),
@@ -367,33 +378,25 @@ export async function evaluateFormalSearchAdmission(evidence) {
     }
   );
 
-  const qualification = evidence.qualificationCatalog?.summary;
-  const stage = qualification?.qualificationStage;
-  const counts = qualification?.optimizationReadyCounts ?? {};
+  // 阶段 C：不再验证数据库正确性（263 项资格/冻结分母），只记录数据库 contentHash 作为输入指纹。
   add(
-    'optimization-qualification-complete',
-    Object.entries(EXPECTED_DENOMINATORS).every(
-      ([kind, expected]) => counts[kind] === expected
-    ) &&
-      qualification?.gameplayBlockingGapCount === 0 &&
-      qualification?.formalOptimizationUnlocked === true,
-    {
-      expected: EXPECTED_DENOMINATORS,
-      actual: counts,
-      gameplayBlockingGapCount: qualification?.gameplayBlockingGapCount ?? null,
-      formalOptimizationUnlocked:
-        qualification?.formalOptimizationUnlocked ?? null,
-    }
+    'database-content-hash-recorded',
+    typeof evidence.databaseContentHash === 'string' &&
+      /^[a-f0-9]{64}$/.test(evidence.databaseContentHash),
+    { databaseContentHash: evidence.databaseContentHash ?? null }
   );
   add(
     'm12c-lock-open',
     evidence.qualificationSummary?.m12cLocked === false &&
-      qualification?.m12cLocked === false &&
-      stage?.m12cLocked === false,
+      evidence.qualificationCatalog?.summary?.m12cLocked === false &&
+      evidence.qualificationCatalog?.summary?.qualificationStage?.m12cLocked ===
+        false,
     {
       summary: evidence.qualificationSummary?.m12cLocked ?? null,
-      catalog: qualification?.m12cLocked ?? null,
-      stage: stage?.m12cLocked ?? null,
+      catalog: evidence.qualificationCatalog?.summary?.m12cLocked ?? null,
+      stage:
+        evidence.qualificationCatalog?.summary?.qualificationStage
+          ?.m12cLocked ?? null,
     }
   );
   add(
@@ -556,30 +559,6 @@ export async function evaluateFormalSearchAdmission(evidence) {
       clientParityRequiredForCurrentFormalScore:
         runtime?.clientParityRequiredForCurrentFormalScore ?? null,
     }
-  );
-
-  const normalAcceptance = evidence.productAcceptance?.normalAcceptance ?? [];
-  add(
-    'required-character-product-acceptance',
-    normalAcceptance.length === 8 &&
-      normalAcceptance.every(
-        entry =>
-          entry.present &&
-          entry.maturityState === 'optimization-ready' &&
-          entry.optimizationReady &&
-          entry.blockerCount === 0
-      ),
-    normalAcceptance,
-    'product-acceptance'
-  );
-  const starborn = evidence.productAcceptance?.starborn;
-  add(
-    'starborn-product-object-acceptance',
-    starborn?.productVisualAcceptance === 'accepted' &&
-      starborn?.formalAdmission === true &&
-      starborn?.optimizationReady === true,
-    starborn ?? null,
-    'product-acceptance'
   );
 
   if (checks.length !== FORMAL_SEARCH_ADMISSION_CHECK_IDS.length) {

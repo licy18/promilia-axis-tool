@@ -12,6 +12,7 @@
 //   hash      重算 contentHash（编辑后调用，更新 manifest）
 //   validate  只查 schema + 引用完整性（不查数值正确性）
 
+import { execSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -253,6 +254,48 @@ export function validate() {
 }
 
 // ---------------------------------------------------------------------------
+// run-identity：搜索 run 的输入指纹集（阶段 C：只记录哈希，不验证正确性）
+// ---------------------------------------------------------------------------
+
+export function createRunIdentity() {
+  let databaseContentHash = null;
+  try {
+    databaseContentHash =
+      readJson(path.join(DATABASE, 'manifest.json'))?.contentHash ?? null;
+  } catch {
+    databaseContentHash = null;
+  }
+  let layerHashes = null;
+  try {
+    layerHashes = readJson(
+      path.join(GENERATED, 'verified-combat-mechanics-layer-hashes.json')
+    );
+  } catch {
+    layerHashes = null;
+  }
+  let authorityHead = null;
+  try {
+    authorityHead = execSync('git rev-parse HEAD', {
+      cwd: REPO_ROOT,
+      encoding: 'utf8',
+    }).trim();
+  } catch {
+    authorityHead = null;
+  }
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-m12c-search-input-identity',
+    authorityHead,
+    databaseContentHash,
+    mechanismHash: layerHashes?.mechanismHash ?? null,
+    dataVersionHash: layerHashes?.dataVersionHash ?? null,
+    verifiedMechanicsPackageHash: layerHashes?.packageHash ?? null,
+    databaseEdited:
+      readJson(path.join(DATABASE, 'manifest.json'))?.edited ?? null,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // CLI
 // ---------------------------------------------------------------------------
 
@@ -275,9 +318,13 @@ function run() {
       if (!result.valid) process.exitCode = 1;
       break;
     }
+    case 'run-identity': {
+      console.log(JSON.stringify(createRunIdentity(), null, 2));
+      break;
+    }
     default:
       console.error(
-        `unknown command: ${command} (expect export|hash|validate)`
+        `unknown command: ${command} (expect export|hash|validate|run-identity)`
       );
       process.exitCode = 1;
   }

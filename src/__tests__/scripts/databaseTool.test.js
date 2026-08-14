@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   computeContentHash,
+  createRunIdentity,
   validate,
 } from '../../../scripts/database-tool.mjs';
 
@@ -28,6 +29,14 @@ describe('azpr editable game database tool', () => {
     const second = computeContentHash();
     expect(first).toBe(second);
     expect(first).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('exposes the search input identity fingerprint set', () => {
+    const identity = createRunIdentity();
+    expect(identity.databaseContentHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(identity.mechanismHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(identity.verifiedMechanicsPackageHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(identity.kind).toBe('azpr-m12c-search-input-identity');
   });
 
   it('treats the database as value data (no correctness verification)', () => {
