@@ -161,6 +161,34 @@ export function validateShardResultEnvelope(result, options = {}) {
 // 第十一轮：预算账本校验（纯函数）——checkpointHash 防篡改；累计严格非负整数；
 // 未干净完成时把 lastCheckpointAt → now 的墙钟计入（shard 中途终止无法绕过总预算）。
 // 第十二轮：lastCheckpointAtMs 必须是非负整数且不晚于 nowMs——未来时间戳不得免除尾段墙钟。
+
+// 第十四轮：复算当前指纹并比对 preflight 快照（纯函数，fail-closed）——捕获 preflight 后 HEAD/数据库/包漂移。
+// expectedFingerprint 为 preflight 时已验证的指纹对象；current 为当前现场重算结果。
+export function validateFingerprintUnchanged(expectedFingerprint, current) {
+  const errors = [];
+  if (!expectedFingerprint || typeof expectedFingerprint !== 'object') {
+    errors.push('missing-expected-fingerprint');
+    return { valid: false, errors };
+  }
+  if (!current || typeof current !== 'object') {
+    errors.push('missing-current-fingerprint');
+    return { valid: false, errors };
+  }
+  const fields = [
+    'authorityHead',
+    'databaseContentHash',
+    'mechanismHash',
+    'dataVersionHash',
+    'packageHash',
+  ];
+  for (const field of fields) {
+    if (expectedFingerprint[field] !== current[field]) {
+      errors.push('fingerprint-drift:' + field);
+    }
+  }
+  return { valid: errors.length === 0, errors };
+}
+
 export function validateWallTimeLedger(
   checkpoint,
   { totalBudgetMs, nowMs, hashFn }

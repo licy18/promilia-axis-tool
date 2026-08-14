@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  validateFingerprintUnchanged,
   validateResumeContinuation,
   validateShardResultEnvelope,
   validateWallTimeLedger,
@@ -531,5 +532,46 @@ describe('search resume validation (sixth-round review)', () => {
       { totalBudgetMs: 10000, nowMs: 4000, hashFn: () => 'x' }
     );
     expect(result).toMatchObject({ valid: true, effective: 1000 });
+  });
+
+  it('accepts an unchanged fingerprint snapshot (fourteenth-round)', () => {
+    const fp = {
+      authorityHead: 'a',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+      packageHash: 'e',
+    };
+    const result = validateFingerprintUnchanged(fp, { ...fp });
+    expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('rejects a drifted fingerprint snapshot field (fourteenth-round)', () => {
+    const fp = {
+      authorityHead: 'a',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+      packageHash: 'e',
+    };
+    const result = validateFingerprintUnchanged(fp, {
+      ...fp,
+      authorityHead: 'changed',
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('fingerprint-drift:authorityHead');
+  });
+
+  it('rejects a missing expected fingerprint (fourteenth-round)', () => {
+    const result = validateFingerprintUnchanged(null, { authorityHead: 'a' });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-expected-fingerprint');
+  });
+
+  it('rejects a missing current fingerprint (fourteenth-round)', () => {
+    const fp = { authorityHead: 'a' };
+    const result = validateFingerprintUnchanged(fp, null);
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-current-fingerprint');
   });
 });

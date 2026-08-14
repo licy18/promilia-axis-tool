@@ -17,6 +17,7 @@ import {
   verifyArtifactFingerprint,
 } from './search-fingerprint.mjs';
 import {
+  validateFingerprintUnchanged,
   validateResumeContinuation,
   validateShardResultEnvelope,
   validateWallTimeLedger,
@@ -142,6 +143,15 @@ const candidateSet = createMachineAxisLocalCandidates(plan);
 const shardSet = createMachineAxisLocalSearchShards(plan, candidateSet);
 const inputDirectory = path.join(outputRoot, 'shards', 'input');
 const resultDirectory = path.join(outputRoot, 'shards', 'result');
+// 第十四轮：任何写操作（含 mkdir）之前复算当前指纹并比对 preflight 快照——preflight 后若 HEAD/数据库/包
+// 漂移，即使无待执行 shard（不会启动 worker 复验）也在此拒绝，禁止写出带旧指纹的产物或污染目录。
+if (resume) {
+  await assertFingerprintUnchanged(
+    validatedFingerprint,
+    frozenDatabaseDir,
+    'shard-write'
+  );
+}
 await fs.mkdir(inputDirectory, { recursive: true });
 await fs.mkdir(resultDirectory, { recursive: true });
 await writeJsonAtomically(path.join(outputRoot, 'plan.normalized.json'), {
@@ -234,6 +244,14 @@ const aggregate = createMachineAxisLocalSearchAggregate({
   startedAt,
   endedAt,
 });
+// 第十四轮：最终聚合前再次复算指纹——resume 无待执行 shard 时 worker 不会启动，此处是最后防线。
+if (resume) {
+  await assertFingerprintUnchanged(
+    validatedFingerprint,
+    frozenDatabaseDir,
+    'final-aggregation'
+  );
+}
 const hardFailure = shardResults.some(shard =>
   ['failed', 'timed-out'].includes(shard.status)
 );
@@ -429,6 +447,22 @@ async function readPriorWallTimeLedger(outputRoot, totalBudgetMs) {
     tailMs: ledgerCheck.effective - Number(checkpoint.cumulativeWallTimeMs),
     effective: ledgerCheck.effective,
   };
+}
+
+// 第十四轮：复算当前指纹并比对 preflight 快照（fail-closed）——捕获 preflight 后 HEAD/数据库/包漂移。
+async function assertFingerprintUnchanged(
+  expectedFingerprint,
+  databaseDir,
+  phase
+) {
+  const current = createSearchFingerprint({ databaseDir });
+  const check = validateFingerprintUnchanged(expectedFingerprint, current);
+  if (!check.valid) {
+    throw new Error(
+      `resume rejected: fingerprint drifted at ${phase} (${check.errors.join(', ')}); use a fresh outputRoot/runId`
+    );
+  }
+  return current;
 }
 
 async function readPriorNormalizedPlan(outputRoot) {
