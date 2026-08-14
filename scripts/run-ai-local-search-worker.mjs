@@ -12,13 +12,12 @@ const outputPath = resolveRequiredPath('--shard-output');
 const shard = JSON.parse(await fs.readFile(inputPath, 'utf8'));
 validateShardEnvelope(shard);
 // P1-3：worker 从冻结数据库快照读取评分输入
-const databaseDir = readOptionalPath('--database-dir') ??
+const databaseDir =
+  readOptionalPath('--database-dir') ??
   path.join(projectRoot, 'src', 'data', 'database');
 // P1-4：worker 在读取评分数据前 fail-closed 验证输入指纹与当前 authority/数据库一致
-const {
-  createSearchFingerprint,
-  verifyArtifactFingerprint,
-} = await import('./search-fingerprint.mjs');
+const { createSearchFingerprint, verifyArtifactFingerprint } =
+  await import('./search-fingerprint.mjs');
 {
   const fingerprintCheck = verifyArtifactFingerprint(
     shard,
@@ -69,6 +68,8 @@ mechanicsPackage.semanticEffectCatalog = {
   formulas: databaseEffects.formulas,
   semanticEffects: databaseEffects.semanticEffects,
 };
+// P1-2：构造完整数据库 gameData（角色/技能/奇波/敌人/元素/装备/魂精），供评分 project/loadout 消费。
+const dbGameData = await loadDatabaseGameData(databaseDir);
 const vite = await createServer({
   root: projectRoot,
   server: { middlewareMode: true },
@@ -94,7 +95,13 @@ try {
   );
 
   packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
-  const rawService = serviceModule.createMachineAxisService();
+  const factoryModule = await vite.ssrLoadModule(
+    '/src/domain/workbenchProjectFactory.js'
+  );
+  factoryModule.setWorkbenchInjectedGameData(dbGameData);
+  const rawService = serviceModule.createMachineAxisService({
+    gameData: dbGameData,
+  });
   const meteredService = createMeteredService(rawService);
   const engine = engineModule.createMachineAxisSearchEngine({
     service: meteredService,
@@ -253,7 +260,7 @@ function validateShardEnvelope(value) {
 
 function readOptionalPath(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }
 
 function resolveRequiredPath(name) {
@@ -261,6 +268,39 @@ function resolveRequiredPath(name) {
   const value = index >= 0 ? process.argv[index + 1] : null;
   if (!value) throw new Error(`${name} <path> is required`);
   return path.resolve(value);
+}
+
+async function loadDatabaseGameData(databaseDir) {
+  const read = async name =>
+    JSON.parse(
+      await fs.readFile(path.join(databaseDir, `${name}.json`), 'utf8')
+    );
+  const [
+    characters,
+    skills,
+    kibos,
+    enemies,
+    elements,
+    equipment,
+    soulessences,
+  ] = await Promise.all([
+    read('characters'),
+    read('skills'),
+    read('kibos'),
+    read('enemies'),
+    read('elements'),
+    read('equipment'),
+    read('soulessences'),
+  ]);
+  return {
+    characters: characters.items,
+    skills: skills.items,
+    kibos: kibos.items,
+    enemies: enemies.items,
+    elements: elements.items,
+    equipment: equipment.items,
+    soulessences: soulessences.items,
+  };
 }
 
 async function writeJsonAtomically(filePath, value) {

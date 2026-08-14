@@ -35,6 +35,7 @@ const DATA_FILES = Object.freeze([
   'enemies.json',
   'equipment.json',
   'soulessences.json',
+  'elements.json',
   'effects.json',
   'actions.json',
 ]);
@@ -111,6 +112,7 @@ export function exportFromGenerated() {
     'enemies',
     'equipment',
     'soulessences',
+    'elements',
   ];
   for (const name of simple) {
     const source = readJson(path.join(GENERATED, `${name}.json`));
@@ -244,10 +246,13 @@ export function validate() {
         issues.push(`${name} has ${missingIds} item(s) missing required id`);
       }
       const invalidIdTypes = data.items.filter(
-        item => item.id != null && !['string', 'number'].includes(typeof item.id)
+        item =>
+          item.id != null && !['string', 'number'].includes(typeof item.id)
       ).length;
       if (invalidIdTypes > 0) {
-        issues.push(`${name} has ${invalidIdTypes} item(s) with invalid id type`);
+        issues.push(
+          `${name} has ${invalidIdTypes} item(s) with invalid id type`
+        );
       }
       const duplicates = ids.filter(
         (value, index) => ids.indexOf(value) !== index
@@ -323,7 +328,8 @@ export function validate() {
       }
       const invalidFormulaIdTypes = data.formulas.filter(
         item =>
-          item.formulaIdentity != null && typeof item.formulaIdentity !== 'string'
+          item.formulaIdentity != null &&
+          typeof item.formulaIdentity !== 'string'
       ).length;
       if (invalidFormulaIdTypes > 0) {
         issues.push(

@@ -64,6 +64,20 @@ export {
 } from './skillDamageSegments';
 
 const workbenchSeed = getAzprWorkbenchSeed();
+
+// P1-2：可编辑数据库注入——评分/排轴计算统一消费注入的 gameData（默认 workbenchSeed.gameData）。
+// 搜索 worker/guided 启动时 setWorkbenchInjectedGameData(数据库快照)，计算链即用可编辑数值；
+// 未注入时保持既有 seed 行为。
+let injectedGameData = null;
+export function setWorkbenchInjectedGameData(gameData) {
+  injectedGameData = gameData;
+}
+export function getWorkbenchInjectedGameData() {
+  return injectedGameData;
+}
+function effectiveGameData() {
+  return injectedGameData ?? workbenchSeed.gameData;
+}
 const enemyLevelProfileCatalog = getAzprEnemyLevelProfiles();
 
 const DEFAULT_SECONDARY_CHARACTER_ID =
@@ -158,24 +172,31 @@ export function getWorkbenchSeed() {
 }
 
 export function getWorkbenchGameData() {
+  // P1-2：注入数据库快照时返回注入的 gameData（补 enemyLevelProfiles），否则返回 seed 默认。
+  if (injectedGameData) {
+    return {
+      ...injectedGameData,
+      enemyLevelProfiles: enemyLevelProfileCatalog.profiles,
+    };
+  }
   return WORKBENCH_GAME_DATA;
 }
 
 export function getWorkbenchLoadoutOptions() {
   return {
-    kibos: WORKBENCH_KIBOS,
-    soulessences: WORKBENCH_SOULESSENCES,
+    kibos: effectiveGameData().kibos,
+    soulessences: effectiveGameData().soulessences,
     equipment: Object.fromEntries(
       Object.entries(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(([slotKey, type]) => [
         slotKey,
-        WORKBENCH_EQUIPMENT.filter(item => item.type === type),
+        effectiveGameData().equipment.filter(item => item.type === type),
       ])
     ),
   };
 }
 
 export function getSkillsForCharacter(characterId) {
-  return workbenchSeed.gameData.skills.filter(
+  return effectiveGameData().skills.filter(
     skill => skill.characterId === Number(characterId)
   );
 }
@@ -235,7 +256,7 @@ export function createWorkbenchActionDraft({
     type === ACTION_TYPES.KIBO_EVENT
       ? positiveIntegerOrNull(skillId)
       : Number(skillId ?? DEFAULT_WORKBENCH_SELECTION.skillId);
-  const skill = findById(workbenchSeed.gameData.skills, normalizedSkillId);
+  const skill = findById(effectiveGameData().skills, normalizedSkillId);
   const statusGeneration =
     type === ACTION_TYPES.SKILL && skill
       ? createSkillActionStatusGeneration({
@@ -438,21 +459,24 @@ export function normalizeWorkbenchSelection(selection = {}, teamSlots = null) {
   const normalizedTeamSlots = normalizeWorkbenchTeamSlots(teamSlots, selection);
   const characterId = normalizedTeamSlots[0].characterId;
   const character =
-    findById(workbenchSeed.gameData.characters, characterId) ??
-    workbenchSeed.gameData.characters[0];
+    findById(effectiveGameData().characters, characterId) ??
+    effectiveGameData().characters[0];
   const secondaryCharacter =
     findById(
-      workbenchSeed.gameData.characters,
+      effectiveGameData().characters,
       normalizedTeamSlots[1].characterId
-    ) ?? workbenchSeed.gameData.characters[1];
+    ) ?? effectiveGameData().characters[1];
   const characterSkills = getSkillsForCharacter(character.id);
   const requestedSkill = findById(characterSkills, selection.skillId);
   const skill =
-    requestedSkill ?? characterSkills[0] ?? workbenchSeed.gameData.skills[0];
+    requestedSkill ?? characterSkills[0] ?? effectiveGameData().skills[0];
   const enemy =
-    findById(WORKBENCH_ENEMIES, selection.enemyId) ??
-    findById(WORKBENCH_ENEMIES, DEFAULT_WORKBENCH_SELECTION.enemyId) ??
-    WORKBENCH_ENEMIES[0];
+    findById(effectiveGameData().enemies, selection.enemyId) ??
+    findById(
+      effectiveGameData().enemies,
+      DEFAULT_WORKBENCH_SELECTION.enemyId
+    ) ??
+    effectiveGameData().enemies[0];
 
   return {
     characterId: character.id,
@@ -487,10 +511,10 @@ export function normalizeWorkbenchTeamSlots(teamSlots = [], selection = {}) {
       sourceSlot?.characterId ?? legacyCharacterIds[index]
     );
     const requestedCharacter = findById(
-      workbenchSeed.gameData.characters,
+      effectiveGameData().characters,
       requestedCharacterId
     );
-    const fallbackCharacter = workbenchSeed.gameData.characters.find(
+    const fallbackCharacter = effectiveGameData().characters.find(
       character => !usedCharacterIds.has(Number(character.id))
     );
     const character =
@@ -545,7 +569,7 @@ export function normalizeWorkbenchActorConfig(
 ) {
   const normalizedCharacterId = Number(characterId);
   const character = findById(
-    workbenchSeed.gameData.characters,
+    effectiveGameData().characters,
     normalizedCharacterId
   );
   const attributeLevel = Number(character?.attributePanel?.level);
@@ -569,7 +593,7 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
   const equipment = source.equipment ?? {};
 
   return {
-    kiboId: normalizeCatalogId(source.kiboId, WORKBENCH_KIBOS),
+    kiboId: normalizeCatalogId(source.kiboId, effectiveGameData().kibos),
     equipment: Object.fromEntries(
       Object.keys(WORKBENCH_EQUIPMENT_SLOT_TYPES).map(slotKey => [
         slotKey,
@@ -578,7 +602,7 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
     ),
     soulessenceId: normalizeCatalogId(
       source.soulessenceId,
-      WORKBENCH_SOULESSENCES
+      effectiveGameData().soulessences
     ),
     soulessenceLevel: optionalClampedInteger(source.soulessenceLevel, 1, 100),
     soulessenceRank: optionalClampedInteger(source.soulessenceRank, 1, 6),
@@ -723,11 +747,11 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     actorConfigs.map(config => [Number(config.characterId), config])
   );
   const character = findById(
-    workbenchSeed.gameData.characters,
+    effectiveGameData().characters,
     normalized.characterId
   );
   const secondaryCharacter = findById(
-    workbenchSeed.gameData.characters,
+    effectiveGameData().characters,
     normalized.secondaryCharacterId
   );
   const enemy = findById(WORKBENCH_ENEMIES, normalized.enemyId);
@@ -789,7 +813,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     draft => draft.type === ACTION_TYPES.SKILL
   );
   const teamCharacters = teamSlots.map(slot =>
-    findById(workbenchSeed.gameData.characters, slot.characterId)
+    findById(effectiveGameData().characters, slot.characterId)
   );
   const actors = teamCharacters.map(item => {
     const actorConfig = actorConfigsByCharacterId.get(Number(item.id));
@@ -817,7 +841,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   });
   const titleAction = actionDrafts[0];
   const firstSkill = titleAction
-    ? findById(workbenchSeed.gameData.skills, titleAction.skillId)
+    ? findById(effectiveGameData().skills, titleAction.skillId)
     : null;
   const titleActionName = !titleAction
     ? '空方案'
@@ -1027,7 +1051,7 @@ export function normalizeWorkbenchActionDrafts(
       : normalizeWorkbenchSelection({ characterId: selectionOrCharacterId });
   const primarySkills = getSkillsForCharacter(selection.characterId);
   const primaryFallbackSkill =
-    primarySkills[0] ?? workbenchSeed.gameData.skills[0];
+    primarySkills[0] ?? effectiveGameData().skills[0];
 
   return actionDrafts
     .map((draft, index) => {
@@ -1150,12 +1174,12 @@ export function normalizeWorkbenchActionDrafts(
     .filter(
       draft =>
         draft.type !== ACTION_TYPES.SKILL ||
-        findById(workbenchSeed.gameData.skills, draft.skillId)
+        findById(effectiveGameData().skills, draft.skillId)
     );
 }
 
 function resolveCompatibleSkillActionEntry(draft, actorSkills) {
-  const sourceSkill = findById(workbenchSeed.gameData.skills, draft.skillId);
+  const sourceSkill = findById(effectiveGameData().skills, draft.skillId);
   if (!sourceSkill) return null;
   const sourceVariantIndex = Math.max(
     0,
@@ -1294,7 +1318,7 @@ function createProjectActionFromDraft(
     });
   }
 
-  const skill = findById(workbenchSeed.gameData.skills, draft.skillId);
+  const skill = findById(effectiveGameData().skills, draft.skillId);
   const actor =
     sourceActor ??
     actorsByCharacterId.get(Number(skill.characterId)) ??
@@ -1541,7 +1565,7 @@ function createSkillLevelsForCharacter(skillDrafts, characterId) {
   return Object.fromEntries(
     skillDrafts
       .map(draft => [
-        findById(workbenchSeed.gameData.skills, draft.skillId),
+        findById(effectiveGameData().skills, draft.skillId),
         draft.level,
       ])
       .filter(([skill]) => skill?.characterId === Number(characterId))

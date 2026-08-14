@@ -75,6 +75,16 @@ mechanicsPackage.semanticEffectCatalog = {
   formulas: databaseEffects.formulas,
   semanticEffects: databaseEffects.semanticEffects,
 };
+// P1-2：构造完整数据库 gameData（角色/技能/奇波/敌人/元素/装备/魂精），供评分 project/loadout 消费。
+const dbGameData = {
+  characters: (await readJson('src/data/database/characters.json')).items,
+  skills: (await readJson('src/data/database/skills.json')).items,
+  kibos: (await readJson('src/data/database/kibos.json')).items,
+  enemies: (await readJson('src/data/database/enemies.json')).items,
+  elements: (await readJson('src/data/database/elements.json')).items,
+  equipment: (await readJson('src/data/database/equipment.json')).items,
+  soulessences: (await readJson('src/data/database/soulessences.json')).items,
+};
 const vite = await createServer({
   root: projectRoot,
   server: { middlewareMode: true },
@@ -103,7 +113,13 @@ try {
   );
 
   packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
-  const service = serviceModule.createMachineAxisService();
+  const factoryModule = await vite.ssrLoadModule(
+    '/src/domain/workbenchProjectFactory.js'
+  );
+  factoryModule.setWorkbenchInjectedGameData(dbGameData);
+  const service = serviceModule.createMachineAxisService({
+    gameData: dbGameData,
+  });
   const isOuterRequest =
     runOuterSearch ||
     loadedContract?.kind === 'azpr-m12c-outer-search' ||
