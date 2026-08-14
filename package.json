@@ -25,6 +25,8 @@
     "benchmark:machine-axis-search": "node --expose-gc scripts/benchmark-machine-axis-search.mjs",
     "data:generate": "node scripts/generate-azpr-data.mjs && node scripts/generate-action-status-catalog.mjs --write",
     "data:sync-verified-combat": "node scripts/sync-verified-combat-mechanics.mjs --write",
+    "data:refresh-reports": "node scripts/refresh-derived-reports.mjs",
+    "data:refresh-reports:full": "node scripts/refresh-derived-reports.mjs --full",
     "audit:verified-combat": "node scripts/sync-verified-combat-mechanics.mjs --assert-clean",
     "data:sync-character-combat": "node scripts/sync-character-combat-profile.mjs --write",
     "audit:character-combat": "node scripts/sync-character-combat-profile.mjs --all --assert-clean",
