@@ -129,6 +129,7 @@ describe('search resume validation (sixth-round review)', () => {
       },
       results: new Array(5).fill({}),
       rejections: new Array(1).fill({}),
+      stopReason: 'shard-wall-time-budget-exhausted',
     });
     expect(result).toMatchObject({ valid: true, errors: [] });
   });
@@ -224,7 +225,99 @@ describe('search resume validation (sixth-round review)', () => {
       },
       results: new Array(3).fill({}),
       rejections: new Array(1).fill({}),
+      stopReason: 'shard-wall-time-budget-exhausted',
     });
     expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('rejects truncated shard without a stop reason (ninth-round)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'truncated',
+      summary: {
+        assignedCandidateCount: 8,
+        evaluatedCandidateCount: 3,
+        rejectedCandidateCount: 1,
+        unevaluatedCandidateCount: 4,
+      },
+      results: new Array(3).fill({}),
+      rejections: new Array(1).fill({}),
+      stopReason: null,
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('truncated-missing-stop-reason');
+  });
+
+  it('rejects complete shard with an unexpected stop reason (ninth-round)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'complete',
+      summary: {
+        assignedCandidateCount: 2,
+        evaluatedCandidateCount: 2,
+        rejectedCandidateCount: 0,
+        unevaluatedCandidateCount: 0,
+      },
+      results: [{ candidateId: 'a' }, { candidateId: 'b' }],
+      rejections: [],
+      stopReason: 'should-not-be-set',
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('complete-unexpected-stop-reason');
+  });
+
+  it('rejects unknown candidate ids in a complete shard (ninth-round)', () => {
+    const result = validateShardResultEnvelope(
+      {
+        status: 'complete',
+        summary: {
+          assignedCandidateCount: 2,
+          evaluatedCandidateCount: 1,
+          rejectedCandidateCount: 1,
+          unevaluatedCandidateCount: 0,
+        },
+        results: [{ candidateId: 'a' }, { candidateId: 'foreign-x' }],
+        rejections: [{ candidateId: 'b' }],
+      },
+      { expectedCandidateIds: ['a', 'b'] }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('unknown-candidate-id:foreign-x');
+  });
+
+  it('rejects duplicate candidate ids in a complete shard (ninth-round)', () => {
+    const result = validateShardResultEnvelope(
+      {
+        status: 'complete',
+        summary: {
+          assignedCandidateCount: 2,
+          evaluatedCandidateCount: 2,
+          rejectedCandidateCount: 0,
+          unevaluatedCandidateCount: 0,
+        },
+        results: [{ candidateId: 'a' }, { candidateId: 'a' }],
+        rejections: [],
+      },
+      { expectedCandidateIds: ['a', 'b'] }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('duplicate-candidate-id:a');
+  });
+
+  it('rejects incomplete candidate coverage in a complete shard (ninth-round)', () => {
+    const result = validateShardResultEnvelope(
+      {
+        status: 'complete',
+        summary: {
+          assignedCandidateCount: 2,
+          evaluatedCandidateCount: 1,
+          rejectedCandidateCount: 0,
+          unevaluatedCandidateCount: 1,
+        },
+        results: [{ candidateId: 'a' }],
+        rejections: [],
+      },
+      { expectedCandidateIds: ['a', 'b'] }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('incomplete-coverage:b');
   });
 });

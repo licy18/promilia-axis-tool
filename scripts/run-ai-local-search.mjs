@@ -62,7 +62,12 @@ if (resume) {
   const currentForCheck = createSearchFingerprint({
     databaseDir: hasExistingFrozen ? existingFrozenDir : undefined,
   });
-  for (const { artifact, fingerprint } of priorArtifacts) {
+  for (const { artifact, fingerprint, corrupt } of priorArtifacts) {
+    if (corrupt) {
+      throw new Error(
+        `resume rejected: ${artifact} is corrupt; use a fresh outputRoot/runId`
+      );
+    }
     if (!fingerprint) {
       throw new Error(
         `resume rejected: ${artifact} missing inputFingerprint; use a fresh outputRoot/runId`
@@ -140,7 +145,15 @@ for (const shard of shardSet.shards) {
 
 const startedAt = new Date().toISOString();
 const startedAtMs = Date.now();
-const globalDeadlineMs = startedAtMs + plan.budget.maxWallTimeMs;
+// 第九轮：resume 不重置总预算——累计已用墙钟持久化于 checkpoint，只给续跑剩余预算。
+const priorCumulativeMs = resume
+  ? await readPriorCumulativeWallTime(outputRoot)
+  : 0;
+const remainingBudgetMs = Math.max(
+  0,
+  Number(plan.budget.maxWallTimeMs) - priorCumulativeMs
+);
+const globalDeadlineMs = startedAtMs + remainingBudgetMs;
 const configuredWorkerCount = Math.max(
   1,
   Math.min(
@@ -229,6 +242,7 @@ await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
   })),
   aggregateHash: aggregate.aggregateHash,
   complete: true,
+  cumulativeWallTimeMs: priorCumulativeMs + (Date.now() - startedAtMs),
 });
 
 process.stdout.write(
@@ -329,6 +343,9 @@ async function runShardProcess(shard, workerIndex) {
       // P2-1：envelope 合法（单一实现见 search-resume-validation.mjs）——绑定实际 shard 候选数。
       const envelopeOk = validateShardResultEnvelope(result, {
         expectedAssignedCandidateCount: shard.candidates.length,
+        expectedCandidateIds: shard.candidates.map(
+          candidate => candidate.candidateId
+        ),
       }).valid;
       if (
         result.shardId === shard.shardId &&
@@ -356,6 +373,18 @@ async function runShardProcess(shard, workerIndex) {
   });
   await writeJsonAtomically(outputPath, failure);
   return failure;
+}
+
+async function readPriorCumulativeWallTime(outputRoot) {
+  try {
+    const checkpoint = JSON.parse(
+      await fs.readFile(path.join(outputRoot, 'checkpoint.json'), 'utf8')
+    );
+    const value = Number(checkpoint?.cumulativeWallTimeMs);
+    return Number.isFinite(value) && value > 0 ? value : 0;
+  } catch {
+    return 0;
+  }
 }
 
 async function readPriorNormalizedPlan(outputRoot) {
@@ -388,8 +417,14 @@ async function readPriorRunFingerprints(outputRoot) {
         // 产物存在但无指纹：显式记录为缺失（校验时拒绝）
         fingerprints.push({ artifact: candidate, fingerprint: null });
       }
-    } catch {
-      // 文件不存在或损坏：不视为续跑证据
+    } catch (error) {
+      // 第九轮：仅 ENOENT（文件不存在）表示缺失；已存在但不可解析/读取错误视为损坏，resume 必须拒绝。
+      if (error?.code === 'ENOENT') continue;
+      fingerprints.push({
+        artifact: candidate,
+        fingerprint: null,
+        corrupt: true,
+      });
     }
   }
   return fingerprints;
@@ -414,10 +449,18 @@ async function readExistingShardResult(shard) {
     const payload = structuredClone(result);
     const declaredResultHash = payload.resultHash;
     delete payload.resultHash;
-    const fingerprintOk = verifyArtifactFingerprint(result).valid;
-    // 第八轮：resume 复用旧 shard 走统一信封校验（results/rejections/unevaluated 语义闭合）。
+    // 第九轮：对比冻结数据库指纹（inputFingerprint），而非现场数据库。
+    const fingerprintOk = verifyArtifactFingerprint(
+      result,
+      inputFingerprint
+    ).valid;
+    // 第八轮：resume 复用旧 shard 走统一信封校验（results/rejections/unevaluated 语义闭合）；
+    // 第九轮：绑定候选 identity（expectedCandidateIds）。
     const envelopeOk = validateShardResultEnvelope(result, {
       expectedAssignedCandidateCount: shard.candidates.length,
+      expectedCandidateIds: shard.candidates.map(
+        candidate => candidate.candidateId
+      ),
     }).valid;
     if (
       result.shardId === shard.shardId &&

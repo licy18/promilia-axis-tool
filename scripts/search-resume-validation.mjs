@@ -94,5 +94,37 @@ export function validateShardResultEnvelope(result, options = {}) {
   ) {
     errors.push('complete-unevaluated-nonzero');
   }
+  // 第九轮：shard 绑定候选 identity——拒绝未知/重复/交叉 ID；complete 精确覆盖全集。
+  const { expectedCandidateIds } = options;
+  if (Array.isArray(expectedCandidateIds) && expectedCandidateIds.length > 0) {
+    const expected = new Set(expectedCandidateIds);
+    const resultIds = (result?.results ?? [])
+      .map(entry => entry?.candidateId)
+      .filter(id => id != null);
+    const rejectionIds = (result?.rejections ?? [])
+      .map(entry => entry?.candidateId)
+      .filter(id => id != null);
+    const allIds = [...resultIds, ...rejectionIds];
+    const unknown = [...new Set(allIds.filter(id => !expected.has(id)))];
+    if (unknown.length > 0)
+      errors.push('unknown-candidate-id:' + unknown.join(','));
+    const dups = [...new Set(allIds.filter((v, i) => allIds.indexOf(v) !== i))];
+    if (dups.length > 0)
+      errors.push('duplicate-candidate-id:' + dups.join(','));
+    if (result?.status === 'complete') {
+      const covered = new Set(allIds);
+      const missing = expectedCandidateIds.filter(id => !covered.has(id));
+      if (missing.length > 0)
+        errors.push('incomplete-coverage:' + missing.join(','));
+    }
+  }
+  // 第九轮：bounded stopping 可审计——truncated 必须携带非空停止原因，complete 必须无停止原因。
+  if (result?.status === 'truncated' && !result?.stopReason) {
+    errors.push('truncated-missing-stop-reason');
+  }
+  if (result?.status === 'complete' && result?.stopReason != null) {
+    errors.push('complete-unexpected-stop-reason');
+  }
+  return { valid: errors.length === 0, errors };
   return { valid: errors.length === 0, errors };
 }
