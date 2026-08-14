@@ -320,4 +320,60 @@ describe('search resume validation (sixth-round review)', () => {
     expect(result).toMatchObject({ valid: false });
     expect(result.errors).toContain('incomplete-coverage:b');
   });
+
+  it('rejects truncated result row without candidateId (tenth-round)', () => {
+    const result = validateShardResultEnvelope(
+      {
+        status: 'truncated',
+        summary: {
+          assignedCandidateCount: 1,
+          evaluatedCandidateCount: 1,
+          rejectedCandidateCount: 0,
+          unevaluatedCandidateCount: 0,
+        },
+        results: [{}],
+        rejections: [],
+        stopReason: 'shard-wall-time-budget-exhausted',
+      },
+      { expectedCandidateIds: ['a'] }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-result-candidate-id');
+  });
+
+  it('rejects truncated stopReason outside published codes (tenth-round)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'truncated',
+      summary: {
+        assignedCandidateCount: 1,
+        evaluatedCandidateCount: 1,
+        rejectedCandidateCount: 0,
+        unevaluatedCandidateCount: 0,
+      },
+      results: [{ candidateId: 'a' }],
+      rejections: [],
+      stopReason: 'banana',
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors[0]).toContain('truncated-invalid-stop-reason');
+  });
+
+  it('accepts truncated with published stopReason and full identities (tenth-round)', () => {
+    const result = validateShardResultEnvelope(
+      {
+        status: 'truncated',
+        summary: {
+          assignedCandidateCount: 1,
+          evaluatedCandidateCount: 1,
+          rejectedCandidateCount: 0,
+          unevaluatedCandidateCount: 0,
+        },
+        results: [{ candidateId: 'a' }],
+        rejections: [],
+        stopReason: 'shard-simulation-budget-exhausted',
+      },
+      { expectedCandidateIds: ['a'] }
+    );
+    expect(result).toMatchObject({ valid: true, errors: [] });
+  });
 });

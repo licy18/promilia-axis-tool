@@ -98,12 +98,29 @@ export function validateShardResultEnvelope(result, options = {}) {
   const { expectedCandidateIds } = options;
   if (Array.isArray(expectedCandidateIds) && expectedCandidateIds.length > 0) {
     const expected = new Set(expectedCandidateIds);
-    const resultIds = (result?.results ?? [])
-      .map(entry => entry?.candidateId)
-      .filter(id => id != null);
-    const rejectionIds = (result?.rejections ?? [])
-      .map(entry => entry?.candidateId)
-      .filter(id => id != null);
+    // 第十轮：逐项要求非空、字符串 candidateId——缺失/类型错误直接拒绝（不能静默丢弃）。
+    const resultIds = [];
+    for (const entry of result?.results ?? []) {
+      if (
+        typeof entry?.candidateId !== 'string' ||
+        entry.candidateId.length === 0
+      ) {
+        errors.push('missing-result-candidate-id');
+      } else {
+        resultIds.push(entry.candidateId);
+      }
+    }
+    const rejectionIds = [];
+    for (const entry of result?.rejections ?? []) {
+      if (
+        typeof entry?.candidateId !== 'string' ||
+        entry.candidateId.length === 0
+      ) {
+        errors.push('missing-rejection-candidate-id');
+      } else {
+        rejectionIds.push(entry.candidateId);
+      }
+    }
     const allIds = [...resultIds, ...rejectionIds];
     const unknown = [...new Set(allIds.filter(id => !expected.has(id)))];
     if (unknown.length > 0)
@@ -119,12 +136,26 @@ export function validateShardResultEnvelope(result, options = {}) {
     }
   }
   // 第九轮：bounded stopping 可审计——truncated 必须携带非空停止原因，complete 必须无停止原因。
+  // 第十轮：stopReason 限制为 worker 实际发布的 bounded-stopping code 集合。
+  const BOUNDED_STOP_REASONS = [
+    'shard-wall-time-budget-exhausted',
+    'global-wall-time-budget-exhausted',
+    'shard-evaluation-budget-exhausted',
+    'shard-simulation-budget-exhausted',
+    'local-search-budget-exhausted',
+    'parent-shard-wall-time-budget-exhausted',
+  ];
   if (result?.status === 'truncated' && !result?.stopReason) {
     errors.push('truncated-missing-stop-reason');
+  }
+  if (
+    result?.status === 'truncated' &&
+    !BOUNDED_STOP_REASONS.includes(result?.stopReason)
+  ) {
+    errors.push('truncated-invalid-stop-reason:' + String(result?.stopReason));
   }
   if (result?.status === 'complete' && result?.stopReason != null) {
     errors.push('complete-unexpected-stop-reason');
   }
-  return { valid: errors.length === 0, errors };
   return { valid: errors.length === 0, errors };
 }

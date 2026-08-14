@@ -147,7 +147,10 @@ const startedAt = new Date().toISOString();
 const startedAtMs = Date.now();
 // 第九轮：resume 不重置总预算——累计已用墙钟持久化于 checkpoint，只给续跑剩余预算。
 const priorCumulativeMs = resume
-  ? await readPriorCumulativeWallTime(outputRoot)
+  ? await readPriorCumulativeWallTime(
+      outputRoot,
+      Number(plan.budget.maxWallTimeMs)
+    )
   : 0;
 const remainingBudgetMs = Math.max(
   0,
@@ -375,16 +378,30 @@ async function runShardProcess(shard, workerIndex) {
   return failure;
 }
 
-async function readPriorCumulativeWallTime(outputRoot) {
+// 第十轮：resume 必须读到合法累计墙钟（非负、有限、≤ 总预算）；缺失/无效/超预算都 fail closed。
+async function readPriorCumulativeWallTime(outputRoot, totalBudgetMs) {
+  let checkpoint = null;
   try {
-    const checkpoint = JSON.parse(
+    checkpoint = JSON.parse(
       await fs.readFile(path.join(outputRoot, 'checkpoint.json'), 'utf8')
     );
-    const value = Number(checkpoint?.cumulativeWallTimeMs);
-    return Number.isFinite(value) && value > 0 ? value : 0;
   } catch {
-    return 0;
+    throw new Error(
+      'resume rejected: checkpoint missing or corrupt; use a fresh outputRoot/runId'
+    );
   }
+  const value = Number(checkpoint?.cumulativeWallTimeMs);
+  if (!Number.isFinite(value) || value < 0) {
+    throw new Error(
+      'resume rejected: invalid cumulativeWallTimeMs; use a fresh outputRoot/runId'
+    );
+  }
+  if (value > totalBudgetMs) {
+    throw new Error(
+      `resume rejected: cumulative wall time ${value} exceeds total budget ${totalBudgetMs}`
+    );
+  }
+  return value;
 }
 
 async function readPriorNormalizedPlan(outputRoot) {
@@ -410,10 +427,21 @@ async function readPriorRunFingerprints(outputRoot) {
     const filePath = path.join(outputRoot, candidate);
     try {
       const parsed = JSON.parse(await fs.readFile(filePath, 'utf8'));
+      // 第十轮：已存在但非正确对象信封（null/primitive/数组）→ corrupt，resume 必须拒绝。
+      const isProperEnvelope =
+        parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed);
+      if (!isProperEnvelope) {
+        fingerprints.push({
+          artifact: candidate,
+          fingerprint: null,
+          corrupt: true,
+        });
+        continue;
+      }
       const fingerprint = parsed?.inputFingerprint ?? null;
       if (fingerprint) {
         fingerprints.push({ artifact: candidate, fingerprint });
-      } else if (parsed && typeof parsed === 'object') {
+      } else {
         // 产物存在但无指纹：显式记录为缺失（校验时拒绝）
         fingerprints.push({ artifact: candidate, fingerprint: null });
       }
@@ -523,6 +551,8 @@ function queueProgressWrite() {
         resultHash: result.resultHash ?? null,
       })),
       complete: false,
+      // 第十轮：运行中 checkpoint 也写累计墙钟——中断后 resume 不会把已用时间读成 0。
+      cumulativeWallTimeMs: priorCumulativeMs + (Date.now() - startedAtMs),
     });
   });
   return progressWrite;
