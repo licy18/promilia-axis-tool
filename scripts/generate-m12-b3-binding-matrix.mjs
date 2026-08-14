@@ -9,6 +9,57 @@ const projectRootDefault = path.resolve(scriptDirectory, '..');
 const readJson = async (root, file) =>
   JSON.parse(await fs.readFile(path.join(root, file), 'utf8'));
 
+const sharedModuleCacheByRoot = new Map();
+
+async function loadSharedModules(projectRoot) {
+  const cached = sharedModuleCacheByRoot.get(projectRoot);
+  if (cached) return cached;
+  const vite = await createServer({
+    root: projectRoot,
+    server: { middlewareMode: true },
+    appType: 'custom',
+    logLevel: 'silent',
+  });
+  try {
+    const modules = {
+      packageModule: await vite.ssrLoadModule(
+        '/src/data/verifiedCombatMechanicsPackage.js'
+      ),
+      serviceModule: await vite.ssrLoadModule(
+        '/src/machine-axis/machineAxisService.js'
+      ),
+      adapterModule: await vite.ssrLoadModule(
+        '/src/machine-axis/workbenchMachineAxisAdapter.js'
+      ),
+      objectiveModule: await vite.ssrLoadModule(
+        '/src/machine-axis/machineAxisObjectiveContract.js'
+      ),
+      initialStatePolicyModule: await vite.ssrLoadModule(
+        '/src/machine-axis/m12cInitialStatePolicy.js'
+      ),
+      policyModule: await vite.ssrLoadModule(
+        '/src/optimization-scenario/optimizationScenarioPolicy.js'
+      ),
+      protocolModule: await vite.ssrLoadModule(
+        '/src/optimization-qualification/optimizationQualificationProtocol.js'
+      ),
+      stageGateModule: await vite.ssrLoadModule(
+        '/src/optimization-qualification/optimizationQualificationStageGate.js'
+      ),
+      canonicalModule: await vite.ssrLoadModule(
+        '/src/simulation/headless/canonicalSerialization.js'
+      ),
+      normalAttackAuthorityModule: await vite.ssrLoadModule(
+        '/src/domain/verifiedNormalAttackInputAuthority.js'
+      ),
+    };
+    sharedModuleCacheByRoot.set(projectRoot, modules);
+    return modules;
+  } finally {
+    await vite.close();
+  }
+}
+
 export async function createM12B3BindingMatrix({
   projectRoot = projectRootDefault,
 } = {}) {
@@ -43,45 +94,20 @@ export async function createM12B3BindingMatrix({
     readJson(projectRoot, 'src/data/generated/equipment.json'),
   ]);
 
-  const vite = await createServer({
-    root: projectRoot,
-    server: { middlewareMode: true },
-    appType: 'custom',
-    logLevel: 'silent',
-  });
+  const {
+    packageModule,
+    serviceModule,
+    adapterModule,
+    objectiveModule,
+    initialStatePolicyModule,
+    policyModule,
+    protocolModule,
+    stageGateModule,
+    canonicalModule,
+    normalAttackAuthorityModule,
+  } = await loadSharedModules(projectRoot);
 
   try {
-    const packageModule = await vite.ssrLoadModule(
-      '/src/data/verifiedCombatMechanicsPackage.js'
-    );
-    const serviceModule = await vite.ssrLoadModule(
-      '/src/machine-axis/machineAxisService.js'
-    );
-    const adapterModule = await vite.ssrLoadModule(
-      '/src/machine-axis/workbenchMachineAxisAdapter.js'
-    );
-    const objectiveModule = await vite.ssrLoadModule(
-      '/src/machine-axis/machineAxisObjectiveContract.js'
-    );
-    const initialStatePolicyModule = await vite.ssrLoadModule(
-      '/src/machine-axis/m12cInitialStatePolicy.js'
-    );
-    const policyModule = await vite.ssrLoadModule(
-      '/src/optimization-scenario/optimizationScenarioPolicy.js'
-    );
-    const protocolModule = await vite.ssrLoadModule(
-      '/src/optimization-qualification/optimizationQualificationProtocol.js'
-    );
-    const stageGateModule = await vite.ssrLoadModule(
-      '/src/optimization-qualification/optimizationQualificationStageGate.js'
-    );
-    const canonicalModule = await vite.ssrLoadModule(
-      '/src/simulation/headless/canonicalSerialization.js'
-    );
-    const normalAttackAuthorityModule = await vite.ssrLoadModule(
-      '/src/domain/verifiedNormalAttackInputAuthority.js'
-    );
-
     packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
     const service = serviceModule.createMachineAxisService();
     const adapter = adapterModule.createWorkbenchMachineAxisAdapter({
@@ -739,7 +765,7 @@ export async function createM12B3BindingMatrix({
     });
     return { report, checks, blocked };
   } finally {
-    await vite.close();
+    // shared modules are cached at module scope; nothing to close here
   }
 }
 

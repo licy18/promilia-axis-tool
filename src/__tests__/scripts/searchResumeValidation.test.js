@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   validateResumeContinuation,
   validateShardResultEnvelope,
+  validateWallTimeLedger,
 } from '../../../scripts/search-resume-validation.mjs';
 import {
   createSearchFingerprint,
@@ -375,5 +376,105 @@ describe('search resume validation (sixth-round review)', () => {
       { expectedCandidateIds: ['a'] }
     );
     expect(result).toMatchObject({ valid: true, errors: [] });
+  });
+
+  it('rejects null cumulative wall time in ledger (eleventh-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: null,
+        lastCheckpointAtMs: 1000,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 2000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('invalid-cumulative-wall-time');
+  });
+
+  it('rejects empty-string cumulative wall time in ledger (eleventh-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: '',
+        lastCheckpointAtMs: 1000,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 2000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('invalid-cumulative-wall-time');
+  });
+
+  it('rejects false cumulative wall time in ledger (eleventh-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: false,
+        lastCheckpointAtMs: 1000,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 2000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('invalid-cumulative-wall-time');
+  });
+
+  it('rejects tampered ledger via checkpoint hash (eleventh-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: 500,
+        lastCheckpointAtMs: 1000,
+        complete: false,
+        checkpointHash: 'tampered',
+      },
+      { totalBudgetMs: 10000, nowMs: 2000, hashFn: () => 'expected-hash' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('checkpoint-hash-mismatch');
+  });
+
+  it('counts tail wall time since last checkpoint on incomplete run (eleventh-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: 1000,
+        lastCheckpointAtMs: 1000,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 4000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: true, effective: 4000 });
+  });
+
+  it('rejects ledger exceeding total budget (eleventh-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: 9000,
+        lastCheckpointAtMs: 1000,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 4000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors[0]).toContain('cumulative-exceeds-budget');
+  });
+
+  it('rejects parent-shard stop reason as truncated (eleventh-round)', () => {
+    const result = validateShardResultEnvelope({
+      status: 'truncated',
+      summary: {
+        assignedCandidateCount: 1,
+        evaluatedCandidateCount: 1,
+        rejectedCandidateCount: 0,
+        unevaluatedCandidateCount: 0,
+      },
+      results: [{ candidateId: 'a' }],
+      rejections: [],
+      stopReason: 'parent-shard-wall-time-budget-exhausted',
+    });
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors[0]).toContain('truncated-invalid-stop-reason');
   });
 });

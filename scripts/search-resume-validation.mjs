@@ -137,13 +137,11 @@ export function validateShardResultEnvelope(result, options = {}) {
   }
   // 第九轮：bounded stopping 可审计——truncated 必须携带非空停止原因，complete 必须无停止原因。
   // 第十轮：stopReason 限制为 worker 实际发布的 bounded-stopping code 集合。
+  // 第十一轮：仅 worker 实际发布的 shard 级 bounded-stopping 原因（父进程/全局原因不属于 shard 信封）。
   const BOUNDED_STOP_REASONS = [
     'shard-wall-time-budget-exhausted',
-    'global-wall-time-budget-exhausted',
     'shard-evaluation-budget-exhausted',
     'shard-simulation-budget-exhausted',
-    'local-search-budget-exhausted',
-    'parent-shard-wall-time-budget-exhausted',
   ];
   if (result?.status === 'truncated' && !result?.stopReason) {
     errors.push('truncated-missing-stop-reason');
@@ -158,4 +156,56 @@ export function validateShardResultEnvelope(result, options = {}) {
     errors.push('complete-unexpected-stop-reason');
   }
   return { valid: errors.length === 0, errors };
+}
+
+// 第十一轮：预算账本校验（纯函数）——checkpointHash 防篡改；累计严格非负整数；
+// 未干净完成时把 lastCheckpointAt → now 的墙钟计入（shard 中途终止无法绕过总预算）。
+export function validateWallTimeLedger(
+  checkpoint,
+  { totalBudgetMs, nowMs, hashFn }
+) {
+  const errors = [];
+  if (
+    !checkpoint ||
+    typeof checkpoint !== 'object' ||
+    Array.isArray(checkpoint)
+  ) {
+    errors.push('missing-or-corrupt-checkpoint');
+    return { valid: false, errors, effective: null };
+  }
+  const body = { ...checkpoint };
+  delete body.checkpointHash;
+  if (
+    typeof checkpoint?.checkpointHash !== 'string' ||
+    checkpoint.checkpointHash !== hashFn(body)
+  ) {
+    errors.push('checkpoint-hash-mismatch');
+  }
+  const rawValue = checkpoint?.cumulativeWallTimeMs;
+  if (
+    typeof rawValue !== 'number' ||
+    !Number.isFinite(rawValue) ||
+    rawValue < 0 ||
+    !Number.isInteger(rawValue)
+  ) {
+    errors.push('invalid-cumulative-wall-time');
+  }
+  const lastCheckpointAt = checkpoint?.lastCheckpointAtMs;
+  if (
+    typeof lastCheckpointAt !== 'number' ||
+    !Number.isFinite(lastCheckpointAt)
+  ) {
+    errors.push('invalid-last-checkpoint-at');
+  }
+  if (errors.length > 0) {
+    return { valid: false, errors, effective: null };
+  }
+  const tailMs =
+    checkpoint?.complete === true ? 0 : Math.max(0, nowMs - lastCheckpointAt);
+  const effective = rawValue + tailMs;
+  if (effective > totalBudgetMs) {
+    errors.push('cumulative-exceeds-budget:' + effective + '>' + totalBudgetMs);
+    return { valid: false, errors, effective };
+  }
+  return { valid: true, errors: [], effective };
 }

@@ -19,6 +19,7 @@ import {
 import {
   validateResumeContinuation,
   validateShardResultEnvelope,
+  validateWallTimeLedger,
 } from './search-resume-validation.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -146,12 +147,10 @@ for (const shard of shardSet.shards) {
 const startedAt = new Date().toISOString();
 const startedAtMs = Date.now();
 // 第九轮：resume 不重置总预算——累计已用墙钟持久化于 checkpoint，只给续跑剩余预算。
-const priorCumulativeMs = resume
-  ? await readPriorCumulativeWallTime(
-      outputRoot,
-      Number(plan.budget.maxWallTimeMs)
-    )
-  : 0;
+const priorLedger = resume
+  ? await readPriorWallTimeLedger(outputRoot, Number(plan.budget.maxWallTimeMs))
+  : null;
+const priorCumulativeMs = priorLedger?.effective ?? 0;
 const remainingBudgetMs = Math.max(
   0,
   Number(plan.budget.maxWallTimeMs) - priorCumulativeMs
@@ -231,7 +230,7 @@ await writeJsonAtomically(path.join(outputRoot, 'result.json'), {
   ...aggregate,
   inputFingerprint,
 });
-await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
+const finalCheckpointBody = {
   schemaVersion: 1,
   contractName: 'AzPrMachineAxisLocalSearchCheckpoint',
   kind: 'azpr-machine-axis-local-search-checkpoint',
@@ -246,6 +245,11 @@ await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
   aggregateHash: aggregate.aggregateHash,
   complete: true,
   cumulativeWallTimeMs: priorCumulativeMs + (Date.now() - startedAtMs),
+  lastCheckpointAtMs: Date.now(),
+};
+await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
+  ...finalCheckpointBody,
+  checkpointHash: hashCanonicalValue(finalCheckpointBody),
 });
 
 process.stdout.write(
@@ -378,8 +382,9 @@ async function runShardProcess(shard, workerIndex) {
   return failure;
 }
 
-// 第十轮：resume 必须读到合法累计墙钟（非负、有限、≤ 总预算）；缺失/无效/超预算都 fail closed。
-async function readPriorCumulativeWallTime(outputRoot, totalBudgetMs) {
+// 第十一轮：resume 必须读到合法累计墙钟（checkpointHash 防篡改、严格非负整数、tail 计入）；
+// 缺失/无效/超预算都 fail closed（单一实现见 search-resume-validation.mjs 的 validateWallTimeLedger）。
+async function readPriorWallTimeLedger(outputRoot, totalBudgetMs) {
   let checkpoint = null;
   try {
     checkpoint = JSON.parse(
@@ -390,18 +395,21 @@ async function readPriorCumulativeWallTime(outputRoot, totalBudgetMs) {
       'resume rejected: checkpoint missing or corrupt; use a fresh outputRoot/runId'
     );
   }
-  const value = Number(checkpoint?.cumulativeWallTimeMs);
-  if (!Number.isFinite(value) || value < 0) {
+  const ledgerCheck = validateWallTimeLedger(checkpoint, {
+    totalBudgetMs,
+    nowMs: Date.now(),
+    hashFn: hashCanonicalValue,
+  });
+  if (!ledgerCheck.valid) {
     throw new Error(
-      'resume rejected: invalid cumulativeWallTimeMs; use a fresh outputRoot/runId'
+      `resume rejected: budget ledger invalid (${ledgerCheck.errors.join(', ')}); use a fresh outputRoot/runId`
     );
   }
-  if (value > totalBudgetMs) {
-    throw new Error(
-      `resume rejected: cumulative wall time ${value} exceeds total budget ${totalBudgetMs}`
-    );
-  }
-  return value;
+  return {
+    cumulative: Number(checkpoint.cumulativeWallTimeMs),
+    tailMs: ledgerCheck.effective - Number(checkpoint.cumulativeWallTimeMs),
+    effective: ledgerCheck.effective,
+  };
 }
 
 async function readPriorNormalizedPlan(outputRoot) {
@@ -538,7 +546,7 @@ function queueProgressWrite() {
       })),
     };
     await writeJsonAtomically(path.join(outputRoot, 'progress.json'), progress);
-    await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
+    const progressCheckpointBody = {
       schemaVersion: 1,
       contractName: 'AzPrMachineAxisLocalSearchCheckpoint',
       kind: 'azpr-machine-axis-local-search-checkpoint',
@@ -553,6 +561,12 @@ function queueProgressWrite() {
       complete: false,
       // 第十轮：运行中 checkpoint 也写累计墙钟——中断后 resume 不会把已用时间读成 0。
       cumulativeWallTimeMs: priorCumulativeMs + (Date.now() - startedAtMs),
+      // 第十一轮：预算账本 heartbeat + 内容哈希（防篡改，resume 可计最后一段墙钟）。
+      lastCheckpointAtMs: Date.now(),
+    };
+    await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
+      ...progressCheckpointBody,
+      checkpointHash: hashCanonicalValue(progressCheckpointBody),
     });
   });
   return progressWrite;

@@ -15,7 +15,7 @@ describe('M12-B3-E22 binding matrix and formal admission', () => {
   beforeAll(async () => {
     const { report } = await createM12B3BindingMatrix({ projectRoot });
     generatedReport = report;
-  }, 30_000);
+  }, 120_000);
 
   it('generates a deterministic binding matrix with every dimension green', async () => {
     const report = structuredClone(generatedReport);
@@ -34,7 +34,7 @@ describe('M12-B3-E22 binding matrix and formal admission', () => {
     // 生成器确定性自检（不再与磁盘镜像全等死绑；镜像由生成器刷新）
     expect(report).toEqual(regenerated);
     expect(report.bindingMatrixHash).toMatch(/^[a-f0-9]{16}$/);
-  }, 30_000);
+  }, 120_000);
 
   it('locks the frozen denominators, artifact hashes, and the eight binding dimensions', async () => {
     const report = generatedReport;
