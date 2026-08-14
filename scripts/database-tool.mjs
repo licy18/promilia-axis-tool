@@ -197,6 +197,43 @@ export function validate() {
   const issues = [];
   const content = readDatabaseContent();
 
+  // P2-6 修复：manifest/contentHash/schemaVersion/kind/count/重复 ID 校验
+  const manifest = fs.existsSync(MANIFEST_PATH)
+    ? readJson(MANIFEST_PATH)
+    : null;
+  if (!manifest?.contentHash) {
+    issues.push('manifest contentHash missing (run export or hash first)');
+  } else if (manifest.contentHash !== computeContentHash()) {
+    issues.push(
+      `manifest contentHash mismatch (recorded ${manifest.contentHash.slice(
+        0,
+        8
+      )}..., actual ${computeContentHash().slice(0, 8)}...) — run db:hash`
+    );
+  }
+  for (const [name, data] of Object.entries(content)) {
+    if (data.schemaVersion !== DATABASE_SCHEMA_VERSION) {
+      issues.push(`${name} schemaVersion mismatch`);
+    }
+    if (!data.kind) {
+      issues.push(`${name} kind missing`);
+    }
+    if (Array.isArray(data.items)) {
+      if (data.count !== data.items.length) {
+        issues.push(
+          `${name} count mismatch (declared ${data.count}, actual ${data.items.length})`
+        );
+      }
+      const ids = data.items.map(item => item.id);
+      const duplicates = ids.filter((value, index) => ids.indexOf(value) !== index);
+      if (duplicates.length > 0) {
+        issues.push(
+          `${name} duplicate ids: ${[...new Set(duplicates)].slice(0, 5).join(', ')}`
+        );
+      }
+    }
+  }
+
   const characterIds = new Set(
     (content.characters.items ?? []).map(item => item.id)
   );

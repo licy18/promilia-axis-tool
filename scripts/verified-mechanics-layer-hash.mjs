@@ -86,7 +86,10 @@ export const SEMANTIC_CATALOG_MECHANISM_FIELDS = Object.freeze([
   'targetTypeContract',
   'formulas',
 ]);
-export const SEMANTIC_CATALOG_DATA_FIELDS = Object.freeze(['semanticEffects']);
+export const SEMANTIC_CATALOG_DATA_FIELDS = Object.freeze([
+  'semanticEffects',
+  'summary',
+]);
 
 // 绑定数组元素的机制骨架字段（身份/变体/调度/状态/统计）。
 // 其余字段（hits/effects 内容、数值参数等）自动归入数据侧。
@@ -154,7 +157,6 @@ export const BINDING_SKELETON_FIELDS = Object.freeze({
     'controlSkillId',
     'runtimePolicy',
     'frameRate',
-    'frameCounts',
     'sourcePath',
     'logic',
     'status',
@@ -165,7 +167,6 @@ export const BINDING_SKELETON_FIELDS = Object.freeze({
     'controlSkillId',
     'runtimePolicy',
     'frameRate',
-    'frameCounts',
     'sourcePath',
     'logic',
     'status',
@@ -180,6 +181,46 @@ export const BINDING_ARRAY_KEYS = Object.freeze([
   'controlBindings',
   'actionVariantControlBindings',
 ]);
+
+// ---------------------------------------------------------------------------
+// 分区完整性（P1-2 修复）：未知顶层/语义字段必须显式归入机制或数据层，否则 fail-closed。
+// ---------------------------------------------------------------------------
+
+const UNPROJECTED_TOP_KEYS = Object.freeze([
+  'packageHash',
+  'semanticEffectCatalog',
+  'actionMappings',
+  'actionBindings',
+  'controlBindings',
+  'actionVariantControlBindings',
+]);
+
+export function assertPartitionComplete(pkg) {
+  const partitioned = new Set([
+    ...MECHANISM_TOP_KEYS,
+    ...DATA_TOP_KEYS,
+    ...UNPROJECTED_TOP_KEYS,
+  ]);
+  const unknownTopKeys = Object.keys(pkg).filter(key => !partitioned.has(key));
+  if (unknownTopKeys.length > 0) {
+    throw new Error(
+      `Mechanics layer partition incomplete: unclassified top-level keys ${unknownTopKeys.join(', ')}`
+    );
+  }
+  const semantic = pkg.semanticEffectCatalog ?? {};
+  const semanticPartitioned = new Set([
+    ...SEMANTIC_CATALOG_MECHANISM_FIELDS,
+    ...SEMANTIC_CATALOG_DATA_FIELDS,
+  ]);
+  const unknownSemanticKeys = Object.keys(semantic).filter(
+    key => !semanticPartitioned.has(key)
+  );
+  if (unknownSemanticKeys.length > 0) {
+    throw new Error(
+      `Mechanics layer partition incomplete: unclassified semanticEffectCatalog keys ${unknownSemanticKeys.join(', ')}`
+    );
+  }
+}
 
 // ---------------------------------------------------------------------------
 // 投影
@@ -243,6 +284,7 @@ export function sha256Utf8(value) {
 }
 
 export function computeLayerHashes(pkg) {
+  assertPartitionComplete(pkg);
   return {
     mechanismHash: sha256Utf8(JSON.stringify(createMechanismProjection(pkg))),
     dataVersionHash: sha256Utf8(JSON.stringify(createDataProjection(pkg))),

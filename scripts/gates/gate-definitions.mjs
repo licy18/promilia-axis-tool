@@ -74,7 +74,12 @@ const mechanismSources = [
 ];
 
 // 数值数据：决定「算什么」（生成 JSON + 访问层）
-const dataSources = ['src/data/generated/**', 'src/data/azprGenerated.js'];
+const dataSources = [
+  'src/data/generated/**',
+  'src/data/database/**',
+  'src/data/azprGenerated.js',
+  'scripts/database-tool.mjs',
+];
 const machineAxisSources = [
   'src/machine-axis/**',
   'scripts/machine-axis/**',
@@ -514,13 +519,15 @@ export const GATE_DEFINITIONS = deepFreeze([
     description: 'Workbench production projection audit',
     dependencies: [
       ...workbenchSources,
+      ...dataSources,
       'scripts/audit-workbench-production-data.mjs',
-      'src/data/generated/**',
     ],
     smartTriggers: [
       ...workbenchSources,
       'scripts/audit-workbench-production-data.mjs',
       'src/data/generated/workbench-*.json',
+      'src/data/database/**',
+      'scripts/database-tool.mjs',
     ],
   }),
   auditGate({

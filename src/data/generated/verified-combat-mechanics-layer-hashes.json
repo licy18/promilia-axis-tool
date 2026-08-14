@@ -4,8 +4,8 @@
   "packageId": "azpr-tc-2026-07-18",
   "packageVersion": 15,
   "packageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
-  "mechanismHash": "c30ad64a71af5d7b200cfa7eca05b06170f06e707a84f6a2b8bb054b4dcd76b9",
-  "dataVersionHash": "510bf472ac55a428f799fe9c2452da7098fd4bb1ae9fa51567c1d604c186a1e3",
+  "mechanismHash": "2ad82d5fd7e92d92c53eafec7c55010f266d901acfd8f0ba4c61724255427278",
+  "dataVersionHash": "9e708be0ead9cf73cdf78cd6a4835c23d4ebed80fd76bd9901e9e5d9b857fbe6",
   "projection": {
     "mechanismTopKeys": [
       "schemaVersion",
@@ -47,7 +47,8 @@
       "formulas"
     ],
     "semanticCatalogDataFields": [
-      "semanticEffects"
+      "semanticEffects",
+      "summary"
     ],
     "bindingSkeletonFields": {
       "actionMappings": [
@@ -113,7 +114,6 @@
         "controlSkillId",
         "runtimePolicy",
         "frameRate",
-        "frameCounts",
         "sourcePath",
         "logic",
         "status",
@@ -124,7 +124,6 @@
         "controlSkillId",
         "runtimePolicy",
         "frameRate",
-        "frameCounts",
         "sourcePath",
         "logic",
         "status",
