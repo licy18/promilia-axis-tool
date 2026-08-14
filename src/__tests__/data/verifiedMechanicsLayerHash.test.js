@@ -46,7 +46,6 @@ function createMiniPackage() {
         actionKind: 'normal-attack',
         runtimeHitCount: 3,
         runtimeReady: true,
-        extraNumericField: 42,
       },
     ],
     controlBindings: [
@@ -128,10 +127,9 @@ describe('verified mechanics layer hash (Step 1 分层)', () => {
     // hits/effects 内容出现在数据侧
     expect(data.controlBindings[0].hits[0].damage).toBe(100);
     expect(data.controlBindings[0].effects[0].value).toBe(0.05);
-    // 非骨架字段（extraNumericField）出现在数据侧
-    expect(data.actionMappings[0].extraNumericField).toBe(42);
-    // 机制侧不携带非骨架字段
-    expect(mechanism.actionMappings[0].extraNumericField).toBeUndefined();
+    // 非骨架对象内容（hits/effects）出现在数据侧，机制侧不携带
+    expect(data.controlBindings[0].hits[0].damage).toBe(100);
+    expect(mechanism.controlBindings[0].hits).toBeUndefined();
     // semanticEffectCatalog 拆分
     expect(mechanism.semanticEffectCatalog.formulas).toBeDefined();
     expect(mechanism.semanticEffectCatalog.semanticEffects).toBeUndefined();

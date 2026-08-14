@@ -201,6 +201,16 @@ export function validate() {
   const manifest = fs.existsSync(MANIFEST_PATH)
     ? readJson(MANIFEST_PATH)
     : null;
+  if (!manifest) {
+    issues.push('manifest missing (run export first)');
+  } else {
+    if (manifest.schemaVersion !== DATABASE_SCHEMA_VERSION) {
+      issues.push('manifest schemaVersion mismatch');
+    }
+    if (manifest.kind !== DATABASE_KIND) {
+      issues.push(`manifest kind mismatch (expected ${DATABASE_KIND})`);
+    }
+  }
   if (!manifest?.contentHash) {
     issues.push('manifest contentHash missing (run export or hash first)');
   } else if (manifest.contentHash !== computeContentHash()) {
@@ -215,8 +225,11 @@ export function validate() {
     if (data.schemaVersion !== DATABASE_SCHEMA_VERSION) {
       issues.push(`${name} schemaVersion mismatch`);
     }
-    if (!data.kind) {
-      issues.push(`${name} kind missing`);
+    const expectedKind = `azpr-edit-database-${name}`;
+    if (data.kind !== expectedKind) {
+      issues.push(
+        `${name} kind mismatch (expected ${expectedKind}, got ${data.kind ?? 'none'})`
+      );
     }
     if (Array.isArray(data.items)) {
       if (data.count !== data.items.length) {
@@ -225,10 +238,45 @@ export function validate() {
         );
       }
       const ids = data.items.map(item => item.id);
-      const duplicates = ids.filter((value, index) => ids.indexOf(value) !== index);
+      const duplicates = ids.filter(
+        (value, index) => ids.indexOf(value) !== index
+      );
       if (duplicates.length > 0) {
         issues.push(
           `${name} duplicate ids: ${[...new Set(duplicates)].slice(0, 5).join(', ')}`
+        );
+      }
+    }
+    if (Array.isArray(data.actionMappings)) {
+      const identities = data.actionMappings.map(item => item.identity);
+      const dupIdentities = identities.filter(
+        (value, index) => identities.indexOf(value) !== index
+      );
+      if (dupIdentities.length > 0) {
+        issues.push(
+          `${name} duplicate action identities: ${[...new Set(dupIdentities)].slice(0, 5).join(', ')}`
+        );
+      }
+    }
+    if (Array.isArray(data.semanticEffects)) {
+      const keys = data.semanticEffects.map(item => item.semanticKey);
+      const dupKeys = keys.filter(
+        (value, index) => keys.indexOf(value) !== index
+      );
+      if (dupKeys.length > 0) {
+        issues.push(
+          `${name} duplicate semanticKeys: ${[...new Set(dupKeys)].slice(0, 5).join(', ')}`
+        );
+      }
+    }
+    if (Array.isArray(data.formulas)) {
+      const formulaIds = data.formulas.map(item => item.formulaIdentity);
+      const dupFormulaIds = formulaIds.filter(
+        (value, index) => formulaIds.indexOf(value) !== index
+      );
+      if (dupFormulaIds.length > 0) {
+        issues.push(
+          `${name} duplicate formula identities: ${[...new Set(dupFormulaIds)].slice(0, 5).join(', ')}`
         );
       }
     }

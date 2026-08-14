@@ -195,6 +195,34 @@ const UNPROJECTED_TOP_KEYS = Object.freeze([
   'actionVariantControlBindings',
 ]);
 
+// 绑定数组里允许进数据侧的标量字段（派生状态/统计，非机制骨架）。
+// 新增的任何非骨架标量字段都必须显式列入此处或加入骨架，否则 fail-closed。
+const DATA_SCALAR_FIELDS = Object.freeze({
+  actionMappings: [
+    'classification',
+    'sourceEvidenceStatus',
+    'scenarioRuntimeStatus',
+    'scenarioResolvedHitCount',
+    'scenarioResolvedEffectCount',
+    'scenarioResolvedElementCount',
+    'complete',
+    'mechanicsClassification',
+    'timingStatus',
+    'attackInputChainStatus',
+    'attackInputSegmentCount',
+    'attackInputAppliedSegmentCount',
+    'attackInputUnresolvedSegmentCount',
+    'attackInputChainIdentity',
+    'attackInputPhaseStatus',
+    'attackInputPhaseSourceIdentity',
+    'publicActionExecutionStatus',
+    'attackInputMechanicWindowStatus',
+  ],
+  actionBindings: [],
+  controlBindings: [],
+  actionVariantControlBindings: [],
+});
+
 export function assertPartitionComplete(pkg) {
   const partitioned = new Set([
     ...MECHANISM_TOP_KEYS,
@@ -219,6 +247,22 @@ export function assertPartitionComplete(pkg) {
     throw new Error(
       `Mechanics layer partition incomplete: unclassified semanticEffectCatalog keys ${unknownSemanticKeys.join(', ')}`
     );
+  }
+  for (const arrayKey of BINDING_ARRAY_KEYS) {
+    const skeleton = new Set(BINDING_SKELETON_FIELDS[arrayKey]);
+    const allowedDataScalars = new Set(DATA_SCALAR_FIELDS[arrayKey] ?? []);
+    for (const entry of pkg[arrayKey] ?? []) {
+      for (const [key, value] of Object.entries(entry)) {
+        if (skeleton.has(key)) continue;
+        if (value === null || typeof value !== 'object') {
+          if (!allowedDataScalars.has(key)) {
+            throw new Error(
+              `Mechanics layer partition incomplete: unclassified scalar field ${arrayKey}.${key} (add to BINDING_SKELETON_FIELDS or DATA_SCALAR_FIELDS)`
+            );
+          }
+        }
+      }
+    }
   }
 }
 

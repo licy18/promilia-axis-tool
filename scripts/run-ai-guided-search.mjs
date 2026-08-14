@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+import { createSearchFingerprint } from './search-fingerprint.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, '..');
@@ -130,16 +131,22 @@ try {
     result,
     guidanceApplication,
   });
+  // 问题 1：每次搜索输出携带 5 指纹，供 plan/checkpoint/shard/Top-N 内嵌与启动/resume/聚合/replay 比对。
+  const inputFingerprint = createSearchFingerprint();
+  const fingerprintedFeedback = feedback
+    ? { ...feedback, inputFingerprint }
+    : { inputFingerprint };
   if (feedbackOutput) {
     await fs.writeFile(
       path.join(projectRoot, feedbackOutput),
-      `${JSON.stringify(feedback, null, 2)}\n`,
+      `${JSON.stringify(fingerprintedFeedback, null, 2)}\n`,
       'utf8'
     );
   }
   process.stdout.write(
     `${JSON.stringify(
       {
+        inputFingerprint,
         objective: result.summary?.objective,
         guidanceHash: result.summary?.guidance?.guidanceHash ?? null,
         appliedRules: result.summary?.guidance?.appliedRules ?? [],

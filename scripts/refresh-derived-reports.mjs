@@ -69,17 +69,41 @@ function run(commands) {
 const REQUIRED_REPORTS = Object.freeze([
   'reports/verified-combat-mechanics-audit.json',
   'reports/verified-combat-action-coverage.json',
+  'reports/verified-combat-action-timing-coverage.json',
+  'reports/verified-combat-effect-coverage.json',
+  'reports/verified-action-variant-resource-coverage.json',
+  'reports/verified-derived-control-coverage.json',
+  'reports/verified-public-runtime-coverage.json',
+  'reports/verified-switch-trigger-coverage.json',
+  'reports/applied-source-binding-audit.json',
+  'reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json',
+  'reports/m9-r3-r2-r2-xiaoyu-hidden-input-audit.json',
+  'reports/m9-r3-r2-r3-contextual-input-scheduling-audit.json',
   'reports/m10/101010/golden-trace.json',
+  'reports/m10/101010/runtime-coverage.json',
+  'reports/m10/102001/golden-trace.json',
+  'reports/m10/102001/runtime-coverage.json',
   'reports/m10/103002/golden-trace.json',
+  'reports/m10/101003/ultimate-controlled-buff-switch-golden.json',
+  'reports/m10/101003/golden-trace.json',
   'reports/m11/character-acceptance/101010/manifest.json',
+  'reports/m11/character-acceptance/199001/manifest.json',
+  'reports/m11/character-acceptance/199001/scenario-cases.json',
+  'reports/m11/character-acceptance/199002/manifest.json',
+  'reports/m11/character-acceptance/199002/scenario-cases.json',
+  'reports/m11/character-acceptance/199002/scenario-matrix.json',
   'reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json',
   'reports/m12/m12-b3-binding-matrix.json',
   'reports/m12/m12-b3-optimization-qualification-summary.json',
   'reports/m12/visual-acceptance/manifests/equipment/1010111.json',
+  'reports/kibo-headless/kibo-maturity-matrix.json',
+  'reports/kibo-headless/kibo-mechanics-census.json',
 ]);
 
 function missingRequiredReports() {
-  return REQUIRED_REPORTS.filter(file => !fs.existsSync(path.join(REPO_ROOT, file)));
+  return REQUIRED_REPORTS.filter(
+    file => !fs.existsSync(path.join(REPO_ROOT, file))
+  );
 }
 
 const args = process.argv.slice(2);
@@ -96,7 +120,9 @@ if (args.includes('--ensure')) {
     process.stdout.write('All required derived reports present.\n');
     process.exit(0);
   }
-  process.stdout.write(`Missing derived reports (${missing.length}): ${missing.join(', ')}\n`);
+  process.stdout.write(
+    `Missing derived reports (${missing.length}): ${missing.join(', ')}\n`
+  );
   process.stdout.write('Regenerating full derived reports...\n');
   const failed = run([...FULL_COMMANDS, ...LIGHT_COMMANDS]);
   process.exitCode = failed ? 1 : 0;
