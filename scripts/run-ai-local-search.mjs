@@ -39,22 +39,42 @@ if (pollutedInputs.has(planPath.toLowerCase())) {
 }
 await prepareOutputRoot(outputRoot, resume);
 
-// P1-3：冻结数据库快照到 run 目录——worker 读冻结副本（不可变），fingerprint 基于冻结快照计算。
-const frozenDatabaseDir = await freezeDatabase(outputRoot);
-// P1-2：本 run 的输入指纹（基于冻结快照），嵌入 plan/shard/result/checkpoint，resume 时 fail-closed 比对。
-const inputFingerprint = createSearchFingerprint({ databaseDir: frozenDatabaseDir });
-// P1-4：resume 时先校验既有 run 的 authority/数据库指纹，不一致直接拒绝（不覆盖原目录）。
+// P1-3：先只读校验既有 run，再决定冻结/复用——resume 不覆盖原冻结证据。
+const existingFrozenDir = path.join(outputRoot, 'frozen-database');
 if (resume) {
   const priorFingerprint = await readPriorRunFingerprint(outputRoot);
+  const hasExistingFrozen = await fs
+    .access(existingFrozenDir)
+    .then(() => true)
+    .catch(() => false);
+  const currentForCheck = createSearchFingerprint({
+    databaseDir: hasExistingFrozen ? existingFrozenDir : undefined,
+  });
   if (priorFingerprint) {
-    const priorCheck = verifyArtifactFingerprint(priorFingerprint, inputFingerprint);
+    const priorCheck = verifyArtifactFingerprint(
+      priorFingerprint,
+      currentForCheck
+    );
     if (!priorCheck.valid) {
       throw new Error(
         `resume authority mismatch (${priorCheck.mismatches.join(', ')}) — use a fresh outputRoot/runId`
       );
     }
   }
+  if (!hasExistingFrozen) {
+    throw new Error(
+      'resume requested but no frozen database exists; use a fresh outputRoot/runId'
+    );
+  }
 }
+// P1-3：resume 复用原冻结快照（不重新复制现场数据库）；新 run 才冻结。
+const frozenDatabaseDir = resume
+  ? existingFrozenDir
+  : await freezeDatabase(outputRoot);
+// P1-2：本 run 的输入指纹（基于冻结快照），嵌入 plan/shard/result/checkpoint，resume 时 fail-closed 比对。
+const inputFingerprint = createSearchFingerprint({
+  databaseDir: frozenDatabaseDir,
+});
 const rawPlan = JSON.parse(await fs.readFile(planPath, 'utf8'));
 const plan = normalizeMachineAxisCoarsePlan(rawPlan);
 const candidateSet = createMachineAxisLocalCandidates(plan);
@@ -264,10 +284,18 @@ async function runShardProcess(shard, workerIndex) {
         result,
         inputFingerprint
       ).valid;
+      // P1-4：fresh shard 也验证 resultHash（删 resultHash 后重算 canonical hash），与 resume 同一逻辑。
+      const resultPayload = structuredClone(result);
+      const declaredResultHash = resultPayload.resultHash;
+      delete resultPayload.resultHash;
+      const resultHashOk =
+        typeof declaredResultHash === 'string' &&
+        declaredResultHash === hashCanonicalValue(resultPayload);
       if (
         result.shardId === shard.shardId &&
         result.planHash === plan.planHash &&
-        resultFingerprintOk
+        resultFingerprintOk &&
+        resultHashOk
       ) {
         return result;
       }
@@ -291,7 +319,11 @@ async function runShardProcess(shard, workerIndex) {
 }
 
 async function readPriorRunFingerprint(outputRoot) {
-  for (const candidate of ['checkpoint.json', 'progress.json', 'plan.normalized.json']) {
+  for (const candidate of [
+    'checkpoint.json',
+    'progress.json',
+    'plan.normalized.json',
+  ]) {
     const filePath = path.join(outputRoot, candidate);
     try {
       const parsed = JSON.parse(await fs.readFile(filePath, 'utf8'));

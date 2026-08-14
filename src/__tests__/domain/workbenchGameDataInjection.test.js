@@ -68,4 +68,66 @@ describe('workbench injected gameData (P1-2)', () => {
       .filter(Boolean);
     expect(seedNames).not.toContain('INJECTED_HERO_' + originalName);
   });
+
+  it('injected enemy MAXHP drives the project enemy (P2-5)', () => {
+    const dbGameData = loadDatabaseGameData();
+    const injected = structuredClone(dbGameData);
+    const enemy = injected.enemies[0];
+    const maxHp = enemy.property.baseAttributes.find(
+      attr => attr.key === 'MAXHP'
+    );
+    maxHp.value = 987654321;
+
+    setWorkbenchInjectedGameData(injected);
+    const project = createWorkbenchProject(
+      {
+        characterId: injected.characters[0].id,
+        secondaryCharacterId: injected.characters[1]?.id,
+        enemyId: enemy.id,
+      },
+      { durationMs: 30000 }
+    );
+
+    const enemyMaxHp = project.enemy?.baseAttributes?.find(
+      attr => attr.key === 'MAXHP'
+    );
+    expect(enemyMaxHp?.value).toBe(987654321);
+  });
+
+  it('injected equipment id is accepted by loadout normalization (P2-5)', () => {
+    const dbGameData = loadDatabaseGameData();
+    const injected = structuredClone(dbGameData);
+    const equipment = injected.equipment.find(item => item.type === '武器');
+    expect(equipment).toBeDefined();
+
+    setWorkbenchInjectedGameData(injected);
+    const project = createWorkbenchProject(
+      {
+        characterId: injected.characters[0].id,
+        secondaryCharacterId: injected.characters[1]?.id,
+        enemyId: injected.enemies[0]?.id,
+      },
+      {
+        durationMs: 30000,
+        teamSlots: [
+          {
+            slotId: 'team-slot-1',
+            position: 0,
+            characterId: injected.characters[0].id,
+          },
+        ],
+        actorConfigs: [
+          {
+            characterId: injected.characters[0].id,
+            loadout: {
+              equipment: { weapon: equipment.id },
+            },
+          },
+        ],
+      }
+    );
+
+    const firstActor = project.actors[0];
+    expect(firstActor.loadout.equipment.weapon).toBe(equipment.id);
+  });
 });

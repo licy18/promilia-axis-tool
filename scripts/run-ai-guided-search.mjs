@@ -7,6 +7,23 @@ import { createSearchFingerprint } from './search-fingerprint.mjs';
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, '..');
 
+async function freezeDatabase() {
+  const frozenDir = path.join(
+    projectRoot,
+    'work',
+    'm12-c',
+    `frozen-database-${Date.now()}`
+  );
+  await fs.mkdir(frozenDir, { recursive: true });
+  const sourceDir = path.join(projectRoot, 'src', 'data', 'database');
+  for (const file of await fs.readdir(sourceDir)) {
+    if (file.endsWith('.json')) {
+      await fs.copyFile(path.join(sourceDir, file), path.join(frozenDir, file));
+    }
+  }
+  return frozenDir;
+}
+
 const readJson = async file =>
   JSON.parse(await fs.readFile(path.join(projectRoot, file), 'utf8'));
 
@@ -60,12 +77,22 @@ const effectiveGuidance =
 const outerOptions = outerOptionsJson ? JSON.parse(outerOptionsJson) : null;
 const initialState = initialStateJson ? JSON.parse(initialStateJson) : null;
 
+// P1-2：启动前冻结数据库快照——评分与最终输出只消费该冻结目录，运行中数据库变化不影响结果与指纹。
+const frozenDatabaseDir = await freezeDatabase();
+const inputFingerprint = createSearchFingerprint({
+  databaseDir: frozenDatabaseDir,
+});
+
 const mechanicsPackage = await readJson(
   'src/data/generated/verified-combat-mechanics-package.json'
 );
-// P1-3b：评分输入使用数据库快照（可编辑数值），覆盖 package 中对应的动作目录/效果/控制绑定。
-const databaseActions = await readJson('src/data/database/actions.json');
-const databaseEffects = await readJson('src/data/database/effects.json');
+// P1-3b：评分输入使用冻结数据库快照（可编辑数值），覆盖 package 中对应的动作目录/效果/控制绑定。
+const databaseActions = await readJson(
+  path.join(frozenDatabaseDir, 'actions.json')
+);
+const databaseEffects = await readJson(
+  path.join(frozenDatabaseDir, 'effects.json')
+);
 mechanicsPackage.actionMappings = databaseActions.actionMappings;
 mechanicsPackage.controlBindings = databaseActions.controlBindings;
 mechanicsPackage.actionVariantControlBindings =
@@ -76,14 +103,16 @@ mechanicsPackage.semanticEffectCatalog = {
   semanticEffects: databaseEffects.semanticEffects,
 };
 // P1-2：构造完整数据库 gameData（角色/技能/奇波/敌人/元素/装备/魂精），供评分 project/loadout 消费。
+const readFrozen = name =>
+  readJson(path.join(frozenDatabaseDir, `${name}.json`));
 const dbGameData = {
-  characters: (await readJson('src/data/database/characters.json')).items,
-  skills: (await readJson('src/data/database/skills.json')).items,
-  kibos: (await readJson('src/data/database/kibos.json')).items,
-  enemies: (await readJson('src/data/database/enemies.json')).items,
-  elements: (await readJson('src/data/database/elements.json')).items,
-  equipment: (await readJson('src/data/database/equipment.json')).items,
-  soulessences: (await readJson('src/data/database/soulessences.json')).items,
+  characters: (await readFrozen('characters')).items,
+  skills: (await readFrozen('skills')).items,
+  kibos: (await readFrozen('kibos')).items,
+  enemies: (await readFrozen('enemies')).items,
+  elements: (await readFrozen('elements')).items,
+  equipment: (await readFrozen('equipment')).items,
+  soulessences: (await readFrozen('soulessences')).items,
 };
 const vite = await createServer({
   root: projectRoot,
@@ -160,7 +189,7 @@ try {
     guidanceApplication,
   });
   // 问题 1：每次搜索输出携带 5 指纹，供 plan/checkpoint/shard/Top-N 内嵌与启动/resume/聚合/replay 比对。
-  const inputFingerprint = createSearchFingerprint();
+  // P1-2：inputFingerprint 已在启动冻结时基于冻结快照计算，此处复用。
   const fingerprintedFeedback = feedback
     ? { ...feedback, inputFingerprint }
     : { inputFingerprint };

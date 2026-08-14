@@ -754,7 +754,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     effectiveGameData().characters,
     normalized.secondaryCharacterId
   );
-  const enemy = findById(WORKBENCH_ENEMIES, normalized.enemyId);
+  const enemy = findById(effectiveGameData().enemies, normalized.enemyId);
   const actionDrafts = normalizeWorkbenchActionDrafts(
     actionPatch.actions ?? [actionPatch],
     normalized,
@@ -799,7 +799,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
   const timelineTopology = createWorkbenchTimelineTopology({
     teamSlots,
     actorConfigs,
-    kibos: WORKBENCH_KIBOS,
+    kibos: effectiveGameData().kibos,
     enemyId: normalized.enemyId,
   });
 
@@ -1285,7 +1285,7 @@ function createProjectActionFromDraft(
 
   if (draft.type === ACTION_TYPES.KIBO_EVENT) {
     const kiboId = positiveIntegerOrNull(sourceActor?.loadout?.kiboId);
-    const kibo = findById(WORKBENCH_KIBOS, kiboId);
+    const kibo = findById(effectiveGameData().kibos, kiboId);
     return createKiboEventAction({
       id: draft.id,
       actorId: sourceActor.id,
@@ -1621,7 +1621,7 @@ function normalizeEquipmentId(value, slotKey) {
   if (!Number.isFinite(id) || !expectedType) {
     return null;
   }
-  return WORKBENCH_EQUIPMENT.some(
+  return effectiveGameData().equipment.some(
     item => Number(item.id) === id && item.type === expectedType
   )
     ? id
