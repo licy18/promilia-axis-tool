@@ -160,6 +160,7 @@ export function validateShardResultEnvelope(result, options = {}) {
 
 // 第十一轮：预算账本校验（纯函数）——checkpointHash 防篡改；累计严格非负整数；
 // 未干净完成时把 lastCheckpointAt → now 的墙钟计入（shard 中途终止无法绕过总预算）。
+// 第十二轮：lastCheckpointAtMs 必须是非负整数且不晚于 nowMs——未来时间戳不得免除尾段墙钟。
 export function validateWallTimeLedger(
   checkpoint,
   { totalBudgetMs, nowMs, hashFn }
@@ -193,15 +194,21 @@ export function validateWallTimeLedger(
   const lastCheckpointAt = checkpoint?.lastCheckpointAtMs;
   if (
     typeof lastCheckpointAt !== 'number' ||
-    !Number.isFinite(lastCheckpointAt)
+    !Number.isFinite(lastCheckpointAt) ||
+    lastCheckpointAt < 0 ||
+    !Number.isInteger(lastCheckpointAt)
   ) {
     errors.push('invalid-last-checkpoint-at');
   }
   if (errors.length > 0) {
     return { valid: false, errors, effective: null };
   }
-  const tailMs =
-    checkpoint?.complete === true ? 0 : Math.max(0, nowMs - lastCheckpointAt);
+  // 第十二轮：未来时间戳 fail-closed——不允许 Math.max(0, now-last) 把负尾段豁免成零。
+  if (lastCheckpointAt > nowMs) {
+    errors.push('last-checkpoint-at-in-future');
+    return { valid: false, errors, effective: null };
+  }
+  const tailMs = checkpoint?.complete === true ? 0 : nowMs - lastCheckpointAt;
   const effective = rawValue + tailMs;
   if (effective > totalBudgetMs) {
     errors.push('cumulative-exceeds-budget:' + effective + '>' + totalBudgetMs);

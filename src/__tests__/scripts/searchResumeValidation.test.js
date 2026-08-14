@@ -477,4 +477,59 @@ describe('search resume validation (sixth-round review)', () => {
     expect(result).toMatchObject({ valid: false });
     expect(result.errors[0]).toContain('truncated-invalid-stop-reason');
   });
+
+  it('rejects a future lastCheckpointAt timestamp in ledger (twelfth-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: 1000,
+        lastCheckpointAtMs: 5000,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 2000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('last-checkpoint-at-in-future');
+  });
+
+  it('rejects a non-integer lastCheckpointAt timestamp in ledger (twelfth-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: 1000,
+        lastCheckpointAtMs: 1000.5,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 2000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('invalid-last-checkpoint-at');
+  });
+
+  it('rejects a negative lastCheckpointAt timestamp in ledger (twelfth-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: 1000,
+        lastCheckpointAtMs: -5,
+        complete: false,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 2000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('invalid-last-checkpoint-at');
+  });
+
+  it('accepts a complete ledger regardless of stale timestamp (twelfth-round)', () => {
+    const result = validateWallTimeLedger(
+      {
+        cumulativeWallTimeMs: 1000,
+        lastCheckpointAtMs: 500,
+        complete: true,
+        checkpointHash: 'x',
+      },
+      { totalBudgetMs: 10000, nowMs: 4000, hashFn: () => 'x' }
+    );
+    expect(result).toMatchObject({ valid: true, effective: 1000 });
+  });
 });

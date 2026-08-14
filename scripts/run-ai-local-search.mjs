@@ -42,10 +42,11 @@ const pollutedInputs = new Set(
 if (pollutedInputs.has(planPath.toLowerCase())) {
   throw new Error('refusing known polluted M12-C search input');
 }
-await prepareOutputRoot(outputRoot, resume);
 
-// P1-3：先只读校验既有 run，再决定冻结/复用——resume 不覆盖原冻结证据。
+// 第十二轮：resume preflight 全部只读并前移到任何 mkdir/copy/write 之前——
+// 指纹/plan/预算账本任一校验失败都不得留下被改写的续跑证据。
 const existingFrozenDir = path.join(outputRoot, 'frozen-database');
+let priorLedger = null;
 if (resume) {
   // P1-2/P1-3：缺失指纹、指纹不匹配、planHash 不匹配均拒绝（单一实现见 search-resume-validation.mjs）。
   // 第八轮：所有存在产物（checkpoint/progress/plan）的指纹逐一独立认证——
@@ -107,7 +108,16 @@ if (resume) {
       'resume requested but no frozen database exists; use a fresh outputRoot/runId'
     );
   }
+  // 第十一轮：resume 不重置总预算——累计墙钟持久化于 checkpoint；第十二轮：账本校验纳入只读 preflight，
+  // 在 prepareOutputRoot/冻结/写 plan/manifests/shard 之前执行，损坏或超预算 checkpoint 拒绝时不留污染。
+  priorLedger = await readPriorWallTimeLedger(
+    outputRoot,
+    Number(newPlan.budget.maxWallTimeMs)
+  );
 }
+
+// 第十二轮：全部 resume preflight 通过后才允许写操作。
+await prepareOutputRoot(outputRoot, resume);
 // P1-3：resume 复用原冻结快照（不重新复制现场数据库）；新 run 才冻结。
 const frozenDatabaseDir = resume
   ? existingFrozenDir
@@ -147,9 +157,7 @@ for (const shard of shardSet.shards) {
 const startedAt = new Date().toISOString();
 const startedAtMs = Date.now();
 // 第九轮：resume 不重置总预算——累计已用墙钟持久化于 checkpoint，只给续跑剩余预算。
-const priorLedger = resume
-  ? await readPriorWallTimeLedger(outputRoot, Number(plan.budget.maxWallTimeMs))
-  : null;
+// 第十二轮：账本已在只读 preflight 校验（priorLedger），此处直接消费有效累计值。
 const priorCumulativeMs = priorLedger?.effective ?? 0;
 const remainingBudgetMs = Math.max(
   0,
@@ -230,6 +238,7 @@ await writeJsonAtomically(path.join(outputRoot, 'result.json'), {
   ...aggregate,
   inputFingerprint,
 });
+const checkpointAtMs = Date.now();
 const finalCheckpointBody = {
   schemaVersion: 1,
   contractName: 'AzPrMachineAxisLocalSearchCheckpoint',
@@ -244,8 +253,8 @@ const finalCheckpointBody = {
   })),
   aggregateHash: aggregate.aggregateHash,
   complete: true,
-  cumulativeWallTimeMs: priorCumulativeMs + (Date.now() - startedAtMs),
-  lastCheckpointAtMs: Date.now(),
+  cumulativeWallTimeMs: priorCumulativeMs + (checkpointAtMs - startedAtMs),
+  lastCheckpointAtMs: checkpointAtMs,
 };
 await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
   ...finalCheckpointBody,
@@ -546,6 +555,7 @@ function queueProgressWrite() {
       })),
     };
     await writeJsonAtomically(path.join(outputRoot, 'progress.json'), progress);
+    const checkpointAtMs = Date.now();
     const progressCheckpointBody = {
       schemaVersion: 1,
       contractName: 'AzPrMachineAxisLocalSearchCheckpoint',
@@ -560,9 +570,10 @@ function queueProgressWrite() {
       })),
       complete: false,
       // 第十轮：运行中 checkpoint 也写累计墙钟——中断后 resume 不会把已用时间读成 0。
-      cumulativeWallTimeMs: priorCumulativeMs + (Date.now() - startedAtMs),
+      cumulativeWallTimeMs: priorCumulativeMs + (checkpointAtMs - startedAtMs),
       // 第十一轮：预算账本 heartbeat + 内容哈希（防篡改，resume 可计最后一段墙钟）。
-      lastCheckpointAtMs: Date.now(),
+      // 第十二轮：累计值与时间戳取自同一个 checkpointAtMs，避免两拍之间墙钟漂移。
+      lastCheckpointAtMs: checkpointAtMs,
     };
     await writeJsonAtomically(path.join(outputRoot, 'checkpoint.json'), {
       ...progressCheckpointBody,
