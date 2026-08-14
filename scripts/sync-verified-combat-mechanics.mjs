@@ -16,6 +16,7 @@ import {
   createVerifiedChargedPhysicalInputContract,
   resolveVerifiedChargedInputAuthority,
 } from '../src/domain/verifiedChargedInputAuthority.js';
+import { createLayerHashesRecord } from './verified-mechanics-layer-hash.mjs';
 import { createCharacterCombatOutputRecords } from './character-combat/character-combat-profile-pipeline.mjs';
 import { createCharacterCombatStatDependencies } from './character-combat/character-combat-contract-compiler.mjs';
 import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
@@ -67,6 +68,10 @@ const RUNTIME_OUTPUT = path.join(
 const PACKAGE_OUTPUT = path.join(
   GENERATED_ROOT,
   'verified-combat-mechanics-package.json'
+);
+const LAYER_HASH_OUTPUT = path.join(
+  GENERATED_ROOT,
+  'verified-combat-mechanics-layer-hashes.json'
 );
 const SP_UNIT_CONTRACT_OUTPUT = path.join(
   GENERATED_ROOT,
@@ -962,6 +967,10 @@ export async function createVerifiedCombatMechanicsBuild({
 
   const outputs = [
     [PACKAGE_OUTPUT, `${JSON.stringify(packageValue, null, 2)}\n`],
+    [
+      LAYER_HASH_OUTPUT,
+      `${JSON.stringify(createLayerHashesRecord(packageValue), null, 2)}\n`,
+    ],
     [SP_UNIT_CONTRACT_OUTPUT, `${JSON.stringify(spUnitContract, null, 2)}\n`],
     [SP_UNIT_RUNTIME_OUTPUT, createSpUnitRuntimeSource(spUnitContract)],
     [RUNTIME_OUTPUT, runtimeSource],
