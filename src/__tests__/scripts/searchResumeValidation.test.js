@@ -574,4 +574,71 @@ describe('search resume validation (sixth-round review)', () => {
     expect(result).toMatchObject({ valid: false });
     expect(result.errors).toContain('missing-current-fingerprint');
   });
+
+  it('rejects when both sides omit the same field (fifteenth-round)', () => {
+    // 双方同缺 packageHash：不得因 undefined === undefined 而通过。
+    const expected = {
+      authorityHead: 'a',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+    };
+    const current = {
+      authorityHead: 'a',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+    };
+    const result = validateFingerprintUnchanged(expected, current);
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-expected:packageHash');
+  });
+
+  it('rejects a partial expected fingerprint object (fifteenth-round)', () => {
+    const expected = { authorityHead: 'a' };
+    const current = {
+      authorityHead: 'a',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+      packageHash: 'e',
+    };
+    const result = validateFingerprintUnchanged(expected, current);
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-expected:databaseContentHash');
+  });
+
+  it('rejects a partial current fingerprint object (fifteenth-round)', () => {
+    const expected = {
+      authorityHead: 'a',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+      packageHash: 'e',
+    };
+    const current = { authorityHead: 'a' };
+    const result = validateFingerprintUnchanged(expected, current);
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-current:databaseContentHash');
+  });
+
+  it('rejects an empty-string fingerprint field (fifteenth-round)', () => {
+    const expected = {
+      authorityHead: '',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+      packageHash: 'e',
+    };
+    const current = {
+      authorityHead: 'a',
+      databaseContentHash: 'b',
+      mechanismHash: 'c',
+      dataVersionHash: 'd',
+      packageHash: 'e',
+    };
+    const result = validateFingerprintUnchanged(expected, current);
+    expect(result).toMatchObject({ valid: false });
+    expect(result.errors).toContain('missing-expected:authorityHead');
+  });
 });

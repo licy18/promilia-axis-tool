@@ -121,6 +121,12 @@ if (resume) {
   // 第十三轮：只记录 preflight 已验证的 plan 与指纹；后续任何写入都不得重新读取 planPath/数据库。
   validatedPlan = newPlan;
   validatedFingerprint = currentForCheck;
+  // 第十五轮：resume 在 prepareOutputRoot 的 mkdir 之前就复验指纹——任何写操作（含 mkdir）前拒绝漂移。
+  await assertFingerprintUnchanged(
+    validatedFingerprint,
+    existingFrozenDir,
+    'preflight-write'
+  );
 }
 
 // 第十二轮：全部 resume preflight 通过后才允许写操作。
@@ -143,15 +149,13 @@ const candidateSet = createMachineAxisLocalCandidates(plan);
 const shardSet = createMachineAxisLocalSearchShards(plan, candidateSet);
 const inputDirectory = path.join(outputRoot, 'shards', 'input');
 const resultDirectory = path.join(outputRoot, 'shards', 'result');
-// 第十四轮：任何写操作（含 mkdir）之前复算当前指纹并比对 preflight 快照——preflight 后若 HEAD/数据库/包
-// 漂移，即使无待执行 shard（不会启动 worker 复验）也在此拒绝，禁止写出带旧指纹的产物或污染目录。
-if (resume) {
-  await assertFingerprintUnchanged(
-    validatedFingerprint,
-    frozenDatabaseDir,
-    'shard-write'
-  );
-}
+// 第十四轮：任何写操作（含 mkdir）之前复算当前指纹并比对快照；第十五轮：无条件执行——fresh run 也
+// 必须在 shard 写入前确认现场指纹仍等于本 run 输入指纹（worker 只启动时检查一次，父进程负责兜底）。
+await assertFingerprintUnchanged(
+  inputFingerprint,
+  frozenDatabaseDir,
+  'shard-write'
+);
 await fs.mkdir(inputDirectory, { recursive: true });
 await fs.mkdir(resultDirectory, { recursive: true });
 await writeJsonAtomically(path.join(outputRoot, 'plan.normalized.json'), {
@@ -244,14 +248,13 @@ const aggregate = createMachineAxisLocalSearchAggregate({
   startedAt,
   endedAt,
 });
-// 第十四轮：最终聚合前再次复算指纹——resume 无待执行 shard 时 worker 不会启动，此处是最后防线。
-if (resume) {
-  await assertFingerprintUnchanged(
-    validatedFingerprint,
-    frozenDatabaseDir,
-    'final-aggregation'
-  );
-}
+// 第十四轮：最终聚合前再次复算指纹；第十五轮：无条件执行——fresh/resume 都要在写出 result/checkpoint 前
+// 确认现场指纹未漂移（worker 只启动时检查一次；无待执行 shard 时此处是唯一防线）。
+await assertFingerprintUnchanged(
+  inputFingerprint,
+  frozenDatabaseDir,
+  'final-aggregation'
+);
 const hardFailure = shardResults.some(shard =>
   ['failed', 'timed-out'].includes(shard.status)
 );

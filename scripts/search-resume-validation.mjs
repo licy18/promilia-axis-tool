@@ -163,7 +163,7 @@ export function validateShardResultEnvelope(result, options = {}) {
 // 第十二轮：lastCheckpointAtMs 必须是非负整数且不晚于 nowMs——未来时间戳不得免除尾段墙钟。
 
 // 第十四轮：复算当前指纹并比对 preflight 快照（纯函数，fail-closed）——捕获 preflight 后 HEAD/数据库/包漂移。
-// expectedFingerprint 为 preflight 时已验证的指纹对象；current 为当前现场重算结果。
+// 第十五轮：逐字段要求 expected/current 均为合法非空字符串，再比较值——双方同缺字段不得静默通过。
 export function validateFingerprintUnchanged(expectedFingerprint, current) {
   const errors = [];
   if (!expectedFingerprint || typeof expectedFingerprint !== 'object') {
@@ -182,7 +182,17 @@ export function validateFingerprintUnchanged(expectedFingerprint, current) {
     'packageHash',
   ];
   for (const field of fields) {
-    if (expectedFingerprint[field] !== current[field]) {
+    const expectedValue = expectedFingerprint[field];
+    const currentValue = current[field];
+    if (typeof expectedValue !== 'string' || expectedValue.length === 0) {
+      errors.push('missing-expected:' + field);
+      continue;
+    }
+    if (typeof currentValue !== 'string' || currentValue.length === 0) {
+      errors.push('missing-current:' + field);
+      continue;
+    }
+    if (expectedValue !== currentValue) {
       errors.push('fingerprint-drift:' + field);
     }
   }
