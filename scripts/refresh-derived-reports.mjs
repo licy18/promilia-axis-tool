@@ -54,7 +54,9 @@ function run(commands) {
     } else {
       failed += 1;
       process.stderr.write(`  FAILED (exit ${result.status ?? 'signal'})\n`);
-      process.stderr.write(`  ${(result.stderr || '').split('\n').slice(-5).join('\n')}\n`);
+      process.stderr.write(
+        `  ${(result.stderr || '').split('\n').slice(-5).join('\n')}\n`
+      );
     }
   }
   return failed;
@@ -73,5 +75,7 @@ const commands = args.includes('--full')
   : [...LIGHT_COMMANDS];
 process.stdout.write('Refreshing derived reports...\n');
 const failed = run(commands);
-process.stdout.write(failed ? `\nDone with ${failed} failures\n` : '\nAll refreshed\n');
+process.stdout.write(
+  failed ? `\nDone with ${failed} failures\n` : '\nAll refreshed\n'
+);
 process.exitCode = failed ? 1 : 0;

@@ -1,0 +1,2035 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-edit-database-soulessences",
+  "count": 62,
+  "items": [
+    {
+      "id": 10001,
+      "name": "汁石就是力量",
+      "icons": {
+        "large": "tex_icon_soulessenceb_199003_001.png",
+        "small": "tex_icon_soulessences_199003_001.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "臣服于大探险家之锤的力量吧！\n毕竟，就连坚硬的汁石也会为之而颤抖...",
+      "skill": {
+        "name": "诺诺-汁石就是力量",
+        "description": "携带者每次释放重击后，使架势破坏效率提高11.2%，持续5秒，最多可以叠加4层。",
+        "maxRankDescription": "携带者每次释放重击后，使架势破坏效率提高22.3%，持续5秒，最多可以叠加4层。"
+      },
+      "relatedCharacters": [
+        "诺诺"
+      ]
+    },
+    {
+      "id": 10002,
+      "name": "家书",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107001_002.png",
+        "small": "tex_icon_soulessences_107001_002.png"
+      },
+      "rarity": "SR",
+      "profession": "爆发",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "风语树叶再一次带来了洛斯兰瑟的讯息。\n随风而来的，还有新生的希望。",
+      "skill": {
+        "name": "西芙莉雅-家书",
+        "description": "携带者释放星鸣技时，自身风属性伤害提升12.2%，持续12秒。",
+        "maxRankDescription": "携带者释放星鸣技时，自身风属性伤害提升24.3%，持续12秒。"
+      },
+      "relatedCharacters": [
+        "西芙莉雅"
+      ]
+    },
+    {
+      "id": 10008,
+      "name": "可以吃吗",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107003_008.png",
+        "small": "tex_icon_soulessences_107003_008.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "暴击率",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "176",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1709",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "夏露露村的兽栏里饲养着擅长驮运的加杜。\n平日，除了照看加杜的村民，基本无人会特意到兽栏附近。\n然而，今日的兽栏迎来了一位不速之客——",
+      "skill": {
+        "name": "阿比-可以吃吗",
+        "description": "携带者重击消耗水属性调谐印记或木属性调谐印记时，架势破坏效率提升44.6%，持续12秒。",
+        "maxRankDescription": "携带者重击消耗水属性调谐印记或木属性调谐印记时，架势破坏效率提升89.3%，持续12秒。"
+      },
+      "relatedCharacters": [
+        "阿比"
+      ]
+    },
+    {
+      "id": 10011,
+      "name": "功夫是这样的！",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101007_011.png",
+        "small": "tex_icon_soulessences_101007_011.png"
+      },
+      "rarity": "SR",
+      "profession": "爆发",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "176",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1709",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "28.6%"
+      },
+      "description": "镜花州的帕米武学大师正在练习自己的秘密招式...\n「才不是基本功！嗷嗷嗷，腿、腿麻了」",
+      "skill": {
+        "name": "芃芃-功夫是这样的！",
+        "description": "携带者普攻暴击时，提升自身12.2%火属性伤害，持续24秒。",
+        "maxRankDescription": "携带者普攻暴击时，提升自身24.3%火属性伤害，持续24秒。"
+      },
+      "relatedCharacters": [
+        "芃芃"
+      ]
+    },
+    {
+      "id": 10018,
+      "name": "飞行试验",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108003_018.png",
+        "small": "tex_icon_soulessences_108003_018.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "调谐强度",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "176",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1709",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "鸟群惊飞，枝叶摇动。\n少女不甘的抱怨隐约传来。\n「可、可恶的藤蔓…」",
+      "skill": {
+        "name": "米蒂-飞行试验",
+        "description": "携带者拥有2枚雷属性调谐印记时，每次重击命中敌人，全队雷属性伤害提高0.4%，持续12秒，最多20层（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者拥有2枚雷属性调谐印记时，每次重击命中敌人，全队雷属性伤害提高0.8%，持续12秒，最多20层（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "米蒂"
+      ]
+    },
+    {
+      "id": 10032,
+      "name": "唤灵",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108002_032.png",
+        "small": "tex_icon_soulessences_108002_032.png"
+      },
+      "rarity": "SSR",
+      "profession": "赋予",
+      "attribute": "治疗加成",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "176",
+        "基础物理防御": "36",
+        "基础魔法防御": "36",
+        "治疗加成": "4.6%"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1709",
+        "基础物理防御": "352",
+        "基础魔法防御": "352",
+        "治疗加成": "47.2%"
+      },
+      "description": "过去与现在交织，心灵与心灵触碰，\n少女的祈愿得到回应。\n这份回应，也将化作她的勇气，陪伴她不断前行——",
+      "skill": {
+        "name": "璐璐卡-唤灵",
+        "description": "携带者释放星携技后，使全队回复携带者最大生命值的6%，并提升4.2%攻击力，持续24秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者释放星携技后，使全队回复携带者最大生命值的12.1%，并提升8.4%攻击力，持续24秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "璐璐卡"
+      ]
+    },
+    {
+      "id": 10033,
+      "name": "咕嘟咕嘟",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108002_033.png",
+        "small": "tex_icon_soulessences_108002_033.png"
+      },
+      "rarity": "SR",
+      "profession": "赋予",
+      "attribute": "治疗加成",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "160",
+        "基础物理防御": "36",
+        "基础魔法防御": "36",
+        "治疗加成": "3.9%"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1551",
+        "基础物理防御": "352",
+        "基础魔法防御": "352",
+        "治疗加成": "39.4%"
+      },
+      "description": "「抱歉...屋子里太暖和，忍不住有点走神...」\n锅子里的药汤被柴火烧得咕嘟咕嘟响，\n或许是再抵挡不住沉沉的倦意，少女合上双眼，沉入梦中。",
+      "skill": {
+        "name": "璐璐卡-咕嘟咕嘟",
+        "description": "携带者最大生命值提高14.6%。",
+        "maxRankDescription": "携带者最大生命值提高29.1%。"
+      },
+      "relatedCharacters": [
+        "璐璐卡"
+      ]
+    },
+    {
+      "id": 10034,
+      "name": "五谷丰登",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_034.png",
+        "small": "tex_icon_soulessences_0_034.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.2%"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "22.8%"
+      },
+      "description": "丰收的喜悦和麦穗一样沉甸甸的。",
+      "skill": {
+        "name": "五谷丰登",
+        "description": "携带者光属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者光属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10037,
+      "name": "厨房的秘密",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109001_037.png",
+        "small": "tex_icon_soulessences_109001_037.png"
+      },
+      "rarity": "SSR",
+      "profession": "猛攻",
+      "attribute": "雷属性伤害增幅",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "192",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1865",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "「这样就大功告成...\n欸？！你你你...你是什么时候来的？」",
+      "skill": {
+        "name": "末音-厨房的秘密",
+        "description": "携带者释放星鸣技时，调谐强度增加90，持续11秒，最多可叠加3层。",
+        "maxRankDescription": "携带者释放星鸣技时，调谐强度增加180，持续11秒，最多可叠加3层。"
+      },
+      "relatedCharacters": [
+        "末音"
+      ]
+    },
+    {
+      "id": 10043,
+      "name": "宣告黎明之花",
+      "icons": {
+        "large": "tex_icon_soulessenceb_102001_043.png",
+        "small": "tex_icon_soulessences_102001_043.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "物理防御",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "你知道吗？有些花被栽培在温室中，却始终没能迎来真正的盛开；\n有些花生在荒野，却坚强地挺过了风吹雨打。\n送你的这朵花，请务必见证它直到最后哦。",
+      "skill": {
+        "name": "莉莉-宣告黎明之花",
+        "description": "携带者获得1枚风调谐印记时，提升全队调谐强度7.5点，持续16秒，最多叠加5层（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者获得1枚风调谐印记时，提升全队调谐强度15点，持续16秒，最多叠加5层（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "莉莉"
+      ]
+    },
+    {
+      "id": 10044,
+      "name": "狩猎姿态",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108001_044.png",
+        "small": "tex_icon_soulessences_108001_044.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "176",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1709",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "28.6%"
+      },
+      "description": "夏露露村口的野猪来势汹汹。\n但是，比它们更加来势汹汹的，\n是夏露露村最优秀的猎人和她的伙伴！",
+      "skill": {
+        "name": "忒拉拉-狩猎姿态",
+        "description": "携带者造成火属性超限伤害或风属性超限伤害时，获得12.2%火属性伤害提升，持续16秒。",
+        "maxRankDescription": "携带者造成火属性超限伤害或风属性超限伤害时，获得24.3%火属性伤害提升，持续16秒。"
+      },
+      "relatedCharacters": [
+        "忒拉拉"
+      ]
+    },
+    {
+      "id": 10047,
+      "name": "传承",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_047.png",
+        "small": "tex_icon_soulessences_0_047.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "魔法防御",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "111",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1078",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "魂灵之形塑成爪牙之饰，\n遥远的意志被传诵至今。",
+      "skill": {
+        "name": "传承",
+        "description": "携带者火属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者火属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10048,
+      "name": "璇枢",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_048.png",
+        "small": "tex_icon_soulessences_0_048.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "127",
+        "基础物理防御": "19",
+        "基础魔法防御": "19",
+        "生命": "2.2%"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1236",
+        "基础物理防御": "185",
+        "基础魔法防御": "185",
+        "生命": "22.8%"
+      },
+      "description": "方寸之间，包藏天地玄机。",
+      "skill": {
+        "name": "璇枢",
+        "description": "携带者切换上场时，攻击力提升4%，持续8秒。",
+        "maxRankDescription": "携带者切换上场时，攻击力提升7%，持续8秒。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10050,
+      "name": "魂引",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_050.png",
+        "small": "tex_icon_soulessences_0_050.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.2%"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "22.8%"
+      },
+      "description": "古树盘曲交错，像是与星球的命脉交织。\n迷失方向的旅人，沿着光的方向前进，也许能发现新的秘密。",
+      "skill": {
+        "name": "魂引",
+        "description": "携带者暗属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者暗属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10052,
+      "name": "小小木雕",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_052.png",
+        "small": "tex_icon_soulessences_0_052.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "物理防御",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240"
+      },
+      "description": "一只是木雕，另一只也是木雕。\n虽然制作者可能都不是同一个人，但不知道为什么大家都会把它们摆到一起。\n很可爱。",
+      "skill": {
+        "name": "小小木雕",
+        "description": "携带者获得调谐印记后，治疗加成提升10.7%，持续10秒。",
+        "maxRankDescription": "携带者获得调谐印记后，治疗加成提升18.7%，持续10秒。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10055,
+      "name": "远古秘钥",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_055.png",
+        "small": "tex_icon_soulessences_0_055.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "魔法防御",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240"
+      },
+      "description": "失落的秘密，逐渐被揭开神秘的面纱。",
+      "skill": {
+        "name": "远古秘钥",
+        "description": "携带者释放星决技后，全队获得60调谐强度，持续20秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者释放星决技后，全队获得105调谐强度，持续20秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10056,
+      "name": "淳朴之音",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_056.png",
+        "small": "tex_icon_soulessences_0_056.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "生命": "2.2%"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "生命": "22.8%"
+      },
+      "description": "即使摇曳不定，她们也在不断倾诉着\n一一能够随风而舞的不只是羽翼。",
+      "skill": {
+        "name": "淳朴之音",
+        "description": "携带者风属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者风属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10057,
+      "name": "命土",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_057.png",
+        "small": "tex_icon_soulessences_0_057.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "666",
+        "基础攻击": "143",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.2%"
+      },
+      "level80Stats": {
+        "基础生命": "6471",
+        "基础攻击": "1393",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "22.8%"
+      },
+      "description": "生命诞生于土壤，而土壤中所诞生的也可以拯救生命。",
+      "skill": {
+        "name": "命土",
+        "description": "携带者木属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者木属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10058,
+      "name": "往事",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_058.png",
+        "small": "tex_icon_soulessences_0_058.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "物理防御",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "111",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1078",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "制刻痕为祈愿，择纹彩为诉说。\n即使其含义已无人知晓，那辉煌也仍残于时光之中。",
+      "skill": {
+        "name": "往事",
+        "description": "携带者地属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者地属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10059,
+      "name": "禁呪",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_059.png",
+        "small": "tex_icon_soulessences_0_059.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "魔法防御",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "111",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1078",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "遮掩背叛之罪的，必不亨通。\n觊觎禁忌之语的，必坠深渊。",
+      "skill": {
+        "name": "禁呪",
+        "description": "携带者雷属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者雷属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10060,
+      "name": "宵祝",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_060.png",
+        "small": "tex_icon_soulessences_0_060.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "111",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "生命": "2.2%"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1078",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "生命": "22.8%"
+      },
+      "description": "千家遥放宵灯处，万户庶祈永安时。",
+      "skill": {
+        "name": "宵祝",
+        "description": "携带者释放星鸣技后，普通攻击伤害提升6.1%，持续24秒。",
+        "maxRankDescription": "携带者释放星鸣技后，普通攻击伤害提升10.7%，持续24秒。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10061,
+      "name": "残局",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_061.png",
+        "small": "tex_icon_soulessences_0_061.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.2%"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "22.8%"
+      },
+      "description": "风止黑白无弦，灯映珍陇谜面，\n奕者为何绝？只待一手，虑千约。",
+      "skill": {
+        "name": "残局",
+        "description": "携带者冰属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者冰属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10062,
+      "name": "分道扬镳",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_062.png",
+        "small": "tex_icon_soulessences_0_062.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "物理防御",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240"
+      },
+      "description": "勇敢的精灵探求者们，不满于既定的知识，不做守旧的奴隶，\n前进吧，探寻未知——即使分道扬镳也绝不止步。",
+      "skill": {
+        "name": "分道扬镳",
+        "description": "携带者水属性伤害增加5.4%（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者水属性伤害增加9.5%（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10063,
+      "name": "屋嘟娃娃",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_063.png",
+        "small": "tex_icon_soulessences_0_063.png"
+      },
+      "rarity": "R",
+      "profession": "",
+      "attribute": "魔法防御",
+      "baseStats": {
+        "基础生命": "763",
+        "基础攻击": "127",
+        "基础物理防御": "25",
+        "基础魔法防御": "25"
+      },
+      "level80Stats": {
+        "基础生命": "7415",
+        "基础攻击": "1236",
+        "基础物理防御": "240",
+        "基础魔法防御": "240"
+      },
+      "description": "娃娃可是萨满的力量象征。不过这一个……看起来更像是某人的宝物。\n“谢谢粉发的大姐姐！” ——毯子上的字大概是这样的含义。",
+      "skill": {
+        "name": "屋嘟娃娃",
+        "description": "携带者击败敌人后，回复自身5.6%最大生命值。",
+        "maxRankDescription": "携带者击败敌人后，回复自身9.8%最大生命值。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10071,
+      "name": "羽夜的思念",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109002_071.png",
+        "small": "tex_icon_soulessences_109002_071.png"
+      },
+      "rarity": "SSR",
+      "profession": "爆发",
+      "attribute": "暴击率",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "192",
+        "基础物理防御": "36",
+        "基础魔法防御": "36"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1865",
+        "基础物理防御": "352",
+        "基础魔法防御": "352"
+      },
+      "description": "「……是啊，如果能实现的话就好了呢。」\n少女和白羽祈愿着她们所珍视之人的幸福。\n回神时，已是漫天星空。",
+      "skill": {
+        "name": "夏儿-羽夜的思念",
+        "description": "携带者拥有2枚光属性调谐印记或水属性调谐印记时，重击增加24.3%光属性伤害。",
+        "maxRankDescription": "携带者拥有2枚光属性调谐印记或水属性调谐印记时，重击增加48.6%光属性伤害。"
+      },
+      "relatedCharacters": [
+        "夏儿"
+      ]
+    },
+    {
+      "id": 10076,
+      "name": "碧空之下",
+      "icons": {
+        "large": "tex_icon_soulessenceb_111001_076.png",
+        "small": "tex_icon_soulessences_111001_076.png"
+      },
+      "rarity": "SSR",
+      "profession": "破坏",
+      "attribute": "风属性伤害增幅",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "192",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1865",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "在如洗的碧空之下，年轻的族长不断地训练着。\n即使已经疲惫至极，也绝不停歇。\n究竟什么才能让她停下来呢？",
+      "skill": {
+        "name": "法兰塔-碧空之下",
+        "description": "携带者每次普攻命中获得1层效果，架势破坏效率提高22.3%，持续3秒，最多可叠2层。消耗风属性调谐印记同时消耗2层效果，架势破坏效率提高59.5%，持续6秒。",
+        "maxRankDescription": "携带者每次普攻命中获得1层效果，架势破坏效率提高44.6%，持续3秒，最多可叠2层。消耗风属性调谐印记同时消耗2层效果，架势破坏效率提高119%，持续6秒。"
+      },
+      "relatedCharacters": [
+        "法兰塔"
+      ]
+    },
+    {
+      "id": 10078,
+      "name": "星晚的追忆",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109001_078.png",
+        "small": "tex_icon_soulessences_109001_078.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "调谐强度",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "176",
+        "基础物理防御": "25",
+        "基础魔法防御": "25"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1709",
+        "基础物理防御": "240",
+        "基础魔法防御": "240"
+      },
+      "description": "少女星空下的身姿凛然而美丽。\n只是，在这背后，她也有自己的小小烦恼。",
+      "skill": {
+        "name": "末音-星晚的追忆",
+        "description": "携带者拥有2枚雷属性调谐印记时，星鸣技与星决技伤害提升15%。",
+        "maxRankDescription": "携带者拥有2枚雷属性调谐印记时，星鸣技与星决技伤害提升30%。"
+      },
+      "relatedCharacters": [
+        "末音"
+      ]
+    },
+    {
+      "id": 10084,
+      "name": "风语之愿",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107001_084.png",
+        "small": "tex_icon_soulessences_107001_084.png"
+      },
+      "rarity": "SR",
+      "profession": "爆发",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "176",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1709",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "箭矢离弦，还未说出口的话语便随着清扬的流风一起飘向了远方。\n少女不为人知的心愿在某个瞬间悄然实现了。",
+      "skill": {
+        "name": "西芙莉雅-风语之愿",
+        "description": "携带者拥有3枚风属性调谐印记时，暴击伤害提升25.8%点。",
+        "maxRankDescription": "携带者拥有3枚风属性调谐印记时，暴击伤害提升51.7%点。"
+      },
+      "relatedCharacters": [
+        "西芙莉雅"
+      ]
+    },
+    {
+      "id": 10093,
+      "name": "无法思考",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101003_093.png",
+        "small": "tex_icon_soulessences_101003_093.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "调谐强度",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "176",
+        "基础物理防御": "25",
+        "基础魔法防御": "25"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1709",
+        "基础物理防御": "240",
+        "基础魔法防御": "240"
+      },
+      "description": "惊喜？惊吓？\n简单的机关，却乱了机关大师的心！",
+      "skill": {
+        "name": "寒悠悠-无法思考",
+        "description": "携带者释放星决技后，提升全队93.8点调谐强度，持续24秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者释放星决技后，提升全队187.5点调谐强度，持续24秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "寒悠悠"
+      ]
+    },
+    {
+      "id": 10094,
+      "name": "陪伴",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109002_094.png",
+        "small": "tex_icon_soulessences_109002_094.png"
+      },
+      "rarity": "SR",
+      "profession": "爆发",
+      "attribute": "暴击率",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "176",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1709",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "不论是可爱的外形，还是柔软的手感，\n都让乌咪抱枕成为了「这个抱枕真好抱」榜单上的第一名。\n而这位天马骑士也被它的魅力俘获——\n「真想马上带回家！」",
+      "skill": {
+        "name": "夏儿-陪伴",
+        "description": "携带者释放星鸣技后，重击伤害提升12.2%，持续15秒。",
+        "maxRankDescription": "携带者释放星鸣技后，重击伤害提升24.3%，持续15秒。"
+      },
+      "relatedCharacters": [
+        "夏儿"
+      ]
+    },
+    {
+      "id": 10095,
+      "name": "甜点时光",
+      "icons": {
+        "large": "tex_icon_soulessenceb_102001_095.png",
+        "small": "tex_icon_soulessences_102001_095.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "176",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1709",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "松软的蛋糕胚、浓郁的奶油、酸甜的水果、填充在缝隙里的砂糖...\n就这样一口接一口地吃下去，直到坠入梦一般的幸福感之中吧。",
+      "skill": {
+        "name": "莉莉-甜点时光",
+        "description": "携带者成功触发格挡5秒内，获得1枚风属性调谐印记时，提升全队3%攻击力，持续16秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者成功触发格挡5秒内，获得1枚风属性调谐印记时，提升全队6%攻击力，持续16秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "莉莉"
+      ]
+    },
+    {
+      "id": 10097,
+      "name": "玫瑰色午后",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109001_097.png",
+        "small": "tex_icon_soulessences_109001_097.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "一次开销不菲的午茶会，\n最昂贵的部分既不是跨越千山万水送抵的臻选茶叶，\n也不是名匠大师在星辰归位的夜空下精心烧制的骨瓷茶具，\n而是二人专为彼此留出的每一秒时光。",
+      "skill": {
+        "name": "末音-玫瑰色午后",
+        "description": "携带者释放极限反击之后的8秒内，调谐强度提升112.5。",
+        "maxRankDescription": "携带者释放极限反击之后的8秒内，调谐强度提升225。"
+      },
+      "relatedCharacters": [
+        "末音"
+      ]
+    },
+    {
+      "id": 10098,
+      "name": "此身为枪",
+      "icons": {
+        "large": "tex_icon_soulessenceb_109002_098.png",
+        "small": "tex_icon_soulessences_109002_098.png"
+      },
+      "rarity": "SR",
+      "profession": "爆发",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "二人的理想终将化作枪锋，开辟道路，一往无前。\n既然如此，我何惜此身？",
+      "skill": {
+        "name": "夏儿-此身为枪",
+        "description": "携带者每次重击命中时，重击伤害提升1.9%，持续4秒，最多可叠加6层。",
+        "maxRankDescription": "携带者每次重击命中时，重击伤害提升3.8%，持续4秒，最多可叠加6层。"
+      },
+      "relatedCharacters": [
+        "夏儿"
+      ]
+    },
+    {
+      "id": 10101,
+      "name": "归来",
+      "icons": {
+        "large": "tex_icon_soulessenceb_111001_101.png",
+        "small": "tex_icon_soulessences_111001_101.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "176",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1709",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "28.6%"
+      },
+      "description": "每次巡视之后，心照不宣的默契。\n得以飞翔时最向往的瞬间，定是帕莫拉回到她的身边时。",
+      "skill": {
+        "name": "法兰塔-归来",
+        "description": "携带者每次普攻命中时，普攻架势破坏效率提高1.9%，持续4秒，最多可叠加30层。",
+        "maxRankDescription": "携带者每次普攻命中时，普攻架势破坏效率提高3.7%，持续4秒，最多可叠加30层。"
+      },
+      "relatedCharacters": [
+        "法兰塔"
+      ]
+    },
+    {
+      "id": 10107,
+      "name": "药草大丰收",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108002_107.png",
+        "small": "tex_icon_soulessences_108002_107.png"
+      },
+      "rarity": "SR",
+      "profession": "赋予",
+      "attribute": "治疗加成",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "160",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "治疗加成": "3.9%"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1551",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "治疗加成": "39.4%"
+      },
+      "description": "篮子里的药草已经多到快要溢出，\n但少女仍全神贯注地盯着眼前这棵曼德龙草。\n就像出发时所预告的那样，今天一定会是满载而归的一天。",
+      "skill": {
+        "name": "璐璐卡-药草大丰收",
+        "description": "携带者释放星鸣技时，回复全队18点星决蓄能，并使全队回复携带者5%血量（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者释放星鸣技时，回复全队36点星决蓄能，并使全队回复携带者10.1%血量（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "璐璐卡"
+      ]
+    },
+    {
+      "id": 10121,
+      "name": "折纸寄情",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101010_121.png",
+        "small": "tex_icon_soulessences_101010_121.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "176",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1709",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "攻击": "28.6%"
+      },
+      "description": "纸折的苍白花朵，也能在少女的「化形之力」下焕发出令人悸动的色彩。\n这捧在掌心里绽放的小小思念，总会被风吹往有缘之人的身边。",
+      "skill": {
+        "name": "涂山小玉-折纸寄情",
+        "description": "携带者释放普攻、重击、星鸣技、星决技后，可分别获得一层提升3%风属性伤害效果，持续20秒，每层效果单独结算持续时间。",
+        "maxRankDescription": "携带者释放普攻、重击、星鸣技、星决技后，可分别获得一层提升6%风属性伤害效果，持续20秒，每层效果单独结算持续时间。"
+      },
+      "relatedCharacters": [
+        "涂山小玉"
+      ]
+    },
+    {
+      "id": 10122,
+      "name": "花之舞",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101010_122.png",
+        "small": "tex_icon_soulessences_101010_122.png"
+      },
+      "rarity": "SSR",
+      "profession": "猛攻",
+      "attribute": "风属性伤害增幅",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "192",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1865",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "桃花水母美丽的身姿令人目眩神迷。\n在这之中，能否看到这位少女想要寻找的「缘分」呢？",
+      "skill": {
+        "name": "涂山小玉-花之舞",
+        "description": "携带者触发风/光超限伤害时，提升调谐强度81，持续8秒。\n释放普攻后，重击伤害提升5.7%，最多叠加3层，持续2秒；释放星鸣技和星决技后，直接获得3层。",
+        "maxRankDescription": "携带者触发风/光超限伤害时，提升调谐强度162，持续8秒。\n释放普攻后，重击伤害提升11.3%，最多叠加3层，持续2秒；释放星鸣技和星决技后，直接获得3层。"
+      },
+      "relatedCharacters": [
+        "涂山小玉"
+      ]
+    },
+    {
+      "id": 10123,
+      "name": "桃芳春笺",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101010_123.png",
+        "small": "tex_icon_soulessences_101010_123.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "桃红的笺纸随风摇曳。\n少女欲说还休，面颊绯红。\n她想要传递的话语，究竟为何？",
+      "skill": {
+        "name": "涂山小玉-桃芳春笺",
+        "description": "携带者触发风超限伤害时，重击伤害提升11.3%，持续8秒。",
+        "maxRankDescription": "携带者触发风超限伤害时，重击伤害提升22.5%，持续8秒。"
+      },
+      "relatedCharacters": [
+        "涂山小玉"
+      ]
+    },
+    {
+      "id": 10124,
+      "name": "夕阳下的约定",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108003_124.png",
+        "small": "tex_icon_soulessences_108003_124.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "夕阳晕染出的余晖，并非直率的色彩；\n于此时许下的约定，也如晚霞般朦胧。\n唯有心意交融，才能重叠出这般光影。",
+      "skill": {
+        "name": "米蒂-夕阳下的约定",
+        "description": "携带者拥有雷属性调谐印记时释放星决技，提升全队21.5%暴击伤害，持续20秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者拥有雷属性调谐印记时释放星决技，提升全队43.1%暴击伤害，持续20秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "米蒂"
+      ]
+    },
+    {
+      "id": 10125,
+      "name": "高手在此！",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101007_125.png",
+        "small": "tex_icon_soulessences_101007_125.png"
+      },
+      "rarity": "SR",
+      "profession": "爆发",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "武学高手在对决的时候意志也很坚定！但——\n「是谁给本大师的腿施了定身法！怎、怎么动不了了...」",
+      "skill": {
+        "name": "芃芃-高手在此！",
+        "description": "携带者每次普攻命中时，自身火属性伤害提升0.7%，持续5秒，最多可叠加15层。",
+        "maxRankDescription": "携带者每次普攻命中时，自身火属性伤害提升1.4%，持续5秒，最多可叠加15层。"
+      },
+      "relatedCharacters": [
+        "芃芃"
+      ]
+    },
+    {
+      "id": 10130,
+      "name": "女仆的疗养日",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112001_130.png",
+        "small": "tex_icon_soulessences_112001_130.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "难得的疗养日，女仆比平日里少了几分锐利，多了几分柔软。\n「这次还承蒙您照顾了——」",
+      "skill": {
+        "name": "姬瑟贝露-女仆的疗养日",
+        "description": "携带者造成雷属性伤害时，重击伤害提升11.3%，持续5秒。",
+        "maxRankDescription": "携带者造成雷属性伤害时，重击伤害提升22.5%，持续5秒。"
+      },
+      "relatedCharacters": [
+        "姬瑟贝露"
+      ]
+    },
+    {
+      "id": 10131,
+      "name": "节日佳肴",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112001_131.png",
+        "small": "tex_icon_soulessences_112001_131.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "暴击率",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "176",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1709",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "一丝不苟的动作，精心设计的杰作，优美考究的摆盘...\n这一切仿佛都在无声地宣告：这是一场属于女仆的独特佳肴艺术。",
+      "skill": {
+        "name": "姬瑟贝露-节日佳肴",
+        "description": "携带者消耗1枚雷属性调谐印记时，重击架势破坏效率\n提升44.6%，持续3秒。",
+        "maxRankDescription": "携带者消耗1枚雷属性调谐印记时，重击架势破坏效率\n提升89.3%，持续3秒。"
+      },
+      "relatedCharacters": [
+        "姬瑟贝露"
+      ]
+    },
+    {
+      "id": 10132,
+      "name": "暗中观察",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107002_132.png",
+        "small": "tex_icon_soulessences_107002_132.png"
+      },
+      "rarity": "SR",
+      "profession": "赋予",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "143",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "生命": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1393",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "生命": "28.6%"
+      },
+      "description": "枝叶掩映间，隐约见到一双好奇的双眼。\n被称为森林女神的木精灵，正悄悄观察着森林中的访客。",
+      "skill": {
+        "name": "米砂-暗中观察",
+        "description": "受到携带者治疗的角色8秒内，攻击命中敌人时降低敌人防御3%，持续8秒（同名灵子不可叠加）。",
+        "maxRankDescription": "受到携带者治疗的角色8秒内，攻击命中敌人时降低敌人防御6%，持续8秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "米砂"
+      ]
+    },
+    {
+      "id": 10133,
+      "name": "「森林女神」来访",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107002_133.png",
+        "small": "tex_icon_soulessences_107002_133.png"
+      },
+      "rarity": "SR",
+      "profession": "赋予",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "生命": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "生命": "28.6%"
+      },
+      "description": "被夏露露村尊以「森林女神」之名的米砂第一次来访，\n对这里的一切陌生而好奇。\n好在，星临者就陪在她的身边。",
+      "skill": {
+        "name": "米砂-「森林女神」来访",
+        "description": "携带者治疗效果与星决蓄能回复效率提升15.6%。",
+        "maxRankDescription": "携带者治疗效果与星决蓄能回复效率提升31.1%。"
+      },
+      "relatedCharacters": [
+        "米砂"
+      ]
+    },
+    {
+      "id": 10136,
+      "name": "林间野餐",
+      "icons": {
+        "large": "tex_icon_soulessenceb_111001_136.png",
+        "small": "tex_icon_soulessences_111001_136.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "午间温暖的阳光洒落。\n早已见惯的寻常风景，每天都吃的家常菜...\n都因为身边的人变得更加美好。",
+      "skill": {
+        "name": "法兰塔-林间野餐",
+        "description": "携带者使用普攻消耗风属性调谐印记时，架势破坏效率提高37.2%，持续8秒。",
+        "maxRankDescription": "携带者使用普攻消耗风属性调谐印记时，架势破坏效率提高74.4%，持续8秒。"
+      },
+      "relatedCharacters": [
+        "法兰塔"
+      ]
+    },
+    {
+      "id": 10146,
+      "name": "新生",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107002_146.png",
+        "small": "tex_icon_soulessences_107002_146.png"
+      },
+      "rarity": "SSR",
+      "profession": "赋予",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "1152",
+        "基础攻击": "160",
+        "基础物理防御": "36",
+        "基础魔法防御": "36",
+        "生命": "3.4%"
+      },
+      "level80Stats": {
+        "基础生命": "11194",
+        "基础攻击": "1551",
+        "基础物理防御": "352",
+        "基础魔法防御": "352",
+        "生命": "34.3%"
+      },
+      "description": "这座山谷的风景与守护者的故乡截然不同。\n然而，只要坚守那抹绿意——定能与这片土地共迎新生。\n她如此相信着。",
+      "skill": {
+        "name": "米砂-新生",
+        "description": "携带者消耗1枚及以上木调谐或风调谐后的6秒内，释放重击后全队攻击力提升7.2%，持续20秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者消耗1枚及以上木调谐或风调谐后的6秒内，释放重击后全队攻击力提升14.4%，持续20秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "米砂"
+      ]
+    },
+    {
+      "id": 10147,
+      "name": "充能时间",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107003_147.png",
+        "small": "tex_icon_soulessences_107003_147.png"
+      },
+      "rarity": "SSR",
+      "profession": "破坏",
+      "attribute": "暴击率",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "192",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1865",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "「凉凉的石头，能吃饱。\n漂亮的大树下，能乘凉。\n星临者答应，陪着我...」",
+      "skill": {
+        "name": "阿比-充能时间",
+        "description": "携带者释放星携技入场后，重击的架势破坏效率提升89.3%，持续6秒。",
+        "maxRankDescription": "携带者释放星携技入场后，重击的架势破坏效率提升178.6%，持续6秒。"
+      },
+      "relatedCharacters": [
+        "阿比"
+      ]
+    },
+    {
+      "id": 10149,
+      "name": "失控飞行",
+      "icons": {
+        "large": "tex_icon_soulessenceb_101003_149.png",
+        "small": "tex_icon_soulessences_101003_149.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "调谐强度",
+      "baseStats": {
+        "基础生命": "860",
+        "基础攻击": "176",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "8360",
+        "基础攻击": "1709",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "天才机关师的得意之作，火力翻倍的高速机关鸢。\n作为唯一被邀请参观此物试飞的对象，欣赏的同时务必要注意安全。",
+      "skill": {
+        "name": "寒悠悠-失控飞行",
+        "description": "携带者获得火属性调谐印记时，提升全队45点调谐强度，持续24秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者获得火属性调谐印记时，提升全队90点调谐强度，持续24秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "寒悠悠"
+      ]
+    },
+    {
+      "id": 10150,
+      "name": "狼少女的心意",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108001_150.png",
+        "small": "tex_icon_soulessences_108001_150.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "用牙齿制成的护身符，有着保佑平安的功效。\n至于实现的方式，则是——\n「你的敌人在哪里，我去咬他们！」",
+      "skill": {
+        "name": "忒拉拉-狼少女的心意",
+        "description": "携带者每造成一次火属性超限伤害或风属性超限伤害，重击伤害提升2.3%，最多提升5层，持续8秒。",
+        "maxRankDescription": "携带者每造成一次火属性超限伤害或风属性超限伤害，重击伤害提升4.5%，最多提升5层，持续8秒。"
+      },
+      "relatedCharacters": [
+        "忒拉拉"
+      ]
+    },
+    {
+      "id": 10151,
+      "name": "非常规钓鱼",
+      "icons": {
+        "large": "tex_icon_soulessenceb_107003_151.png",
+        "small": "tex_icon_soulessences_107003_151.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "为了准备一场足以令人满意的野餐活动，\n需要一条能填饱肚子的「大鱼」，供她与你一同分享。\n要是不够，那就再来一条——\n反正，阿比有的是手段和力气。",
+      "skill": {
+        "name": "阿比-非常规钓鱼",
+        "description": "携带者释放星携技入场的10秒内架势破坏效率提升37.2%。",
+        "maxRankDescription": "携带者释放星携技入场的10秒内架势破坏效率提升74.4%。"
+      },
+      "relatedCharacters": [
+        "阿比"
+      ]
+    },
+    {
+      "id": 10152,
+      "name": "真正的宝藏",
+      "icons": {
+        "large": "tex_icon_soulessenceb_199003_152.png",
+        "small": "tex_icon_soulessences_199003_152.png"
+      },
+      "rarity": "SR",
+      "profession": "破坏",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "160",
+        "基础物理防御": "25",
+        "基础魔法防御": "25",
+        "生命": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1551",
+        "基础物理防御": "240",
+        "基础魔法防御": "240",
+        "生命": "28.6%"
+      },
+      "description": "绝无可能被复制的、唯有与你一同度过才算完整的、\n如此闪亮的探险之旅。\n无疑是胜过一切的、真正的宝藏。",
+      "skill": {
+        "name": "诺诺-真正的大冒险",
+        "description": "携带者拥有2枚地属性调谐印记时，架势破坏效率提高37.2%。",
+        "maxRankDescription": "携带者拥有2枚地属性调谐印记时，架势破坏效率提高74.4%。"
+      },
+      "relatedCharacters": [
+        "诺诺"
+      ]
+    },
+    {
+      "id": 10154,
+      "name": "月下秘仪",
+      "icons": {
+        "large": "tex_icon_soulessenceb_103002_154.png",
+        "small": "tex_icon_soulessences_103002_154.png"
+      },
+      "rarity": "SSR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "192",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "3.4%"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1865",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "34.3%"
+      },
+      "description": "无论深陷于何等的黑暗中，也能重新令其焕发光彩，\n照亮世间一切无形之影——\n少女独一无二的魔法，只在此刻向你展现。",
+      "skill": {
+        "name": "红宝石-月下秘仪",
+        "description": "携带者每次普攻命中时，提高自身64点调谐强度，持续15秒，最多可叠加5层。",
+        "maxRankDescription": "携带者每次普攻命中时，提高自身130点调谐强度，持续15秒，最多可叠加5层。"
+      },
+      "relatedCharacters": [
+        "红宝石"
+      ]
+    },
+    {
+      "id": 10155,
+      "name": "恶作剧前奏",
+      "icons": {
+        "large": "tex_icon_soulessenceb_103002_155.png",
+        "small": "tex_icon_soulessences_103002_155.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "只是一个简单的恶作剧。\n像这个的恶作剧，少女尝试过许多次。\n这一次，她却感到心跳不已。",
+      "skill": {
+        "name": "红宝石-恶作剧前奏",
+        "description": "携带者每次普攻命中时，提高自身火属性伤害2.9%，持续15秒，最多可叠加5层。",
+        "maxRankDescription": "携带者每次普攻命中时，提高自身火属性伤害5.8%，持续15秒，最多可叠加5层。"
+      },
+      "relatedCharacters": [
+        "红宝石"
+      ]
+    },
+    {
+      "id": 10156,
+      "name": "在勒布上空",
+      "icons": {
+        "large": "tex_icon_soulessenceb_103002_156.png",
+        "small": "tex_icon_soulessences_103002_156.png"
+      },
+      "rarity": "SR",
+      "profession": "猛攻",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "「传说，在城市的最高点，用这样的手势连接彼此，就能一直、\n一直不分开——欸？你说怎么证实？我还没想好...」\n所幸旅途漫长，我们可以一起走向那个让传说成真的未来。",
+      "skill": {
+        "name": "红宝石-在勒布上空",
+        "description": "携带者火属性调谐伤害提升17.5%。",
+        "maxRankDescription": "携带者火属性调谐伤害提升35%。"
+      },
+      "relatedCharacters": [
+        "红宝石"
+      ]
+    },
+    {
+      "id": 10169,
+      "name": "软软棉花肉",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108005_169.png",
+        "small": "tex_icon_soulessences_108005_169.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "物理防御",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296"
+      },
+      "description": "甜蜜像棉花一样蓬蓬松松，幸福像云朵一样软软乎乎——\n只是好像又吃得多了一点。\n休憩时共度的野餐时刻，也会有这样柔软的烦恼呢~",
+      "skill": {
+        "name": "卡塔露-软软棉花肉",
+        "description": "携带者获得护盾时，为全队提供37.5点调谐强度，持续20秒（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者获得护盾时，为全队提供75点调谐强度，持续20秒（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": [
+        "卡塔露"
+      ]
+    },
+    {
+      "id": 10170,
+      "name": "攀高的幼崽",
+      "icons": {
+        "large": "tex_icon_soulessenceb_108005_170.png",
+        "small": "tex_icon_soulessences_108005_170.png"
+      },
+      "rarity": "SR",
+      "profession": "增幅",
+      "attribute": "物理防御",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "127",
+        "基础物理防御": "42",
+        "基础魔法防御": "42"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1236",
+        "基础物理防御": "408",
+        "基础魔法防御": "408"
+      },
+      "description": "「别怕，我会帮助你的...呜哞？！」\n所谓成长，就是更高、更强、更有力量。\n不过，按照自己的节奏，脚踏实地来或许也是不错的选择？",
+      "skill": {
+        "name": "卡塔露-攀高的幼崽",
+        "description": "携带者获得地属性调谐印记后，携带者防御力提升18%，持续10秒。",
+        "maxRankDescription": "携带者获得地属性调谐印记后，携带者防御力提升36%，持续10秒。"
+      },
+      "relatedCharacters": [
+        "卡塔露"
+      ]
+    },
+    {
+      "id": 10175,
+      "name": "一点都不痛",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112002_175.png",
+        "small": "tex_icon_soulessences_112002_175.png"
+      },
+      "rarity": "SR",
+      "profession": "赋予",
+      "attribute": "治疗加成",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "治疗加成": "3.9%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "治疗加成": "39.4%"
+      },
+      "description": "您的健康就请交给专业人士来负责吧，我会好好地...\n欸？您该不会是想逃吧？\n那可不行，只要您乖乖听话，是绝对不会痛的哦。",
+      "skill": {
+        "name": "艾妮丝-一点都不痛",
+        "description": "携带者释放星决技进行治疗时，受治疗角色攻击力提升9%，持续2秒。",
+        "maxRankDescription": "携带者释放星决技进行治疗时，受治疗角色攻击力提升18%，持续2秒。"
+      },
+      "relatedCharacters": [
+        "艾妮丝"
+      ]
+    },
+    {
+      "id": 10176,
+      "name": "温柔的照护",
+      "icons": {
+        "large": "tex_icon_soulessenceb_112002_176.png",
+        "small": "tex_icon_soulessences_112002_176.png"
+      },
+      "rarity": "SR",
+      "profession": "赋予",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "阳光洒落的静谧时刻，艾妮丝温柔地守护着疲惫的星临者醒来。\n一如既往无微不至的照料让空气中都弥漫着治愈与安心。",
+      "skill": {
+        "name": "艾妮丝-温柔的照护",
+        "description": "携带者释放普攻进行治疗时，受治疗角色最大生命值提升14.6%，持续15秒。持续期间不再触发。",
+        "maxRankDescription": "携带者释放普攻进行治疗时，受治疗角色最大生命值提升29.1%，持续15秒。持续期间不再触发。"
+      },
+      "relatedCharacters": [
+        "艾妮丝"
+      ]
+    },
+    {
+      "id": 10196,
+      "name": "热火朝天",
+      "icons": {
+        "large": "tex_icon_soulessenceb_1_196.png",
+        "small": "tex_icon_soulessences_1_196.png"
+      },
+      "rarity": "SSR",
+      "profession": "",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "192",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "3.4%"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1865",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "34.3%"
+      },
+      "description": "铁锤重重落下，飞溅的火星照亮了少女脸上晶莹的汗滴。\n此刻，已然分不清这高热到底是源于锻造，还是她振奋的心灵。",
+      "skill": {
+        "name": "热火朝天",
+        "description": "携带者每获得一种属性调谐印记时，提升全队2%攻击力，持续24秒,最多9层（同名灵子不可叠加）。",
+        "maxRankDescription": "携带者每获得一种属性调谐印记时，提升全队3.3%攻击力，持续24秒,最多9层（同名灵子不可叠加）。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10197,
+      "name": "安睡吧，宝贝",
+      "icons": {
+        "large": "tex_icon_soulessenceb_1_197.png",
+        "small": "tex_icon_soulessences_1_197.png"
+      },
+      "rarity": "SR",
+      "profession": "",
+      "attribute": "攻击",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "160",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "攻击": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1551",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "攻击": "28.6%"
+      },
+      "description": "在温暖羽翼的呵护下安睡吧，亲爱的宝贝。\n等你醒来，便能看到一个美丽而广阔的世界。",
+      "skill": {
+        "name": "安睡吧，宝贝",
+        "description": "携带者的奇波释放奇波特技时伤害增加18.8%。",
+        "maxRankDescription": "携带者的奇波释放奇波特技时伤害增加37.5%。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10198,
+      "name": "星之种",
+      "icons": {
+        "large": "tex_icon_soulessenceb_0_198.png",
+        "small": "tex_icon_soulessences_0_198.png"
+      },
+      "rarity": "SR",
+      "profession": "",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "958",
+        "基础攻击": "143",
+        "基础物理防御": "36",
+        "基础魔法防御": "36",
+        "生命": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "9305",
+        "基础攻击": "1393",
+        "基础物理防御": "352",
+        "基础魔法防御": "352",
+        "生命": "28.6%"
+      },
+      "description": "即便坠入黑暗，即便只余一丝微光。\n坚韧的种子也不会放弃生长的希望。",
+      "skill": {
+        "name": "星之种",
+        "description": "携带者释放星鸣技或者奇波特技后，携带者与其出战的奇波提升7.2%火属性伤害，持续8秒。",
+        "maxRankDescription": "携带者释放星鸣技或者奇波特技后，携带者与其出战的奇波提升14.5%火属性伤害，持续8秒。"
+      },
+      "relatedCharacters": []
+    },
+    {
+      "id": 10216,
+      "name": "耕种之时",
+      "icons": {
+        "large": "tex_icon_soulessenceb_1_216.png",
+        "small": "tex_icon_soulessences_1_216.png"
+      },
+      "rarity": "SR",
+      "profession": "",
+      "attribute": "生命",
+      "baseStats": {
+        "基础生命": "1055",
+        "基础攻击": "143",
+        "基础物理防御": "30",
+        "基础魔法防御": "30",
+        "生命": "2.8%"
+      },
+      "level80Stats": {
+        "基础生命": "10249",
+        "基础攻击": "1393",
+        "基础物理防御": "296",
+        "基础魔法防御": "296",
+        "生命": "28.6%"
+      },
+      "description": "悉心灌溉种满植株的沃土，期待未来的丰收。\n等等…喷洒的水流是不是太激烈了些——\n不要浇到同伴的身上啊！",
+      "skill": {
+        "name": "耕种之时",
+        "description": "携带者的奇波释放奇波特技时，回复自身10星决蓄能。",
+        "maxRankDescription": "携带者的奇波释放奇波特技时，回复自身20星决蓄能。"
+      },
+      "relatedCharacters": []
+    }
+  ]
+}
