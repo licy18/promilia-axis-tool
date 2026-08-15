@@ -30,8 +30,11 @@ describe('Lily Machine Axis action-level integration', () => {
   });
 
   it('preserves intent.level 1/12 through Workbench and hashes level-scaled star-skill damage', () => {
-    const levelOne = runLevelCase(1, 1887);
-    const levelTwelve = runLevelCase(12, 3960);
+    // A+ 效果入口扩大后：莉莉星鸣"命中后自身攻击 +4%（6 秒）"（效果图内部
+    // 命名为"减防"，attributeId=1/source-owner/+400 基点）恢复生成，Lv1 星鸣
+    // 总伤害 1887 → 1959。
+    const levelOne = runLevelCase(1, 1959);
+    const levelTwelve = runLevelCase(12, 4113);
 
     expect(levelOne.hashes.input).not.toBe(levelTwelve.hashes.input);
     expect(levelOne.hashes.evaluation).not.toBe(levelTwelve.hashes.evaluation);
@@ -45,7 +48,7 @@ describe('Lily Machine Axis action-level integration', () => {
     expect(prepared.contract.actions[0].intent.level).toBeNull();
     expect(prepared.project.actions[0]).toMatchObject({ level: 1 });
     expect(service.prepareValidated(missing).issues).toEqual([]);
-    expect(service.simulate(missing).evaluation.totals.hpDamage).toBe(1887);
+    expect(service.simulate(missing).evaluation.totals.hpDamage).toBe(1959);
 
     for (const invalidLevel of [0, 'invalid', 13]) {
       const validation = service.validate(createAxisContract(invalidLevel));

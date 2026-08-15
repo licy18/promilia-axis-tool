@@ -31,7 +31,7 @@ const cases = [
     hashes: {
       input: '0657838366cfd35a',
       data: '66a63cfbd3b5b7a0',
-      trace: '0925f2d1732c9700',
+      trace: '449825c0cc25ec37',
       evaluation: 'b0acda242f007986',
     },
   },
@@ -61,8 +61,8 @@ const cases = [
     hashes: {
       input: 'c366c268aaafca16',
       data: '964f7f4431171711',
-      trace: 'afce0ce5607032c3',
-      evaluation: 'cae1444558aa36c9',
+      trace: 'f609109dbca0663b',
+      evaluation: '536749479f9c27ac',
     },
   },
   {
@@ -71,8 +71,8 @@ const cases = [
     hashes: {
       input: '8a82ef9e87458e27',
       data: '74f991d439e64485',
-      trace: '24947df22c0d97cf',
-      evaluation: 'e1e6ae688f04457d',
+      trace: '5ee7189362cab855',
+      evaluation: '44efb01bcaa13650',
     },
   },
 ];

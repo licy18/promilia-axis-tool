@@ -204,6 +204,7 @@ export function createVerifiedBattleEffectGeneration({
   const directSpEvents = [...generatedDirectSpEvents];
   const directHpEvents = [];
   const shieldEvents = [];
+  const cooldownReductionEvents = [];
   const unresolved = [];
   const elementTagLayers = new Map();
   const elementIdsHeld = new Map();
@@ -230,21 +231,51 @@ export function createVerifiedBattleEffectGeneration({
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
     assertMechanicsPackageBinding({ mechanicsPackage, resolution });
-    const runtimeEffects = [
-      ...(resolution.semanticEffects ?? []),
+    // 效果入口覆盖所有 advertised applied 效果（不止 semantic/raw-direct）：
+    // 此前大量奇波效果被源绑定标 applied 但无 semantic 投影、也非
+    // raw-direct-effect，导致静默丢弃（18/43 奇波大招缺口）。
+    // 去重：同一 resolution 内按效果身份（effectIdentity/semanticIdentity/
+    // sourceIdentity）只处理一次；semantic 已覆盖的原始效果按 pathId 跳过。
+    const semanticEffects = resolution.semanticEffects ?? [];
+    const semanticPathIds = new Set(
+      semanticEffects
+        .map(effect => String(effect.pathId ?? ''))
+        .filter(Boolean)
+    );
+    const mergedEffects = [
+      ...semanticEffects,
       ...(resolution.effects ?? []).filter(
-        effect => effect.runtimeGenerationMode === 'raw-direct-effect'
+        effect =>
+          effect.classification === 'applied' &&
+          !isConsumedBySemanticEffect(effect, semanticPathIds)
       ),
-    ].filter(
-      effect =>
-        !isSuppressedBreakWatcherEffect(
+    ];
+    const seenEffectIdentities = new Set();
+    const runtimeEffects = [];
+    for (const effect of mergedEffects) {
+      if (
+        isSuppressedBreakWatcherEffect(
           effect,
           suppressedWatcherEffectIdentities
         )
-    );
+      ) {
+        continue;
+      }
+      const identity =
+        effect.effectIdentity ??
+        effect.semanticIdentity ??
+        `${effect.kind}|${effect.sourceIdentity ?? ''}`;
+      if (identity && seenEffectIdentities.has(identity)) continue;
+      if (identity) seenEffectIdentities.add(identity);
+      runtimeEffects.push(effect);
+    }
     for (const effect of runtimeEffects) {
       if (effect.role && effect.role !== 'gameplay-effect') continue;
       if (effect.tuningMark || effect.tuningOverlimit) continue;
+      // 合法跳过（在 target/value 解析之前）：damage 由 hit 系统结算；
+      // inject/pack 是效果图内部组合/注入结构（子效果已单独列出）。
+      if (effect.kind === 'damage') continue;
+      if (effect.kind === 'inject' || effect.kind === 'pack') continue;
       if (
         !isHitBoundEffectEnabled({
           action,
@@ -385,6 +416,22 @@ export function createVerifiedBattleEffectGeneration({
           );
           continue;
         }
+        if (effect.cooldownReduction) {
+          cooldownReductionEvents.push(
+            createDirectEvent({
+              kind: 'direct-cooldown-reduction',
+              action,
+              effect,
+              target,
+              timeMs,
+              value,
+              formulaResult,
+              resolution,
+              targetSequenceIndex,
+            })
+          );
+          continue;
+        }
         unresolved.push(
           createUnresolvedEffect(action, effect, [
             'generated-effect-runtime-kind-unresolved',
@@ -398,7 +445,8 @@ export function createVerifiedBattleEffectGeneration({
     effectCommands.length +
     directSpEvents.length +
     directHpEvents.length +
-    shieldEvents.length;
+    shieldEvents.length +
+    cooldownReductionEvents.length;
   return {
     schemaVersion: 1,
     contractName: VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME,
@@ -411,6 +459,7 @@ export function createVerifiedBattleEffectGeneration({
     directSpEvents,
     directHpEvents,
     shieldEvents,
+    cooldownReductionEvents,
     unresolved,
     summary: {
       resolvedActionCount: actionResolutionById.size,
@@ -418,6 +467,7 @@ export function createVerifiedBattleEffectGeneration({
       directSpEventCount: directSpEvents.length,
       directHpEventCount: directHpEvents.length,
       shieldEventCount: shieldEvents.length,
+      cooldownReductionEventCount: cooldownReductionEvents.length,
       unresolvedEffectCount: unresolved.length,
       generatedCount,
       applied: true,
@@ -426,8 +476,18 @@ export function createVerifiedBattleEffectGeneration({
   };
 }
 
-function isSuppressedBreakWatcherEffect(effect, suppressedIdentities) {
-  if (suppressedIdentities.size === 0) return false;
+function isConsumedBySemanticEffect(effect, semanticPathIds) {
+  if (!semanticPathIds || semanticPathIds.size === 0) return false;
+  const sourceIdentity = String(effect?.sourceIdentity ?? '');
+  // sourceIdentity 形如 battle-effect:<skillId>:<mapIndex>:<pathId>:<behaviorPathId>:<frame>
+  const parts = sourceIdentity.split(':');
+  if (parts.length >= 4 && parts[0] === 'battle-effect') {
+    return semanticPathIds.has(parts[3]);
+  }
+  return false;
+}
+
+function isSuppressedBreakWatcherEffect(effect, suppressedIdentities) {  if (suppressedIdentities.size === 0) return false;
   if (
     suppressedIdentities.has(effect?.effectIdentity) ||
     suppressedIdentities.has(effect?.semanticIdentity)

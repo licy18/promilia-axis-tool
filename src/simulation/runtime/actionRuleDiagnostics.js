@@ -2659,7 +2659,15 @@ function enqueueAcceptedCooldownReductionTransactions({
   actionResolutionById = null,
   pending,
 }) {
-  if (action.type !== ACTION_TYPES.SKILL || !action.actorId) return;
+  // 技能与奇波大招（KIBO_EVENT）都携带冷却缩减效果（如 500368/500369/
+  // 500370 大招"在场友方技能冷却缩短"）。此前只接受 SKILL，奇波大招的
+  // cooldownReduction 效果被静默跳过。
+  if (
+    ![ACTION_TYPES.SKILL, ACTION_TYPES.KIBO_EVENT].includes(action.type) ||
+    !action.actorId
+  ) {
+    return;
+  }
   const resolution =
     actionResolutionById?.get?.(action.id) ??
     resolveVerifiedCombatActionMechanics(action, {
