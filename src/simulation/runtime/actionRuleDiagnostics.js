@@ -2716,7 +2716,13 @@ function enqueueAcceptedCooldownReductionTransactions({
       slot: Number(reduction.slot),
       cdRecoveryType: Number(reduction.cdRecoveryType),
       rawValue,
-      reductionMs: -rawValue * 1000,
+      // 固定毫秒模式（cdRecoveryType=0）才预计算 reductionMs；
+      // 百分比模式（cdRecoveryType=1）的目标剩余冷却在 apply 时才确定，
+      // 这里不填，避免 canonical 输出出现 -430 → 430000ms 的虚假固定值。
+      reductionMs:
+        Number(reduction.cdRecoveryType) === 1
+          ? null
+          : -rawValue * 1000,
       sourceSequencePath,
       sourceSequenceStatus: Array.isArray(sourceSequencePath)
         ? 'verified-cooldown-reduction-source-sequence-ready'

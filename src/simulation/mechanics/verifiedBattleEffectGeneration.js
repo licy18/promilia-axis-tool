@@ -205,6 +205,7 @@ export function createVerifiedBattleEffectGeneration({
   const directHpEvents = [];
   const shieldEvents = [];
   const cooldownReductionEvents = [];
+  const knownGaps = [];
   const unresolved = [];
   const elementTagLayers = new Map();
   const elementIdsHeld = new Map();
@@ -278,8 +279,39 @@ export function createVerifiedBattleEffectGeneration({
       if (effect.tuningMark || effect.tuningOverlimit) continue;
       // 合法跳过（在 target/value 解析之前）：damage 由 hit 系统结算；
       // inject/pack 是效果图内部组合/注入结构（子效果已单独列出）。
-      if (effect.kind === 'damage') continue;
-      if (effect.kind === 'inject' || effect.kind === 'pack') continue;
+      // 注意：部分奇波恢复节点 kind='damage' 但携带 heal/shield
+      // （500357/500358 风绒守护恢复），必须继续走资源 consumer。
+      if (effect.kind === 'damage' && !effect.heal && !effect.shield) {
+        // DoT 声明（无 damage 字段 + 生命周期时长）尚无周期伤害结算，
+        // 记录 known-gap（不得静默当作普通 hit 结算）。
+        if (
+          !effect.damage &&
+          Number(effect.lifecycle?.durationMs) > 0
+        ) {
+          knownGaps.push({
+            actionId: action.id,
+            effectIdentity: resolveEffectIdentity(effect),
+            name: effect.name ?? null,
+            reason: 'periodic-damage-not-implemented',
+            sourceIdentity: effect.sourceIdentity ?? null,
+          });
+        }
+        continue;
+      }
+      if (effect.kind === 'inject' || effect.kind === 'pack') {
+        // pack 的元素限定（如 500025"对雷属性角色注入调谐提升"）尚无
+        // 结构化字段，子效果按 team-actors 全量展开，记录 known-gap。
+        if (effect.kind === 'pack' && /(角色|元素|属性)/.test(effect.name ?? '')) {
+          knownGaps.push({
+            actionId: action.id,
+            effectIdentity: resolveEffectIdentity(effect),
+            name: effect.name ?? null,
+            reason: 'pack-element-filter-not-structured',
+            sourceIdentity: effect.sourceIdentity ?? null,
+          });
+        }
+        continue;
+      }
       if (
         !isHitBoundEffectEnabled({
           action,
@@ -421,19 +453,23 @@ export function createVerifiedBattleEffectGeneration({
           continue;
         }
         if (effect.cooldownReduction) {
-          cooldownReductionEvents.push(
-            createDirectEvent({
-              kind: 'direct-cooldown-reduction',
-              action,
-              effect,
-              target,
-              timeMs,
-              value,
-              formulaResult,
-              resolution,
-              targetSequenceIndex,
-            })
-          );
+          const cooldownReductionEvent = createDirectEvent({
+            kind: 'direct-cooldown-reduction',
+            action,
+            effect,
+            target,
+            timeMs,
+            value,
+            formulaResult,
+            resolution,
+            targetSequenceIndex,
+          });
+          // evidence-only：实际冷却结算由 actionRuleDiagnostics 按
+          // resolution.effects 独立执行（含百分比按剩余时间计算），
+          // 这里的事件仅作可见性记录，不声称已被本路径 calculator 消费。
+          cooldownReductionEvent.appliedToCalculators = false;
+          cooldownReductionEvent.applied = false;
+          cooldownReductionEvents.push(cooldownReductionEvent);
           continue;
         }
         unresolved.push(
@@ -464,6 +500,7 @@ export function createVerifiedBattleEffectGeneration({
     directHpEvents,
     shieldEvents,
     cooldownReductionEvents,
+    knownGaps,
     unresolved,
     summary: {
       resolvedActionCount: actionResolutionById.size,
@@ -472,6 +509,7 @@ export function createVerifiedBattleEffectGeneration({
       directHpEventCount: directHpEvents.length,
       shieldEventCount: shieldEvents.length,
       cooldownReductionEventCount: cooldownReductionEvents.length,
+      knownGapCount: knownGaps.length,
       unresolvedEffectCount: unresolved.length,
       generatedCount,
       applied: true,

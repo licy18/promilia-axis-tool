@@ -2188,5 +2188,25 @@ describe('kibo ultimate percentage cooldown reduction', () => {
     expect(Number(applied.afterReadyAtMs)).toBeLessThan(
       Number(applied.beforeReadyAtMs)
     );
+    // 精确数值：Lv1 rawValue=-430（-4.3%），百分比按目标冷却剩余时间折算
+    expect(Number(applied.rawValue)).toBe(-430);
+    const remainingBeforeMs = Math.max(
+      0,
+      Number(applied.beforeReadyAtMs) - Number(applied.timeMs)
+    );
+    expect(Number(applied.appliedReductionMs)).toBeCloseTo(
+      remainingBeforeMs * 0.043,
+      1
+    );
+    // 回能：500368 直接回能给在场英雄 +3.1 SP（不是给奇波充能）
+    const spEvents =
+      result.verifiedBattleEffectGeneration?.directSpEvents ?? [];
+    const recover = spEvents.find(event => event.kind === 'direct-sp');
+    expect(recover).toBeTruthy();
+    expect(Number(recover.value)).toBeCloseTo(3.1, 1);
+    expect(recover.target).toMatchObject({
+      kind: 'actor',
+      id: `actor-${MOYIN_ID}`,
+    });
   });
 });
