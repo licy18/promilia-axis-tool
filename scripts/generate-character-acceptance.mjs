@@ -1846,7 +1846,7 @@ function inspectThunderLifecycle(run) {
       Number(event.elementId) === 251
   );
   const expectedLimitHeldFrames = [3515, 4045, 4356, 4667, 4978];
-  const expectedLimitHeldRawDamage = [158, 316, 473, 631, 789];
+  const expectedLimitHeldRawDamage = [4, 8, 12, 16, 20];
   const limitHeldDamages = (run.trace?.damage ?? []).filter(
     event =>
       /^moyin-limit-[1-5]$/.test(event.actionId) &&

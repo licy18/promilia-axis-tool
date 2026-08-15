@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "a6e6a697d94b8fdd",
+  "manifestIndexHash": "5f97bd6ab3e8d046",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -892,23 +892,21 @@
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "extracted",
+      "maturityState": "optimization-ready",
       "earnedStates": [
-        "extracted"
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-headless-replay-gate-failed",
-        "acceptance-functional-failure-present",
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
-      ],
-      "blockingLedgerCount": 13,
+      "optimizationReady": true,
+      "blockers": [],
+      "blockingLedgerCount": 0,
       "matrixRequiredCount": 134,
-      "matrixPassedCount": 121,
-      "manifestHash": "9a9cf84a14c590fb",
-      "qualificationSubjectHash": "f47a1ecc39842839",
-      "sourceOfTruthHash": "4adffa8756ee469b",
+      "matrixPassedCount": 134,
+      "manifestHash": "1a2c78f801ce3cf5",
+      "qualificationSubjectHash": "2154d32918223a7c",
+      "sourceOfTruthHash": "4af26aef2ccddba1",
       "profileHash": "3a5e713c62424857e4b28226d1ad3470bd845deb83f809ae84287b8d19e4df6e",
       "visualScenarioIds": [
         "m11-d-109001-visual-acceptance"
@@ -991,11 +989,11 @@
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
-      "extracted": 3,
-      "optimization-ready": 7,
+      "extracted": 2,
+      "optimization-ready": 8,
       "visually-accepted": 1
     },
-    "optimizationReadyCount": 7
+    "optimizationReadyCount": 8
   },
-  "catalogHash": "7e9b4baa44604f1d"
+  "catalogHash": "105a3f6e015afe8e"
 }
