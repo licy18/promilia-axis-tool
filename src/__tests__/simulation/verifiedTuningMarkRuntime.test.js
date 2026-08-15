@@ -2068,8 +2068,7 @@ function simulateVerifiedProject({
   initialRuntimeState = null,
   initialSpByCharacterId = {},
   targetPolicy = null,
-}) {
-  const teamSlots = createDefaultWorkbenchTeamSlots();
+}) {  const teamSlots = createDefaultWorkbenchTeamSlots();
   const actorConfigs = createDefaultWorkbenchActorConfigs(
     DEFAULT_WORKBENCH_SELECTION
   ).map(config => ({
@@ -2102,3 +2101,92 @@ function simulateVerifiedProject({
   });
   return simulateScenario(compileProject(project, getWorkbenchGameData()));
 }
+
+describe('kibo ultimate percentage cooldown reduction', () => {
+  const KIBO_ID = 500368;
+  const KIBO_SKILL_ID = 50036801;
+  const MOYIN_ID = 109001;
+  const MOYIN_STAR_SKILL_ID = 10900112;
+
+  it('applies cdRecoveryType=1 from a KIBO_EVENT ultimate to the owner active cooldown', () => {
+    const teamSlots = createDefaultWorkbenchTeamSlots();
+    const actorConfigs = createDefaultWorkbenchActorConfigs(
+      DEFAULT_WORKBENCH_SELECTION
+    ).map(config => ({
+      ...config,
+      initialSp: Number(config.characterId) === MOYIN_ID ? 100 : 0,
+      loadout:
+        Number(config.characterId) === MOYIN_ID
+          ? { ...config.loadout, kiboId: KIBO_ID }
+          : config.loadout,
+    }));
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      durationMs: 9_000,
+      teamSlots,
+      actorConfigs,
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'moyin-star-cd',
+          type: 'skill',
+          actorCharacterId: MOYIN_ID,
+          skillId: MOYIN_STAR_SKILL_ID,
+          actionVariantIndex: 0,
+          startMs: 0,
+          durationMs: 1_000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'kibo-500368-ult',
+          type: 'kiboEvent',
+          actorCharacterId: MOYIN_ID,
+          skillId: KIBO_SKILL_ID,
+          kiboId: KIBO_ID,
+          actionVariantIndex: 0,
+          startMs: 2_000,
+          durationMs: 3_900,
+          eventType: 'signature',
+        }),
+      ],
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: `actor-${MOYIN_ID}`,
+          characterId: MOYIN_ID,
+        },
+        kiboEnergyBySlot: [
+          {
+            slotId: 'team-slot-1',
+            kiboId: KIBO_ID,
+            currentValue: 100,
+            maxValue: 100,
+          },
+        ],
+      },
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+    });
+    const result = simulateScenario(
+      compileProject(project, getWorkbenchGameData())
+    );
+    const transactions =
+      result.actionRuleDiagnostics?.cooldownReductionTransactions ?? [];
+    const applied = transactions.find(
+      transaction =>
+        Number(transaction.sourceSkillId) === KIBO_SKILL_ID &&
+        transaction.cdRecoveryType === 1 &&
+        transaction.status === 'cooldown-reduction-transaction-applied'
+    );
+    // 回归：500368 大招（cdRecoveryType=1，-4.3%）此前因 KIBO_EVENT 被
+    // enqueueAcceptedCooldownReductionTransactions 拒绝、且百分比模式被
+    // unsupported-mode 拒绝，冷却缩减完全缺失。
+    expect(applied).toBeTruthy();
+    expect(applied).toMatchObject({
+      sourceActionId: 'kibo-500368-ult',
+      sourceSkillId: KIBO_SKILL_ID,
+      cdRecoveryType: 1,
+      targetSkillId: MOYIN_STAR_SKILL_ID,
+      appliedToSimulationResults: true,
+    });
+    expect(Number(applied.afterReadyAtMs)).toBeLessThan(
+      Number(applied.beforeReadyAtMs)
+    );
+  });
+});

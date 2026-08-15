@@ -2809,7 +2809,10 @@ function applyCooldownReductionTransaction({
       consumed: true,
     };
   }
-  if (transaction.cdRecoveryType !== 0) {
+  if (
+    transaction.cdRecoveryType !== 0 &&
+    transaction.cdRecoveryType !== 1
+  ) {
     return {
       ...transaction,
       status: 'cooldown-reduction-transaction-consumed-unsupported-mode',
@@ -2844,9 +2847,14 @@ function applyCooldownReductionTransaction({
     };
   }
   const beforeReadyAtMs = targetCharge.readyAtMs;
+  const reductionMs =
+    transaction.cdRecoveryType === 1
+      ? Math.max(0, beforeReadyAtMs - transaction.timeMs) *
+        (Math.abs(Number(transaction.rawValue)) / 10000)
+      : transaction.reductionMs;
   const afterReadyAtMs = Math.max(
     transaction.timeMs,
-    beforeReadyAtMs - transaction.reductionMs
+    beforeReadyAtMs - reductionMs
   );
   targetCharge.readyAtMs = afterReadyAtMs;
   targetCharge.cooldownReductionMs =
@@ -2922,11 +2930,13 @@ function applySharedChargeCooldownReduction({
   const targetWindowId = targetWindow?.windowId ?? null;
   const appliedReductionMs = Math.min(
     beforeCoolTimeMs,
-    transaction.reductionMs
+    transaction.cdRecoveryType === 1
+      ? beforeCoolTimeMs * (Math.abs(Number(transaction.rawValue)) / 10000)
+      : transaction.reductionMs
   );
   const remainingCoolTimeMs = Math.max(
     0,
-    beforeCoolTimeMs - transaction.reductionMs
+    beforeCoolTimeMs - appliedReductionMs
   );
   let restoredChargeCount = 0;
   let afterReadyAtMs;
