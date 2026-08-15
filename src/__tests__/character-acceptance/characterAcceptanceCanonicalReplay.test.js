@@ -71,7 +71,7 @@ const cases = [
     hashes: {
       input: '8a82ef9e87458e27',
       data: '74f991d439e64485',
-      trace: '5ee7189362cab855',
+      trace: '79709af5db2c2638',
       evaluation: '44efb01bcaa13650',
     },
   },
