@@ -283,9 +283,38 @@ export function createVerifiedBattleEffectGeneration({
       // 注意：部分奇波恢复节点 kind='damage' 但携带 heal/shield
       // （500357/500358 风绒守护恢复），必须继续走资源 consumer。
       if (effect.kind === 'damage' && !effect.heal && !effect.shield) {
+        // 公共校验（与下方非 damage 路径一致）：hit-bound 门、动作占用
+        // 区间、classification。DoT 不得绕过这些——否则 SP 不足/未命中/
+        // 越界动作也会产生幽灵周期伤害。
+        if (
+          !isHitBoundEffectEnabled({
+            action,
+            effect,
+            resolution,
+            defaultWillHit,
+          })
+        ) {
+          continue;
+        }
+        if (
+          Number.isFinite(Number(effect.trigger?.startFrame)) &&
+          !isActionFrameWithinContextualOccupancy(
+            action,
+            effect.trigger.startFrame,
+            resolution.controlBinding?.frameRate ?? 60
+          )
+        ) {
+          continue;
+        }
+        if (effect.classification !== 'applied') {
+          unresolved.push(createUnresolvedEffect(action, effect));
+          continue;
+        }
         // DoT（周期伤害，damageType=7，如 500360303 流血）：生成周期伤害
         // 命令，由 runtime 按 tick 结算（层数×奇波ATK×等级倍率/10000）。
-        // timeMs/target 在下方统一解析，这里先解析 DoT 专属字段。
+        // 仅放行已验证的流血契约（root=500360301 && element=500360303）；
+        // 其他 damageType=7/baseFunctionId=116 效果无可靠 tick 派生证据，
+        // fail-closed 记 known-gap，不得套用流血模型。
         if (isVerifiedDotEffect(effect, mechanicsPackage)) {
           const dotTimeMs = resolveEffectTimeMs(action, effect, resolution);
           const dotTargets = resolveEffectTargets({
@@ -980,18 +1009,25 @@ function roundValue(value) {
   return Math.round((Number(value) + Number.EPSILON) * 1e6) / 1e6;
 }
 
-// DoT（周期伤害）识别：kind=damage 且 damageType=7（如 500360303 流血），
-// 或者公式为层数×ATK×系数型（baseFunctionId=116 带 ELEMENT_LAYERS）。
+// DoT（周期伤害）识别：仅放行已验证的流血契约
+// （rootElementId=500360301 && elementId=500360303，damageType=7，
+// baseFunctionId=116）。机制包中还有其他 damageType=7/baseFunctionId=116
+// 效果（如 502004 火残响、10700305 残响），但它们没有已验证的
+// tick/叠层/首帧证据，不能套用流血模型——fail-closed（返回 false → 走
+// known-gap），不得静默转换为周期伤害。
 function isVerifiedDotEffect(effect, mechanicsPackage) {
   if (!effect || effect.kind !== 'damage') return false;
+  const isVerifiedBleed =
+    Number(effect.rootElementId) === 500360301 &&
+    Number(effect.elementId) === 500360303;
+  if (!isVerifiedBleed) return false;
   if (Number(effect.damage?.damageType) === 7) return true;
   if (Number(effect.formula?.baseFunctionId) === 116) return true;
   const nodes = mechanicsPackage?.battleEffectCatalog?.nodes ?? [];
   const node = nodes.find(
     candidate => String(candidate.elementId) === String(effect.elementId)
   );
-  if (node && Number(node.damage?.damageType) === 7) return true;
-  return false;
+  return Boolean(node && Number(node.damage?.damageType) === 7);
 }
 
 // DoT 命令：携带施加信息（时长、tick 间隔、层数、等级倍率），由 runtime

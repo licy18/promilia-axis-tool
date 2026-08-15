@@ -701,7 +701,7 @@ export function createVerifiedCombatRuntime({
     if (descriptor.kind === 'battle-effect-dot-contract-unresolved') {
       const event = createVerifiedBattleEffectDotEvent({
         descriptor,
-        dotCommand: descriptor.dotCommand,
+        dot: descriptor.dotCommand ?? {},
         applied: false,
         reason: 'battle-effect-dot-contract-unresolved',
         payload: {
@@ -1898,11 +1898,12 @@ function qDivNearestPositive(left, right) {
   return quotient + (remainder * 2n >= right ? 1n : 0n);
 }
 
-// 按 (target, rootElementId) 聚合 DoT 命令：单实例叠层（原生
-// IsSameElement 只比较 elementConfigId；BuffElement.Combine 为单聚合实例
-// 叠层入口——overlying-capped-single-aggregate-layer）。首个施加者持有
-// 来源/等级系数（后续施加不替换），层数 cap maxStacks，共享到期时间
-// 刷新为 max(旧到期, 本次施加+20s)，整组到期时全部层数一起消失。
+// 按 (target, rootElementId) 聚合 DoT 命令，并按时间窗口切分为多个
+// 聚合实例（原生 IsSameElement 只比较 elementConfigId；BuffElement.Combine
+// 为单聚合实例叠层）。同一实例内：首个施加者持有来源/等级系数（后续
+// 施加不替换），层数=窗口内累计施加（cap maxStacks），共享到期刷新为
+// max(旧到期, 本次施加+20s)，整组到期时全部层数一起消失。窗口断裂
+// （新施加晚于当前实例到期）则开启新实例（新 owner = 新实例首施加）。
 function groupVerifiedBattleEffectDotCommands(dotCommands) {
   const groups = new Map();
   for (const dotCommand of dotCommands ?? []) {
@@ -1913,21 +1914,50 @@ function groupVerifiedBattleEffectDotCommands(dotCommands) {
     entries.push(dotCommand);
     groups.set(key, entries);
   }
-  return [...groups.values()]
-    .map(entries => {
-      const applications = [...entries].sort(
-        (left, right) =>
-          Number(left.timeMs) - Number(right.timeMs) ||
-          String(left.actionId ?? '').localeCompare(String(right.actionId ?? ''))
-      );
-      // 首个施加者 = timeMs 最小者：持有来源与等级系数。
-      const owner = applications[0];
-      return {
-        ...owner,
-        applications,
-        applicationCount: entries.length,
-      };
-    })
+  const instances = [];
+  for (const entries of groups.values()) {
+    const applications = [...entries].sort(
+      (left, right) =>
+        Number(left.timeMs) - Number(right.timeMs) ||
+        String(left.actionId ?? '').localeCompare(String(right.actionId ?? ''))
+    );
+    // 切分实例：窗口 [start, end)，end = max(施加 + durationMs)。
+    let current = null;
+    for (const application of applications) {
+      const applyMs = nonNegativeNumber(application.timeMs);
+      const expiresAtMs =
+        applyMs + positiveNumber(application.durationMs, 20_000);
+      if (
+        current == null ||
+        applyMs >= current.sharedExpiresAtMs
+      ) {
+        if (current != null) {
+          instances.push(current);
+        }
+        current = {
+          ...application,
+          applications: [application],
+          instanceStartMs: applyMs,
+          sharedExpiresAtMs: expiresAtMs,
+          applicationCount: 0,
+        };
+      } else {
+        current.applications.push(application);
+        current.sharedExpiresAtMs = Math.max(
+          current.sharedExpiresAtMs,
+          expiresAtMs
+        );
+      }
+    }
+    if (current != null) {
+      instances.push(current);
+    }
+  }
+  return instances
+    .map(instance => ({
+      ...instance,
+      applicationCount: instance.applications.length,
+    }))
     .sort((left, right) => Number(left.timeMs) - Number(right.timeMs));
 }
 
@@ -1937,7 +1967,7 @@ function createVerifiedBattleEffectDotDescriptors({
   frameRate,
 }) {
   const intervalMs = positiveNumber(dotGroup?.tickIntervalMs, null);
-  const startMs = nonNegativeNumber(dotGroup?.timeMs);
+  const startMs = nonNegativeNumber(dotGroup?.instanceStartMs ?? dotGroup?.timeMs);
   const unresolvedReasons = [];
   if (intervalMs == null) {
     unresolvedReasons.push('battle-effect-dot-interval-invalid');
@@ -1965,7 +1995,7 @@ function createVerifiedBattleEffectDotDescriptors({
       },
     ];
   }
-  // 共享到期时间：max(各施加时刻 + 自身 durationMs)（整组同生共死）。
+  // 本实例共享到期：max(各施加时刻 + durationMs)。
   const relayDurationMs = Math.max(
     0,
     ...(dotGroup.applications ?? [dotGroup]).map(
@@ -1977,9 +2007,11 @@ function createVerifiedBattleEffectDotDescriptors({
   );
   const normalizedFrameRate = positiveNumber(frameRate, FRAME_RATE);
   const descriptors = [];
+  // 按 thresholdMs < relayDurationMs 迭代（不整秒余量也不漏末次有效 tick）。
   const maximumTick = Math.floor(relayDurationMs / intervalMs) - 1;
   for (let tickIndex = 0; tickIndex <= maximumTick; tickIndex += 1) {
     const thresholdMs = tickIndex * intervalMs;
+    if (thresholdMs >= relayDurationMs) break;
     const frameIndex =
       Math.floor(((startMs + thresholdMs) * normalizedFrameRate) / 1000) + 1;
     const timeMs = roundValue((frameIndex * 1000) / normalizedFrameRate);
@@ -4632,15 +4664,41 @@ function applyVerifiedBattleEffectDotTickDescriptor({ descriptor, state }) {
   }
   const timeMs = descriptor.timeMs;
   // 单实例聚合叠层（原生 overlying-capped-single-aggregate-layer）：
-  // 层数 = 该时刻前已施加次数（cap maxStacks），不按独立窗口衰减——
-  // 共享到期时间刷新为 max(旧到期, 本次施加+20s)，整组到期时全部消失。
+  // 层数 = 本实例窗口内、tick 时刻前已施加次数（cap maxStacks），
+  // 不跨实例（窗口断裂后由新实例承接，层数从 1 重新开始）。
   const maxStacks = positiveIntegerOrNull(dot.maxStacks) ?? 3;
+  const instanceStartMs = nonNegativeNumber(
+    dot.instanceStartMs ?? dot.timeMs
+  );
+  const sharedExpiresAtMs = nonNegativeNumber(
+    dot.sharedExpiresAtMs ??
+      instanceStartMs + positiveNumber(dot.durationMs, 20_000)
+  );
+  if (timeMs < instanceStartMs || timeMs >= sharedExpiresAtMs) {
+    return createEvent({
+      ...basePayload,
+      layers: 0,
+      coefficientRaw: 0,
+      beforeValue: roundValue(state.enemy.hp),
+      requestedDamage: null,
+      appliedDamage: 0,
+      change: 0,
+      afterValue: roundValue(state.enemy.hp),
+      lethal: false,
+      applied: false,
+      reason: 'battle-effect-dot-instance-expired',
+      appliedToCalculators: false,
+    });
+  }
   const layers = Math.min(
     maxStacks,
     Math.max(
       1,
-      applications.filter(application => timeMs >= Number(application.timeMs))
-        .length
+      // 聚合实例共享到期（整组同生共死）：实例到期前层数=累计施加
+      // （cap maxStacks），不按单层独立到期衰减。
+      applications.filter(
+        application => timeMs >= Number(application.timeMs)
+      ).length
     )
   );
   // 首个施加者持有等级系数（后续施加只加层，不替换系数）。
@@ -4744,10 +4802,10 @@ function createVerifiedBattleEffectDotEvent({ descriptor, dot, payload }) {
   return {
     type: 'VERIFIED_COMBAT_HIT',
     timeMs: roundValue(descriptor.timeMs),
-    actionId: dot.actionId ?? null,
-    actorId: dot.sourceActorId ?? null,
-    targetId: dot.target?.id ?? null,
-    hitKey: `battle-effect-dot|${dot.rootElementId ?? dot.elementId ?? 'element'}|${
+    actionId: dot?.actionId ?? null,
+    actorId: dot?.sourceActorId ?? null,
+    targetId: dot?.target?.id ?? null,
+    hitKey: `battle-effect-dot|${dot?.rootElementId ?? dot?.elementId ?? 'element'}|${
       descriptor.tickIndex ?? 'tick'
     }|${roundValue(descriptor.timeMs)}`,
     hitIndex: (descriptor.tickIndex ?? 0) + 1,

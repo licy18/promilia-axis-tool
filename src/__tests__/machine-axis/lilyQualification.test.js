@@ -448,28 +448,16 @@ describe('Lily M12-B3 active-surface qualification', () => {
       ])
     ).toEqual([
       ['lily-star-skill-at-cap', 32, 'apply', 1, 400],
-      ['lily-star-skill-at-cap', 32, 'apply', 1, 400],
-      ['lily-star-skill-at-cap', 37, 'apply', 1, 400],
       ['lily-star-skill-at-cap', 37, 'apply', 1, 400],
       ['lily-star-skill-at-cap', 42, 'apply', 1, 400],
-      ['lily-star-skill-at-cap', 42, 'apply', 1, 400],
-      ['lily-star-skill-at-cap', 48, 'apply', 1, 400],
       ['lily-star-skill-at-cap', 48, 'apply', 1, 400],
       ['lily-star-skill-at-cap', 54, 'apply', 1, 400],
-      ['lily-star-skill-at-cap', 54, 'apply', 1, 400],
-      ['lily-star-skill-at-cap', 414, 'expire', 1, 400],
       ['lily-star-skill-at-cap', 414, 'expire', 1, 400],
       ['lily-star-skill', 1832, 'apply', 1, 400],
-      ['lily-star-skill', 1832, 'apply', 1, 400],
-      ['lily-star-skill', 1837, 'apply', 1, 400],
       ['lily-star-skill', 1837, 'apply', 1, 400],
       ['lily-star-skill', 1842, 'apply', 1, 400],
-      ['lily-star-skill', 1842, 'apply', 1, 400],
-      ['lily-star-skill', 1848, 'apply', 1, 400],
       ['lily-star-skill', 1848, 'apply', 1, 400],
       ['lily-star-skill', 1854, 'apply', 1, 400],
-      ['lily-star-skill', 1854, 'apply', 1, 400],
-      ['lily-star-skill', 2214, 'expire', 1, 400],
       ['lily-star-skill', 2214, 'expire', 1, 400],
     ]);
 

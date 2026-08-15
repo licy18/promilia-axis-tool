@@ -370,4 +370,80 @@ describe('500360 血噬暗影 流血 DoT（派生管线 + runtime 结算）', ()
     const singleLayer = dotEvents.find(event => event.payload.layers === 1);
     expect(singleLayer.payload.coefficientRaw).toBe(520);
   });
+
+  it('runtime：实例到期后再次施加开启新实例（新 owner、层数重置、窗口断裂无伤害间隙）', () => {
+    // 0s 施加（窗口到 20s），25s 再施加（窗口断裂 → 新实例）。
+    // 20s~25s 之间应无 DoT tick（第一实例已到期）。
+    const baseDot = {
+      kind: 'verified-battle-effect-dot',
+      sourceActorId: 'actor-101003',
+      sourceKiboId: BLEED_KIBO_ID,
+      elementId: BLEED_DOT_ELEMENT_ID,
+      rootElementId: BLEED_ROOT_ELEMENT_ID,
+      damageType: 7,
+      elementalType: 9,
+      ignoreDamageEvent: true,
+      durationMs: 20000,
+      tickIntervalMs: 1000,
+      timeExeFirstFrame: true,
+      maxStacks: 3,
+      level: 1,
+      ratioAtLevel: 520,
+      valueByLevel: { 1: 520 },
+      target: { kind: 'enemy', id: 'enemy-1' },
+    };
+    const scenario = createBleedScenario({ durationMs: 50000 });
+    const generation = {
+      schemaVersion: 1,
+      contractName: 'probe-instance-split',
+      status: 'ready',
+      applied: true,
+      actionResolutionById: new Map(),
+      effectCommands: [],
+      directSpEvents: [],
+      directHpEvents: [],
+      shieldEvents: [],
+      cooldownReductionEvents: [],
+      knownGaps: [],
+      unresolved: [],
+      dotCommands: [
+        { ...baseDot, actionId: 'kibo-a', timeMs: 3433.33 },
+        { ...baseDot, actionId: 'kibo-b', timeMs: 28433.33 },
+      ],
+      summary: { dotCommandCount: 2, generatedCount: 2, applied: true },
+    };
+    const runtime = createVerifiedCombatRuntime({
+      scenario,
+      actionExecutionPlan: {
+        actions: [{ actionId: 'kibo-a', execute: true }],
+      },
+      effectGeneration: generation,
+      runtimeMode: 'full',
+    });
+    const dotEvents = (runtime.damageEvents ?? []).filter(
+      event => event.payload?.battleEffectDot === true
+    );
+    // 第一实例：3433ms 起 20 tick（到 ~22433ms）；第二实例：28433ms 起 20 tick。
+    // 中间 ~22433ms 到 ~28433ms 无 tick。
+    expect(dotEvents).toHaveLength(40);
+    const firstInstanceFrames = dotEvents
+      .filter(event => event.timeMs < 28433.33)
+      .map(event => event.timeMs);
+    expect(firstInstanceFrames).toHaveLength(20);
+    // 第一实例末 tick 约 22433ms，第二实例首 tick 约 28433ms —— 无重叠
+    const gapStart = Math.max(...firstInstanceFrames);
+    const secondStart = Math.min(
+      ...dotEvents
+        .filter(event => event.timeMs >= 28433.33)
+        .map(event => event.timeMs)
+    );
+    expect(secondStart - gapStart).toBeGreaterThan(5000);
+    // 两实例各自从 1 层开始（新实例 owner/层数重置）
+    const firstLayers = new Set(
+      dotEvents
+        .filter(event => event.timeMs < 28433.33)
+        .map(event => event.payload.layers)
+    );
+    expect(firstLayers).toEqual(new Set([1]));
+  });
 });

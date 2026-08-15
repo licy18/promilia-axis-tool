@@ -9348,7 +9348,10 @@ function createControlRuntimeHits(control) {
         ) &&
         (element.classification === 'applied' ||
           element.scenarioClassification === 'applied') &&
-        Number(element.damage?.damageType) !== 5
+        Number(element.damage?.damageType) !== 5 &&
+        // DoT（damageType=7，如 500360303 流血）由周期伤害结算，不得
+        // 同时作为普通 hit——否则有 SP 时会在命中帧额外结算一次普通伤害。
+        Number(element.damage?.damageType) !== 7
     )
     .flatMap(element => [
       ...(element.classification === 'applied'
@@ -15102,6 +15105,9 @@ function applyLevelOverride(baseValues, valueParam) {
 
 // 系数参数槽：公式的"随等级变化"参数（如 500360303 流血伤害的 9#520/730/…、
 // 残响类 1#1500/1650/…），而非固定取参数 1。G 槽（7#10000 常数）被排除。
+// 要求：变化参数必须是唯一正整数（参数号 1..N）；无变化参数（常数系数）
+// 回退槽 0（参数 1）；多个参数同时随等级变化时无法唯一确定，明确抛错，
+// 不得静默选第一个（避免重新生成错误倍率）。
 function resolveCoefficientParamIndex(levelOverrides) {
   if (!Array.isArray(levelOverrides) || levelOverrides.length === 0) {
     return 0;
@@ -15112,7 +15118,7 @@ function resolveCoefficientParamIndex(levelOverrides) {
       const [rawId, rawValue] = token.split('#');
       const id = Number(rawId);
       const value = Number(rawValue);
-      if (Number.isFinite(id) && Number.isFinite(value)) {
+      if (Number.isInteger(id) && id >= 1 && Number.isFinite(value)) {
         map.set(id, value);
       }
     }
@@ -15122,16 +15128,29 @@ function resolveCoefficientParamIndex(levelOverrides) {
     (left, right) => Number(left.level) - Number(right.level)
   );
   const firstParams = parsePairs(sorted[0].valueParam ?? '');
+  if (firstParams.size === 0) return 0;
+  const changingParams = new Set();
   for (const row of sorted.slice(1)) {
     const nextParams = parsePairs(row.valueParam ?? '');
     for (const [paramId, value] of firstParams) {
       const nextValue = nextParams.get(paramId);
       if (nextValue != null && nextValue !== value) {
-        return Math.max(0, Number(paramId) - 1);
+        changingParams.add(paramId);
       }
     }
   }
-  return 0;
+  if (changingParams.size === 0) return 0;
+  if (changingParams.size > 1) {
+    throw new Error(
+      `ambiguous coefficient parameter slot: multiple params change across levels (${[
+        ...changingParams,
+      ].join(',')}) for ${levelOverrides
+        .map(row => row.valueParam)
+        .join(' | ')}`
+    );
+  }
+  const [paramId] = [...changingParams];
+  return Math.max(0, Number(paramId) - 1);
 }
 
 function createBindingIdentity(candidate) {

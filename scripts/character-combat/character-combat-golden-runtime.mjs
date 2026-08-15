@@ -866,17 +866,28 @@ function createGoldenActualProjection({
     })
     .map(event => {
       const sourceElementId = numberOrNull(event.sourceIdentity?.elementId);
+      const rawEffectId = event.effectId ?? null;
+      const rawEffectElementId = numberOrNull(
+        String(rawEffectId ?? '').replace(/^battle-element:/, '')
+      );
+      // effectId 归一化：仅当原始 effectId 的元素号与 sourceElementId 一致
+      // 时才映射为 battle-element:<sourceElementId>。不同原始 effectId 可能
+      // 共享同一 sourceElementId（如"减防"1265593419004875038 的 source 指向
+      // 102001119）——此时保留原始 effectId，避免把两个效果合并显示。
+      const effectId =
+        sourceElementId == null ||
+        (rawEffectElementId != null &&
+          rawEffectElementId !== sourceElementId)
+          ? rawEffectId
+          : `battle-element:${sourceElementId}`;
       return {
         eventId: event.eventId ?? event.id ?? null,
         eventType: event.type ?? null,
         status: event.status ?? null,
         actionId: event.actionId ?? null,
         frame: msToFrame(event.timeMs, scenarioRecipe.frameRate),
-        effectId:
-          sourceElementId == null
-            ? (event.effectId ?? null)
-            : `battle-element:${sourceElementId}`,
-        runtimeEffectId: event.effectId ?? null,
+        effectId,
+        runtimeEffectId: rawEffectId,
         sourceElementId,
         sourceSequencePath:
           event.after?.sourceIdentity?.triggerSequencePath ??
