@@ -838,11 +838,6 @@ export async function createVerifiedCombatMechanicsBuild({
       });
     },
     createGoldenRuntimeForOwner({ recipe, mechanicsPackage }) {
-      // AZPR_SYNC_SKIP_GOLDEN：A+ 属性单位修复后 authoritative golden 期望
-      // 需整体重建；机制派生调试（如流血系数）期间跳过，正式重建时恢复。
-      if (process.env.AZPR_SYNC_SKIP_GOLDEN === '1') {
-        return null;
-      }
       return createCharacterCombatGoldenRuntime({
         repositoryRoot: REPO_ROOT,
         mechanicsPackage,
@@ -898,11 +893,8 @@ export async function createVerifiedCombatMechanicsBuild({
     controlBindings,
   });
   const characterCombatVerificationGoldens = [];
-  // AZPR_SYNC_SKIP_GOLDEN：A+ 属性单位修复后 character-combat golden 期望
-  // 需整体重建；机制派生调试（如流血系数）期间跳过，正式重建时恢复。
-  if (process.env.AZPR_SYNC_SKIP_GOLDEN !== '1') {
-    for (const recipe of recipes) {
-      for (const scenarioRecipe of recipe.verificationGoldenScenarios ?? []) {
+  for (const recipe of recipes) {
+    for (const scenarioRecipe of recipe.verificationGoldenScenarios ?? []) {
         const goldenRuntime = await createCharacterCombatGoldenRuntime({
           repositoryRoot: REPO_ROOT,
           mechanicsPackage: packageValue,
@@ -926,7 +918,6 @@ export async function createVerifiedCombatMechanicsBuild({
             .replace(/^-+|-+$/g, ''),
           goldenRuntime,
         });
-      }
     }
   }
   if (!xiaoyuActionOccupancyAudit || !xiaoyuHiddenInputAudit) {

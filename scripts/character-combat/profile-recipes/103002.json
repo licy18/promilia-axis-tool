@@ -11,11 +11,7 @@
     "zeroDistance": {
       "projectileImpactPolicy": "scenario-assumed-zero-distance",
       "requiredResourceIdentities": ["actor:103002:element:103002047"],
-      "requiredActionEffectBindingIdentities": [
-        "ruby-star-skill-fire-tuning-mark",
-        "ruby-star-carry-thunder-tuning-mark",
-        "ruby-ultimate-red-heat-six-stacks"
-      ],
+      "requiredActionEffectBindingIdentities": ["ruby-star-skill-fire-tuning-mark", "ruby-star-carry-thunder-tuning-mark", "ruby-ultimate-red-heat-six-stacks"],
       "requiredPassiveIdentities": ["actor:103002:passive:10300261"]
     }
   },
@@ -45,12 +41,7 @@
   },
   "compiler": {
     "timingPolicy": "verified-input-reopen",
-    "reachableControlSkillIds": [
-      10300201, 10300202, 10300203, 10300204, 10300205, 10300210, 10300211,
-      10300212, 10300213, 10300214, 10300215, 10300216, 10300217, 10300221,
-      10300224, 10300225, 10300226, 10300227, 10300241, 10300242, 10300243,
-      10300244, 10300245, 10300246, 10300247, 10300248, 10300249, 10300261
-    ],
+    "reachableControlSkillIds": [10300201, 10300202, 10300203, 10300204, 10300205, 10300210, 10300211, 10300212, 10300213, 10300214, 10300215, 10300216, 10300217, 10300221, 10300224, 10300225, 10300226, 10300227, 10300241, 10300242, 10300243, 10300244, 10300245, 10300246, 10300247, 10300248, 10300249, 10300261],
     "publicActionDeclarations": [
       {
         "sourceSkillId": 10300201,
@@ -670,16 +661,22 @@
       "statuses": ["runtime-evidence-required"],
       "scenarioRuntimeStatuses": ["scenario-assumed-zero-distance"],
       "controlVariants": [
-        { "controlSkillId": 10300201, "subSkillIndexes": [0] },
-        { "controlSkillId": 10300202, "subSkillIndexes": [0] },
-        { "controlSkillId": 10300203, "subSkillIndexes": [0] }
+        {
+          "controlSkillId": 10300201,
+          "subSkillIndexes": [0]
+        },
+        {
+          "controlSkillId": 10300202,
+          "subSkillIndexes": [0]
+        },
+        {
+          "controlSkillId": 10300203,
+          "subSkillIndexes": [0]
+        }
       ],
       "disposition": "applied",
       "impactClassification": "source-runtime-resolved",
-      "reasons": [
-        "zero-distance-projectile-impact-is-immediate",
-        "selected-public-action-form-hit-is-canonical-trace-required"
-      ],
+      "reasons": ["zero-distance-projectile-impact-is-immediate", "selected-public-action-form-hit-is-canonical-trace-required"],
       "sourceIdentity": "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:103002#normal-chain"
     },
     {
@@ -688,17 +685,26 @@
       "statuses": ["static-evidence-gap"],
       "elementPathIds": ["-8301357918827043072"],
       "controlVariants": [
-        { "controlSkillId": 10300201, "subSkillIndexes": [1, 2, 3] },
-        { "controlSkillId": 10300202, "subSkillIndexes": [1, 2, 3] },
-        { "controlSkillId": 10300203, "subSkillIndexes": [1, 2, 3] },
-        { "controlSkillId": 10300204, "subSkillIndexes": [0, 1, 2] }
+        {
+          "controlSkillId": 10300201,
+          "subSkillIndexes": [1, 2, 3]
+        },
+        {
+          "controlSkillId": 10300202,
+          "subSkillIndexes": [1, 2, 3]
+        },
+        {
+          "controlSkillId": 10300203,
+          "subSkillIndexes": [1, 2, 3]
+        },
+        {
+          "controlSkillId": 10300204,
+          "subSkillIndexes": [0, 1, 2]
+        }
       ],
       "disposition": "applied",
       "impactClassification": "source-runtime-resolved",
-      "reasons": [
-        "source-driven-four-second-target-state-contract",
-        "enhanced-chain-canonical-trace-required"
-      ],
+      "reasons": ["source-driven-four-second-target-state-contract", "enhanced-chain-canonical-trace-required"],
       "sourceIdentity": "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
     },
     {
@@ -708,10 +714,7 @@
       "elementPathIds": ["3663436943335475859"],
       "disposition": "not-applicable",
       "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "raw-resource-child-is-not-a-second-runtime-transaction",
-        "typed-resource-contract-remains-runtime-required"
-      ],
+      "reasons": ["raw-resource-child-is-not-a-second-runtime-transaction", "typed-resource-contract-remains-runtime-required"],
       "sourceIdentity": "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
     },
     {
@@ -721,29 +724,17 @@
       "elementPathIds": ["6226025878936021619"],
       "disposition": "not-applicable",
       "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "visual-child-is-not-a-gameplay-effect",
-        "source-container-retained-without-runtime-synthesis"
-      ],
+      "reasons": ["visual-child-is-not-a-gameplay-effect", "source-container-retained-without-runtime-synthesis"],
       "sourceIdentity": "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
     },
     {
       "policyIdentity": "ruby-tuning-judgment-parent-superseded-by-applied-child",
       "sourceKinds": ["effect"],
       "statuses": ["static-evidence-gap"],
-      "reasonIncludes": [
-        "tuning-consume-current-packet-not-in-candidate-map",
-        "tuning-consume-judgment-missing",
-        "tuning-consume-mark-identity-ambiguous",
-        "tuning-consume-success-branch-unresolved"
-      ],
+      "reasonIncludes": ["tuning-consume-current-packet-not-in-candidate-map", "tuning-consume-judgment-missing", "tuning-consume-mark-identity-ambiguous", "tuning-consume-success-branch-unresolved"],
       "disposition": "not-applicable",
       "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "root-judgment-wrapper-is-covered-by-applied-descendant",
-        "same-graph-same-trigger-child-points-back-to-judgment-element",
-        "applied-child-tuning-consume-trace-remains-required"
-      ],
+      "reasons": ["root-judgment-wrapper-is-covered-by-applied-descendant", "same-graph-same-trigger-child-points-back-to-judgment-element", "applied-child-tuning-consume-trace-remains-required"],
       "sourceIdentity": "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
     },
     {
@@ -752,14 +743,14 @@
       "statuses": ["static-evidence-gap"],
       "elementPathIds": ["-8301357918827043072"],
       "controlVariants": [
-        { "controlSkillId": 10300244, "subSkillIndexes": [1] }
+        {
+          "controlSkillId": 10300244,
+          "subSkillIndexes": [1]
+        }
       ],
       "disposition": "not-applicable",
       "impactClassification": "unreachable",
-      "reasons": [
-        "internal-control-has-no-current-public-action-incoming-path",
-        "unreachable-client-container-retained-without-runtime-synthesis"
-      ],
+      "reasons": ["internal-control-has-no-current-public-action-incoming-path", "unreachable-client-container-retained-without-runtime-synthesis"],
       "sourceIdentity": "current-public-action-closure:103002#control=10300244/sub=1;incomingReferenceCount=0"
     },
     {
@@ -768,14 +759,14 @@
       "statuses": ["static-evidence-gap"],
       "elementPathIds": ["4537866354445192595"],
       "controlVariants": [
-        { "controlSkillId": 10300211, "subSkillIndexes": [0] }
+        {
+          "controlSkillId": 10300211,
+          "subSkillIndexes": [0]
+        }
       ],
       "disposition": "not-applicable",
       "impactClassification": "not-applicable",
-      "reasons": [
-        "plunging-action-is-outside-frozen-active-surface",
-        "scenario-out-of-scope-not-applicable"
-      ],
+      "reasons": ["plunging-action-is-outside-frozen-active-surface", "scenario-out-of-scope-not-applicable"],
       "sourceIdentity": "m12c-zero-distance-passive-boss-v1#plunge-excluded|battle-effect:10300211:0:4537866354445192595"
     },
     {
@@ -784,14 +775,14 @@
       "statuses": ["static-evidence-gap"],
       "elementPathIds": ["9417489454203567"],
       "controlVariants": [
-        { "controlSkillId": 10300243, "subSkillIndexes": [0] }
+        {
+          "controlSkillId": 10300243,
+          "subSkillIndexes": [0]
+        }
       ],
       "disposition": "not-applicable",
       "impactClassification": "unreachable",
-      "reasons": [
-        "internal-control-has-no-current-public-action-incoming-path",
-        "marker-has-no-runtime-element-payload"
-      ],
+      "reasons": ["internal-control-has-no-current-public-action-incoming-path", "marker-has-no-runtime-element-payload"],
       "sourceIdentity": "current-public-action-closure:103002#control=10300243/sub=0;incomingReferenceCount=0|Battle/Element/ast_103002180.asset#empty-payload-marker"
     },
     {
@@ -800,14 +791,14 @@
       "statuses": ["static-evidence-gap"],
       "elementPathIds": ["2509240266934390618"],
       "controlVariants": [
-        { "controlSkillId": 10300261, "subSkillIndexes": [0] }
+        {
+          "controlSkillId": 10300261,
+          "subSkillIndexes": [0]
+        }
       ],
       "disposition": "not-applicable",
       "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "raw-passive-marker-is-superseded-by-compiled-passive-contract",
-        "fifteen-second-six-stack-runtime-remains-required"
-      ],
+      "reasons": ["raw-passive-marker-is-superseded-by-compiled-passive-contract", "fifteen-second-six-stack-runtime-remains-required"],
       "sourceIdentity": "character-combat-owner-contract:103002#passives[actor:103002:passive:10300261]"
     },
     {
@@ -816,14 +807,14 @@
       "statuses": ["static-evidence-gap"],
       "reasonIncludes": ["effect-trigger-frame-missing"],
       "controlVariants": [
-        { "controlSkillId": 10300241, "subSkillIndexes": [0] }
+        {
+          "controlSkillId": 10300241,
+          "subSkillIndexes": [0]
+        }
       ],
       "disposition": "not-applicable",
       "impactClassification": "unreachable",
-      "reasons": [
-        "foreign-player-skill-id-has-no-current-public-action-reference",
-        "missing-trigger-frame-must-not-be-synthesized"
-      ],
+      "reasons": ["foreign-player-skill-id-has-no-current-public-action-reference", "missing-trigger-frame-must-not-be-synthesized"],
       "sourceIdentity": "current-public-action-closure:103002#control=10300241;playerSkillId=10100347;incomingReferenceCount=0"
     }
   ],
@@ -839,9 +830,7 @@
       "identity": "actor:103002:internal-control:10300253",
       "sourceKind": "internal-unreachable-control",
       "status": "not-applicable",
-      "reasons": [
-        "reexported-subskill-container-unreachable-from-current-skill-list"
-      ],
+      "reasons": ["reexported-subskill-container-unreachable-from-current-skill-list"],
       "sourceIdentity": "Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500135400000.asset|skill_control_10300253.asset#skillResourceMaps=2|NewTable/skill+skillsub_logic#referenceCount=0|current-public-action-closure#referenceCount=0"
     }
   ],
@@ -852,19 +841,19 @@
     "teamCharacterIds": [103002, 101010, 101003],
     "initialControlledCharacterId": 103002,
     "initialActorSp": {
-      "103002": 100,
+      "101003": 0,
       "101010": 0,
-      "101003": 0
+      "103002": 100
     },
     "kiboByCharacterId": {
-      "103002": 500039,
+      "101003": 500469,
       "101010": 500003,
-      "101003": 500469
+      "103002": 500039
     },
     "initialKiboSp": {
-      "103002": 100,
+      "101003": 100,
       "101010": 100,
-      "101003": 100
+      "103002": 100
     },
     "loadoutByCharacterId": {
       "103002": {
@@ -1032,16 +1021,7 @@
     "traceSelectors": {
       "passiveEffectIds": ["battle-element:103002275"],
       "stateEffectIds": [],
-      "dynamicPropertyActionKeys": [
-        "ruby-enhanced-shot-1",
-        "ruby-enhanced-shot-2",
-        "ruby-enhanced-shot-3",
-        "ruby-enhanced-shot-4",
-        "ruby-enhanced-shot-5",
-        "ruby-enhanced-shot-6",
-        "ruby-ultimate",
-        "ruby-post-ultimate-shot"
-      ]
+      "dynamicPropertyActionKeys": ["ruby-enhanced-shot-1", "ruby-enhanced-shot-2", "ruby-enhanced-shot-3", "ruby-enhanced-shot-4", "ruby-enhanced-shot-5", "ruby-enhanced-shot-6", "ruby-ultimate", "ruby-post-ultimate-shot"]
     },
     "expectedRuntime": {
       "exact": {
@@ -1080,26 +1060,24 @@
         "actions.selectionByActionId.ruby-limit-counter.actualDurationFrames": 35,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.controlSkillId": 10300221,
         "actions.selectionByActionId.switch-back-to-ruby--on-enter--actor-103002--star-carry.actualDurationFrames": 93,
-        "combat.damageEventCount": 187,
-        "combat.ownerDamageEventCount": 185,
+        "combat.damageEventCount": 188,
+        "combat.ownerDamageEventCount": 186,
         "combat.ownerHitEventCount": 64,
         "combat.ownerHitCountByActionId.ruby-star-skill": 7,
         "combat.ownerHitSummaryByActionId.ruby-star-skill.hitCount": 7,
-        "combat.ownerHitSummaryByActionId.ruby-star-skill.frames": [
-          1887, 1894, 1899, 1904, 1909, 1914, 1919
-        ],
+        "combat.ownerHitSummaryByActionId.ruby-star-skill.frames": [1887, 1894, 1899, 1904, 1909, 1914, 1919],
         "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage": 3839,
         "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage": 2688,
         "combat.ownerHitSummaryByActionId.ruby-ultimate.hitCount": 25,
-        "combat.ownerHitSummaryByActionId.ruby-ultimate.totalHpDamage": 42736,
-        "combat.ownerHitSummaryByActionId.ruby-ultimate.totalToughnessDamage": 4504,
-        "combat.selectedHpDamageByActionId.ruby-ultimate": 191891,
-        "combat.ownerHitTotalHpDamage": 64780,
-        "combat.ownerHitTotalToughnessDamage": 15438,
-        "combat.ownerTotalHpDamage": 218014,
-        "combat.ownerTotalToughnessDamage": 6063,
+        "combat.ownerHitSummaryByActionId.ruby-ultimate.totalHpDamage": 24591,
+        "combat.ownerHitSummaryByActionId.ruby-ultimate.totalToughnessDamage": 17208,
+        "combat.selectedHpDamageByActionId.ruby-ultimate": 30461,
+        "combat.ownerHitTotalHpDamage": 48641,
+        "combat.ownerHitTotalToughnessDamage": 27926.0077,
+        "combat.ownerTotalHpDamage": 54680,
+        "combat.ownerTotalToughnessDamage": 4176,
         "combat.enemy.initialHp": 8677869.84,
-        "combat.enemy.finalHp": 8459311.84,
+        "combat.enemy.finalHp": 8622645.84,
         "resources.specialResourceTrace.0.actionId": "ruby-reload",
         "resources.specialResourceTrace.0.frame": 24,
         "resources.specialResourceTrace.0.beforeValue": 0,
@@ -1168,16 +1146,13 @@
         "effects.passiveTrace.9.targetId": "actor-103002",
         "dynamicProperties.ownerSources.0.attributeId": 1,
         "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
-        "comparison.primaryDamage": 1716,
-        "comparison.baselineDamage": 723,
-        "comparison.damageDelta": 993
+        "comparison.primaryDamage": 1144,
+        "comparison.baselineDamage": 360,
+        "comparison.damageDelta": 784
       },
       "greaterThan": {
-        "combat.ownerTotalHpDamage": 0,
-        "combat.ownerTotalToughnessDamage": 0,
         "resources.actorSpByActorId.actor-103002.currentValue": 0,
-        "resources.kiboSpBySlotId.team-slot-1.currentValue": 0,
-        "comparison.damageDelta": 0
+        "resources.kiboSpBySlotId.team-slot-1.currentValue": 0
       }
     }
   }

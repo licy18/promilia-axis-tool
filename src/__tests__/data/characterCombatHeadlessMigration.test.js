@@ -9,13 +9,13 @@ const GOLDENS = [
     identity: 'xiaoyu-main',
     ownerId: 101010,
     report: xiaoyuGolden,
-    assertionCount: 118,
+    assertionCount: 115,
   },
   {
     identity: 'ruby-main',
     ownerId: 103002,
     report: rubyGolden,
-    assertionCount: 129,
+    assertionCount: 126,
   },
   {
     identity: 'han-main',

@@ -16,10 +16,7 @@
     "zeroDistance": {
       "projectileImpactPolicy": "scenario-assumed-zero-distance",
       "requiredResourceIdentities": [],
-      "requiredActionEffectBindingIdentities": [
-        "misa-star-wood-priority-consume",
-        "misa-star-independent-wind-mark"
-      ],
+      "requiredActionEffectBindingIdentities": ["misa-star-wood-priority-consume", "misa-star-independent-wind-mark"],
       "requiredPassiveIdentities": []
     }
   },
@@ -61,25 +58,24 @@
       "statuses": ["runtime-evidence-required"],
       "scenarioRuntimeStatuses": ["scenario-assumed-zero-distance"],
       "controlVariants": [
-        { "controlSkillId": 10700201, "subSkillIndexes": [0] },
-        { "controlSkillId": 10700202, "subSkillIndexes": [0] }
+        {
+          "controlSkillId": 10700201,
+          "subSkillIndexes": [0]
+        },
+        {
+          "controlSkillId": 10700202,
+          "subSkillIndexes": [0]
+        }
       ],
       "disposition": "applied",
       "impactClassification": "source-runtime-resolved",
-      "reasons": [
-        "zero-distance-projectile-impact-is-source-bound",
-        "verified-a1-a2-projectile-timing-is-canonical-trace-required"
-      ],
+      "reasons": ["zero-distance-projectile-impact-is-source-bound", "verified-a1-a2-projectile-timing-is-canonical-trace-required"],
       "sourceIdentity": "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
     }
   ],
   "compiler": {
     "timingPolicy": "standalone-animation",
-    "reachableControlSkillIds": [
-      10700201, 10700202, 10700203, 10700204, 10700205, 10700210, 10700211,
-      10700212, 10700213, 10700215, 10700222, 10700225, 10700226, 10700227,
-      10700261
-    ],
+    "reachableControlSkillIds": [10700201, 10700202, 10700203, 10700204, 10700205, 10700210, 10700211, 10700212, 10700213, 10700215, 10700222, 10700225, 10700226, 10700227, 10700261],
     "contextInputEdges": [],
     "publicActionDeclarations": [],
     "publicActionForms": [
@@ -440,12 +436,7 @@
         "triggerElementId": 107002233,
         "triggerElementIndex": 7,
         "sourceTrackOrder": 15,
-        "pickupIdentities": [
-          "misa-a3-hp-pickup",
-          "misa-star-sp-pickup",
-          "misa-ultimate-hp-pickup",
-          "misa-ultimate-sp-pickup"
-        ],
+        "pickupIdentities": ["misa-a3-hp-pickup", "misa-star-sp-pickup", "misa-ultimate-hp-pickup", "misa-ultimate-sp-pickup"],
         "collector": "action-owner",
         "settlementGate": "successful-action-execute",
         "requiresHit": false,
@@ -555,9 +546,7 @@
       "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:-6104701335743815286|82|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-priority-consume-overlimit-and-success-contract"
-      ],
+      "reasons": ["covered-by-applied-priority-consume-overlimit-and-success-contract"],
       "sourceIdentity": "battle-effect:10700212:0:-6104701335743815286:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
     },
     {
@@ -585,9 +574,7 @@
       "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:7183943640740465629|82|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-consume-success-property-contract"
-      ],
+      "reasons": ["covered-by-applied-tuning-consume-success-property-contract"],
       "sourceIdentity": "battle-effect:10700212:0:7183943640740465629:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
     },
     {
@@ -635,19 +622,19 @@
       }
     },
     "initialActorSp": {
-      "107002": 90,
       "101010": 0,
-      "103002": 0
+      "103002": 0,
+      "107002": 90
     },
     "kiboByCharacterId": {
-      "107002": 500001,
       "101010": 500003,
-      "103002": 500039
+      "103002": 500039,
+      "107002": 500001
     },
     "initialKiboSp": {
-      "107002": 100,
       "101010": 100,
-      "103002": 100
+      "103002": 100,
+      "107002": 100
     },
     "initialTuningMarks": [
       {
@@ -827,13 +814,7 @@
     ],
     "comparison": {},
     "traceSelectors": {
-      "stateEffectIds": [
-        "battle-element:107002256",
-        "battle-element:-3902053340404252506",
-        "battle-element:1466117413664505892",
-        "battle-element:107002257",
-        "battle-element:107002258"
-      ]
+      "stateEffectIds": ["battle-element:107002256", "battle-element:-3902053340404252506", "battle-element:1466117413664505892", "battle-element:107002257", "battle-element:107002258"]
     },
     "expectedRuntime": {
       "exact": {
@@ -848,9 +829,7 @@
             "skipReason": "confirmed-action-rule-violation",
             "unresolvedCodes": [],
             "violationCodes": ["skill-cooldown-active"],
-            "diagnosticIds": [
-              "skill-cooldown-active|misa-star-before-cooldown-boundary|misa-star"
-            ]
+            "diagnosticIds": ["skill-cooldown-active|misa-star-before-cooldown-boundary|misa-star"]
           }
         ],
         "actions.selectionByActionId.misa-star": {
@@ -877,65 +856,20 @@
           "actualDurationFrames": 218,
           "sourceKind": "verified-public-action-form-wrapper-derived-execution"
         },
-        "combat.ownerHitSummaryByActionId.misa-a3.frames": [
-          40, 46, 52, 58, 64, 70, 76, 82, 88, 94, 100
-        ],
-        "combat.ownerHitSummaryByActionId.misa-a3-pickup-hits-miss.frames": [
-          3876, 3882, 3888, 3894, 3900
-        ],
-        "combat.ownerHitSummaryByActionId.misa-a4.frames": [
-          289, 296, 303, 310, 317, 324, 330, 336, 342
-        ],
-        "combat.ownerHitSummaryByActionId.misa-a4-required-hit-miss.frames": [
-          3449, 3456, 3463, 3470, 3477, 3490, 3496, 3502
-        ],
-        "combat.ownerHitSummaryByActionId.misa-charged.frames": [
-          648, 651, 663, 669, 676, 683, 690
-        ],
-        "combat.ownerHitSummaryByActionId.misa-star.frames": [
-          1274, 1282, 1290, 1299, 1307, 1314
-        ],
-        "combat.ownerHitSummaryByActionId.misa-star-at-cooldown-boundary.frames": [
-          2714, 2722, 2730, 2739, 2747, 2754
-        ],
-        "combat.ownerHitSummaryByActionId.misa-star-no-consume-candidate.frames": [
-          6074, 6082, 6090, 6099, 6107, 6114
-        ],
+        "combat.ownerHitSummaryByActionId.misa-a3.frames": [40, 46, 52, 58, 64, 70, 76, 82, 88, 94, 100],
+        "combat.ownerHitSummaryByActionId.misa-a3-pickup-hits-miss.frames": [3876, 3882, 3888, 3894, 3900],
+        "combat.ownerHitSummaryByActionId.misa-a4.frames": [289, 296, 303, 310, 317, 324, 330, 336, 342],
+        "combat.ownerHitSummaryByActionId.misa-a4-required-hit-miss.frames": [3449, 3456, 3463, 3470, 3477, 3490, 3496, 3502],
+        "combat.ownerHitSummaryByActionId.misa-charged.frames": [648, 651, 663, 669, 676, 683, 690],
+        "combat.ownerHitSummaryByActionId.misa-star.frames": [1274, 1282, 1290, 1299, 1307, 1314],
+        "combat.ownerHitSummaryByActionId.misa-star-at-cooldown-boundary.frames": [2714, 2722, 2730, 2739, 2747, 2754],
+        "combat.ownerHitSummaryByActionId.misa-star-no-consume-candidate.frames": [6074, 6082, 6090, 6099, 6107, 6114],
         "combat.ownerDirectHealSummaryByActionId.misa-charged.eventCount": 6,
-        "combat.ownerDirectHealSummaryByActionId.misa-charged.frames": [
-          670, 670, 670, 670, 670, 670
-        ],
-        "combat.ownerDirectHealSummaryByActionId.misa-charged.targetIds": [
-          "actor-107002"
-        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-charged.frames": [670, 670, 670, 670, 670, 670],
+        "combat.ownerDirectHealSummaryByActionId.misa-charged.targetIds": ["actor-107002"],
         "combat.ownerDirectHealSummaryByActionId.misa-charged.requestedChangeTotal": 966,
-        "combat.ownerDirectHealSummaryByActionId.misa-charged.baseFunctionIds": [
-          104
-        ],
-        "combat.ownerDirectHealSummaryByActionId.misa-charged.maximumHpSubjects": [
-          "source-actor"
-        ],
-        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.eventCount": 15,
-        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.frames": [
-          3143, 3143, 3143, 3155, 3155, 3155, 3167, 3167, 3167, 3181, 3181,
-          3181, 3193, 3193, 3193
-        ],
-        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.targetIds": [
-          "actor-101010",
-          "actor-103002",
-          "actor-107002"
-        ],
-        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.baseFunctionIds": [],
-        "combat.ownerDirectHealSummaryByActionId.misa-ultimate.maximumHpSubjects": [],
-        "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.eventCount": 12,
-        "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.frames": [
-          4246, 4246, 4246, 4261, 4261, 4261, 4279, 4279, 4279, 4298, 4298, 4298
-        ],
-        "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.targetIds": [
-          "actor-101010",
-          "actor-103002",
-          "actor-107002"
-        ],
+        "combat.ownerDirectHealSummaryByActionId.misa-charged.baseFunctionIds": [104],
+        "combat.ownerDirectHealSummaryByActionId.misa-charged.maximumHpSubjects": ["source-actor"],
         "resources.ownerActorSpTransactionsByActionId.misa-ultimate": {
           "eventCount": 1,
           "frames": [3000],
@@ -959,48 +893,26 @@
           "unresolvedCount": 0,
           "applied": true
         },
-        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.spawnFrames": [
-          40, 46, 52, 58, 64, 70
-        ],
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.spawnFrames": [40, 46, 52, 58, 64, 70],
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.collectionFrames": [],
-        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorptionFrames": [
-          670, 670, 670, 670, 670, 670
-        ],
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorptionFrames": [670, 670, 670, 670, 670, 670],
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorbedCount": 6,
-        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorberActorIds": [
-          "actor-107002"
-        ],
-        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorberActionIds": [
-          "misa-charged"
-        ],
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorberActorIds": ["actor-107002"],
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorberActionIds": ["misa-charged"],
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.rejectedCount": 6,
-        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.poolKeys": [
-          "actor-107002|SummonTempData|summon-temp:107002220|480042"
-        ],
-        "resources.pickupSummaryByIdentity.misa-star-sp-pickup.spawnFrames": [
-          1274, 1282, 1290, 1299, 2714, 2722, 2730, 2739, 6074, 6082, 6090, 6099
-        ],
+        "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.poolKeys": ["actor-107002|SummonTempData|summon-temp:107002220|480042"],
+        "resources.pickupSummaryByIdentity.misa-star-sp-pickup.spawnFrames": [1274, 1282, 1290, 1299, 2714, 2722, 2730, 2739, 6074, 6082, 6090, 6099],
         "resources.pickupSummaryByIdentity.misa-star-sp-pickup.collectionFrames": [],
         "resources.pickupSummaryByIdentity.misa-star-sp-pickup.absorbedCount": 0,
-        "resources.pickupSummaryByIdentity.misa-star-sp-pickup.poolKeys": [
-          "actor-107002|SummonTempData|summon-temp:107002214|480041"
-        ],
-        "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.spawnFrames": [
-          3135, 3135, 3135
-        ],
+        "resources.pickupSummaryByIdentity.misa-star-sp-pickup.poolKeys": ["actor-107002|SummonTempData|summon-temp:107002214|480041"],
+        "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.spawnFrames": [3135, 3135, 3135],
         "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.collectionFrames": [],
         "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.absorbedCount": 0,
-        "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.poolKeys": [
-          "actor-107002|SummonId|summon-id:480042|480042"
-        ],
-        "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.spawnFrames": [
-          3135, 3135, 3135
-        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.poolKeys": ["actor-107002|SummonId|summon-id:480042|480042"],
+        "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.spawnFrames": [3135, 3135, 3135],
         "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.collectionFrames": [],
         "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.absorbedCount": 0,
-        "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.poolKeys": [
-          "actor-107002|SummonId|summon-id:480041|480041"
-        ],
+        "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.poolKeys": ["actor-107002|SummonId|summon-id:480041|480041"],
         "resources.tuningMarkAcquireByActionId": {
           "misa-star": {
             "eventCount": 1,
@@ -1096,10 +1008,7 @@
           "sameFrameVisibilityModes": ["strict-source-sequence"],
           "maxStacks": 1,
           "attributeIds": [3, 4],
-          "modifierSignatures": [
-            "3:dynamicPercent:-1000",
-            "4:dynamicPercent:-1000"
-          ],
+          "modifierSignatures": ["3:dynamicPercent:-1000", "4:dynamicPercent:-1000"],
           "formulaFamilies": [],
           "formulaValues": []
         },

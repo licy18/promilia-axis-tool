@@ -43,8 +43,8 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
       ],
     ]);
     expect(xiaoyuGoldenTrace.actual.combat).toMatchObject({
-      ownerTotalHpDamage: 775993,
-      ownerTotalToughnessDamage: 0,
+      ownerTotalHpDamage: 50091,
+      ownerTotalToughnessDamage: 22529,
     });
     expect(
       xiaoyuGoldenTrace.actual.dynamicProperties.maxPercentRawByAttributeId
@@ -74,8 +74,8 @@ describe('legacy golden axes under shared tuning-mark decay', () => {
       ],
     ]);
     expect(rubyGoldenTrace.actual.combat).toMatchObject({
-      ownerTotalHpDamage: 218014,
-      ownerTotalToughnessDamage: 6063,
+      ownerTotalHpDamage: 54680,
+      ownerTotalToughnessDamage: 4176,
     });
     expect(
       rubyGoldenTrace.actual.dynamicProperties.maxPercentRawByAttributeId

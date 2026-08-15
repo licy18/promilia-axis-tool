@@ -20,14 +20,7 @@
   },
   "compiler": {
     "timingPolicy": "verified-input-reopen",
-    "reachableControlSkillIds": [
-      10100301, 10100302, 10100303, 10100304, 10100305, 10100310, 10100311,
-      10100312, 10100313, 10100314, 10100315, 10100316, 10100322, 10100324,
-      10100325, 10100326, 10100327, 10100331, 10100341, 10100342, 10100343,
-      10100344, 10100345, 10100346, 10100347, 10100348, 10100349, 10100360,
-      10100361, 48005901, 48006001, 48012401, 48012501, 48012601, 48013201,
-      48013301
-    ],
+    "reachableControlSkillIds": [10100301, 10100302, 10100303, 10100304, 10100305, 10100310, 10100311, 10100312, 10100313, 10100314, 10100315, 10100316, 10100322, 10100324, 10100325, 10100326, 10100327, 10100331, 10100341, 10100342, 10100343, 10100344, 10100345, 10100346, 10100347, 10100348, 10100349, 10100360, 10100361, 48005901, 48006001, 48012401, 48012501, 48012601, 48013201, 48013301],
     "publicActionDeclarations": [],
     "contextInputEdges": [
       {
@@ -704,10 +697,7 @@
         "skillId": 10100361,
         "runtimeGenerationMode": "target-state-runtime",
         "sourceElementIds": [101003186, 480124006, 480126003],
-        "runtimeBindingIdentities": [
-          "han-firework-explosion-controlled-attack-passive",
-          "han-firework-explosion-controlled-attack-passive-stage-two"
-        ],
+        "runtimeBindingIdentities": ["han-firework-explosion-controlled-attack-passive", "han-firework-explosion-controlled-attack-passive-stage-two"],
         "effectId": "battle-element:480124006",
         "effectElementId": 480124006,
         "markerElementId": 101003186,
@@ -724,10 +714,7 @@
       "identity": "actor:101003:ultimate:hidden-firework-explosion",
       "sourceKind": "legacy-unreachable-element",
       "status": "not-applicable",
-      "reasons": [
-        "legacy-or-unreachable-current-client",
-        "hidden-ultimate-firework-explosion-discarded-current-client"
-      ],
+      "reasons": ["legacy-or-unreachable-current-client", "hidden-ultimate-firework-explosion-discarded-current-client"],
       "sourceIdentity": "Battle/Element/ast_101003144.asset|Battle/Item/ast_480133.asset"
     }
   ],
@@ -806,15 +793,8 @@
       },
       "traceSelectors": {
         "passiveEffectIds": [],
-        "stateEffectIds": [
-          "battle-element:101003205",
-          "battle-element:101003207"
-        ],
-        "dynamicPropertyActionKeys": [
-          "han-ultimate",
-          "xiaoyu-hit-during-buff",
-          "xiaoyu-hit-after-expiry"
-        ]
+        "stateEffectIds": ["battle-element:101003205", "battle-element:101003207"],
+        "dynamicPropertyActionKeys": ["han-ultimate", "xiaoyu-hit-during-buff", "xiaoyu-hit-after-expiry"]
       },
       "expectedRuntime": {
         "exact": {
@@ -824,38 +804,21 @@
           "actions.selectionByActionId.han-ultimate.subSkillIndex": 0,
           "actions.selectionByActionId.xiaoyu-hit-during-buff.controlSkillId": 10101001,
           "actions.selectionByActionId.xiaoyu-hit-after-expiry.controlSkillId": 10101001,
-          "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff": 5157,
-          "combat.selectedHpDamageByActionId.xiaoyu-hit-after-expiry": 3565,
-          "dynamicProperties.effectIdsByActionId.xiaoyu-hit-during-buff": [
-            "battle-element:-4841411980842434486",
-            "battle-element:-5652413049857383353",
-            "battle-element:101010206",
-            "tuning-mark:150:persistent"
-          ],
-          "dynamicProperties.effectIdsByActionId.xiaoyu-hit-after-expiry": [
-            "battle-element:-5652413049857383353",
-            "tuning-mark:150:persistent"
-          ],
-          "effects.selectedEffectSummaryByElementId.101003205.targetIds": [
-            "actor-101003",
-            "actor-101010",
-            "actor-103002"
-          ],
+          "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff": 325,
+          "combat.selectedHpDamageByActionId.xiaoyu-hit-after-expiry": 286,
+          "dynamicProperties.effectIdsByActionId.xiaoyu-hit-during-buff": ["battle-element:-4841411980842434486", "battle-element:-5652413049857383353", "battle-element:101010206", "tuning-mark:150:persistent"],
+          "dynamicProperties.effectIdsByActionId.xiaoyu-hit-after-expiry": ["battle-element:-5652413049857383353", "tuning-mark:150:persistent"],
+          "effects.selectedEffectSummaryByElementId.101003205.targetIds": ["actor-101003", "actor-101010", "actor-103002"],
           "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount": 3,
           "effects.selectedEffectSummaryByElementId.101003205.transferredEventCount": 0,
           "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount": 3,
-          "effects.selectedEffectSummaryByElementId.101003207.targetIds": [
-            "actor-101003",
-            "actor-101010"
-          ],
+          "effects.selectedEffectSummaryByElementId.101003207.targetIds": ["actor-101003", "actor-101010"],
           "effects.selectedEffectSummaryByElementId.101003207.appliedEventCount": 1,
           "effects.selectedEffectSummaryByElementId.101003207.transferredEventCount": 1,
           "effects.selectedEffectSummaryByElementId.101003207.expiredEventCount": 1,
           "effects.selectedEffectSummaryByElementId.101003207.firstAppliedFrame": 208,
           "effects.selectedEffectSummaryByElementId.101003207.firstExpiredFrame": 1108,
-          "effects.selectedEffectSummaryByElementId.101003207.formulaValues": [
-            1042.0045928955078
-          ],
+          "effects.selectedEffectSummaryByElementId.101003207.formulaValues": [30.79718017578125],
           "effects.inheritanceTransferCountByEffectId.battle-element:101003205": 0,
           "effects.inheritanceTransferCountByEffectId.battle-element:101003207": 1,
           "effects.inheritanceTransfers.0.effectId": "battle-element:101003207",
@@ -866,13 +829,9 @@
           "effects.inheritanceTransfers.0.formulaSourceActorId": "actor-101003",
           "effects.inheritanceTransfers.0.effectAdderActorId": "actor-101003",
           "effects.inheritanceTransfers.0.expiresAtMs": 18466.667,
-          "effects.inheritanceTransfers.0.formulaValues": [1042.0045928955078],
-          "comparison.primaryEffectFormulaValuesById.battle-element:101003207": [
-            1042.0045928955078
-          ],
-          "comparison.baselineEffectFormulaValuesById.battle-element:101003207": [
-            1019.9066162109375
-          ]
+          "effects.inheritanceTransfers.0.formulaValues": [30.79718017578125],
+          "comparison.primaryEffectFormulaValuesById.battle-element:101003207": [30.79718017578125],
+          "comparison.baselineEffectFormulaValuesById.battle-element:101003207": [8.699203491210938]
         }
       }
     }
@@ -1036,19 +995,8 @@
     },
     "traceSelectors": {
       "passiveEffectIds": ["battle-element:480124006"],
-      "stateEffectIds": [
-        "battle-element:101003079",
-        "battle-element:101003205",
-        "battle-element:101003207",
-        "battle-element:101003145",
-        "battle-element:101003142"
-      ],
-      "dynamicPropertyActionKeys": [
-        "han-charged-stage-one",
-        "han-charged-stage-two",
-        "han-star-skill",
-        "han-ultimate"
-      ]
+      "stateEffectIds": ["battle-element:101003079", "battle-element:101003205", "battle-element:101003207", "battle-element:101003145", "battle-element:101003142"],
+      "dynamicPropertyActionKeys": ["han-charged-stage-one", "han-charged-stage-two", "han-star-skill", "han-ultimate"]
     },
     "expectedRuntime": {
       "exact": {
@@ -1057,9 +1005,7 @@
         "project.teamCharacterIds": [101003, 101010, 103002],
         "actions.blockedActionIds": ["han-kibo-signature"],
         "actions.blockedActionDetails.0.skipReason": "confirmed-action-rule-violation",
-        "actions.blockedActionDetails.0.violationCodes": [
-          "controlled-actor-action-unavailable"
-        ],
+        "actions.blockedActionDetails.0.violationCodes": ["controlled-actor-action-unavailable"],
         "actions.selectionByActionId.han-normal-a1.semanticName": "普通攻击 A1",
         "actions.selectionByActionId.han-normal-a5.semanticName": "普通攻击 A5",
         "actions.selectionByActionId.han-charged-stage-one.controlSkillId": 10100310,
@@ -1072,8 +1018,8 @@
         "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
         "combat.ownerHitCountByActionId.han-star-skill": 7,
         "combat.ownerHitCountByActionId.han-ultimate": 7,
-        "combat.ownerTotalHpDamage": 149879,
-        "combat.ownerTotalToughnessDamage": 6398,
+        "combat.ownerTotalHpDamage": 98042,
+        "combat.ownerTotalToughnessDamage": 1223,
         "resources.targetStateSummary.profileCount": 3,
         "resources.targetStateSummary.eventCount": 9,
         "resources.targetStateSummary.appliedGroupCount": 2,
@@ -1094,44 +1040,26 @@
         "resources.tuningMarkAcquireByActionId.han-ultimate.totalDelta": 3,
         "effects.passiveMaxStacks": 1,
         "effects.firstPassiveMaxStackFrame": 2029,
-        "effects.selectedEffectSummaryByElementId.101003205.effectNames": [
-          "全队调谐强度提升"
-        ],
-        "effects.selectedEffectSummaryByElementId.101003205.targetKinds": [
-          "actor"
-        ],
-        "effects.selectedEffectSummaryByElementId.101003205.targetIds": [
-          "actor-101003",
-          "actor-101010",
-          "actor-103002"
-        ],
-        "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount": 3,
+        "effects.selectedEffectSummaryByElementId.101003205.effectNames": ["全队调谐强度提升"],
+        "effects.selectedEffectSummaryByElementId.101003205.targetKinds": ["actor"],
+        "effects.selectedEffectSummaryByElementId.101003205.targetIds": ["actor-101003", "actor-101010", "actor-103002"],
+        "effects.selectedEffectSummaryByElementId.101003205.appliedEventCount": 6,
         "effects.selectedEffectSummaryByElementId.101003205.transferredEventCount": 0,
-        "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount": 3,
+        "effects.selectedEffectSummaryByElementId.101003205.expiredEventCount": 6,
         "effects.selectedEffectSummaryByElementId.101003205.firstAppliedFrame": 208,
         "effects.selectedEffectSummaryByElementId.101003205.firstExpiredFrame": 1648,
         "effects.selectedEffectSummaryByElementId.101003205.maxStacks": 2,
-        "effects.selectedEffectSummaryByElementId.101003205.formulaValues": [
-          18
-        ],
-        "effects.selectedEffectSummaryByElementId.101003207.effectNames": [
-          "主控角色调谐强度提升"
-        ],
-        "effects.selectedEffectSummaryByElementId.101003207.targetKinds": [
-          "actor"
-        ],
-        "effects.selectedEffectSummaryByElementId.101003207.targetIds": [
-          "actor-101003"
-        ],
+        "effects.selectedEffectSummaryByElementId.101003205.formulaValues": [18],
+        "effects.selectedEffectSummaryByElementId.101003207.effectNames": ["主控角色调谐强度提升"],
+        "effects.selectedEffectSummaryByElementId.101003207.targetKinds": ["actor"],
+        "effects.selectedEffectSummaryByElementId.101003207.targetIds": ["actor-101003"],
         "effects.selectedEffectSummaryByElementId.101003207.appliedEventCount": 1,
         "effects.selectedEffectSummaryByElementId.101003207.transferredEventCount": 0,
         "effects.selectedEffectSummaryByElementId.101003207.expiredEventCount": 1,
         "effects.selectedEffectSummaryByElementId.101003207.firstAppliedFrame": 208,
         "effects.selectedEffectSummaryByElementId.101003207.firstExpiredFrame": 1108,
         "effects.selectedEffectSummaryByElementId.101003207.maxStacks": 1,
-        "effects.selectedEffectSummaryByElementId.101003207.formulaValues": [
-          1019.9066162109375
-        ],
+        "effects.selectedEffectSummaryByElementId.101003207.formulaValues": [8.699203491210938],
         "effects.inheritanceTransferCountByEffectId.battle-element:101003205": 0,
         "effects.inheritanceTransferCountByEffectId.battle-element:101003207": 0,
         "effects.inheritanceTransferCountByEffectId.battle-element:480124006": 1,
@@ -1146,8 +1074,8 @@
         "effects.passiveTrace.3.frame": 3615,
         "effects.passiveTrace.3.targetId": "actor-101010",
         "dynamicProperties.maxPercentRawByAttributeId.1": 1300,
-        "dynamicProperties.maxExtraRawByAttributeId.229": 1055.9066162109375,
-        "comparison.damageDelta": 6968
+        "dynamicProperties.maxExtraRawByAttributeId.229": 44.69920349121094,
+        "comparison.damageDelta": 5983
       },
       "greaterThan": {
         "resources.actorSpByActorId.actor-101003.currentValue": 0,
