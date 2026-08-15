@@ -293,7 +293,14 @@ export function evaluateVerifiedBattleEffectFormula({
   const evaluatedResultRaw = qMul(evaluatedBaseRaw, commonRaw);
   const outputUsesEvaluatedValue =
     contract.family === 'basis-point-property-a-with-common-ratio' &&
-    resolveEffectPropertyBucket(effect) === 'dynamicExtra';
+    (resolveEffectPropertyBucket(effect) === 'dynamicExtra' ||
+      // 直接回能/治疗/护盾（500368/500369/500370 等）：valueByLevel 为
+      // 基点（Lv1=31000 → 3.1 SP），必须换算后输出，否则 runtime 会把
+      // 31000 当绝对 SP 注入导致溢出。注意字段可能是 false 占位，
+      // 必须用真值判断（false != null 会误判）。
+      Boolean(effect.directSp) ||
+      Boolean(effect.heal) ||
+      Boolean(effect.shield));
   const outputRaw = outputUsesEvaluatedValue
     ? evaluatedResultRaw
     : qMul(sourceBaseRaw, commonRaw);
@@ -363,7 +370,8 @@ function resolveFormulaParams(effect, level) {
     effect.propertyChange?.valueByLevel?.[normalizedLevel] ??
     effect.directSp?.valueByLevel?.[normalizedLevel] ??
     effect.heal?.valueByLevel?.[normalizedLevel] ??
-    effect.shield?.valueByLevel?.[normalizedLevel];
+    effect.shield?.valueByLevel?.[normalizedLevel] ??
+    effect.cooldownReduction?.valueByLevel?.[normalizedLevel];
   return fallback == null ? null : [fallback, 0, 0, 0, 0, 0, 10_000];
 }
 

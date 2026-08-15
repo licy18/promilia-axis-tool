@@ -8,7 +8,6 @@ import {
   compareSourceSequencePaths,
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
-import { getInstalledVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 
@@ -25,6 +24,10 @@ const ACTION_KIND_SKILL_TAG_IDS = Object.freeze({
   'charged-attack': [2],
   'star-skill': [3],
   'ultimate': [4],
+  // 注意：末音星鸣技/星携技追击的 public 语义标签（NormalAttack=1）与
+  // 执行 control 标签（2）不同，客户端归类待裁定；当前按公开声明取 1，
+  // 且不把 public 与 execution 标签取并集（否则会同时触发普攻与重击两类
+  // 灵子）。裁定前不在此处为 star-combo 等追加语义映射。
 });
 
 export function deriveSoulEventSnapshotFromCombatRuntime(combatRuntime) {

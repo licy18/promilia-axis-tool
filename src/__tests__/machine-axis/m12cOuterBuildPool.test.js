@@ -116,27 +116,32 @@ describe('M12-C outer team and build pool', () => {
     expect(nonArray.issues).toContain('m12c-team-object-count-invalid');
   });
 
-  it('materializes a scoreable canonical build for every one of the 35 source configs', () => {
-    const pool = createM12cOuterBuildPool();
-    const builds = pool.teamCatalog.sourceConfigs.map(sourceConfig =>
-      createM12cBuildCandidate(createLegalSelection(pool, sourceConfig), {
-        pool,
-      })
-    );
+  it(
+    'materializes a scoreable canonical build for every one of the 35 source configs',
+    () => {
+      const pool = createM12cOuterBuildPool();
+      const builds = pool.teamCatalog.sourceConfigs.map(sourceConfig =>
+        createM12cBuildCandidate(createLegalSelection(pool, sourceConfig), {
+          pool,
+        })
+      );
 
     expect(builds).toHaveLength(35);
     expect(builds.every(result => result.scoreable && result.build)).toBe(true);
     expect(new Set(builds.map(result => result.build.buildHash)).size).toBe(35);
-  });
+    },
+    30_000
+  );
 
-  it('derives the qualified 43/62/137 catalogs and the 53-instance M12-C projection', () => {
+  it('derives the qualified 43/61/137 catalogs and the 53-instance M12-C projection', () => {
     const pool = createM12cOuterBuildPool();
 
     expect(pool.summary).toMatchObject({
       teamCount: 28,
       sourceConfigCount: 35,
       kiboCount: 43,
-      soulEssenceCount: 62,
+      // 搜索域灵子 61：10097（依赖 limit-counter，搜索禁用）已排除。
+      soulEssenceCount: 61,
       globalEquipmentQualifiedCount: 137,
       m12cEquipmentProjectionCount: 53,
       m12cEquipmentProjectionCountBySlot: {

@@ -247,7 +247,11 @@ export function createVerifiedBattleEffectGeneration({
       ...(resolution.effects ?? []).filter(
         effect =>
           effect.classification === 'applied' &&
-          !isConsumedBySemanticEffect(effect, semanticPathIds)
+          !isConsumedBySemanticEffect(
+            effect,
+            semanticEffects,
+            semanticPathIds
+          )
       ),
     ];
     const seenEffectIdentities = new Set();
@@ -476,13 +480,34 @@ export function createVerifiedBattleEffectGeneration({
   };
 }
 
-function isConsumedBySemanticEffect(effect, semanticPathIds) {
+function isConsumedBySemanticEffect(effect, semanticEffects, semanticPathIds) {
+  if (!Array.isArray(semanticEffects) || semanticEffects.length === 0) {
+    return false;
+  }
+  // 精确匹配：semantic 效果声明的 rawEffectIdentities（同效果身份）。
+  const identitySet = new Set();
+  for (const semantic of semanticEffects) {
+    for (const identity of semantic.rawEffectIdentities ?? []) {
+      identitySet.add(String(identity));
+    }
+  }
+  if (identitySet.has(String(effect?.effectIdentity ?? ''))) return true;
+  // pathId fallback：必须同时匹配触发帧，避免不同目标/时机的效果被
+  // 误认为已被 semantic 覆盖（如 500166 的 ally 暴击 frame25 与自身
+  // 暴击 frame24 共用 pathId 但语义不同）。
   if (!semanticPathIds || semanticPathIds.size === 0) return false;
   const sourceIdentity = String(effect?.sourceIdentity ?? '');
   // sourceIdentity 形如 battle-effect:<skillId>:<mapIndex>:<pathId>:<behaviorPathId>:<frame>
   const parts = sourceIdentity.split(':');
   if (parts.length >= 4 && parts[0] === 'battle-effect') {
-    return semanticPathIds.has(parts[3]);
+    const pathId = parts[3];
+    if (!semanticPathIds.has(pathId)) return false;
+    const frame = String(effect?.trigger?.startFrame ?? '');
+    return semanticEffects.some(
+      semantic =>
+        String(semantic.pathId ?? '') === pathId &&
+        String(semantic.trigger?.startFrame ?? '') === frame
+    );
   }
   return false;
 }
@@ -788,12 +813,16 @@ function resolveEffectTargets({
       : [];
   }
   if (['source-owner', 'owner-actor', 'player'].includes(effect.target?.kind)) {
-    return [
-      action.type === ACTION_TYPES.KIBO_EVENT &&
-      effect.target?.kind === 'source-owner'
-        ? { kind: EFFECT_TARGET_KINDS.KIBO, id: action.actorId }
-        : { kind: EFFECT_TARGET_KINDS.ACTOR, id: action.actorId },
-    ];
+    // 奇波大招的 source-owner 效果（500368/500369/500370 的直接回能等）
+    // 作用于在场英雄（装备奇波的角色），不是给奇波本体充能。
+    return [{ kind: EFFECT_TARGET_KINDS.ACTOR, id: action.actorId }];
+  }
+  if (effect.target?.kind === 'ally') {
+    // ally（友方）：奇波大招的支援增益/治疗目标为全体友方角色。
+    return (scenario.actors ?? []).map(actor => ({
+      kind: EFFECT_TARGET_KINDS.ACTOR,
+      id: actor.id,
+    }));
   }
   if (effect.target?.kind === 'team-actors') {
     return (scenario.actors ?? []).map(actor => ({

@@ -2676,7 +2676,13 @@ function enqueueAcceptedCooldownReductionTransactions({
   const frameRate = Number(resolution?.controlBinding?.frameRate) || 60;
   for (const [effectIndex, effect] of (resolution?.effects ?? []).entries()) {
     const reduction = effect.cooldownReduction;
-    const rawValue = Number(reduction?.valueByLevel?.['1']);
+    const level = clampActionLevel(
+      action.level ?? resolution?.actionBinding?.controlVariantSkillLevel
+    );
+    const rawValue = Number(
+      reduction?.valueByLevel?.[String(level)] ??
+        reduction?.valueByLevel?.['1']
+    );
     if (
       Number(reduction?.recoverType) !== 3 ||
       !Number.isFinite(rawValue) ||
@@ -2781,6 +2787,10 @@ function applyCooldownReductionTransaction({
     timeMs: transaction.timeMs,
   });
   const runtimeOwnerIdentity = `actor:${String(transaction.sourceActorId)}`;
+  // 产品契约（当前实现）：冷却缩减作用于施放者自己的活跃技能冷却，
+  // slot=-1 时要求恰好一个冷却中技能，否则标 ambiguous 不应用。
+  // 与"在场友方单位"描述（500368 等奇波大招）的差异：
+  // 多目标/友方广播的冷却缩减尚未实现，待数据确认后扩展。
   let candidates = [...cooldownStateBySkillOwner.values()].filter(
     state =>
       state.ownerKind === 'actor' &&
@@ -2903,6 +2913,12 @@ function applyCooldownReductionTransaction({
   state.lastCooldownReductionTransactionId = transaction.eventIdentity;
   state.cooldownReductionTransactions.push(result);
   return result;
+}
+
+function clampActionLevel(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return 1;
+  return Math.min(12, Math.max(1, Math.trunc(number)));
 }
 
 function hasActiveCooldownAtTime(state, timeMs) {

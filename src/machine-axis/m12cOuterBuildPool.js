@@ -42,7 +42,10 @@ const ACTOR_SLOT_ID_PREFIX = 'm12c-slot';
 const EXPECTED_TEAM_COUNT = 28;
 const EXPECTED_SOURCE_CONFIG_COUNT = 35;
 const EXPECTED_KIBO_COUNT = 43;
-const EXPECTED_SOUL_ESSENCE_COUNT = 62;
+// 搜索范围灵子数：资格域排除场景不可达灵子（10097 依赖 limit-counter，
+// 本搜索不排格挡/反击/闪避 → 62-1=61）。就绪/准入计数保持 62。
+const EXPECTED_SEARCH_SOUL_ESSENCE_COUNT = 61;
+const EXPECTED_ADMITTED_SOUL_ESSENCE_COUNT = 62;
 const EXPECTED_GLOBAL_EQUIPMENT_COUNT = 137;
 const EXPECTED_SET_SKILL_COUNT = 12;
 const EXPECTED_M12C_EQUIPMENT_COUNT_BY_SLOT = Object.freeze({
@@ -92,7 +95,7 @@ export function validateM12cOuterBuildAuthority({
   const expectedCounts = {
     character: 9,
     kibo: EXPECTED_KIBO_COUNT,
-    'soul-essence': EXPECTED_SOUL_ESSENCE_COUNT,
+    'soul-essence': EXPECTED_ADMITTED_SOUL_ESSENCE_COUNT,
     equipment: EXPECTED_GLOBAL_EQUIPMENT_COUNT,
     'set-skill': EXPECTED_SET_SKILL_COUNT,
   };
@@ -850,7 +853,20 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
   const kiboIds = [...qualification.admission.kibos]
     .map(Number)
     .sort(numberSort);
-  const soulEssenceIds = [...qualification.admission.soulEssences]
+  // 搜索域 = 资格装配域（cultivation.soulEssence.soulEssenceIds，已排除
+  // 场景不可达灵子）∩ admission 准入列表；admission 缺失时退回准入全量。
+  const admittedSoulEssenceIdSet = new Set(
+    (qualification.admission.soulEssences ?? []).map(Number)
+  );
+  const scopedSoulEssenceIds =
+    qualification.cultivation?.soulEssence?.soulEssenceIds ?? [];
+  const soulEssenceIds = (
+    scopedSoulEssenceIds.length > 0
+      ? scopedSoulEssenceIds.filter(id =>
+          admittedSoulEssenceIdSet.has(Number(id))
+        )
+      : [...admittedSoulEssenceIdSet]
+  )
     .map(Number)
     .sort(numberSort);
   const equipmentProfiles = qualification.cultivation.equipment.profiles;
@@ -1456,7 +1472,7 @@ function validatePoolCensus({
   if (kiboIds.length !== EXPECTED_KIBO_COUNT) {
     issues.push('m12c-outer-kibo-census-mismatch');
   }
-  if (soulEssenceIds.length !== EXPECTED_SOUL_ESSENCE_COUNT) {
+  if (soulEssenceIds.length !== EXPECTED_SEARCH_SOUL_ESSENCE_COUNT) {
     issues.push('m12c-outer-soul-census-mismatch');
   }
   if (equipment.length !== EXPECTED_M12C_EQUIPMENT_COUNT) {

@@ -939,6 +939,142 @@ describe('verified soul essence effect generation', () => {
     }
   });
 
+  it('matches 10107 for a star-skill action through semantic tag 3 despite a diverging execution control tag', () => {
+    // 回归：米砂星鸣技（公开 10700212，NormalSkill=3）的变体执行路径可能把
+    // controlBinding 换成执行 control（如星结合击 10700226，tag 15）。
+    // 星鸣技本体（actionKind=star-skill）的语义 tag 3 必须稳定匹配 10107，
+    // 不受 execution tag 干扰；星结合击是独立动作、不应触发星鸣诱发。
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => Number(entry.soulEssenceId) === 10107
+    );
+    const sourceActorId = 'actor-107002';
+    const action = {
+      id: 'misa-star-skill-semantic',
+      actorId: sourceActorId,
+      actionKind: 'star-skill',
+      startMs: 1000,
+      durationMs: 600,
+      sourceSequenceIndex: 0,
+      sourceSequencePath: [0],
+    };
+    const scenario = {
+      time: { fps: 60, durationMs: 20_000 },
+      initialRuntimeState: {
+        controlledActor: { actorId: sourceActorId, characterId: 107002 },
+      },
+      actors: [
+        {
+          id: sourceActorId,
+          name: '米砂',
+          loadout: {
+            soulessenceId: 10107,
+            soulessenceStar: 1,
+            soulessenceCultivation: {
+              effectSkill: {
+                skillId: 1900350,
+                star: 1,
+                skillLevel: 1,
+                runtimeStatus: 'runtime-applied',
+                sourceIdentity: 'fixture:10107:star-skill-semantic',
+              },
+            },
+          },
+        },
+        { id: 'actor-101003', name: 'target-2' },
+        { id: 'actor-101010', name: 'target-3' },
+      ],
+      actions: [action],
+    };
+    const actionExecutionPlan = {
+      actions: [{ actionId: action.id, execute: true }],
+    };
+    const controlledActorTimeline = createControlledActorTimeline({
+      scenario,
+      actionExecutionPlan,
+    });
+    const resolution = createSyntheticVerifiedActionResolution('star-skill');
+    // 模拟真实执行路径：execution control 标签漂移为 15。
+    resolution.controlBinding.logic.skillTag = '15';
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      actionResolutionById: new Map([[action.id, resolution]]),
+      catalog: { ...soulEssenceEffectCatalog, definitions: [definition] },
+    });
+    // 语义 tag 3（NormalSkill）匹配 → 三名角色各一条 SP + 一条治疗。
+    expect(generation.directSpEvents).toHaveLength(3);
+    expect(generation.directHpEvents).toHaveLength(3);
+    expect(
+      generation.directSpEvents.every(event => Number(event.value) > 0)
+    ).toBe(true);
+  });
+
+  it('does not let a star-combo (joint attack) action trigger the star-skill NormalSkill trigger', () => {
+    // 星结合击（star-combo，执行 control 10700226 tag 15）是独立动作，
+    // 不得触发星鸣技（NormalSkill=3）的诱发效果（10107）。
+    const definition = soulEssenceEffectCatalog.definitions.find(
+      entry => Number(entry.soulEssenceId) === 10107
+    );
+    const sourceActorId = 'actor-107002';
+    const action = {
+      id: 'misa-star-combo-no-trigger',
+      actorId: sourceActorId,
+      actionKind: 'star-combo',
+      startMs: 1000,
+      durationMs: 600,
+      sourceSequenceIndex: 0,
+      sourceSequencePath: [0],
+    };
+    const scenario = {
+      time: { fps: 60, durationMs: 20_000 },
+      initialRuntimeState: {
+        controlledActor: { actorId: sourceActorId, characterId: 107002 },
+      },
+      actors: [
+        {
+          id: sourceActorId,
+          name: '米砂',
+          loadout: {
+            soulessenceId: 10107,
+            soulessenceStar: 1,
+            soulessenceCultivation: {
+              effectSkill: {
+                skillId: 1900350,
+                star: 1,
+                skillLevel: 1,
+                runtimeStatus: 'runtime-applied',
+                sourceIdentity: 'fixture:10107:star-combo-no-trigger',
+              },
+            },
+          },
+        },
+        { id: 'actor-101003', name: 'target-2' },
+        { id: 'actor-101010', name: 'target-3' },
+      ],
+      actions: [action],
+    };
+    const actionExecutionPlan = {
+      actions: [{ actionId: action.id, execute: true }],
+    };
+    const controlledActorTimeline = createControlledActorTimeline({
+      scenario,
+      actionExecutionPlan,
+    });
+    const resolution = createSyntheticVerifiedActionResolution('star-combo');
+    resolution.controlBinding.logic.skillTag = '15';
+    const generation = createVerifiedSoulEssenceEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      controlledActorTimeline,
+      actionResolutionById: new Map([[action.id, resolution]]),
+      catalog: { ...soulEssenceEffectCatalog, definitions: [definition] },
+    });
+    // 合击不触发星鸣诱发：无 SP/治疗事件。
+    expect(generation.directSpEvents).toHaveLength(0);
+    expect(generation.directHpEvents).toHaveLength(0);
+  });
+
   it('applies the real 10216 BeforeSkill PetUltraSkill direct-SP to the controlling hero', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(
       entry => entry.soulEssenceId === 10216
