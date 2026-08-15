@@ -401,20 +401,28 @@ describe('Machine Axis external audit boundaries', () => {
     });
 
     it('conserves the merged 120 second fixture across totals and groups', () => {
-      const evaluation =
-        createMachineAxisService().simulate(cloneFixture()).evaluation;
+      const run = createMachineAxisService().simulate(cloneFixture());
+      const evaluation = run.evaluation;
       const ruby = evaluation.byAction.find(
         row => row.identity === 'ruby-plunging'
       );
+      const tuningDamage = (run.trace?.damage ?? [])
+        .filter(event => event.eventType === 'VERIFIED_TUNING_DAMAGE')
+        .reduce((sum, event) => sum + Number(event.rawDamage ?? 0), 0);
 
       expect(evaluation.totals).toMatchObject({
         combatHitCount: 28,
         projectedHitCount: 28,
         stateEventCount: 0,
-        hpDamage: 4064,
+        // A+ fix 后基线：普通伤害保持 3894（不变），held tuning damage 因 Lv1
+        // fixture MASTERY 归一化（11400→1，倍率 11700→301）从 170 降至 4，
+        // totals 4064 → 3898。下面两条子总计断言锁住分解。
+        hpDamage: 3898,
         inflictedToughnessDamage: 0,
         recoveredToughness: 0,
       });
+      expect(tuningDamage).toBe(4);
+      expect(evaluation.totals.hpDamage - tuningDamage).toBe(3894);
       expect(ruby).toMatchObject({
         combatHitCount: 1,
         hitCount: 1,

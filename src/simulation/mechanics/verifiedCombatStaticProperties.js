@@ -8,6 +8,11 @@ const CORE_ATTRIBUTE_KEYS = Object.freeze({
   4: 'MDEF',
   5: 'MAXHP',
 });
+// 与 scripts/generate-azpr-data.mjs:359 的 NORMALIZED_BASE_ATTRIBUTE_IDS 对齐：
+// 只有这些属性以万分比原始单位进入等级归一化（×growth/10000），
+// 其余属性（CRI/CRI_DMG/SPR_SEC/SPR_SEC_BACK 等）保持模板原始单位，
+// 由各自 rawScale 在 createAttributeOutput 中解释，禁止二次缩放。
+const NORMALIZED_BASE_ATTRIBUTE_IDS = new Set([1, 3, 4, 5, 35, 229]);
 const DEFAULT_ACTOR_LEVEL = 80;
 const DEFAULT_KIBO_LEVEL = 80;
 const DEFAULT_KIBO_HOBBY_ID = 1;
@@ -90,7 +95,7 @@ export function compileVerifiedStaticActorProperties({
     'panel-round-after-source-sum';
   const levelAttributes = [];
   for (const [attributeId, value] of heroTemplate) {
-    if (CORE_ATTRIBUTE_KEYS[attributeId]) {
+    if (NORMALIZED_BASE_ATTRIBUTE_IDS.has(attributeId)) {
       const growthValue = growthAttributes.get(attributeId);
       if (!Number.isFinite(growthValue)) {
         unresolved.push({
@@ -121,18 +126,8 @@ export function compileVerifiedStaticActorProperties({
       });
       continue;
     }
-    if (
-      preserveLevelPrecision &&
-      Number.isFinite(growthAttributes.get(attributeId))
-    ) {
-      levelAttributes.push({
-        id: attributeId,
-        value: roundToFour(
-          (value * Number(growthAttributes.get(attributeId))) / 10000
-        ),
-      });
-      continue;
-    }
+    // 非归一化属性保持模板原始单位（CRI/CRI_DMG/SPR_SEC/SPR_SEC_BACK/…），
+    // 由 createAttributeOutput 按各属性 rawScale 换算 runtimeValue。
     levelAttributes.push({ id: attributeId, value });
   }
   sources.push(

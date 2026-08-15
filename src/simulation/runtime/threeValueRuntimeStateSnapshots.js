@@ -421,10 +421,13 @@ export function createThreeValueRuntimeStateMetric({
           : initialValue + normalizedDelta
       )
     : null;
+  const maxValue = normalizeRuntimeStateNumber(baseline?.maxValue);
   const currentValue =
     rawCurrentValue != null && deltaDirection === 'decrease'
       ? Math.max(0, rawCurrentValue)
-      : rawCurrentValue;
+      : rawCurrentValue != null && maxValue != null
+        ? Math.min(maxValue, rawCurrentValue)
+        : rawCurrentValue;
 
   return {
     key,
@@ -615,10 +618,13 @@ function applyRuntimeStateDelta(state, delta) {
       : state.currentValue + normalizedDelta
   );
   state.rawCurrentValue = rawCurrentValue;
+  const maxValue = normalizeRuntimeStateNumber(state.maxValue);
   state.currentValue =
     state.deltaDirection === 'decrease'
       ? Math.max(0, rawCurrentValue)
-      : rawCurrentValue;
+      : maxValue != null
+        ? Math.min(maxValue, rawCurrentValue)
+        : rawCurrentValue;
   state.overrunValue =
     state.deltaDirection === 'decrease'
       ? Math.max(0, roundRuntimeStateValue(-rawCurrentValue))

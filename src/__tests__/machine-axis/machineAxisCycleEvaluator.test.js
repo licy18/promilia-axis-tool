@@ -962,6 +962,71 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
+  it('keeps resource closure strict: a 1e-4 deficit is rejected, a sub-1e-8 drift is accepted', () => {
+    const boundary = sp => ({
+      activeActorId: 'actor-1',
+      actors: [{ actorId: 'actor-1', sp, max: 100 }],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      cooldowns: [],
+      effects: [],
+      pendingEvents: [],
+    });
+
+    // RESOURCE_BOUNDARY_TOLERANCE=0.5 补偿已移除：0.001 的亏空必须拒绝。
+    expect(
+      compareCycleBoundaryStates(boundary(100), boundary(99.999))
+    ).toMatchObject({ closed: false });
+    expect(
+      compareCycleBoundaryStates(boundary(100), boundary(99.999)).issues
+    ).toContainEqual(
+      expect.objectContaining({ code: 'machine-axis-cycle-resource-deficit' })
+    );
+    // 浮点累计误差（< VALUE_TOLERANCE=1e-8）允许闭合。
+    expect(
+      compareCycleBoundaryStates(boundary(100), boundary(99.99999999))
+    ).toMatchObject({ closed: true });
+  });
+
+  it('rejects a cooldown invariant drift even when remaining time drops', () => {
+    const createBoundary = fullCooldownMs => ({
+      activeActorId: 'actor-1',
+      actors: [{ actorId: 'actor-1', sp: 100, max: 100 }],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      cooldowns: [],
+      effects: [],
+      pendingEvents: [],
+      chargeCooldowns: [
+        {
+          runtimeOwnerIdentity: 'actor:actor-1',
+          ownerId: 'actor-1',
+          skillId: 10900112,
+          cooldownIdentity: 10900112,
+          fullCooldownMs,
+          coolTimeMs: 10000,
+          chargeMaxCount: 2,
+          currentChargeCount: 1,
+          sharedTimerRunning: true,
+          lastSettlementIdentity: 'cooldown-charge-cast|w-star',
+          lastCooldownReductionTransactionId: null,
+          missingChargeSourceActionIds: ['w-star'],
+          remainingFrames: 300,
+        },
+      ],
+    });
+
+    // 剩余时间相同但 fullCooldownMs 漂移 → 不闭合。
+    expect(
+      compareCycleBoundaryStates(
+        createBoundary(15000),
+        createBoundary(18000)
+      )
+    ).toMatchObject({ closed: false });
+  });
+
   it('keeps BeforeSkill trigger intervals in the cycle boundary state', () => {
     const createBoundary = remainingFrames => ({
       activeActorId: 'actor-1',
@@ -999,7 +1064,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       ]),
     });
     expect(
-      compareCycleBoundaryStates(createBoundary(360), createBoundary(0)).issues
+      compareCycleBoundaryStates(createBoundary(0), createBoundary(360)).issues
     ).toContainEqual(
       expect.objectContaining({
         code: 'machine-axis-cycle-state-not-closed',
@@ -1196,7 +1261,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       ]),
     });
     expect(
-      compareCycleBoundaryStates(first, createBoundary({ coolTimeMs: 11_000 }))
+      compareCycleBoundaryStates(first, createBoundary({ coolTimeMs: 13_000 }))
         .issues
     ).toContainEqual(
       expect.objectContaining({

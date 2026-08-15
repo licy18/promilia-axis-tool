@@ -21,8 +21,8 @@ const cases = [
     hashes: {
       input: '6d6ef75d3a8d90cd',
       data: '25be5c0a8fa43ad0',
-      trace: '29b1a5cf197fd4f6',
-      evaluation: 'a753f6788d66964d',
+      trace: '67470f4c7b4276f3',
+      evaluation: 'f72a5e2c689d161b',
     },
   },
   {
@@ -41,8 +41,8 @@ const cases = [
     hashes: {
       input: 'cbef83de60bc52be',
       data: '69332b15aaa18102',
-      trace: '0b38651860faa9bf',
-      evaluation: 'afb7809d5ed9ff1a',
+      trace: '8ac3f6bbd0dc8ee0',
+      evaluation: '7cf1957ae8627871',
     },
   },
   {
@@ -51,8 +51,8 @@ const cases = [
     hashes: {
       input: '7113dda5d446cd7b',
       data: 'a27e398f3ad3e875',
-      trace: '68ccfb659f8eb692',
-      evaluation: '019157378a4bf202',
+      trace: 'e2baf37b3af1bc01',
+      evaluation: '94254d19b8dd08e4',
     },
   },
   {
@@ -61,8 +61,8 @@ const cases = [
     hashes: {
       input: 'c366c268aaafca16',
       data: '964f7f4431171711',
-      trace: '6b0763f7a68abaef',
-      evaluation: '0f204a248dc578b9',
+      trace: 'afce0ce5607032c3',
+      evaluation: 'cae1444558aa36c9',
     },
   },
   {
@@ -71,8 +71,8 @@ const cases = [
     hashes: {
       input: '8a82ef9e87458e27',
       data: '74f991d439e64485',
-      trace: 'f589ce53d905f26b',
-      evaluation: '6538894b2964b7e7',
+      trace: '24947df22c0d97cf',
+      evaluation: 'e1e6ae688f04457d',
     },
   },
 ];

@@ -265,6 +265,9 @@ describe('Moyin Machine Axis qualification', () => {
     const limitHeldThunder = heldThunder.filter(event =>
       /^moyin-limit-[1-5]$/.test(event.actionId)
     );
+    // A+ fix 后基线：mastery_plus_300 中 MASTERY 归一化（Lv1 fixture
+    // 11400→1，倍率 11700→301），held-thunder tuning damage 确定性变化
+    // 158/316/… → 4/8/…（÷11700/301≈38.87 吻合）。
     expect(
       limitHeldThunder.map(event => [
         event.actionId,
@@ -272,11 +275,11 @@ describe('Moyin Machine Axis qualification', () => {
         event.rawDamage,
       ])
     ).toEqual([
-      ['moyin-limit-1', 3515, 158],
-      ['moyin-limit-2', 4045, 316],
-      ['moyin-limit-3', 4356, 473],
-      ['moyin-limit-4', 4667, 631],
-      ['moyin-limit-5', 4978, 789],
+      ['moyin-limit-1', 3515, 4],
+      ['moyin-limit-2', 4045, 8],
+      ['moyin-limit-3', 4356, 12],
+      ['moyin-limit-4', 4667, 16],
+      ['moyin-limit-5', 4978, 20],
     ]);
     expect(
       limitHeldThunder.every(

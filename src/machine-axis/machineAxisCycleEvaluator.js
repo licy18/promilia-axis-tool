@@ -709,6 +709,93 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
   stateDimensions.splice(2, 0, ...soulTriggerDimensions);
   const stateDiffs = [];
   for (const [dimension, normalize] of stateDimensions) {
+    if (
+      dimension === 'cooldowns' ||
+      dimension === 'chargeCooldowns' ||
+      dimension === 'soulTriggerIntervals'
+    ) {
+      // Cooldown closure uses non-increasing remaining time: the loop end
+      // must leave every cooldown with no MORE remaining time than at the
+      // loop start (a warmup rehearsal may pre-cast the same actions so the
+      // boundary starts partially cooled and ends fully cooled). Exact
+      // equality is not required; only the ability to replay without a
+      // tighter cooldown budget.
+      const startRows = normalize(startSnapshot);
+      const endRows = normalize(endSnapshot);
+      const cooldownIdentity = row =>
+        row.bindingKey != null
+          ? `soul-trigger:${row.bindingKey}|${row.intervalMs ?? ''}|${row.sourceIdentityHash ?? ''}`
+          : `${row.runtimeOwnerIdentity ?? ''}|${row.ownerId ?? ''}|${row.skillId ?? ''}|${row.chargeIndex ?? ''}|${row.cooldownCount ?? ''}|${row.status ?? ''}|${row.cooldownIdentity ?? ''}|${row.lastSettlementIdentity ?? ''}|${(row.missingChargeSourceActionIds ?? []).join('+')}|${row.sharedTimerRunning ?? ''}|${row.chargeMaxCount ?? ''}|${row.fullCooldownMs ?? ''}`;
+      const startRemaining = new Map(
+        startRows.map(row => [
+          cooldownIdentity(row),
+          finiteNumberOrNull(row.remainingFrames) ?? 0,
+        ])
+      );
+      const endRemaining = new Map(
+        endRows.map(row => [
+          cooldownIdentity(row),
+          finiteNumberOrNull(row.remainingFrames) ?? 0,
+        ])
+      );
+      const identities = [
+        ...new Set([...startRemaining.keys(), ...endRemaining.keys()]),
+      ]
+        .filter(Boolean)
+        .sort((left, right) => left.localeCompare(right, 'en'));
+      let closed = true;
+      const differences = [];
+      for (const identity of identities) {
+        const startValue = startRemaining.get(identity) ?? 0;
+        const endValue = endRemaining.get(identity) ?? 0;
+        const startHas = startRemaining.has(identity);
+        const endHas = endRemaining.has(identity);
+        // A cooldown that appears at loop end but not at loop start is a new
+        // or differently-sourced cooldown -> not closed.
+        if (endHas && !startHas) {
+          closed = false;
+          differences.push({
+            identity,
+            startRemaining: null,
+            endRemaining: endValue,
+            reason: 'cooldown-appears-at-end',
+          });
+          continue;
+        }
+        // A cooldown that expired by loop end (start-only) is fine: remaining
+        // dropped to zero. Shared identities must not have MORE remaining time
+        // at the end than at the start (+ half-frame tolerance).
+        const rowClosed = endValue <= startValue + 0.5;
+        if (!rowClosed) {
+          closed = false;
+          differences.push({
+            identity,
+            startRemaining: startValue,
+            endRemaining: endValue,
+            reason: 'remaining-cooldown-grew',
+          });
+        }
+      }
+      const equal = closed;
+      stateDiffs.push({
+        dimension,
+        equal,
+        start: startRows,
+        end: endRows,
+        differences,
+      });
+      if (!equal) {
+        issues.push(
+          cycleIssue(
+            'machine-axis-cycle-state-not-closed',
+            `state.${dimension}`,
+            `${dimension} leaves a cooldown with more remaining time than at loop start`,
+            { dimension, start: startRows, end: endRows, differences }
+          )
+        );
+      }
+      continue;
+    }
     const startValue = normalize(startSnapshot);
     const endValue = normalize(endSnapshot);
     const equal =
@@ -2630,6 +2717,9 @@ function normalizeChargeCooldownState(snapshot) {
         ...(row.missingChargeSourceActionIds ?? []),
       ].map(normalizeCycleLocalCooldownIdentity),
     }))
+    .filter(
+      row => row.sharedTimerRunning === true && row.remainingFrames > 0
+    )
     .sort(compareCanonicalRows);
 }
 

@@ -1114,3 +1114,173 @@ function actionToughnessDamage(result, actionId) {
       0
     );
 }
+
+// A+ 修复：优化静态属性单位分类必须与 scripts/generate-azpr-data.mjs 的
+// NORMALIZED_BASE_ATTRIBUTE_IDS = {1,3,4,5,35,229} 对齐——只有这些属性按
+// 万分比进入等级归一化；CRI/CRI_DMG/SPR_SEC/SPR_SEC_BACK 等保持模板原始
+// 单位，禁止二次缩放（此前 optimizationStaticSources 路径把 2084 → 0.2084
+// → runtime 0.00002084，导致 M12C 角色自动回能完全失效）。
+describe('normalized attribute unit classification (A+ fix)', () => {
+  const optimizationCultivationFor = characterId => ({
+    starGiftRank: 0,
+    favorabilityLevel: 0,
+    optimizationStaticSources: {
+      schemaVersion: 1,
+      contractName: 'AzPrOptimizationCharacterStaticSources',
+      characterId,
+      levelTemplatePrecision: 'panel-round-after-source-sum',
+      completedStarGiftAttributeRank: 0,
+      completedStarGiftAttributeSources: [],
+      starGiftNodeSources: [],
+      starGiftNodeSkillLevels: [],
+      levelBreakthroughAttributeSources: [],
+      levelBreakthroughSelection: null,
+      levelBreakthroughSources: [],
+      unappliedStaticSources: [],
+      unappliedSkillSources: [],
+    },
+  });
+  const NORMALIZED_IDS = new Set([1, 3, 4, 5, 35, 229]);
+
+  function compileActor(characterId, cultivation, loadout = {}) {
+    return compileVerifiedStaticActorProperties({
+      actor: { characterId, level: 80, cultivation, loadout },
+    });
+  }
+
+  function rawValueById(result) {
+    return new Map(
+      result.attributes.map(attribute => [
+        Number(attribute.id),
+        Number(attribute.rawValue),
+      ])
+    );
+  }
+
+  it('keeps SPR_SEC(110)/SPR_SEC_BACK(226) in template raw units under the optimization path', () => {
+    const result = compileActor(109001, optimizationCultivationFor(109001));
+    const raw = rawValueById(result);
+    expect(result.complete).toBe(true);
+    expect(raw.get(110)).toBe(2084);
+    expect(raw.get(226)).toBe(1042);
+    expect(result.resourceProfile).toMatchObject({
+      effectiveMaxSp: 100,
+      sprSecBasisPoints: 2084,
+      sprSecBackBasisPoints: 1042,
+    });
+  });
+
+  it('keeps CRI(7)/CRI_DMG(8) at panel units 500/15000 without a second scale', () => {
+    const result = compileActor(109001, optimizationCultivationFor(109001));
+    const raw = rawValueById(result);
+    expect(raw.get(7)).toBe(500);
+    expect(raw.get(8)).toBe(15000);
+    const attr8 = result.attributes.find(
+      attribute => Number(attribute.id) === 8
+    );
+    // runtimeValue 只由 rawScale 解释一次：15000/10000 = 1.5
+    expect(attr8.runtimeValue).toBe(1.5);
+    expect(attr8.rawValue).toBe(15000);
+  });
+
+  it('keeps MASTERY(229)/SPEED(35) normalized to the current protocol expectation', () => {
+    const result = compileActor(109001, optimizationCultivationFor(109001));
+    const raw = rawValueById(result);
+    // 109001 模板 MASTERY=11400、SPEED=55000；Lv80 成长值 86 / 1
+    // → 归一化 11400×86/10000=98.04、55000×1/10000=5.5
+    expect(raw.get(229)).toBe(98.04);
+    expect(raw.get(35)).toBe(5.5);
+  });
+
+  it('classifies every template attribute identically across plain and optimization paths', () => {
+    const plainCultivation = { starGiftRank: 0, favorabilityLevel: 0 };
+    const plain = compileActor(109001, plainCultivation);
+    const optimized = compileActor(109001, optimizationCultivationFor(109001));
+    const profile = mechanicsPackage.staticPropertyCatalog.actor.profiles.find(
+      profile => Number(profile.characterId) === 109001
+    );
+    const template = new Map(
+      profile.templateAttributes.map(entry => [
+        Number(entry.id),
+        Number(entry.value),
+      ])
+    );
+    const left = rawValueById(plain);
+    const right = rawValueById(optimized);
+    const ids = [...new Set([...left.keys(), ...right.keys()])].sort(
+      (a, b) => a - b
+    );
+    for (const id of ids) {
+      if (NORMALIZED_IDS.has(id)) {
+        // 归一化属性：两路径都必须改变单位（不得保持模板原始值）
+        expect(left.get(id)).not.toBe(template.get(id));
+        expect(right.get(id)).not.toBe(template.get(id));
+      } else if (id !== 6) {
+        // 非归一化属性：保持模板原始单位，两路径数值一致
+        expect(left.get(id)).toBe(template.get(id));
+        expect(right.get(id)).toBe(template.get(id));
+        expect(left.get(id)).toBe(right.get(id));
+      }
+    }
+  });
+
+  it('keeps kibo recovery attributes unchanged under the optimization path', () => {
+    const result = compileActor(109001, optimizationCultivationFor(109001), {
+      kiboId: 500324,
+      kiboConfig: neutralKiboConfig,
+    });
+    const kibo = result.kibo;
+    expect(kibo.ready).toBe(true);
+    const raw110 = (kibo.attributes ?? []).find(
+      attribute => Number(attribute.id) === 110
+    );
+    expect(Number(raw110?.rawValue)).toBe(2084);
+  });
+
+  it('accumulates ~20.84 foreground / ~10.42 background SP over 100 idle seconds (optimization path)', () => {
+    const teamSlots = createDefaultWorkbenchTeamSlots();
+    const actorConfigs = createDefaultWorkbenchActorConfigs(
+      DEFAULT_WORKBENCH_SELECTION
+    ).map(config => ({
+      ...config,
+      initialSp: 0,
+      loadout: {},
+      cultivation: optimizationCultivationFor(config.characterId),
+    }));
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      durationMs: 100000,
+      teamSlots,
+      actorConfigs,
+      actions: [],
+      combatScenario: {
+        projectile: { targetDistance: 0, defaultWillHit: true },
+        critical: { policy: 'non-critical', seed: 'idle-100s-acceptance' },
+      },
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-109001',
+          characterId: 109001,
+        },
+      },
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+    });
+    const result = simulateScenario(
+      compileProject(project, getWorkbenchGameData())
+    );
+    const byId = new Map(
+      result.verifiedCombatRuntime.finalState.actorEnergy.map(entry => [
+        entry.actorId,
+        entry.currentValue,
+      ])
+    );
+    // Q16 累计：前台 0.0208282470703125 × 1000 tick ≈ 20.83；
+    // 后台 0.010406494140625 × 1000 tick ≈ 10.41（0.1s 固定步长，100s=1000 tick）
+    const foreground = byId.get('actor-109001');
+    const background = byId.get('actor-101003');
+    expect(foreground).toBeGreaterThan(20.6);
+    expect(foreground).toBeLessThan(21.1);
+    expect(background).toBeGreaterThan(10.2);
+    expect(background).toBeLessThan(10.6);
+  });
+});
