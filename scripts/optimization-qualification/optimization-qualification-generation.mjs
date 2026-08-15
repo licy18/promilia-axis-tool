@@ -169,6 +169,10 @@ export const FROZEN_B3_DENOMINATORS = Object.freeze({
 });
 
 const TARGET_ELEMENTS = new Set(['风', '雷']);
+// 本搜索（M12-C cycle/kill，不排格挡/反击/闪避）禁用的动作族 skillTag：
+// limit-counter=11、perfect-parry=18/19/20。依赖这些动作触发的灵子/套装
+// 在当前搜索场景不可达，不得作为有效搜索候选。
+const DISABLED_SEARCH_ACTION_SKILL_TAGS = new Set([11, 18, 19, 20]);
 const FORMAL_CHARACTER_OPTIMIZATION_OBJECT_IDS = new Set(
   optimizationScenarioPolicy.candidateRoster.formalOptimizationObjectIds
     .filter(identity => identity !== 'STARBORN')
@@ -803,11 +807,23 @@ export async function createOptimizationQualificationArtifacts({
   publicSoulEssences = publicSoulEssences.map(item => {
     const effectMechanics =
       soulEffectById.get(Number(item.soulEssenceId)) ?? null;
+    const triggerTags = collectTriggerSkillTags(effectMechanics?.trigger);
+    const dependsOnDisabledAction = triggerTags.some(tag =>
+      DISABLED_SEARCH_ACTION_SKILL_TAGS.has(tag)
+    );
     return {
       ...item,
+      // effectStatus 来自生成器定义（机制族已接入 runtime 路由）；但
+      // runtime-applied 只证明机制族存在，不证明当前搜索场景可达。
+      // sourceEffectStatus 保留来源状态（effect-skill-dynamic-unapplied）。
       sourceEffectStatus: item.effectStatus,
       effectStatus:
         effectMechanics?.runtimeStatus ?? 'effect-mechanics-profile-missing',
+      // 场景可达性：触发依赖禁用动作（limit-counter/perfect-parry 等，
+      // 本搜索不排格挡反击闪避）的灵子标注不可达，不得作为有效搜索候选。
+      scenarioReachability: dependsOnDisabledAction
+        ? 'unreachable-action-disabled'
+        : 'reachable-route-present',
       effectMechanics,
     };
   });
@@ -1628,7 +1644,11 @@ function createCultivationCatalog({
       initialInheritanceBasisPoints: 900,
     },
     soulEssence: {
-      soulEssenceIds: publicSoulEssences.map(item => item.soulEssenceId),
+      // 搜索范围排除场景不可达灵子（触发依赖禁用动作，如 10097 依赖
+      // limit-counter）。runtime-applied 只证明机制族接入；可达性单独标注。
+      soulEssenceIds: publicSoulEssences
+        .filter(item => item.scenarioReachability === 'reachable-route-present')
+        .map(item => item.soulEssenceId),
       level: { minimum: 1, maximum: 100 },
       rank: { minimum: 1, maximum: 6 },
       star: { minimum: 1, maximum: 4 },
@@ -1645,6 +1665,15 @@ function createCultivationCatalog({
         unresolvedCount: publicSoulEssences.filter(
           item => item.effectMechanics?.runtimeStatus !== 'runtime-applied'
         ).length,
+        reachableCount: publicSoulEssences.filter(
+          item => item.scenarioReachability === 'reachable-route-present'
+        ).length,
+        unreachableActionDisabledCount: publicSoulEssences.filter(
+          item => item.scenarioReachability === 'unreachable-action-disabled'
+        ).length,
+        unreachableActionDisabledIds: publicSoulEssences
+          .filter(item => item.scenarioReachability === 'unreachable-action-disabled')
+          .map(item => item.soulEssenceId),
       },
     },
     equipment: {
@@ -2060,8 +2089,23 @@ function projectKiboRosterRecord(kibo) {
   };
 }
 
-function projectSoulEssenceRosterRecord(item, profile) {
-  return {
+function collectTriggerSkillTags(node, out = []) {
+  if (!node || typeof node !== 'object') return out;
+  if (Array.isArray(node)) {
+    for (const entry of node) collectTriggerSkillTags(entry, out);
+    return out;
+  }
+  if (Number.isFinite(Number(node.skillTagId))) {
+    out.push(Number(node.skillTagId));
+  }
+  for (const key of Object.keys(node)) {
+    if (key === 'skillTagId') continue;
+    collectTriggerSkillTags(node[key], out);
+  }
+  return out;
+}
+
+function projectSoulEssenceRosterRecord(item, profile) {  return {
     soulEssenceId: Number(item.id),
     name: item.name,
     rarity: item.rarity ?? null,
