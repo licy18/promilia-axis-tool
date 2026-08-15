@@ -8,11 +8,24 @@ import {
   compareSourceSequencePaths,
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
+import { getInstalledVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { evaluateVerifiedBattleEffectFormula } from './verifiedBattleEffectFormulaRuntime';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 
 export const VERIFIED_SOULESSENCE_EFFECT_GENERATION_CONTRACT_NAME =
   'AzPrVerifiedSoulEssenceEffectGeneration';
+
+// 公开动作分类 → ESkillTagType 语义标签（il2cpp dump 权威枚举）：
+// NormalAttack=1, WhackAttack=2, NormalSkill=3, UltraSkill=4。
+// 触发器条件按此语义匹配；不依赖 public/execution 技能 tag——
+// 米砂星鸣 public 10700212 tag=3 → 执行 control 10700226 tag=15（漏判），
+// 101007 重击复用普攻技能 id 致 public tag=1（误判）。
+const ACTION_KIND_SKILL_TAG_IDS = Object.freeze({
+  'normal-attack': [1],
+  'charged-attack': [2],
+  'star-skill': [3],
+  'ultimate': [4],
+});
 
 export function deriveSoulEventSnapshotFromCombatRuntime(combatRuntime) {
   const events = [];
@@ -1829,6 +1842,8 @@ function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
           ]
         : []),
     ]),
+    // 执行 control 的标签（内部 control 可能替换公开标签，如米砂星技
+    // 10700212 tag 3 → 执行 control 10700226 tag 15）。
     skillTagIds: uniqueFiniteIntegers([
       ...(eventContext?.skillTagIds ?? []),
       ...(actionProvenanceAvailable
@@ -1837,6 +1852,14 @@ function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
             ...parseDelimitedNumbers(controlBinding.logic?.skillTag),
           ]
         : []),
+    ]),
+    // 公开动作的语义标签：触发器条件按公开语义匹配（skill-tag 条件优先使用
+    // semanticSkillTagIds）。来源为动作分类（ESkillTagType 映射），避免被
+    // 内部执行 control 标签覆盖（米砂星技 tag 3→15）或复用技能 id 误判
+    // （101007 重击 public tag 1 实为重击 tag 2）。
+    semanticSkillTagIds: uniqueFiniteIntegers([
+      ...(eventContext?.semanticSkillTagIds ?? []),
+      ...resolvePublicActionSkillTagIds(actionBinding, action),
     ]),
     switchTrigger: {
       kind: action?.derivedAction?.kind ?? null,
@@ -1848,6 +1871,23 @@ function resolveSoulTriggerActionContext({ action, resolution, eventContext }) {
       sourceIdentity: action?.switchTriggerBinding?.sourceIdentity ?? null,
     },
   };
+}
+
+function resolvePublicActionSkillTagIds(actionBinding = {}, action = {}) {
+  // 显式语义声明优先（数据/场景可提供 semanticSkillTagIds/triggerSkillTagId）；
+  // 否则按公开动作分类（ESkillTagType）映射：NormalAttack=1, WhackAttack=2,
+  // NormalSkill=3, UltraSkill=4。不依赖 public/execution 技能 tag。
+  const explicit = [
+    ...(actionBinding?.semanticSkillTagIds ?? []),
+    actionBinding?.triggerSkillTagId,
+    ...(action?.semanticSkillTagIds ?? []),
+  ].filter(value => Number.isFinite(Number(value)) && Number(value) > 0);
+  if (explicit.length > 0) {
+    return uniqueFiniteIntegers(explicit);
+  }
+  const kind = actionBinding.actionKind ?? action?.actionKind ?? null;
+  const tags = kind ? (ACTION_KIND_SKILL_TAG_IDS[kind] ?? []) : [];
+  return uniqueFiniteIntegers(tags);
 }
 
 function matchesSoulTriggerCondition(
@@ -1886,8 +1926,15 @@ function matchesSoulTriggerCondition(
       );
     }
     if (entry.kind === 'skill-tag') {
+      // 触发器条件按公开语义标签匹配（米砂星技 public tag 3 不被执行
+      // control tag 15 覆盖；寒悠悠重击二段 public tag 2 不被 tag 1 覆盖）。
+      // semanticSkillTagIds 存在时优先；否则退回 execution skillTagIds。
+      const semanticTags = actionContext.semanticSkillTagIds ?? [];
+      const candidateTags = semanticTags.length
+        ? semanticTags
+        : (actionContext.skillTagIds ?? []);
       return (
-        (actionContext.skillTagIds.includes(Number(entry.skillTagId)) ||
+        (candidateTags.includes(Number(entry.skillTagId)) ||
           (legacyConditionShape &&
             (entry.actionKinds ?? []).includes(actionContext.actionKind))) &&
         matchesSoulTriggerProvenance(entry, actionContext)

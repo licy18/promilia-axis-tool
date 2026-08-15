@@ -899,6 +899,46 @@ describe('verified soul essence effect generation', () => {
     ).toBe(true);
   });
 
+  it('triggers 10107 for Misa star-skill through the real public→execution tag mapping', () => {
+    // 回归：米砂公开星技 10700212 的语义标签 NormalSkill=3 在执行层映射为
+    // 内部 control 10700226 的标签 15。10107 要求 AfterSkill + skillTag=3，
+    // 若触发器只读 execution 标签则 acceptedTriggerOccurrences=[] 且全队
+    // 18 SP 与治疗事件全部缺失。真实 compileProject → simulateScenario。
+    const result = createRealSoulScenario({
+      actorCharacterId: 107002,
+      soulEssenceId: 10107,
+      effectSkillId: 1900350,
+      durationMs: 12_000,
+      ownerInitialSp: 0,
+      teamCharacterIds: [107002, 101003, 101010],
+      actionPlan: [
+        {
+          id: 'misa-10107-star',
+          actionKind: 'star-skill',
+          startFrame: 60,
+        },
+      ],
+    });
+    const generation = result.verifiedSoulEssenceEffectGeneration;
+    // 三目标（米砂 + 两名队友）各一条 SP 事件 + 一条治疗事件。
+    expect(generation.directSpEvents).toHaveLength(3);
+    expect(generation.directHpEvents).toHaveLength(3);
+    expect(
+      generation.directSpEvents.every(event => Number(event.value) > 0)
+    ).toBe(true);
+    expect(
+      generation.directHpEvents.every(event => Number(event.value) > 0)
+    ).toBe(true);
+    // 最终 SP：三名角色均入账正收益（漏触发时米砂 SP 保持 0）。
+    const finalEnergy = result.verifiedCombatRuntime.finalState.actorEnergy;
+    const spByActor = new Map(
+      finalEnergy.map(entry => [entry.actorId, entry.currentValue])
+    );
+    for (const actorId of ['actor-107002', 'actor-101003', 'actor-101010']) {
+      expect(spByActor.get(actorId)).toBeGreaterThan(0);
+    }
+  });
+
   it('applies the real 10216 BeforeSkill PetUltraSkill direct-SP to the controlling hero', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(
       entry => entry.soulEssenceId === 10216
@@ -4538,7 +4578,12 @@ describe('verified soul essence effect generation', () => {
       [
         'ultimate-tag-only',
         {
-          actionBinding: { actionKind: 'normal-attack' },
+          actionBinding: {
+            actionKind: 'normal-attack',
+            // 合成场景显式声明语义标签（UltraSkill=4），验证
+            // semanticSkillTagIds 机制不依赖 actionKind/execution tag。
+            semanticSkillTagIds: [4],
+          },
           controlBinding: { logic: { skillTag: '4' } },
         },
       ],
@@ -5957,6 +6002,36 @@ describe('verified soul essence effect generation', () => {
     expect(commands[0].modifiers[0]).toMatchObject({
       attributeId: 58,
       propertyTagMatchMode: 'unscoped',
+    });
+  });
+
+  it('triggers real 10018 for Hanyoyo charged attack through semantic WhackAttack tag 2', () => {
+    // 回归：寒悠悠重击的执行 control tag=1，但公开语义是 WhackAttack=2。
+    // 10018 要求 skill-tag 2，若触发器只读 execution 标签则漏触发。
+    const active = createRealSoulScenario({
+      actorCharacterId: 101003,
+      soulEssenceId: 10018,
+      effectSkillId: 1900400,
+      ownerInitialSp: 0,
+      teamCharacterIds: [101003, 101010, 101007],
+      initialRuntimeState: {
+        tuningMarks: [createInheritedTuningMark(250, 2, 20_000)],
+      },
+      actionPlan: [
+        {
+          id: 'han-10018-heavy',
+          actionKind: 'charged-attack',
+          startFrame: 60,
+        },
+      ],
+    });
+    const commands =
+      active.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10018
+      );
+    expect(commands.length).toBeGreaterThan(0);
+    expect(commands[0]).toMatchObject({
+      sourceActionId: 'han-10018-heavy',
     });
   });
 
