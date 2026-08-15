@@ -390,6 +390,21 @@ export function createVerifiedCombatRuntime({
     );
   }
 
+  for (const dotGroup of groupVerifiedBattleEffectDotCommands(
+    effectGeneration?.dotCommands ?? []
+  )) {
+    descriptors.push(
+      ...createVerifiedBattleEffectDotDescriptors({
+        dotGroup,
+        durationMs: nonNegativeNumber(scenario?.time?.durationMs),
+        frameRate: positiveNumber(
+          scenario?.time?.fps ?? scenario?.time?.frameRate,
+          FRAME_RATE
+        ),
+      })
+    );
+  }
+
   if (!nonDamageProjectionOnly) {
     descriptors.push(
       ...createVerifiedJointAttackRuntimeDescriptors({
@@ -664,6 +679,38 @@ export function createVerifiedCombatRuntime({
         breakWatcherEvents,
         eventLog,
       });
+      continue;
+    }
+    if (descriptor.kind === 'battle-effect-dot-tick') {
+      const event = applyVerifiedBattleEffectDotTickDescriptor({
+        descriptor,
+        state,
+      });
+      appendRuntimeEvent(damageEvents, event, state);
+      eventLog.push(event);
+      appendVerifiedBreakWatcherEvents({
+        descriptor,
+        damageEvent: event,
+        scenario,
+        state,
+        breakWatcherEvents,
+        eventLog,
+      });
+      continue;
+    }
+    if (descriptor.kind === 'battle-effect-dot-contract-unresolved') {
+      const event = createVerifiedBattleEffectDotEvent({
+        descriptor,
+        dotCommand: descriptor.dotCommand,
+        applied: false,
+        reason: 'battle-effect-dot-contract-unresolved',
+        payload: {
+          unresolvedReasons: descriptor.unresolvedReasons,
+          appliedToCalculators: false,
+        },
+      });
+      appendRuntimeEvent(damageEvents, event, state);
+      eventLog.push(event);
       continue;
     }
     if (descriptor.kind === 'passive-retaliation-hit') {
@@ -1849,6 +1896,126 @@ function qDivNearestPositive(left, right) {
   const quotient = numerator / right;
   const remainder = numerator % right;
   return quotient + (remainder * 2n >= right ? 1n : 0n);
+}
+
+// 按 (target, rootElementId) 聚合 DoT 命令：单实例叠层（原生
+// IsSameElement 只比较 elementConfigId；BuffElement.Combine 为单聚合实例
+// 叠层入口——overlying-capped-single-aggregate-layer）。首个施加者持有
+// 来源/等级系数（后续施加不替换），层数 cap maxStacks，共享到期时间
+// 刷新为 max(旧到期, 本次施加+20s)，整组到期时全部层数一起消失。
+function groupVerifiedBattleEffectDotCommands(dotCommands) {
+  const groups = new Map();
+  for (const dotCommand of dotCommands ?? []) {
+    const key = `${dotCommand?.target?.kind ?? '?'}:${
+      dotCommand?.target?.id ?? '?'
+    }:${dotCommand?.rootElementId ?? dotCommand?.elementId ?? '?'}`;
+    const entries = groups.get(key) ?? [];
+    entries.push(dotCommand);
+    groups.set(key, entries);
+  }
+  return [...groups.values()]
+    .map(entries => {
+      const applications = [...entries].sort(
+        (left, right) =>
+          Number(left.timeMs) - Number(right.timeMs) ||
+          String(left.actionId ?? '').localeCompare(String(right.actionId ?? ''))
+      );
+      // 首个施加者 = timeMs 最小者：持有来源与等级系数。
+      const owner = applications[0];
+      return {
+        ...owner,
+        applications,
+        applicationCount: entries.length,
+      };
+    })
+    .sort((left, right) => Number(left.timeMs) - Number(right.timeMs));
+}
+
+function createVerifiedBattleEffectDotDescriptors({
+  dotGroup,
+  durationMs,
+  frameRate,
+}) {
+  const intervalMs = positiveNumber(dotGroup?.tickIntervalMs, null);
+  const startMs = nonNegativeNumber(dotGroup?.timeMs);
+  const unresolvedReasons = [];
+  if (intervalMs == null) {
+    unresolvedReasons.push('battle-effect-dot-interval-invalid');
+  }
+  if (dotGroup?.timeExeFirstFrame !== true) {
+    unresolvedReasons.push('battle-effect-dot-first-trigger-policy-unsupported');
+  }
+  if (
+    dotGroup?.target?.kind == null ||
+    dotGroup?.target?.id == null ||
+    dotGroup?.elementId == null
+  ) {
+    unresolvedReasons.push('battle-effect-dot-target-or-element-invalid');
+  }
+  if (unresolvedReasons.length > 0) {
+    return [
+      {
+        kind: 'battle-effect-dot-contract-unresolved',
+        timeMs: startMs,
+        frameIndex: null,
+        tickIndex: null,
+        thresholdMs: null,
+        dotCommand: dotGroup,
+        unresolvedReasons,
+      },
+    ];
+  }
+  // 共享到期时间：max(各施加时刻 + 自身 durationMs)（整组同生共死）。
+  const relayDurationMs = Math.max(
+    0,
+    ...(dotGroup.applications ?? [dotGroup]).map(
+      application =>
+        nonNegativeNumber(application.timeMs) +
+        positiveNumber(application.durationMs, 20_000) -
+        startMs
+    )
+  );
+  const normalizedFrameRate = positiveNumber(frameRate, FRAME_RATE);
+  const descriptors = [];
+  const maximumTick = Math.floor(relayDurationMs / intervalMs) - 1;
+  for (let tickIndex = 0; tickIndex <= maximumTick; tickIndex += 1) {
+    const thresholdMs = tickIndex * intervalMs;
+    const frameIndex =
+      Math.floor(((startMs + thresholdMs) * normalizedFrameRate) / 1000) + 1;
+    const timeMs = roundValue((frameIndex * 1000) / normalizedFrameRate);
+    if (timeMs > durationMs) break;
+    descriptors.push({
+      kind: 'battle-effect-dot-tick',
+      timeMs,
+      frameIndex,
+      tickIndex,
+      thresholdMs,
+      dotCommand: dotGroup,
+      sourceSequencePath: createBattleEffectDotSourceSequencePath({
+        dotCommand: dotGroup,
+        tickIndex,
+      }),
+    });
+  }
+  return descriptors;
+}
+
+function createBattleEffectDotSourceSequencePath({ dotCommand, tickIndex }) {
+  const sourceIdentity = [
+    dotCommand?.actionId,
+    dotCommand?.sourceKiboId,
+    dotCommand?.elementId,
+    dotCommand?.rootElementId,
+    dotCommand?.sourceActorId,
+    dotCommand?.target?.kind,
+    dotCommand?.target?.id,
+  ].join('|');
+  return [
+    Number.MAX_SAFE_INTEGER,
+    46,
+    stableSourceSequenceComponent(sourceIdentity),
+    nonNegativeInteger(tickIndex),
+  ];
 }
 
 function createPeriodicVitalDescriptors({ schedule, durationMs, frameRate }) {
@@ -4427,6 +4594,171 @@ function applyKiboPassiveRetaliationHitDescriptor({
     hpDamage,
     toughnessDamage,
     damageEvent,
+  };
+}
+
+function applyVerifiedBattleEffectDotTickDescriptor({ descriptor, state }) {
+  const dot = descriptor.dotCommand ?? {};
+  const basePayload = {
+    actionId: dot.actionId ?? null,
+    sourceActorId: dot.sourceActorId ?? null,
+    sourceKiboId: dot.sourceKiboId ?? null,
+    elementId: dot.elementId ?? null,
+    rootElementId: dot.rootElementId ?? null,
+    pathId: dot.pathId ?? null,
+    damageType: dot.damageType ?? 7,
+    elementalType: dot.elementalType ?? null,
+    ignoreDamageEvent: dot.ignoreDamageEvent === true,
+    tickIndex: descriptor.tickIndex,
+    thresholdMs: descriptor.thresholdMs,
+    timeMs: descriptor.timeMs,
+  };
+  const createEvent = payload =>
+    createVerifiedBattleEffectDotEvent({ descriptor, dot, payload });
+  const applications = dot.applications ?? [];
+  if (applications.length === 0 || !dot.target) {
+    return createEvent({
+      ...basePayload,
+      beforeValue: null,
+      requestedDamage: null,
+      appliedDamage: 0,
+      change: 0,
+      afterValue: null,
+      lethal: false,
+      applied: false,
+      reason: 'battle-effect-dot-config-missing',
+      appliedToCalculators: false,
+    });
+  }
+  const timeMs = descriptor.timeMs;
+  // 单实例聚合叠层（原生 overlying-capped-single-aggregate-layer）：
+  // 层数 = 该时刻前已施加次数（cap maxStacks），不按独立窗口衰减——
+  // 共享到期时间刷新为 max(旧到期, 本次施加+20s)，整组到期时全部消失。
+  const maxStacks = positiveIntegerOrNull(dot.maxStacks) ?? 3;
+  const layers = Math.min(
+    maxStacks,
+    Math.max(
+      1,
+      applications.filter(application => timeMs >= Number(application.timeMs))
+        .length
+    )
+  );
+  // 首个施加者持有等级系数（后续施加只加层，不替换系数）。
+  const owner = applications[0] ?? dot;
+  const level = clampInteger(owner.level, 1, 12, 1);
+  const ratioAtLevel = Number(owner.ratioAtLevel);
+  const valueByLevel = owner.valueByLevel ?? {};
+  const coefficientRaw =
+    Number.isFinite(ratioAtLevel) && ratioAtLevel > 0
+      ? ratioAtLevel
+      : (Number(valueByLevel[level]) || 0);
+  const kiboState = findKiboStateByActorId(
+    state,
+    owner.sourceActorId,
+    owner.sourceKiboId
+  );
+  const sourceAttribute = resolveRuntimeAttribute({
+    state,
+    targetKind: EFFECT_TARGET_KINDS.KIBO,
+    targetId: String(owner.sourceActorId),
+    timeMs,
+    attributeId: 1,
+    baseRaw:
+      kiboState?.attributesById?.get(1) ??
+      numberOrNull(kiboState?.profile?.attack),
+    propertyTags: [],
+    settlingSourceSequencePath: descriptor.sourceSequencePath,
+  });
+  if (!sourceAttribute.ready || sourceAttribute.value == null) {
+    return createEvent({
+      ...basePayload,
+      layers,
+      coefficientRaw,
+      beforeValue: roundValue(state.enemy.hp),
+      requestedDamage: null,
+      appliedDamage: 0,
+      change: 0,
+      afterValue: roundValue(state.enemy.hp),
+      lethal: false,
+      applied: false,
+      reason: 'battle-effect-dot-source-attribute-unresolved',
+      sourceAttribute,
+      appliedToCalculators: false,
+    });
+  }
+  // 公式：层数 × 首个施加者奇波ATK × 首个施加者等级系数 /10000（与客户端
+  // target.ELEMENT_LAYERS[H]*source.ATK[0]*I/10000 一致；H=层数、I=系数）。
+  const formulaRaw = qDivNearestPositive(
+    qMul(
+      qMul(qFromFloat(Number(sourceAttribute.value)), qFromInt(layers)),
+      qFromInt(coefficientRaw)
+    ),
+    qFromInt(10_000)
+  );
+  const before = Number(state.enemy.hp);
+  const damageResult = calculateRealDamage({
+    baseRaw: formulaRaw,
+    worldEventConflictPer: 1,
+    hitLocationRatio: 1,
+    blockMiscellaneous: true,
+    miscellaneous: 1,
+    inWeakState: false,
+    breakDamageUp: 0,
+    currentHp: before,
+    minimumRemainingHp: 0,
+  });
+  const requestedDamage = Math.max(0, Number(damageResult.value));
+  const appliedDamage = Math.min(before, requestedDamage);
+  state.enemy.hp = clampNumber(
+    before - appliedDamage,
+    0,
+    positiveNumber(state.enemy.maxHp, before)
+  );
+  const lethal = before > 0 && state.enemy.hp <= 0;
+  const applied = appliedDamage > 0;
+  return createEvent({
+    ...basePayload,
+    layers,
+    coefficientRaw,
+    attack: Number(sourceAttribute.value),
+    sourceAttribute,
+    formulaRaw: formulaRaw.toString(),
+    formulaResult: damageResult,
+    beforeValue: roundValue(before),
+    requestedDamage: roundValue(requestedDamage),
+    appliedDamage: roundValue(appliedDamage),
+    rawDamage: roundValue(appliedDamage),
+    change: roundValue(-appliedDamage),
+    afterValue: roundValue(state.enemy.hp),
+    hpLossPercent: ratioOrZero(appliedDamage, state.enemy.maxHp),
+    lethal,
+    applied,
+    reason: applied
+      ? 'battle-effect-dot-applied'
+      : 'battle-effect-dot-no-effective-change',
+    appliedToCalculators: true,
+  });
+}
+
+function createVerifiedBattleEffectDotEvent({ descriptor, dot, payload }) {
+  return {
+    type: 'VERIFIED_COMBAT_HIT',
+    timeMs: roundValue(descriptor.timeMs),
+    actionId: dot.actionId ?? null,
+    actorId: dot.sourceActorId ?? null,
+    targetId: dot.target?.id ?? null,
+    hitKey: `battle-effect-dot|${dot.rootElementId ?? dot.elementId ?? 'element'}|${
+      descriptor.tickIndex ?? 'tick'
+    }|${roundValue(descriptor.timeMs)}`,
+    hitIndex: (descriptor.tickIndex ?? 0) + 1,
+    hitSkillId: null,
+    payload: {
+      verifiedCombat: true,
+      battleEffectDot: true,
+      toughnessDamage: 0,
+      sourceSequencePath: descriptor.sourceSequencePath ?? null,
+      ...payload,
+    },
   };
 }
 
@@ -7517,6 +7849,8 @@ function resolveDescriptorOrder(kind) {
     'break-watcher-arm': 3,
     'passive-derived-hit': 3,
     'passive-derived-dot': 3,
+    'battle-effect-dot-tick': 3,
+    'battle-effect-dot-contract-unresolved': 3,
     'passive-retaliation-hit': 3,
     'joint-attack-admission': 3,
     'joint-attack-atomic-cost': 3,
@@ -7540,6 +7874,8 @@ function resolveDescriptorOrder(kind) {
     'break-watcher-arm': ['combat-hit', 3],
     'passive-derived-hit': ['combat-hit', 3],
     'passive-derived-dot': ['combat-hit', 3],
+    'battle-effect-dot-tick': ['combat-hit', 3],
+    'battle-effect-dot-contract-unresolved': ['combat-hit', 3],
     'passive-retaliation-hit': ['combat-hit', 3],
     'joint-attack-admission': ['combat-hit', 3],
     'joint-attack-atomic-cost': ['combat-hit', 3],

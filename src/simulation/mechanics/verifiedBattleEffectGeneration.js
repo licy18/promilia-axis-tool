@@ -205,6 +205,7 @@ export function createVerifiedBattleEffectGeneration({
   const directHpEvents = [];
   const shieldEvents = [];
   const cooldownReductionEvents = [];
+  const dotCommands = [];
   const knownGaps = [];
   const unresolved = [];
   const elementTagLayers = new Map();
@@ -282,8 +283,41 @@ export function createVerifiedBattleEffectGeneration({
       // 注意：部分奇波恢复节点 kind='damage' 但携带 heal/shield
       // （500357/500358 风绒守护恢复），必须继续走资源 consumer。
       if (effect.kind === 'damage' && !effect.heal && !effect.shield) {
-        // DoT 声明（无 damage 字段 + 生命周期时长）尚无周期伤害结算，
-        // 记录 known-gap（不得静默当作普通 hit 结算）。
+        // DoT（周期伤害，damageType=7，如 500360303 流血）：生成周期伤害
+        // 命令，由 runtime 按 tick 结算（层数×奇波ATK×等级倍率/10000）。
+        // timeMs/target 在下方统一解析，这里先解析 DoT 专属字段。
+        if (isVerifiedDotEffect(effect, mechanicsPackage)) {
+          const dotTimeMs = resolveEffectTimeMs(action, effect, resolution);
+          const dotTargets = resolveEffectTargets({
+            action,
+            effect,
+            scenario,
+            timeMs: dotTimeMs,
+            controlledActorTimeline,
+          });
+          const dotCommand = createVerifiedDotCommand({
+            action,
+            effect,
+            resolution,
+            mechanicsPackage,
+            timeMs: dotTimeMs,
+            target: dotTargets[0],
+          });
+          if (dotCommand) {
+            dotCommands.push(dotCommand);
+          } else {
+            knownGaps.push({
+              actionId: action.id,
+              effectIdentity: resolveEffectIdentity(effect),
+              name: effect.name ?? null,
+              reason: 'periodic-damage-command-unresolved',
+              sourceIdentity: effect.sourceIdentity ?? null,
+            });
+          }
+          continue;
+        }
+        // 普通 damage 由 hit 系统结算；DoT 声明（无 damage 字段 + 生命周期
+        // 时长）但未识别为周期伤害时，记录 known-gap（不得静默当作普通 hit）。
         if (
           !effect.damage &&
           Number(effect.lifecycle?.durationMs) > 0
@@ -486,7 +520,8 @@ export function createVerifiedBattleEffectGeneration({
     directSpEvents.length +
     directHpEvents.length +
     shieldEvents.length +
-    cooldownReductionEvents.length;
+    cooldownReductionEvents.length +
+    dotCommands.length;
   return {
     schemaVersion: 1,
     contractName: VERIFIED_BATTLE_EFFECT_GENERATION_CONTRACT_NAME,
@@ -500,6 +535,7 @@ export function createVerifiedBattleEffectGeneration({
     directHpEvents,
     shieldEvents,
     cooldownReductionEvents,
+    dotCommands,
     knownGaps,
     unresolved,
     summary: {
@@ -509,6 +545,7 @@ export function createVerifiedBattleEffectGeneration({
       directHpEventCount: directHpEvents.length,
       shieldEventCount: shieldEvents.length,
       cooldownReductionEventCount: cooldownReductionEvents.length,
+      dotCommandCount: dotCommands.length,
       knownGapCount: knownGaps.length,
       unresolvedEffectCount: unresolved.length,
       generatedCount,
@@ -941,4 +978,124 @@ function clampInteger(value, minimum, maximum, fallback) {
 
 function roundValue(value) {
   return Math.round((Number(value) + Number.EPSILON) * 1e6) / 1e6;
+}
+
+// DoT（周期伤害）识别：kind=damage 且 damageType=7（如 500360303 流血），
+// 或者公式为层数×ATK×系数型（baseFunctionId=116 带 ELEMENT_LAYERS）。
+function isVerifiedDotEffect(effect, mechanicsPackage) {
+  if (!effect || effect.kind !== 'damage') return false;
+  if (Number(effect.damage?.damageType) === 7) return true;
+  if (Number(effect.formula?.baseFunctionId) === 116) return true;
+  const nodes = mechanicsPackage?.battleEffectCatalog?.nodes ?? [];
+  const node = nodes.find(
+    candidate => String(candidate.elementId) === String(effect.elementId)
+  );
+  if (node && Number(node.damage?.damageType) === 7) return true;
+  return false;
+}
+
+// DoT 命令：携带施加信息（时长、tick 间隔、层数、等级倍率），由 runtime
+// 按 tick 结算。层数上限取 root 叠层（combineType=4 stack）的 maxStacks。
+function createVerifiedDotCommand({
+  action,
+  effect,
+  resolution,
+  mechanicsPackage,
+  timeMs,
+  target,
+}) {
+  const nodes = mechanicsPackage?.battleEffectCatalog?.nodes ?? [];
+  const node = nodes.find(
+    candidate => String(candidate.elementId) === String(effect.elementId)
+  );
+  const level = clampInteger(
+    action.level ?? resolution.actionBinding?.controlVariantSkillLevel,
+    1,
+    12,
+    1
+  );
+  const durationMs =
+    positiveNumberOrNull(effect.lifecycle?.durationMs) ??
+    positiveNumberOrNull(node?.lifecycle?.durationMs) ??
+    20_000;
+  const valueByLevel = node?.formula?.valueByLevel ?? {};
+  const ratioAtLevel = Number(valueByLevel[level]);
+  if (!Number.isFinite(ratioAtLevel) || ratioAtLevel <= 0) {
+    return null;
+  }
+  // 层数上限：root 叠层优先（500360301 combineType=4 stack → maxStacks=3），
+  // 子节点自身的 maxStacks（303 replace → 1）不反映叠层语义。
+  const rootNode = nodes.find(
+    candidate => String(candidate.elementId) === String(effect.rootElementId)
+  );
+  const maxStacks =
+    positiveIntegerOrNull(
+      rootNode?.lifecycle?.combineNumber ??
+        rootNode?.lifecycle?.maxStacks ??
+        effect.lifecycle?.maxStacks
+    ) ??
+    3;
+  const elementalType = Number(
+    effect.damage?.elementalType ??
+      node?.damage?.elementalType ??
+      node?.damage?.elementId ??
+      9
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'verified-battle-effect-dot',
+    status: 'verified-battle-effect-dot-command-ready',
+    sourceKind: 'azpr-verified-battle-effect-dot',
+    actionId: action.id,
+    actionName: action.name ?? action.id,
+    sourceActorId: action.actorId ?? null,
+    sourceKiboId: action.kiboId ?? null,
+    elementId: Number(effect.elementId),
+    rootElementId: Number(effect.rootElementId) || Number(effect.elementId),
+    pathId: effect.pathId ?? null,
+    name: effect.name ?? effect.displayLabel ?? null,
+    sourceIdentity: effect.sourceIdentity ?? null,
+    damageType: 7,
+    elementalType,
+    ignoreDamageEvent:
+      Number(node?.damage?.ignoreDamageEvent) === 1 ||
+      Number(effect.damage?.ignoreDamageEvent) === 1 ||
+      // damageType=7（DoT）在客户端默认 ignoreDamageEvent=1（不进入普通
+      // 伤害事件），用户规格确认：流血 DoT 的 ignoreDamageEvent=1。
+      Number(node?.damage?.damageType) === 7 ||
+      Number(effect.damage?.damageType) === 7,
+    durationMs,
+    tickIntervalMs: 1000,
+    timeExeFirstFrame: true,
+    maxStacks,
+    stackDelta: 1,
+    level,
+    ratioAtLevel,
+    valueByLevel,
+    formula: {
+      baseFunctionId: Number(effect.formula?.baseFunctionId ?? node?.formula?.baseFunctionId),
+      baseExpression:
+        effect.formula?.baseExpression ?? node?.formula?.baseExpression ?? null,
+    },
+    target: {
+      kind: target.kind,
+      id: target.id,
+    },
+    timeMs: roundValue(timeMs),
+    trigger: {
+      startFrame: Number(effect.trigger?.startFrame),
+      behaviorPathId: effect.trigger?.behaviorPathId ?? null,
+    },
+    applied: true,
+  };
+}
+
+function positiveNumberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : null;
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
