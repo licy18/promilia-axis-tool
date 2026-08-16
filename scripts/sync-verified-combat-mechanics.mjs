@@ -9975,7 +9975,13 @@ function createSemanticEffectCandidate({
             valueByLevel: node.formula?.valueByLevel ?? null,
           }
         : null,
-    heal: node.kind === 'damage' && node.damage?.damageType === 5 ? {} : null,
+    // damageType=5（heal）语义效果必须携带 valueByLevel，否则 runtime 走
+    // heal 分支时 value 解析失败（heal={} 空对象 truthy 但无系数）→ 回血
+    // 静默丢失 + 验收 coverage-missing（107002 大招全体回血即此类）。
+    heal:
+      node.kind === 'damage' && node.damage?.damageType === 5
+        ? { valueByLevel: node.formula?.valueByLevel ?? {} }
+        : null,
     shield: (node.kind === 'shield' || node.damage?.damageType === 11) && {
       ...node.shield,
     },

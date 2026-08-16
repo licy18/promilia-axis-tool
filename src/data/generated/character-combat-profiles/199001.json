@@ -100,7 +100,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "41f911d6887fa057c3a483c3a07caa476004d5c5f79cf7f8cc54da54fdf897f8",
+    "packageHash": "1a111dd02c0e1c50dfcf1c9cbbaf5fb7e9a1f5d9f419cbf425da2d28f4f03a5b",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -75211,7 +75211,22 @@
           "propertyChange": null,
           "directSp": null,
           "cooldownReduction": null,
-          "heal": {},
+          "heal": {
+            "valueByLevel": {
+              "1": 69,
+              "2": 69,
+              "3": 69,
+              "4": 69,
+              "5": 69,
+              "6": 69,
+              "7": 69,
+              "8": 69,
+              "9": 69,
+              "10": 69,
+              "11": 69,
+              "12": 69
+            }
+          },
           "shield": false,
           "damage": {
             "damageType": 5,
@@ -82100,7 +82115,22 @@
           "propertyChange": null,
           "directSp": null,
           "cooldownReduction": null,
-          "heal": {},
+          "heal": {
+            "valueByLevel": {
+              "1": 69,
+              "2": 69,
+              "3": 69,
+              "4": 69,
+              "5": 69,
+              "6": 69,
+              "7": 69,
+              "8": 69,
+              "9": 69,
+              "10": 69,
+              "11": 69,
+              "12": 69
+            }
+          },
           "shield": false,
           "damage": {
             "damageType": 5,
@@ -89969,7 +89999,7 @@
       "recipeHash": "07a3ce3a6a8bcaf2b380563481b4fd0d7426712de60e1056a37f787b9091086b",
       "compilerInputHash": "0bdbdd56943a2d29d050ec8552777820c9c56a14fb3a8250903d59d524c62d32",
       "recipeContractHash": "95bf71d96131014ceb9cc24adcd5c76590360402e1d0507b003b095fdcfe6e53",
-      "ownerContractHash": "24056fee85607f626d1ce6e897ce295036662e97e34d482269b375789bb47303"
+      "ownerContractHash": "e96c0cbcd91720ee6c5cd361c9fb54850da9a3625429ca82954b0c8294d04cde"
     },
     "operators": [
       "public-action-binding",
@@ -90754,7 +90784,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "096e9202a1d6a1d5a6c4bff328ab9cf528aa0f88119cd951477f47603941b49f"
+    "deterministicInputHash": "bbe096c9782db31f3f9909306af6e92d7652ba7a14035c4ab0f2fa1e777255da"
   },
-  "profileHash": "2ac3f8ec7c2617bd4386b040e5f84453286aeccec9882f24b0b6d4b855e0aa63"
+  "profileHash": "639f412ea4b00d9b9bee4e6d62e9e80355e0285dda53c975781e70f93af479ac"
 }
