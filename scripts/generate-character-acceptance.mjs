@@ -84,7 +84,8 @@ for (const recipe of recipes) {
   }
 }
 const mechanicsPackage = await readJson(verifiedMechanicsPackagePath);
-const pathIdToElementIdByPackage = createPathIdToElementIdIndex(mechanicsPackage);
+const pathIdToElementIdByPackage =
+  createPathIdToElementIdIndex(mechanicsPackage);
 const vite = await createServer({
   root: projectRoot,
   server: { middlewareMode: true },
@@ -273,7 +274,9 @@ try {
     );
     const derivedSubjectHash =
       previewManifest.evidence?.productVisualAcceptance?.bindingExpectation
-        ?.qualificationSubjectHash ?? previewManifest.qualificationSubjectHash ?? null;
+        ?.qualificationSubjectHash ??
+      previewManifest.qualificationSubjectHash ??
+      null;
     const signoffVerification = verifySignoffRecord(recipe, {
       projectRoot,
       qualificationSubjectHash: derivedSubjectHash,
@@ -288,8 +291,7 @@ try {
         visualScenario,
         additionalVisualScenarios,
         signoffRecordVerified: signoffVerification.verified,
-        signoffRecordAuthentication:
-          signoffVerification.authentication ?? null,
+        signoffRecordAuthentication: signoffVerification.authentication ?? null,
       })
     );
     const validation = validateCharacterAcceptanceManifest(manifest, {
@@ -364,7 +366,10 @@ function createPublishedAcceptanceResult(manifests, visualRuns) {
       publishedManifestIndex: manifestIndex,
       checkPublication: true,
     });
-    if (!publishedValidation.valid && !isBindingInvalidOnly(publishedValidation)) {
+    if (
+      !publishedValidation.valid &&
+      !isBindingInvalidOnly(publishedValidation)
+    ) {
       throw new Error(
         'Published character acceptance manifest invalid for ' +
           manifest.owner.ownerId +
@@ -1454,8 +1459,7 @@ function executeVisualScenario({
             event =>
               ['VERIFIED_DIRECT_HEAL', 'VERIFIED_DIRECT_SHIELD'].includes(
                 event.type
-              ) &&
-              event.payload?.effectIdentity != null
+              ) && event.payload?.effectIdentity != null
           )
           .map((event, index) => ({
             projectionIdentity:
@@ -4033,7 +4037,12 @@ function inspectNegativeActionCase(service, fixture, negativeCase) {
   };
 }
 
-export function inspectIsolatedActionCase(service, fixture, isolatedCase, profile) {
+export function inspectIsolatedActionCase(
+  service,
+  fixture,
+  isolatedCase,
+  profile
+) {
   const contract = structuredClone(fixture);
   contract.actions = structuredClone(isolatedCase.actions ?? []);
   contract.scenario.id += '--isolated--' + String(isolatedCase.identity);
@@ -4504,16 +4513,14 @@ function createIsolatedMachineTraceProjection({ run, profile, scenarioId }) {
           event =>
             ['VERIFIED_DIRECT_HEAL', 'VERIFIED_DIRECT_SHIELD'].includes(
               event.type
-            ) &&
-            event.payload?.effectIdentity != null
+            ) && event.payload?.effectIdentity != null
         )
         .map((event, index) => ({
           projectionIdentity:
             'machine-isolated-direct-effect:' + scenarioId + ':' + index,
           actionId: event.actionId ?? null,
           effectIdentity: event.payload.effectIdentity,
-          operation:
-            event.type === 'VERIFIED_DIRECT_HEAL' ? 'heal' : 'shield',
+          operation: event.type === 'VERIFIED_DIRECT_HEAL' ? 'heal' : 'shield',
           targetId: event.targetId ?? null,
           absoluteFrame: event.absoluteFrame ?? null,
           frameIndex:

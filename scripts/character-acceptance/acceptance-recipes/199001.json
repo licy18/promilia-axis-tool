@@ -8,9 +8,7 @@
     "recordIdentity": "character-product-acceptance:199001:6833dc95557735f15cc68e74cf667c2acf90edc1:106404c7cef7d83f",
     "qualificationSubjectHash": "106404c7cef7d83f",
     "scenarioSetHash": "ade88dad22bd1344",
-    "scenarioIdentities": [
-      "m12-b3-starborn-199001-focused-acceptance"
-    ],
+    "scenarioIdentities": ["m12-b3-starborn-199001-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
@@ -51,17 +49,12 @@
   "ownerId": 199001,
   "optimizationObjectAcceptance": {
     "optimizationObjectId": "STARBORN",
-    "requiredSourceCharacterIds": [
-      199001,
-      199002
-    ],
+    "requiredSourceCharacterIds": [199001, 199002],
     "sourceCharacterId": 199001,
     "sourceAliasIdentity": "STARBORN:source-alias:199001"
   },
   "fixturePath": "fixtures/character-acceptance/199001-starborn-visual.json",
-  "goldenReports": [
-    "reports/m10/199001/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/199001/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 19900162,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -144,13 +137,8 @@
     "effectIdentity": "battle-element:199001049",
     "targetId": "actor-199001",
     "durationFrames": 1440,
-    "requiredOperations": [
-      "apply",
-      "expire"
-    ],
-    "startOperations": [
-      "apply"
-    ],
+    "requiredOperations": ["apply", "expire"],
+    "startOperations": ["apply"],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -331,9 +319,7 @@
           }
         }
       ],
-      "baselineRequiredExecutableActionIds": [
-        "starborn-f-ultimate"
-      ],
+      "baselineRequiredExecutableActionIds": ["starborn-f-ultimate"],
       "expectedIssue": {
         "actionId": "199001-ultimate-sp-insufficient",
         "code": "machine-axis-action-resource-insufficient"
@@ -437,9 +423,7 @@
           }
         }
       ],
-      "baselineRequiredExecutableActionIds": [
-        "starborn-f-derived-thrust"
-      ],
+      "baselineRequiredExecutableActionIds": ["starborn-f-derived-thrust"],
       "expectedIssue": {
         "actionId": "199001-thrust-window-a1",
         "code": "machine-axis-normal-attack-context-window-conflict"
@@ -825,10 +809,7 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": [
-                "expire",
-                "apply"
-              ]
+              "operation": ["expire", "apply"]
             }
           }
         }

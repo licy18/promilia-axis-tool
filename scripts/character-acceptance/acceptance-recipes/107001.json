@@ -8,9 +8,7 @@
     "recordIdentity": "character-product-acceptance:107001:6833dc95557735f15cc68e74cf667c2acf90edc1:d374d3686c54e95c",
     "qualificationSubjectHash": "d374d3686c54e95c",
     "scenarioSetHash": "0efcdfd16c3e7f5c",
-    "scenarioIdentities": [
-      "m12-b3-107001-focused-acceptance"
-    ],
+    "scenarioIdentities": ["m12-b3-107001-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
@@ -58,9 +56,7 @@
   ],
   "ownerId": 107001,
   "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
-  "goldenReports": [
-    "reports/m10/107001/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/107001/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10700162,
   "requirementPolicies": {
     "unselectedControlVariantsFromActionForms": true
@@ -148,9 +144,7 @@
           }
         }
       ],
-      "requiredExecutableActionIds": [
-        "window-before-source"
-      ],
+      "requiredExecutableActionIds": ["window-before-source"],
       "expectedIssue": {
         "actionId": "window-outside-before",
         "code": "machine-axis-action-not-executable",
@@ -209,9 +203,7 @@
           }
         }
       ],
-      "requiredExecutableActionIds": [
-        "window-after-source"
-      ],
+      "requiredExecutableActionIds": ["window-after-source"],
       "expectedIssue": {
         "actionId": "window-outside-after",
         "code": "machine-axis-action-not-executable",
@@ -224,11 +216,7 @@
     "effectIdentity": "battle-element:107001262",
     "targetId": "actor-107001",
     "durationFrames": 1440,
-    "requiredOperations": [
-      "apply",
-      "refresh",
-      "expire"
-    ],
+    "requiredOperations": ["apply", "refresh", "expire"],
     "rightOpenExpiry": true
   },
   "probes": [
@@ -454,15 +442,9 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [
-                40
-              ],
-              "toughnessAfter": [
-                0
-              ],
-              "breakTriggered": [
-                true
-              ]
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
             }
           },
           "select": [

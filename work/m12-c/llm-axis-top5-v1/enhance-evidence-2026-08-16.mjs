@@ -16,15 +16,26 @@ const SPEC_PATH = 'e2e/m12-c-owner-visual-review.spec.js';
 const specBytes = fs.readFileSync(SPEC_PATH);
 const specSha256 = createHash('sha256').update(specBytes).digest('hex');
 const specGitBlob = createHash('sha1')
-  .update(Buffer.concat([Buffer.from('blob ' + specBytes.length + '\0'), specBytes]))
+  .update(
+    Buffer.concat([Buffer.from('blob ' + specBytes.length + '\0'), specBytes])
+  )
   .digest('hex');
 const pkg = JSON.parse(
-  fs.readFileSync('src/data/generated/verified-combat-mechanics-package.json', 'utf8')
+  fs.readFileSync(
+    'src/data/generated/verified-combat-mechanics-package.json',
+    'utf8'
+  )
 );
 
-const owners = [101010, 102001, 103002, 107001, 107002, 108003, 109001, 112001, 199001, 199002];
+const owners = [
+  101010, 102001, 103002, 107001, 107002, 108003, 109001, 112001, 199001,
+  199002,
+];
 for (const ownerId of owners) {
-  const reviewPath = path.join(EVIDENCE_DIR, `${PREFIX}-${ownerId}-review.json`);
+  const reviewPath = path.join(
+    EVIDENCE_DIR,
+    `${PREFIX}-${ownerId}-review.json`
+  );
   if (!fs.existsSync(reviewPath)) {
     console.log(`${ownerId} SKIP: missing review`);
     continue;
@@ -32,7 +43,12 @@ for (const ownerId of owners) {
   const review = JSON.parse(fs.readFileSync(reviewPath, 'utf8'));
   review.repositoryHead = HEAD;
   review.trackedCleanAtCapture = {
-    captureInputs: ['fixtures/character-acceptance/', 'src/data/generated/verified-combat-mechanics-package.json', 'src/data/generated/character-combat-profiles/', 'e2e/m12-c-owner-visual-review.spec.js'],
+    captureInputs: [
+      'fixtures/character-acceptance/',
+      'src/data/generated/verified-combat-mechanics-package.json',
+      'src/data/generated/character-combat-profiles/',
+      'e2e/m12-c-owner-visual-review.spec.js',
+    ],
     clean: true,
     note: 'capture 输入（fixtures/mechanism package/profiles/spec）在捕获时 tracked clean；recipe 落账等非捕获输入允许存在未提交修改',
   };
@@ -43,6 +59,8 @@ for (const ownerId of owners) {
   };
   review.mechanicsPackageHash = pkg.packageHash;
   fs.writeFileSync(reviewPath, JSON.stringify(review, null, 2) + '\n', 'utf8');
-  console.log(`${ownerId} enhanced: head=${HEAD} spec=${specSha256.slice(0, 12)} pkg=${pkg.packageHash.slice(0, 12)}`);
+  console.log(
+    `${ownerId} enhanced: head=${HEAD} spec=${specSha256.slice(0, 12)} pkg=${pkg.packageHash.slice(0, 12)}`
+  );
 }
 console.log('DONE');

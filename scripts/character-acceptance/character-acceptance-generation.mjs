@@ -868,9 +868,7 @@ function createFormalJointAttackBoundaryClassifier(profile) {
     profile?.contracts?.actionForms,
     'actionForms'
   )) {
-    if (
-      String(form?.actionKind ?? form?.publicActionKind) !== 'star-combo'
-    ) {
+    if (String(form?.actionKind ?? form?.publicActionKind) !== 'star-combo') {
       continue;
     }
     add(form.executionControlSkillId, form.executionSubSkillIndex);

@@ -10,10 +10,7 @@
       "identity": "11200101-sub1-unselected-client-control-variant",
       "controlSkillId": 11200101,
       "subSkillIndex": 1,
-      "dimensions": [
-        "control-window",
-        "hit"
-      ],
+      "dimensions": ["control-window", "hit"],
       "reason": "the public normal-attack chain selects sub0 and the charged public action binds control 11200110; no source-backed public selector reaches skill_control_11200101 sub1",
       "sourceIdentity": "skill_control_11200101.asset#skillPlayers[1]|profile.actionForms=11200103/sub0,11200110/sub0|profile.attackInputChains=11200101/sub0",
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1"
@@ -22,10 +19,7 @@
       "identity": "11200121-sub1-unselected-entry-control-variant",
       "controlSkillId": 11200121,
       "subSkillIndex": 1,
-      "dimensions": [
-        "control-window",
-        "hit"
-      ],
+      "dimensions": ["control-window", "hit"],
       "reason": "the source-backed on-enter trigger binds the star-carry action to control 11200121 sub0 and exposes no public or variant edge selecting sub1",
       "sourceIdentity": "characters.items[id=112001].skillSlots[slot=203,skillId=11200121]|profile.switchTriggers[on-enter].actionVariantIndex=0|skill_control_11200121.asset#skillPlayers[1]",
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1"
@@ -41,9 +35,7 @@
     }
   ],
   "fixturePath": "fixtures/character-acceptance/112001-visual.json",
-  "goldenReports": [
-    "reports/m10/112001/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/112001/golden-trace.json"],
   "inputWindowBoundary": null,
   "productVisualAcceptance": {
     "status": "accepted",
@@ -51,9 +43,7 @@
     "recordIdentity": "character-product-acceptance:112001:6833dc95557735f15cc68e74cf667c2acf90edc1:92d63428949df95d",
     "qualificationSubjectHash": "92d63428949df95d",
     "scenarioSetHash": "7560fee46ade998b",
-    "scenarioIdentities": [
-      "m12-b3-112001-assumption-v1-focused-acceptance"
-    ],
+    "scenarioIdentities": ["m12-b3-112001-assumption-v1-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
@@ -101,10 +91,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          299,
-          499
-        ],
+        "elementIds": [299, 499],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -144,10 +131,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          299,
-          499
-        ],
+        "elementIds": [299, 499],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -762,10 +746,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "hitIdentity",
-            "inBreakForHpDamage"
-          ]
+          "select": ["hitIdentity", "inBreakForHpDamage"]
         }
       ]
     },
@@ -1068,10 +1049,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "candidateStates",
-            "sourceIdentity"
-          ]
+          "select": ["candidateStates", "sourceIdentity"]
         },
         {
           "kind": "trace-query",
@@ -1098,10 +1076,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "hitIdentity",
-            "effectiveHpDamage"
-          ]
+          "select": ["hitIdentity", "effectiveHpDamage"]
         },
         {
           "kind": "trace-query",
@@ -1111,10 +1086,7 @@
             "actionId": "isolated-consumer-split-one-one",
             "eventType": "VERIFIED_TUNING_DAMAGE",
             "elementId": {
-              "$in": [
-                296,
-                498
-              ]
+              "$in": [296, 498]
             }
           },
           "expectation": {
@@ -1251,10 +1223,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "frameIndex",
-            "sourceSequencePath"
-          ]
+          "select": ["frameIndex", "sourceSequencePath"]
         },
         {
           "kind": "trace-query",
@@ -1310,10 +1279,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "settlementCursor.sourceSequencePath",
-            "settlementOrder"
-          ]
+          "select": ["settlementCursor.sourceSequencePath", "settlementOrder"]
         },
         {
           "kind": "trace-query",
@@ -1330,10 +1296,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "hitIdentity",
-            "settlementCursor.sourceSequencePath"
-          ]
+          "select": ["hitIdentity", "settlementCursor.sourceSequencePath"]
         },
         {
           "kind": "trace-query",
@@ -1351,11 +1314,7 @@
           "expectation": {
             "count": 2
           },
-          "select": [
-            "effectId",
-            "sourceSequencePath",
-            "modifiers"
-          ]
+          "select": ["effectId", "sourceSequencePath", "modifiers"]
         },
         {
           "kind": "trace-query",
@@ -1370,11 +1329,7 @@
           "expectation": {
             "count": 2
           },
-          "select": [
-            "effectId",
-            "timeMs",
-            "sourceSequencePath"
-          ]
+          "select": ["effectId", "timeMs", "sourceSequencePath"]
         }
       ]
     },
@@ -1478,10 +1433,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "effectiveHpDamage",
-            "settlementCursor.sourceSequencePath"
-          ]
+          "select": ["effectiveHpDamage", "settlementCursor.sourceSequencePath"]
         }
       ]
     },
@@ -1734,11 +1686,7 @@
           "expectation": {
             "count": 2
           },
-          "select": [
-            "effectId",
-            "timeMs",
-            "sourceSequencePath"
-          ]
+          "select": ["effectId", "timeMs", "sourceSequencePath"]
         },
         {
           "kind": "trace-query",
@@ -2002,9 +1950,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "formula.verifiedResult.expectedCritical.weightedValue"
-          ]
+          "select": ["formula.verifiedResult.expectedCritical.weightedValue"]
         },
         {
           "kind": "trace-query",
@@ -2018,9 +1964,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "effectiveHpDamage"
-          ]
+          "select": ["effectiveHpDamage"]
         },
         {
           "kind": "trace-query",
@@ -2034,9 +1978,7 @@
           "expectation": {
             "count": 1
           },
-          "select": [
-            "effectiveHpDamage"
-          ]
+          "select": ["effectiveHpDamage"]
         },
         {
           "kind": "trace-query",
@@ -2323,10 +2265,7 @@
           "expectation": {
             "count": 2
           },
-          "select": [
-            "effectId",
-            "after.expiresAtMs"
-          ]
+          "select": ["effectId", "after.expiresAtMs"]
         },
         {
           "kind": "trace-query",
@@ -2345,11 +2284,7 @@
           "expectation": {
             "count": 2
           },
-          "select": [
-            "effectId",
-            "before.expiresAtMs",
-            "after.expiresAtMs"
-          ]
+          "select": ["effectId", "before.expiresAtMs", "after.expiresAtMs"]
         },
         {
           "kind": "trace-query",
@@ -2364,10 +2299,7 @@
           "expectation": {
             "count": 2
           },
-          "select": [
-            "effectId",
-            "before.expiresAtMs"
-          ]
+          "select": ["effectId", "before.expiresAtMs"]
         }
       ]
     },
@@ -2766,15 +2698,9 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [
-                40
-              ],
-              "toughnessAfter": [
-                0
-              ],
-              "breakTriggered": [
-                true
-              ]
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
             }
           },
           "select": [
@@ -2835,9 +2761,7 @@
     },
     {
       "factIdentity": "critical:sameSeedReplay",
-      "allOfAssertionIdentities": [
-        "canonical-same-input-replay"
-      ]
+      "allOfAssertionIdentities": ["canonical-same-input-replay"]
     },
     {
       "factIdentity": "input-window-inside-outside-boundaries",
