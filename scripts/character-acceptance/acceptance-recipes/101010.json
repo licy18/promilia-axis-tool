@@ -3,12 +3,21 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:101010:13d28aa515312a63395f49ddff3c778967e1b20f:6c361b4ae3dc61a8",
-    "qualificationSubjectHash": "6c361b4ae3dc61a8",
-    "scenarioSetHash": "eca42d0ce3b24bf0",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:101010:829d628bff9476c489d03e152e9377fd8c8e9e3c:81fa9f4067851a48",
+    "qualificationSubjectHash": "81fa9f4067851a48",
+    "scenarioSetHash": "f47ed3bbb4551a6b",
+    "scenarioIdentities": ["m11-d-101010-visual-acceptance"],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m11-d-101010-visual-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-canonical-trace.png",
+        "screenshotSha256": "9c75dc7c59e298be2eeebb7327a412fa11da38524c9f883049dee33dc929c977"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m11-d-101010-visual-acceptance",
@@ -174,25 +183,43 @@
       "actions": [
         {
           "id": "negative-window-before-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
             "actionKind": "charged-attack",
+            "physicalInput": {
+              "mode": "hold",
+              "pressFrame": 0,
+              "releaseFrame": null,
+              "executionFrame": 16
+            },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 16
+          }
         },
         {
           "id": "negative-window-start-minus-one",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
             "actionKind": "charged-attack",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 74 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 90
+          }
         }
       ],
       "requiredExecutableActionIds": ["negative-window-before-source"],

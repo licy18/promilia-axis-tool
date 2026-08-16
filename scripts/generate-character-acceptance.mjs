@@ -268,7 +268,10 @@ try {
     const validation = validateCharacterAcceptanceManifest(manifest, {
       checkPublication: false,
     });
-    if (!validation.valid) {
+    // binding-invalid：旧签收（acceptanceCommit）的 subject 与当前机制包
+    // 不匹配——诚实降级为 pending（角色不 ready），而不是中断整个生成。
+    // 其他 issues 仍视为产物错误。
+    if (!validation.valid && !isBindingInvalidOnly(validation)) {
       throw new Error(
         'Character acceptance manifest invalid for ' +
           ownerId +
@@ -310,6 +313,15 @@ try {
   await vite.close();
 }
 
+// 仅当全部 issues 都是 product-record-binding-invalid 时才容忍：旧签收的
+// acceptanceCommit subject 与当前机制包不匹配，诚实降级（角色不 ready），
+// 但不中断全量验收/资格产物生成。任何其他 issue 都视为产物错误。
+function isBindingInvalidOnly(validation) {
+  return (validation.issues ?? []).every(
+    issue => issue === 'character-acceptance-product-record-binding-invalid'
+  );
+}
+
 function createPublishedAcceptanceResult(manifests, visualRuns) {
   const manifestIndex = createCharacterAcceptanceManifestIndex(manifests);
   const indexValidation =
@@ -325,7 +337,7 @@ function createPublishedAcceptanceResult(manifests, visualRuns) {
       publishedManifestIndex: manifestIndex,
       checkPublication: true,
     });
-    if (!publishedValidation.valid) {
+    if (!publishedValidation.valid && !isBindingInvalidOnly(publishedValidation)) {
       throw new Error(
         'Published character acceptance manifest invalid for ' +
           manifest.owner.ownerId +

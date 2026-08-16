@@ -2,12 +2,23 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:107002:13d28aa515312a63395f49ddff3c778967e1b20f:bd44ed4ae5bace66",
-    "qualificationSubjectHash": "bd44ed4ae5bace66",
-    "scenarioSetHash": "ca11b122ad34a2d4",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:107002:829d628bff9476c489d03e152e9377fd8c8e9e3c:82b68738f6bb892d",
+    "qualificationSubjectHash": "82b68738f6bb892d",
+    "scenarioSetHash": "cc2e46fb607d25c5",
+    "scenarioIdentities": [
+      "m12-b3-107002-reduced-action-surface-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107002-canonical-trace.png",
+        "screenshotSha256": "a4aaa609a2cae9a9af869dcb3cf2d81805886aae92251afc7b1b8baac9a6b8e9"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
@@ -23,7 +34,9 @@
   "ownerId": 107002,
   "runtimeProfileOverlay": true,
   "fixturePath": "fixtures/character-acceptance/107002-visual.json",
-  "goldenReports": ["reports/m10/107002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/107002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10700262,
   "criticalProbe": {
     "preHitAttributeChange": {
@@ -46,7 +59,10 @@
       "identity": "misa-star-source-sub1-not-runtime-reachable",
       "controlSkillId": 10700212,
       "subSkillIndex": 1,
-      "dimensions": ["control-window", "hit"],
+      "dimensions": [
+        "control-window",
+        "hit"
+      ],
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
       "reason": "source-subskill-has-no-runtime-reachable-public-action-form-in-frozen-product-scenario",
       "sourceIdentity": "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
@@ -55,7 +71,10 @@
       "identity": "misa-star-execution-sub1-not-runtime-reachable",
       "controlSkillId": 10700226,
       "subSkillIndex": 1,
-      "dimensions": ["control-window", "hit"],
+      "dimensions": [
+        "control-window",
+        "hit"
+      ],
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
       "reason": "source-subskill-has-no-runtime-reachable-public-action-form-in-frozen-product-scenario",
       "sourceIdentity": "src/data/generated/character-combat-profiles/107002.json#contracts.actionForms[formIdentity=actor:107002:star-skill:misa-star-main-combo].executionControlSkillId=10700226;executionSubSkillIndex=0"

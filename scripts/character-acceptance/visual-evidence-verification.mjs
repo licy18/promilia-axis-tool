@@ -11,6 +11,19 @@ export async function verifyProductVisualEvidenceFiles(
     throw new Error('Character acceptance project root missing');
   }
 
+  // 显式 pending 的角色（从未签收 / 不在搜索域，如 101003）的视觉证据
+  // 是记录性质的，不得以截图 SHA 硬校验阻断全量验收/资格生成。只有
+  // 显式声明 pending 才跳过；status 缺失或为 accepted 等其他值一律
+  // fail-closed 强制校验（保持旧契约与既有测试语义）。
+  const acceptanceStatus = recipe.productVisualAcceptance?.status;
+  if (acceptanceStatus === 'pending') {
+    return {
+      skipped: true,
+      reason: 'product-visual-acceptance-not-requested',
+      ownerId: recipe.ownerId,
+    };
+  }
+
   for (const evidence of recipe.productVisualAcceptance?.automatedEvidence ??
     []) {
     const identity = String(evidence?.scenarioIdentity ?? 'unknown');

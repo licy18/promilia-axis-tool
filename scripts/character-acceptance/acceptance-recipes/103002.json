@@ -3,12 +3,21 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:314afdb71e2322d8",
-    "qualificationSubjectHash": "314afdb71e2322d8",
-    "scenarioSetHash": "983f79cbac9c221a",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:1341fb521686b889",
+    "qualificationSubjectHash": "1341fb521686b889",
+    "scenarioSetHash": "772e03bd84be8025",
+    "scenarioIdentities": ["m12-b3-103002-reload-window-boundaries"],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-canonical-trace.png",
+        "screenshotSha256": "618014ef0caa89b54cd27921f82237b5e6bcf80f804f4c1c74b0f76a76561cd3"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m11-d-103002-visual-acceptance",
@@ -615,18 +624,33 @@
           "actions": [
             {
               "id": "negative-reload-window-source",
-              "owner": { "kind": "actor", "slotId": "slot-1" },
+              "owner": {
+                "kind": "actor",
+                "slotId": "slot-1"
+              },
               "intent": {
                 "kind": "public-action",
                 "publicActionId": 10300201,
                 "actionKind": "charged-attack",
+                "physicalInput": {
+                  "mode": "hold",
+                  "pressFrame": 0,
+                  "releaseFrame": null,
+                  "executionFrame": 16
+                },
                 "level": 1
               },
-              "schedule": { "mode": "absolute", "frame": 0 }
+              "schedule": {
+                "mode": "absolute",
+                "frame": 16
+              }
             },
             {
               "id": "negative-reload-window-start-minus-one",
-              "owner": { "kind": "actor", "slotId": "slot-1" },
+              "owner": {
+                "kind": "actor",
+                "slotId": "slot-1"
+              },
               "intent": {
                 "kind": "public-action",
                 "publicActionId": 10300201,
@@ -637,7 +661,10 @@
                 },
                 "level": 1
               },
-              "schedule": { "mode": "absolute", "frame": 23 }
+              "schedule": {
+                "mode": "absolute",
+                "frame": 39
+              }
             }
           ],
           "requiredExecutableActionIds": ["negative-reload-window-source"],

@@ -3,16 +3,29 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "ownerId": 102001,
   "fixturePath": "fixtures/character-acceptance/102001-visual.json",
-  "goldenReports": ["reports/m10/102001/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/102001/golden-trace.json"
+  ],
   "runtimeProfileOverlay": true,
   "inputWindowBoundary": null,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-    "recordIdentity": "character-product-acceptance:102001:13d28aa515312a63395f49ddff3c778967e1b20f:4a34ddcb5e9904e5",
-    "qualificationSubjectHash": "4a34ddcb5e9904e5",
-    "scenarioSetHash": "ffd5274b42ef204b",
-    "scenarioIdentities": [],
+    "status": "accepted",
+    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
+    "recordIdentity": "character-product-acceptance:102001:829d628bff9476c489d03e152e9377fd8c8e9e3c:1645041fd4814f74",
+    "qualificationSubjectHash": "1645041fd4814f74",
+    "scenarioSetHash": "6497fb0ac228b14d",
+    "scenarioIdentities": [
+      "m12-b3-102001-zero-distance-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-102001-zero-distance-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-102001-canonical-trace.png",
+        "screenshotSha256": "0d7e288fd82b1a59140dda68759e0da29815559303713ea3229a261ba59b58a8"
+      }
+    ],
     "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-102001-zero-distance-acceptance",
@@ -583,7 +596,10 @@
       "expectation": {
         "directSpCount": 0,
         "effectCommandCountById": {},
-        "remainingTuningMarkFrames": [211, 216],
+        "remainingTuningMarkFrames": [
+          211,
+          216
+        ],
         "conditionResults": [
           {
             "triggerFrame": 211,
@@ -651,10 +667,17 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "frameIndex": [220]
+              "frameIndex": [
+                220
+              ]
             }
           },
-          "select": ["before", "after", "frameIndex", "sourceSequencePath"]
+          "select": [
+            "before",
+            "after",
+            "frameIndex",
+            "sourceSequencePath"
+          ]
         }
       ]
     },
@@ -799,7 +822,11 @@
           }
         ]
       },
-      "select": ["actionId", "absoluteFrame", "operation"]
+      "select": [
+        "actionId",
+        "absoluteFrame",
+        "operation"
+      ]
     },
     {
       "kind": "trace-query",
@@ -812,10 +839,19 @@
       "expectation": {
         "count": 5,
         "orderedValues": {
-          "absoluteFrame": [2032, 2037, 2042, 2048, 2054]
+          "absoluteFrame": [
+            2032,
+            2037,
+            2042,
+            2048,
+            2054
+          ]
         }
       },
-      "select": ["hitIdentity", "sourceSequencePath"]
+      "select": [
+        "hitIdentity",
+        "sourceSequencePath"
+      ]
     },
     {
       "kind": "trace-query",
@@ -829,15 +865,30 @@
       "expectation": {
         "count": 5,
         "orderedValues": {
-          "absoluteFrame": [2032, 2037, 2042, 2048, 2054],
-          "modifiers.0.valueRaw": [400, 400, 400, 400, 400]
+          "absoluteFrame": [
+            2032,
+            2037,
+            2042,
+            2048,
+            2054
+          ],
+          "modifiers.0.valueRaw": [
+            400,
+            400,
+            400,
+            400,
+            400
+          ]
         },
         "every": {
           "modifiers.0.attributeId": 1,
           "modifiers.0.bucket": "dynamicPercent"
         }
       },
-      "select": ["expiresAtMs", "targetId"]
+      "select": [
+        "expiresAtMs",
+        "targetId"
+      ]
     },
     {
       "kind": "trace-query",
@@ -850,11 +901,26 @@
       "expectation": {
         "count": 5,
         "orderedValues": {
-          "absoluteFrame": [2032, 2037, 2042, 2048, 2054],
-          "change": [0.5, 0.5, 0.5, 0.5, 0.5]
+          "absoluteFrame": [
+            2032,
+            2037,
+            2042,
+            2048,
+            2054
+          ],
+          "change": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ]
         }
       },
-      "select": ["beforeValue", "afterValue"]
+      "select": [
+        "beforeValue",
+        "afterValue"
+      ]
     },
     {
       "kind": "trace-query",
@@ -867,11 +933,18 @@
       "expectation": {
         "count": 1,
         "orderedValues": {
-          "absoluteFrame": [3754],
-          "change": [0.5]
+          "absoluteFrame": [
+            3754
+          ],
+          "change": [
+            0.5
+          ]
         }
       },
-      "select": ["beforeValue", "afterValue"]
+      "select": [
+        "beforeValue",
+        "afterValue"
+      ]
     },
     {
       "kind": "trace-query",
@@ -897,12 +970,27 @@
       "expectation": {
         "count": 3,
         "orderedValues": {
-          "frameIndex": [1861, 1866, 1870],
-          "before": [0, 1, 2],
-          "after": [1, 2, 3]
+          "frameIndex": [
+            1861,
+            1866,
+            1870
+          ],
+          "before": [
+            0,
+            1,
+            2
+          ],
+          "after": [
+            1,
+            2,
+            3
+          ]
         }
       },
-      "select": ["frameIndex", "sourceSequencePath"]
+      "select": [
+        "frameIndex",
+        "sourceSequencePath"
+      ]
     },
     {
       "kind": "trace-query",
@@ -916,10 +1004,17 @@
       "expectation": {
         "count": 2,
         "orderedValues": {
-          "kind": ["acquire", "held-trigger"]
+          "kind": [
+            "acquire",
+            "held-trigger"
+          ]
         }
       },
-      "select": ["before", "after", "sourceSequencePath"]
+      "select": [
+        "before",
+        "after",
+        "sourceSequencePath"
+      ]
     },
     {
       "kind": "trace-query",
@@ -934,7 +1029,11 @@
       "expectation": {
         "count": 1
       },
-      "select": ["timeMs", "payload.beforeValue", "payload.afterValue"]
+      "select": [
+        "timeMs",
+        "payload.beforeValue",
+        "payload.afterValue"
+      ]
     },
     {
       "kind": "trace-query",
@@ -984,10 +1083,15 @@
       "expectation": {
         "count": 1,
         "orderedValues": {
-          "actualDurationFrames": [81]
+          "actualDurationFrames": [
+            81
+          ]
         }
       },
-      "select": ["controlSkillId", "subSkillIndex"]
+      "select": [
+        "controlSkillId",
+        "subSkillIndex"
+      ]
     },
     {
       "kind": "trace-query",
@@ -1000,13 +1104,27 @@
       "expectation": {
         "count": 2,
         "orderedValues": {
-          "operation": ["apply", "expire"],
-          "absoluteFrame": [2851, 3211],
-          "modifiers.0.valueRaw": [1900, 1900],
-          "targetId": ["actor-103002", "actor-103002"]
+          "operation": [
+            "apply",
+            "expire"
+          ],
+          "absoluteFrame": [
+            2851,
+            3211
+          ],
+          "modifiers.0.valueRaw": [
+            1900,
+            1900
+          ],
+          "targetId": [
+            "actor-103002",
+            "actor-103002"
+          ]
         }
       },
-      "select": ["expiresAtMs"]
+      "select": [
+        "expiresAtMs"
+      ]
     },
     {
       "kind": "trace-query",
@@ -1019,11 +1137,28 @@
       "expectation": {
         "count": 6,
         "orderedValues": {
-          "operation": ["apply", "apply", "apply", "apply", "apply", "expire"],
-          "absoluteFrame": [6732, 6737, 6742, 6748, 6754, 7114]
+          "operation": [
+            "apply",
+            "apply",
+            "apply",
+            "apply",
+            "apply",
+            "expire"
+          ],
+          "absoluteFrame": [
+            6732,
+            6737,
+            6742,
+            6748,
+            6754,
+            7114
+          ]
         }
       },
-      "select": ["modifiers.0.valueRaw", "targetId"]
+      "select": [
+        "modifiers.0.valueRaw",
+        "targetId"
+      ]
     }
   ]
 }
