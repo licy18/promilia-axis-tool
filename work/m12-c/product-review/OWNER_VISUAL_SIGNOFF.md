@@ -40,41 +40,47 @@
 
 ---
 
-# 2026-08-16 机制包更新后真实重签（DoT / 审查修复基线 @81e2e56f）
+# 2026-08-16 机制包更新后真实重签（认证链版，捕获基线 fd9e3fad）
 
 状态：`accepted-explicit-user-signoff`
 
-审阅基线：`81e2e56f`（mechanism package `d47224a5`）
+审阅基线：`fd9e3fad`（harness 提交后 clean HEAD；mechanism package `d47224a5`）
 
-签收时间：`2026-08-16 10:48（北京时间）`
+签收时间：`2026-08-16 13:00（北京时间）`
 
 签收指令：`继续签收`（用户对既有 10 owner + STARBORN 联合签收范围的延续授权）
 
-机制包重建（流血 DOT 修复 + 审查 6 项修复）后，既有 829d628 签收的 qualification subject 全部失效。本轮按"不得据 hash 自动续签"原则重新捕获真实证据：逐 owner 生成精确 owner-only runtime package，Playwright 在 1440×900 Workbench 真实导入 Machine Axis、展开代表动作 canonical trace 并截图。10/10 Playwright 审阅 PASS，证据 commit 为 `7d765d87`。
+机制包重建（流血 DOT 修复 + 审查 6 项修复）后，既有 829d628 签收的 qualification subject 全部失效。本轮按"不得据 hash 自动续签"原则重新捕获真实证据：
 
-| owner / 对象          | canonical trace    | 证据（2026-08-16）                                                                                                                                                                                                                                   |
-| --------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 101010                | `532e9df6de5392b2` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-101010-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-101010-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-101010-review.json) |
-| 102001                | `27a9f92545dcb618` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-102001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-102001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-102001-review.json) |
-| 103002                | `1b9428463a24dd60` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-103002-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-103002-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-103002-review.json) |
-| 107001                | `ec2b0fdf5281b027` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-107001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-107001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-107001-review.json) |
-| 107002                | `28629db898bf3180` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-107002-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-107002-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-107002-review.json) |
-| 108003                | `3319a6c6dcc13c16` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-108003-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-108003-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-108003-review.json) |
-| 109001                | `2f15aea4124a3481` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-109001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-109001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-109001-review.json) |
-| 112001                | `1bb74aaaa6ef43a4` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-112001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-112001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-112001-review.json) |
-| STARBORN alias 199001 | `733f9b45105c1632` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-199001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-199001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-199001-review.json) |
-| STARBORN alias 199002 | `e96dadeaf0c69577` | [trace](./visual-evidence/2026-08-16/20260816-81e2e56f-199002-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-81e2e56f-199002-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-81e2e56f-199002-review.json) |
+1. capture harness（e2e/m12-c-owner-visual-review.spec.js 参数化 + 112001 sub2）先独立提交 `fd9e3fad`；
+2. 在捕获输入 tracked clean 状态下逐 owner 生成精确 owner-only runtime package，Playwright 在 1440×900 Workbench 真实导入 Machine Axis、展开代表动作 canonical trace 并截图（10/10 PASS）；
+3. 证据 commit `654e00fc`，每条 review JSON 记录 repositoryHead、trackedCleanAtCapture（真实 git status）、captureHarness.specSha256（git 规范化 blob 字节，LF 无 CRLF 污染）、mechanicsPackageHash；
+4. 生成不可变 signoff record（`365df368` / STARBORN `f50bd618`），recipe 引用 record commit，validator 用 `git show <commit>:<path>` 认证内容 SHA/subject/package/harness。
 
-## 本轮签收落账
+| owner / 对象          | canonical trace    | 证据（2026-08-16, fd9e3fad 前缀）                                                                                                                                                                          |
+| --------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 101010                | `532e9df6de5392b2` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-101010-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-101010-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-101010-review.json) |
+| 102001                | `27a9f92545dcb618` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-102001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-102001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-102001-review.json) |
+| 103002                | `1b9428463a24dd60` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-103002-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-103002-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-103002-review.json) |
+| 107001                | `ec2b0fdf5281b027` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-107001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-107001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-107001-review.json) |
+| 107002                | `28629db898bf3180` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-107002-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-107002-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-107002-review.json) |
+| 108003                | `3319a6c6dcc13c16` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-108003-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-108003-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-108003-review.json) |
+| 109001                | `2f15aea4124a3481` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-109001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-109001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-109001-review.json) |
+| 112001                | `1bb74aaaa6ef43a4` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-112001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-112001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-112001-review.json) |
+| STARBORN alias 199001 | `733f9b45105c1632` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-199001-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-199001-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-199001-review.json) |
+| STARBORN alias 199002 | `e96dadeaf0c69577` | [trace](./visual-evidence/2026-08-16/20260816-fd9e3fad-199002-canonical-trace.png) · [import](./visual-evidence/2026-08-16/20260816-fd9e3fad-199002-import-dialog.png) · [record](./visual-evidence/2026-08-16/20260816-fd9e3fad-199002-review.json) |
 
-- 10/10 owner recipe `acceptanceCommit=7d765d87`、`screenshotSha256` 与 review JSON 一致；qualification subject / scenarioSetHash / recordIdentity 由 owner-only 权威生成器 binding expectation 回填。
-- STARBORN 对象级 recipe 同步到 `7d765d87`，对象 subject `d99f600c89a285b6`、`formalAdmission=true`；199001/199002 仍只联合为一个 STARBORN 对象。
-- 10/10 owner `binding=verified`、`optimization-ready`；STARBORN `binding=verified`、`optimization-ready`；101003 保持 pending/unready（非签收范围）。
+## 本轮签收落账（认证链）
+
+- 10/10 owner recipe `acceptanceCommit=365df368`（record commit）、`signoffRecordPath/Sha256` 指向 git 对象内不可变 signoff record；qualification subject / scenarioSetHash / recordIdentity 由 owner-only 权威生成器 binding expectation 回填。
+- STARBORN 对象级 recipe `acceptanceCommit=f50bd618`、subject `5d14de6c7098a469`、`formalAdmission=true`；199001/199002 仍只联合为一个 STARBORN 对象。
+- validator（scripts/character-acceptance/signoff-record-verification.mjs）用 `git show <commit>:<path>` 读取 record 实际内容并认证：内容 SHA == recipe.signoffRecordSha256、mechanicsPackageHash == 当前机制包、captureHarness.specSha256 == 当前 spec 的 git 规范化字节、qualificationSubjectHash == 当前派生、场景身份/fixture 与证据一致。
+- 10/10 owner `binding=verified` + `signoffRecordAuthentication.status=verified`、`optimization-ready`；STARBORN 同样 verified；101003 保持 pending/unready（非签收范围）。
 - 修复两处验收派生缺陷：112001 twoTwo isolated case 三个 break 结算断言按当前机制包真实语义更新（196f 触发 break / pre-break overlimit / post-break 独立 packet，旧期望 191f 为机制包更新前的 false fact）；11200113 GP加攻（112001256）effect 投影 path_id → elementId 归一化，消除最后 1 个 acceptance-scenario-gap。
 - canonical replay 六角色 trace hash 期望同步到当前 runtime 值（与 review JSON 一致）。
 
 ## 产品签收结果
 
-- 10/10 owner/alias review 记录全部绑定本轮签收；正式 acceptance evidence commit 为 `7d765d87ee0db22fc0ee25f26dbf926946fbf08b`。
-- `199001` 与 `199002` 保留各自角色级 manifest，对象级裁决统一绑定 `optimization-object-product-acceptance:STARBORN:7d765d87ee0db22fc0ee25f26dbf926946fbf08b:d99f600c89a285b6`。
+- 10/10 owner/alias review 记录全部绑定本轮签收；signoff record commit 为 `365df3685b9b16a06ec57da452f05618915b2d11`（STARBORN `f50bd618c30f7cf3b4a98a4971512e97f28556a6`）。
+- `199001` 与 `199002` 保留各自角色级 manifest，对象级裁决统一绑定 `optimization-object-product-acceptance:STARBORN:f50bd618c30f7cf3b4a98a4971512e97f28556a6:5d14de6c7098a469`。
 - `101003` 不在本轮审阅或签收范围，继续保持 pending/unready。

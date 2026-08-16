@@ -109,6 +109,8 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
     const staleSignoff = validateOptimizationObjectAliasAcceptanceBundle({
       recipe: objectRecipe,
       sources: driftedEvidence,
+      // 认证已通过（模拟合法签收记录），仍应因 alias manifest 漂移而失败
+      signoffRecordVerified: true,
     });
     expect(staleSignoff.valid).toBe(false);
     expect(staleSignoff.issues).toEqual(
