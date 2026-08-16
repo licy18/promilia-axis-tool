@@ -2,7 +2,10 @@
   "schemaVersion": 1,
   "contractName": "AzPrOptimizationObjectAliasAcceptanceRecipe",
   "optimizationObjectId": "STARBORN",
-  "requiredSourceCharacterIds": [199001, 199002],
+  "requiredSourceCharacterIds": [
+    199001,
+    199002
+  ],
   "sourceAliases": [
     {
       "sourceCharacterId": 199001,
@@ -30,13 +33,13 @@
   },
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "b2e643d72cf28f22f51c8d5ca6d02e906d8846c0",
-    "recordIdentity": "optimization-object-product-acceptance:STARBORN:b2e643d72cf28f22f51c8d5ca6d02e906d8846c0:5d14de6c7098a469",
-    "acceptanceSubjectHash": "5d14de6c7098a469",
+    "acceptanceCommit": "654e00fc13ab8d5b0e5d8e9020b8665aedb1300f",
+    "recordIdentity": "optimization-object-product-acceptance:STARBORN:654e00fc13ab8d5b0e5d8e9020b8665aedb1300f:3cb89f7631a6c8cf",
+    "acceptanceSubjectHash": "3cb89f7631a6c8cf",
     "formalAdmission": true,
     "optimizationReady": true,
     "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/STARBORN.json",
-    "signoffRecordSha256": "68e8b12821b6ea83a451fafd13e9769963f0afe3774972061334f35413f83e0a"
+    "signoffRecordSha256": "PENDING-STAGE3"
   },
   "outputPath": "reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json"
 }

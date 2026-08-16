@@ -7,19 +7,19 @@
     199001,
     199002
   ],
-  "signoffTime": "2026-08-16T05:28:46.968Z",
+  "signoffTime": "2026-08-16T06:28:26.760Z",
   "signoffInstruction": "继续签收",
-  "repositoryHead": "04749f5d2159617bfa93badd019b197a39fe2bef",
+  "repositoryHead": "fd9e3fad796ba616e57c769ed8bf6751d4f4f582",
   "mechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb",
   "captureHarness": {
     "specPath": "e2e/m12-c-owner-visual-review.spec.js",
-    "specSha256": "33ee8c7fca384a8d905397fccf460be665e0d7c1fe46059c8062bb115165c8e9",
-    "specGitBlobSha1": null
+    "specSha256": "d04455b0d5fd3764af8b9ecaa6154345b10bf62d58459e2e10a13b5df31f8cb3",
+    "specGitBlobSha1": "0c399cba14cc73659598e28b028ff09e4031daaa"
   },
   "automatedEvidence": [
     {
       "sourceCharacterId": 199001,
-      "scenarioIdentity": "m11-d-199001-visual-acceptance",
+      "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
       "evidenceKind": "workbench-playwright-screenshot",
       "status": "automated-workbench-import-passed",
       "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-199001-canonical-trace.png",
@@ -32,7 +32,7 @@
     },
     {
       "sourceCharacterId": 199002,
-      "scenarioIdentity": "m11-d-199002-visual-acceptance",
+      "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
       "evidenceKind": "workbench-playwright-screenshot",
       "status": "automated-workbench-import-passed",
       "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-199002-canonical-trace.png",
@@ -44,6 +44,6 @@
       "canonicalTraceHash": "e96dadeaf0c69577"
     }
   ],
-  "acceptanceSubjectHash": "5d14de6c7098a469",
-  "recordIdentity": "optimization-object-product-acceptance:STARBORN:654e00fc13ab8d5b0e5d8e9020b8665aedb1300f:5d14de6c7098a469"
+  "acceptanceSubjectHash": "3cb89f7631a6c8cf",
+  "recordIdentity": "optimization-object-product-acceptance:STARBORN:654e00fc13ab8d5b0e5d8e9020b8665aedb1300f:3cb89f7631a6c8cf"
 }
