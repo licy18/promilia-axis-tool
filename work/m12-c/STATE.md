@@ -1,5 +1,15 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.000000000000000 2026-08-16 13:40 签收链认证修复（审查 P1-1/P1-2/P1-3 全闭）
+
+- 外部审查指出先前"真实重签"（237320ca）仍由脚本自动把旧证据绑定到当前 subject：acceptanceCommit 只是 40 位字符串、validator 不读取 commit 实际内容；截图声明 HEAD=81e2e56f 但捕获脚本在该 HEAD 之后才提交；Prettier 18 文件不合规。三项均已修复。
+- **P1-1 签收链认证**（`signoff-record-verification.mjs` + 协议增强）：每 owner 生成**不可变 signoff record**（含 qualificationSubject/scenarioSetHash/recordIdentity、mechanicsPackageHash、captureHarness spec SHA-256 + git blob SHA-1、repositoryHead、trace/import 截图 SHA-256、fixture SHA-256），先提交为 record commit；recipe 引用 `acceptanceCommit=record commit` + `signoffRecordPath/Sha256`；validator 用 `git show <commit>:<path>` 读取 commit 内实际内容，认证内容 SHA、subject、package hash、capture harness spec SHA。机制包或 harness 漂移即失效，旧证据无法续签到新机制包。防伪验证：subject 漂移 / SHA 篡改均 fail-closed 拒绝。
+- **P1-2 证据可复现**：capture harness（spec 参数化 + 112001 sub 2）先独立提交 `fd9e3fad`；在捕获输入 tracked clean 状态重捕 10/10 证据（`654e00fc`），review JSON 记录 repositoryHead、trackedCleanAtCapture、captureHarness.specSha256、mechanicsPackageHash。
+- **P1-3 Prettier**：18 个文件格式化（10 recipe + STARBORN + 2 生成/验证脚本 + 4 work 脚本 + SIGNOFF.md），`git diff --check` 通过。
+- 提交链：`81e2e56f`(101003 修复) → `fd9e3fad`(harness) → `654e00fc`(证据) → `6833dc95`(签收链实现 + 10 record) → `04749f5d`(10 owner 落账) → `b2e643d7`+`62e9576a`(STARBORN record + 认证落账) → `49177eaa`+`684a88c8`+`215de866`(测试适配 + Prettier + 派生重建)。
+- 状态：10/10 owner + STARBORN 全部 `binding=verified`（`signoffRecordAuthentication.status=verified`）+ `optimization-ready`；101003 pending/unready；`m12cLocked=false`、`formalOptimizationUnlocked=true`；验收/资格测试 11 files / 128 tests PASS。
+- 下一步：codex_review 质量门 → 推送 → 从新 clean HEAD 重建 Gate V2 release:verify → Formal Search Admission 15/15 → fresh 搜索（旧 5105.99 作废）。
+
 ## 0.00000000000000 2026-08-14 07:59 035fcfee Gate 单一 E21 封套漂移闭合
 
 - clean pushed `master@035fcfee85ac3cc2e7c3a966685dba32d8e3547a` 的唯一 Gate V2 已真实通过 character-combat、visual acceptance `254/254`、binding `22/22`、Kibo headless 与 machine-axis settlement；全量 Vitest 为 `250/251 files`、`2104/2105 tests`，随后以 exit `1`、record=`4797d93ac315132dc9f220ba23be5fe5cb4edb06bf4dd1bd8fd9c94728cac6fe`、`failureStage=test` 诚实封账。runner restoration 零残留，HEAD/remote 相等且 tracked tree 恢复 clean；未产生 Formal Search Admission，搜索任务保持 idle。
