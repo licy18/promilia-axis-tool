@@ -25,7 +25,9 @@ function git(args) {
 }
 
 function readJson(relativePath) {
-  return JSON.parse(fs.readFileSync(path.join(REPO_ROOT, relativePath), 'utf8'));
+  return JSON.parse(
+    fs.readFileSync(path.join(REPO_ROOT, relativePath), 'utf8')
+  );
 }
 
 function sha256(bytes) {
@@ -35,7 +37,10 @@ function sha256(bytes) {
 function currentCommitRecordBytes(recipe) {
   return execFileSync(
     'git',
-    ['show', `${recipe.productVisualAcceptance.acceptanceCommit}:${recipe.productVisualAcceptance.signoffRecordPath}`],
+    [
+      'show',
+      `${recipe.productVisualAcceptance.acceptanceCommit}:${recipe.productVisualAcceptance.signoffRecordPath}`,
+    ],
     { cwd: REPO_ROOT, encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'] }
   );
 }
@@ -77,7 +82,9 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
       qualificationSubjectHash: '0'.repeat(16),
     });
     expect(result.verified).toBe(false);
-    expect(result.issues.some(i => i.startsWith('signoff-record-sha256-mismatch'))).toBe(true);
+    expect(
+      result.issues.some(i => i.startsWith('signoff-record-sha256-mismatch'))
+    ).toBe(true);
   });
 
   it('rejects subject drift (mechanism package rebuild invalidates old signoff)', () => {
@@ -89,7 +96,9 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
       qualificationSubjectHash: 'deadbeefdeadbeef',
     });
     expect(result.verified).toBe(false);
-    expect(result.issues).toContain('signoff-record-qualification-subject-mismatch');
+    expect(result.issues).toContain(
+      'signoff-record-qualification-subject-mismatch'
+    );
   });
 
   it('rejects tampered record SHA (forged rebinding of old evidence)', () => {
@@ -100,19 +109,23 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
     forged.productVisualAcceptance.signoffRecordSha256 = '0'.repeat(64);
     const result = verifySignoffRecord(forged, {
       projectRoot: REPO_ROOT,
-      qualificationSubjectHash:
-        readJson('reports/m11/character-acceptance/101010/manifest.json')
-          .qualificationSubjectHash,
+      qualificationSubjectHash: readJson(
+        'reports/m11/character-acceptance/101010/manifest.json'
+      ).qualificationSubjectHash,
     });
     expect(result.verified).toBe(false);
-    expect(result.issues.some(i => i.startsWith('signoff-record-sha256-mismatch'))).toBe(true);
+    expect(
+      result.issues.some(i => i.startsWith('signoff-record-sha256-mismatch'))
+    ).toBe(true);
   });
 
   it('rejects scenario identity drift (record claims a different scene than evidence)', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
-    const record = JSON.parse(currentCommitRecordBytes(recipe).toString('utf8'));
+    const record = JSON.parse(
+      currentCommitRecordBytes(recipe).toString('utf8')
+    );
     expect(record.scenarioIdentity).toBe('m11-d-101010-visual-acceptance');
     // record 的 scenarioIdentity 必须与 recipe 证据一致（validator 检查）
     const recipeEvidence = recipe.productVisualAcceptance.automatedEvidence[0];
@@ -130,7 +143,9 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
       qualificationSubjectHash: '1f89665fc50102a4',
     });
     expect(result.verified).toBe(false);
-    expect(result.issues.some(i => i.startsWith('signoff-record-missing-in-commit'))).toBe(true);
+    expect(
+      result.issues.some(i => i.startsWith('signoff-record-missing-in-commit'))
+    ).toBe(true);
   });
 
   it('verifies the STARBORN object-level signoff record with subject binding (P1-3)', () => {
@@ -154,6 +169,8 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
       acceptanceSubjectHash: 'deadbeefdeadbeef',
     });
     expect(drifted.verified).toBe(false);
-    expect(drifted.issues).toContain('signoff-record-acceptance-subject-mismatch');
+    expect(drifted.issues).toContain(
+      'signoff-record-acceptance-subject-mismatch'
+    );
   });
 });

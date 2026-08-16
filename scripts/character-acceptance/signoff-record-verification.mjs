@@ -108,7 +108,11 @@ export function verifySignoffRecord(
   } catch (error) {
     issues.push('signoff-record-invalid-json');
   }
-  if (parsedRecord == null || typeof parsedRecord !== 'object' || Array.isArray(parsedRecord)) {
+  if (
+    parsedRecord == null ||
+    typeof parsedRecord !== 'object' ||
+    Array.isArray(parsedRecord)
+  ) {
     issues.push('signoff-record-must-be-object');
   } else {
     record = parsedRecord;
@@ -138,7 +142,10 @@ export function verifySignoffRecord(
   if (Number(record.ownerId) !== Number(recipe.ownerId)) {
     issues.push('signoff-record-owner-mismatch');
   }
-  if (!Array.isArray(record.automatedEvidence) || record.automatedEvidence.length === 0) {
+  if (
+    !Array.isArray(record.automatedEvidence) ||
+    record.automatedEvidence.length === 0
+  ) {
     issues.push('signoff-record-evidence-missing');
   }
 
@@ -166,7 +173,9 @@ export function verifySignoffRecord(
     issues.push('signoff-record-capture-harness-mismatch');
   }
 
-  if (String(record.qualificationSubjectHash ?? '') !== qualificationSubjectHash) {
+  if (
+    String(record.qualificationSubjectHash ?? '') !== qualificationSubjectHash
+  ) {
     issues.push('signoff-record-qualification-subject-mismatch');
   }
 
@@ -176,7 +185,8 @@ export function verifySignoffRecord(
   if (
     evidence.scenarioIdentity &&
     recipeEvidence.scenarioIdentity &&
-    String(evidence.scenarioIdentity) !== String(recipeEvidence.scenarioIdentity)
+    String(evidence.scenarioIdentity) !==
+      String(recipeEvidence.scenarioIdentity)
   ) {
     issues.push('signoff-record-scenario-identity-mismatch');
   }
@@ -346,7 +356,11 @@ export function verifyOptimizationObjectSignoffRecord(
   } catch (error) {
     issues.push('signoff-record-invalid-json');
   }
-  if (parsedRecord == null || typeof parsedRecord !== 'object' || Array.isArray(parsedRecord)) {
+  if (
+    parsedRecord == null ||
+    typeof parsedRecord !== 'object' ||
+    Array.isArray(parsedRecord)
+  ) {
     issues.push('signoff-record-must-be-object');
   } else {
     record = parsedRecord;

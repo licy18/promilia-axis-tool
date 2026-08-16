@@ -200,7 +200,8 @@ describe('generated character acceptance manifests', () => {
       expect(validateCharacterAcceptanceManifest(manifest)).toMatchObject({
         valid: true,
         issues: [],
-      });      const productAccepted = [
+      });
+      const productAccepted = [
         101010, 102001, 103002, 107001, 107002, 108003, 109001, 199001, 199002,
         112001,
       ].includes(ownerId);

@@ -64,7 +64,9 @@ function git(args, { allowFailure = false } = {}) {
 const CAPTURE_COMMIT = process.env.M12C_SIGNOFF_CAPTURE_COMMIT ?? '';
 function computeSpecSha256() {
   if (!/^[0-9a-f]{40}$/.test(CAPTURE_COMMIT)) {
-    throw new Error('M12C_SIGNOFF_CAPTURE_COMMIT required (40-hex capture commit)');
+    throw new Error(
+      'M12C_SIGNOFF_CAPTURE_COMMIT required (40-hex capture commit)'
+    );
   }
   const bytes = execFileSync(
     'git',
@@ -122,7 +124,10 @@ if (stage1) {
       captureHarness: {
         specPath: 'e2e/m12-c-owner-visual-review.spec.js',
         specSha256,
-        specGitBlobSha1: git(['hash-object', 'e2e/m12-c-owner-visual-review.spec.js']),
+        specGitBlobSha1: git([
+          'hash-object',
+          'e2e/m12-c-owner-visual-review.spec.js',
+        ]),
       },
       canonicalTraceHash: review.canonicalTraceHash,
       automatedEvidence: [

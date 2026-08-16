@@ -24,13 +24,15 @@ const CAPTURE_INPUTS = [
 // spec SHA-256 必须基于 git blob 字节（LF 规范化），不能用工作树字节
 // （Windows CRLF 会污染哈希，Linux clean checkout 将认证失败）。
 function git(args) {
-  return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  return execFileSync('git', args, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  }).trim();
 }
-const specBlobBytes = execFileSync(
-  'git',
-  ['show', `${HEAD}:${SPEC_PATH}`],
-  { encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'] }
-);
+const specBlobBytes = execFileSync('git', ['show', `${HEAD}:${SPEC_PATH}`], {
+  encoding: 'buffer',
+  stdio: ['ignore', 'pipe', 'pipe'],
+});
 const specSha256 = createHash('sha256').update(specBlobBytes).digest('hex');
 const specGitBlob = git(['hash-object', SPEC_PATH]);
 const pkg = JSON.parse(
@@ -41,7 +43,12 @@ const pkg = JSON.parse(
 );
 
 // 真实捕获输入 clean 检查
-const dirtyCaptureInputs = git(['status', '--porcelain', '--', ...CAPTURE_INPUTS])
+const dirtyCaptureInputs = git([
+  'status',
+  '--porcelain',
+  '--',
+  ...CAPTURE_INPUTS,
+])
   .split('\n')
   .map(line => line.trim())
   .filter(Boolean);

@@ -47,10 +47,14 @@ if (!/^[0-9a-f]{40}$/.test(CAPTURE_COMMIT)) {
 }
 const specSha256 = createHash('sha256')
   .update(
-    execFileSync('git', ['show', `${CAPTURE_COMMIT}:e2e/m12-c-owner-visual-review.spec.js`], {
-      encoding: 'buffer',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    })
+    execFileSync(
+      'git',
+      ['show', `${CAPTURE_COMMIT}:e2e/m12-c-owner-visual-review.spec.js`],
+      {
+        encoding: 'buffer',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }
+    )
   )
   .digest('hex');
 const pkg = readJson(
@@ -102,7 +106,10 @@ if (stage1) {
     captureHarness: {
       specPath: 'e2e/m12-c-owner-visual-review.spec.js',
       specSha256,
-      specGitBlobSha1: git(['hash-object', 'e2e/m12-c-owner-visual-review.spec.js']),
+      specGitBlobSha1: git([
+        'hash-object',
+        'e2e/m12-c-owner-visual-review.spec.js',
+      ]),
     },
     automatedEvidence,
     acceptanceSubjectHash: null,
