@@ -39,6 +39,7 @@ export const FORMAL_DETERMINISM_TEST_FILES = Object.freeze([
   'src/__tests__/machine-axis/workbenchMachineAxisAdapter.test.js',
   'src/__tests__/simulation/canonicalHeadlessCombatBoundary.test.js',
   'src/__tests__/simulation/starbornExistingTuningMarkSemantics.test.js',
+  'src/__tests__/scripts/gates/formalSearchAdmission.test.js',
 ]);
 
 const packageAndTestConfig = [
@@ -447,7 +448,7 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'determinism',
-    version: 2,
+    version: 3,
     order: 70,
     kind: 'formal-targeted',
     description:
@@ -877,7 +878,7 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'formal-search-admission',
-    version: 5,
+    version: 6,
     order: 510,
     kind: 'derived-formal-decision',
     description:
@@ -890,6 +891,7 @@ export const GATE_DEFINITIONS = deepFreeze([
       'src/domain/kiboAxisActionScopePolicy.js',
       'src/domain/verifiedNormalAttackInputAuthority.js',
       'src/machine-axis/m12cInitialStatePolicy.js',
+      'src/machine-axis/m12cSearchScopeContract.js',
       'src/machine-axis/kiboAutoCastScheduler.js',
       'src/machine-axis/machineAxisSearchGenerator.js',
       'src/machine-axis/machineAxisService.js',
@@ -902,7 +904,7 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'search-core-authority',
-    version: 1,
+    version: 2,
     order: 515,
     kind: 'search-authority',
     description:

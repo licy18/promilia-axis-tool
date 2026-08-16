@@ -140,12 +140,30 @@ export async function runSearchCoreAuthorityVerification({
     recordId: stageResults.find(result => result.gate === 'determinism')?.record
       ?.recordId,
   };
-  const evidence = await evidenceLoader({
-    repositoryRoot: root,
-    searchCoreProof: proof,
-    deterministicProof,
-  });
-  const admission = await evaluateFormalSearchAdmission(evidence);
+  let evidence;
+  let admission;
+  try {
+    evidence = await evidenceLoader({
+      repositoryRoot: root,
+      searchCoreProof: proof,
+      deterministicProof,
+    });
+    admission = await evaluateFormalSearchAdmission(evidence);
+  } catch (error) {
+    return completeFailure({
+      root,
+      reportPath,
+      stdout,
+      authorityPending,
+      snapshot,
+      preflight,
+      stageResults,
+      stage: 'formal-search-admission',
+      issues: [
+        `formal-search-admission-load-failed:${normalizeErrorIdentity(error)}`,
+      ],
+    });
+  }
   const admissionValidation = validateFormalSearchAdmissionRecord(admission);
   const postflight = await inspectRepositoryAuthority(root);
   const postflightStable =
@@ -391,6 +409,13 @@ function withSearchCoreHeap(nodeOptions) {
         !token.startsWith('--max_old_space_size=')
     );
   return [...retained, '--max-old-space-size=8192'].join(' ');
+}
+
+function normalizeErrorIdentity(error) {
+  return String(error?.code ?? error?.name ?? 'unknown')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/gu, '-');
 }
 
 function printFailure(stdout, report) {

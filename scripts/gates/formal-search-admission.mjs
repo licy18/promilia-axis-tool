@@ -37,7 +37,7 @@ export async function loadFormalSearchAdmissionEvidence({
     settlementModule,
     kiboScopeModule,
     normalAttackInputAuthorityModule,
-    outerBuildPoolModule,
+    searchScopeModule,
     kiboActionCatalogSource,
     kiboSchedulerSource,
     kiboSearchGeneratorSource,
@@ -70,7 +70,7 @@ export async function loadFormalSearchAdmissionEvidence({
       root,
       'src/domain/verifiedNormalAttackInputAuthority.js'
     ),
-    importRepositoryModule(root, 'src/machine-axis/m12cOuterBuildPool.js'),
+    importRepositoryModule(root, 'src/machine-axis/m12cSearchScopeContract.js'),
     readFile(
       path.join(
         root,
@@ -105,11 +105,11 @@ export async function loadFormalSearchAdmissionEvidence({
   const settlementContract =
     settlementModule.getMachineAxisEnemySettlementContract();
   const formalRoster = [
-    outerBuildPoolModule.M12C_REQUIRED_OPTIMIZATION_OBJECT_ID,
-    ...outerBuildPoolModule.M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS,
+    searchScopeModule.M12C_REQUIRED_OPTIMIZATION_OBJECT_ID,
+    ...searchScopeModule.M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS,
   ];
   const starbornSourceCharacterIds = [
-    ...outerBuildPoolModule.M12C_STARBORN_SOURCE_CHARACTER_IDS,
+    ...searchScopeModule.M12C_STARBORN_SOURCE_CHARACTER_IDS,
   ];
   const normalRoster = formalRoster.filter(identity => identity !== 'STARBORN');
   const headlessManifestOwnerIds = uniqueSortedNumbers([

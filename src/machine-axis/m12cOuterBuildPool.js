@@ -5,6 +5,17 @@ import {
   validateOptimizationQualificationCatalog,
 } from '../optimization-qualification/optimizationQualificationProtocol.js';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization.js';
+import {
+  M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS,
+  M12C_REQUIRED_OPTIMIZATION_OBJECT_ID,
+  M12C_STARBORN_SOURCE_CHARACTER_IDS,
+} from './m12cSearchScopeContract.js';
+
+export {
+  M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS,
+  M12C_REQUIRED_OPTIMIZATION_OBJECT_ID,
+  M12C_STARBORN_SOURCE_CHARACTER_IDS,
+} from './m12cSearchScopeContract.js';
 
 export const M12C_OUTER_BUILD_POOL_SCHEMA_VERSION = 1;
 export const M12C_OUTER_BUILD_POOL_CONTRACT_NAME = 'AzPrM12COuterBuildPool';
@@ -14,20 +25,6 @@ export const M12C_BUILD_CONTRACT_NAME = 'AzPrM12COuterBuild';
 export const M12C_BUILD_ENUMERATION_PLAN_CONTRACT_NAME =
   'AzPrM12CBuildEnumerationPlan';
 
-export const M12C_REQUIRED_OPTIMIZATION_OBJECT_ID = '109001';
-export const M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS = Object.freeze([
-  '101010',
-  '102001',
-  '103002',
-  '107001',
-  '107002',
-  '108003',
-  '112001',
-  'STARBORN',
-]);
-export const M12C_STARBORN_SOURCE_CHARACTER_IDS = Object.freeze([
-  199001, 199002,
-]);
 export const M12C_EQUIPMENT_SLOTS = Object.freeze([
   'weapon',
   'top',

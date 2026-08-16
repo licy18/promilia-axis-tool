@@ -103,6 +103,42 @@ describe('formal search admission', () => {
     });
   });
 
+  it('loads the headless search scope contract through native Node ESM', () => {
+    const moduleUrl = pathToFileURL(
+      resolve('src/machine-axis/m12cSearchScopeContract.js')
+    ).href;
+    const imported = spawnSync(
+      process.execPath,
+      [
+        '--input-type=module',
+        '--eval',
+        `const scope = await import(${JSON.stringify(
+          moduleUrl
+        )}); process.stdout.write(JSON.stringify({ required: scope.M12C_REQUIRED_OPTIMIZATION_OBJECT_ID, optional: scope.M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS, starborn: scope.M12C_STARBORN_SOURCE_CHARACTER_IDS }));`,
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+      }
+    );
+
+    expect(imported.status, imported.stderr).toBe(0);
+    expect(JSON.parse(imported.stdout)).toEqual({
+      required: '109001',
+      optional: [
+        '101010',
+        '102001',
+        '103002',
+        '107001',
+        '107002',
+        '108003',
+        '112001',
+        'STARBORN',
+      ],
+      starborn: [199001, 199002],
+    });
+  });
+
   it('binds all admitted Kibo autonomous surfaces to the product-deferred scope', async () => {
     const result = await evaluateFormalSearchAdmission(currentEvidence);
 

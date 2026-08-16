@@ -1,0 +1,16 @@
+export const M12C_REQUIRED_OPTIMIZATION_OBJECT_ID = '109001';
+
+export const M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS = Object.freeze([
+  '101010',
+  '102001',
+  '103002',
+  '107001',
+  '107002',
+  '108003',
+  '112001',
+  'STARBORN',
+]);
+
+export const M12C_STARBORN_SOURCE_CHARACTER_IDS = Object.freeze([
+  199001, 199002,
+]);
