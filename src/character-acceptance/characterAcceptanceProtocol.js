@@ -41,8 +41,7 @@ export function finalizeCharacterAcceptanceManifest(
   input,
   {
     signoffRecordVerified = input?.signoffRecordVerified ?? false,
-    signoffRecordAuthentication =
-      input?.signoffRecordAuthentication ?? null,
+    signoffRecordAuthentication = input?.signoffRecordAuthentication ?? null,
   } = {}
 ) {
   const base = structuredClone(input ?? {});
