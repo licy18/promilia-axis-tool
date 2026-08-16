@@ -53,7 +53,7 @@ const OWNER_CASES = {
     fixturePath: 'fixtures/character-acceptance/112001-visual.json',
     actionId: 'gisele-heavy3-threshold67',
     controlSkillId: 11200141,
-    subSkillIndex: 3,
+    subSkillIndex: 2,
   },
   199001: {
     fixturePath: 'fixtures/character-acceptance/199001-starborn-visual.json',
@@ -74,8 +74,15 @@ const OWNER_CASES = {
 const ownerId = Number(process.env.M12C_VISUAL_OWNER);
 const ownerCase = OWNER_CASES[ownerId];
 const runtimePackagePath =
+  process.env.M12C_VISUAL_RUNTIME_PACKAGE ??
   'work/m12-c/product-review/runtime-package-current.json';
-const outputDirectory = 'work/m12-c/product-review/visual-evidence/2026-08-12';
+// 输出目录与 basename 前缀可由调用方覆盖（真实签收必须在新证据目录下
+// 捕获，不能复用旧日期/旧 HEAD 前缀）；默认保留历史签收目录行为。
+const outputDirectory =
+  process.env.M12C_VISUAL_OUTPUT_DIR ??
+  'work/m12-c/product-review/visual-evidence/2026-08-12';
+const basenamePrefix =
+  process.env.M12C_VISUAL_BASENAME_PREFIX ?? '20260812-bda6696e';
 
 test.skip(!ownerCase, 'Set M12C_VISUAL_OWNER to a supported owner id');
 
@@ -153,7 +160,7 @@ test(`[m12-c-owner-visual-review] ${ownerId}`, async ({ page }) => {
   expect(canonicalTraceHash).toMatch(/^[0-9a-f]{16}$/);
 
   await mkdir(outputDirectory, { recursive: true });
-  const basename = `20260812-bda6696e-${ownerId}`;
+  const basename = `${basenamePrefix}-${ownerId}`;
   const importScreenshotPath = path.join(
     outputDirectory,
     `${basename}-import-dialog.png`
