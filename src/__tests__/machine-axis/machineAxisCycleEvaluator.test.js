@@ -793,6 +793,8 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
   it('rejects a single A1 [0,18) loop before cycle scoring', () => {
     const envelope = structuredClone(cycleFixture);
     envelope.contract = structuredClone(giseleFixture);
+    envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
     envelope.contract.actions = [
       {
         id: 'melania-a1',
@@ -831,6 +833,8 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
   it('accepts an A1 [0,230) loop at the exact recovery boundary', () => {
     const envelope = structuredClone(cycleFixture);
     envelope.contract = structuredClone(giseleFixture);
+    envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
     envelope.contract.actions = [
       {
         id: 'melania-a1',
@@ -1020,10 +1024,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
 
     // 剩余时间相同但 fullCooldownMs 漂移 → 不闭合。
     expect(
-      compareCycleBoundaryStates(
-        createBoundary(15000),
-        createBoundary(18000)
-      )
+      compareCycleBoundaryStates(createBoundary(15000), createBoundary(18000))
     ).toMatchObject({ closed: false });
   });
 

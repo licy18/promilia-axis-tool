@@ -8,6 +8,7 @@
 - `m12cOuterBuildPool` 不再用产品 signoff/binding 状态裁剪或阻断搜索域；binding 仅作为 `productReleaseAdvisory`。搜索按当前数据快照生成 Top-N，记录数据库及机制指纹，仍对 legality、canonical replay、finalScoreEligible、闭环/击杀 proof、HEAD/指纹漂移 fail closed。
 - 本节取代下方历史段落中“必须先完成全部视觉签收/完整 release 才能开始 heuristic 搜索”的旧顺序。旧 run、checkpoint、results 与旧 authority 仍永久隔离；新代码提交并推送后，先执行一次轻量 search authority，再由独立 consumer 创建唯一 fresh run。
 - 本批同时修复 108003 direct-SP 双结算：runtime-managed 的 action/element 会屏蔽同一 raw direct-SP，canonical profile/golden 由 `18/39` 更新为真实 `17/37`；定向 determinism 为 18 files / 278 tests PASS。Search Core Authority 子阶段统一使用 8 GiB heap，避免 character-combat generator 在默认 4 GiB 下 OOM。
+- clean pushed `215374bfb3181888f23250f79116c44c3be57ab2` 的首次 Search Core Authority 已 fail closed：前三个 headless stage PASS，`determinism` 因正式 Machine Axis fixture 与 layer-hash 派生仍绑定旧 package hash 而为 10/18 files、225/265 executed tests，record=`b9cfd8845b8948ff25e407895b4bd5578b461a4c901059eb99a183bb87bf05e8`；未生成 admission。最小收口只重绑 5 个正式 Machine Axis 输入与 layer-hash，并让技术测试复制陈旧产品 fixture 后显式使用当前 package；产品视觉 evidence 未续签，历史负例 `m11-b-three-actor-120s.json` 零改动。失败面 3 files / 74 tests 与 layer-hash+service 2 files / 40 tests 已通过，待新 clean pushed HEAD 重跑一次轻量 authority。
 
 ## 0.0000000000000000 2026-08-16 15:30 签收链推送当前状态（用户决策：暂停协议级重构）
 

@@ -22,6 +22,12 @@ function cloneFixture() {
   return axis;
 }
 
+function cloneTechnicalFixture(source) {
+  const axis = structuredClone(source);
+  axis.dataIdentity.verifiedMechanicsPackageHash = mechanicsPackage.packageHash;
+  return axis;
+}
+
 function createRubyInputDerivedSuccessorAxis() {
   const axis = structuredClone(fixture);
   axis.scenario.durationFrames = 1000;
@@ -320,7 +326,7 @@ describe('Machine Axis search state', () => {
   });
 
   it('keeps the complete verified 112001 continuation phase in the state hash', () => {
-    const axis = structuredClone(giseleFixture);
+    const axis = cloneTechnicalFixture(giseleFixture);
     axis.actions = [
       {
         id: 'melania-a1',
@@ -455,7 +461,7 @@ describe('Machine Axis search state', () => {
   });
 
   it('rejects a repeated A1 before an objective can score it', () => {
-    const axis = structuredClone(giseleFixture);
+    const axis = cloneTechnicalFixture(giseleFixture);
     axis.actions = [
       {
         id: 'melania-a1-1',

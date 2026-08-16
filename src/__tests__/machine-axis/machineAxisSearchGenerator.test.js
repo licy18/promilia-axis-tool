@@ -18,6 +18,12 @@ function cloneFixture() {
   return axis;
 }
 
+function cloneTechnicalFixture(source) {
+  const axis = structuredClone(source);
+  axis.dataIdentity.verifiedMechanicsPackageHash = mechanicsPackage.packageHash;
+  return axis;
+}
+
 function createRubyUltimatePrefixAxis() {
   const axis = structuredClone(fixture);
   axis.scenario.durationFrames = 700;
@@ -136,7 +142,7 @@ describe('Machine Axis search generator', () => {
   });
 
   it('generates the three source-ordered Miti release tiers as distinct candidates', () => {
-    const axis = structuredClone(mitiFixture);
+    const axis = cloneTechnicalFixture(mitiFixture);
     axis.actions = [];
     axis.scenario.initialRuntimeState.controlledActor = {
       actorId: 'actor-108003',
@@ -259,7 +265,7 @@ describe('Machine Axis search generator', () => {
   }, 30_000);
 
   it('keeps 112001 inside its verified A1 continuation and recovery surface', () => {
-    const axis = structuredClone(giseleFixture);
+    const axis = cloneTechnicalFixture(giseleFixture);
     axis.actions = [];
     axis.scenario.initialRuntimeState.controlledActor = {
       actorId: 'actor-112001',
@@ -335,7 +341,7 @@ describe('Machine Axis search generator', () => {
   }, 30_000);
 
   it('emits only the exact verified special continuation target and fails closed when it cannot construct it', () => {
-    const axis = structuredClone(giseleFixture);
+    const axis = cloneTechnicalFixture(giseleFixture);
     axis.actions = [];
     axis.scenario.initialRuntimeState.controlledActor = {
       actorId: 'actor-112001',
@@ -532,7 +538,7 @@ describe('Machine Axis search generator', () => {
   }, 30_000);
 
   it('uses the verified A5 reopen window before animation recovery completes', () => {
-    const axis = structuredClone(giseleFixture);
+    const axis = cloneTechnicalFixture(giseleFixture);
     axis.actions = [];
     axis.scenario.initialRuntimeState.controlledActor = {
       actorId: 'actor-112001',
