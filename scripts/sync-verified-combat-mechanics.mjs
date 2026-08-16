@@ -838,11 +838,6 @@ export async function createVerifiedCombatMechanicsBuild({
       });
     },
     createGoldenRuntimeForOwner({ recipe, mechanicsPackage }) {
-      // 临时调试开关：AZPR_SYNC_SKIP_GOLDEN=1 跳过 orchestrator golden
-      //（机制包重建流程用：先写盘新包 → 更新 golden 期望 → 恢复校验）。
-      if (process.env.AZPR_SYNC_SKIP_GOLDEN === '1') {
-        return null;
-      }
       return createCharacterCombatGoldenRuntime({
         repositoryRoot: REPO_ROOT,
         mechanicsPackage,
