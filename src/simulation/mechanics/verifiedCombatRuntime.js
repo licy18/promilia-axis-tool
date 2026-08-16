@@ -1916,9 +1916,16 @@ function groupVerifiedBattleEffectDotCommands(dotCommands) {
   }
   const instances = [];
   for (const entries of groups.values()) {
+    // 排序：timeMs 主键 → canonical sourceSequencePath（owner 决定等级系数/
+    // 源奇波，必须由来源顺序而非可任意命名的 actionId 决定）→ actionId
+    // 仅作最终稳定 tie-break。
     const applications = [...entries].sort(
       (left, right) =>
         Number(left.timeMs) - Number(right.timeMs) ||
+        compareSourceSequencePaths(
+          left.sourceSequencePath ?? null,
+          right.sourceSequencePath ?? null
+        ) ||
         String(left.actionId ?? '').localeCompare(String(right.actionId ?? ''))
     );
     // 切分实例：窗口 [start, end)，end = max(施加 + durationMs)。
@@ -2007,8 +2014,9 @@ function createVerifiedBattleEffectDotDescriptors({
   );
   const normalizedFrameRate = positiveNumber(frameRate, FRAME_RATE);
   const descriptors = [];
-  // 按 thresholdMs < relayDurationMs 迭代（不整秒余量也不漏末次有效 tick）。
-  const maximumTick = Math.floor(relayDurationMs / intervalMs) - 1;
+  // 按 thresholdMs < relayDurationMs 迭代（不漏非整秒余量的末次有效
+  // tick）：25.5s 窗口应含 0..25s 共 26 次，floor-1 会漏 25s 那次。
+  const maximumTick = Math.ceil(relayDurationMs / intervalMs) - 1;
   for (let tickIndex = 0; tickIndex <= maximumTick; tickIndex += 1) {
     const thresholdMs = tickIndex * intervalMs;
     if (thresholdMs >= relayDurationMs) break;

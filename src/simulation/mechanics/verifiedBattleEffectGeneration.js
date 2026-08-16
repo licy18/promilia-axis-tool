@@ -256,6 +256,22 @@ export function createVerifiedBattleEffectGeneration({
           )
       ),
     ];
+    // 预扫"元素限定 pack"（如 500025"给雷属性角色注入调谐提升"）：这类
+    // pack 的元素条件只有 name 文本、无结构化字段，无法在 runtime 判定
+    // 目标元素。其子效果若仍按 pack 的 team-actors 目标全量展开，会给
+    // 非限定元素角色错误施加（500025 的 540072 调谐强度 360300 全队）。
+    // fail-closed：记录这些 pack 的 pathId，子效果若直接挂在限定 pack 下
+    // 则阻止进入 calculator（评分不得使用未验证的元素过滤）。
+    const elementLimitedPackPathIds = new Set(
+      mergedEffects
+        .filter(
+          effect =>
+            effect.kind === 'pack' &&
+            /(角色|元素|属性)/.test(effect.name ?? '')
+        )
+        .map(effect => String(effect.pathId ?? ''))
+        .filter(Boolean)
+    );
     const seenEffectIdentities = new Set();
     const runtimeEffects = [];
     for (const effect of mergedEffects) {
@@ -373,6 +389,25 @@ export function createVerifiedBattleEffectGeneration({
             sourceIdentity: effect.sourceIdentity ?? null,
           });
         }
+        continue;
+      }
+      // 元素限定 pack 的子效果（relationPath 的 from 指向限定 pack 的
+      // pathId）：元素过滤无法结构化，阻止施加，避免非限定角色被污染。
+      // 这是 fail-closed——宁可缺失也不得用未验证的元素条件评分。
+      if (
+        elementLimitedPackPathIds.size > 0 &&
+        Array.isArray(effect.relationPath) &&
+        effect.relationPath.some(
+          edge => elementLimitedPackPathIds.has(String(edge.from ?? '').replace(/^element:/, ''))
+        )
+      ) {
+        knownGaps.push({
+          actionId: action.id,
+          effectIdentity: resolveEffectIdentity(effect),
+          name: effect.name ?? null,
+          reason: 'pack-element-limited-child-blocked',
+          sourceIdentity: effect.sourceIdentity ?? null,
+        });
         continue;
       }
       if (
@@ -1122,6 +1157,14 @@ function createVerifiedDotCommand({
       startFrame: Number(effect.trigger?.startFrame),
       behaviorPathId: effect.trigger?.behaviorPathId ?? null,
     },
+    // canonical source sequence：同帧多次施加时，owner（等级系数/源奇波）
+    // 必须由来源顺序决定，而不是可任意命名的 actionId。
+    sourceSequencePath: createVerifiedEffectSourceSequencePath({
+      action,
+      effect,
+      phase: 'settlement',
+      localSequenceSuffix: [0],
+    }),
     applied: true,
   };
 }
