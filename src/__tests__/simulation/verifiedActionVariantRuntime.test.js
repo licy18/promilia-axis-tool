@@ -1258,7 +1258,7 @@ describe('verified action variant and special resource runtime', () => {
 
     expect(runtime.executionBlocks).toEqual([]);
     expect(runtime.selectionByActionId.get(a5.id)).toMatchObject({
-      attackInputChainIdentity: null,
+      attackInputChainIdentity: 'moyin-normal-five-inputs',
       attackChainSequenceIndex: 5,
       executionControlSkillId: 10900105,
       selectedSubSkillIndex: 0,

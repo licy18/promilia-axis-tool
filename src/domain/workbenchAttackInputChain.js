@@ -464,6 +464,10 @@ function normalizeAttackInputSegment(segment) {
   if (!identity || !controlSkillId || !sequenceIndex || !sequenceTotal) {
     return null;
   }
+  const contextVariant = normalizeContextVariant(segment.contextVariant);
+  const automaticContinuation = normalizeAutomaticContinuation(
+    segment.automaticContinuation
+  );
   return {
     identity,
     sequenceIndex,
@@ -506,6 +510,70 @@ function normalizeAttackInputSegment(segment) {
     classification: normalizeText(segment.classification) ?? 'unresolved',
     reasons: normalizeTextArray(segment.reasons),
     sourceIdentity: normalizeText(segment.sourceIdentity),
+    ...(contextVariant ? { contextVariant } : {}),
+    ...(automaticContinuation ? { automaticContinuation } : {}),
+  };
+}
+
+function normalizeContextVariant(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const edgeIdentity = normalizeText(value.edgeIdentity);
+  const executionControlSkillId = positiveIntegerOrNull(
+    value.executionControlSkillId
+  );
+  const executionSubSkillIndex = nonNegativeIntegerOrNull(
+    value.executionSubSkillIndex
+  );
+  if (
+    !edgeIdentity ||
+    !executionControlSkillId ||
+    executionSubSkillIndex == null
+  ) {
+    return null;
+  }
+  return {
+    edgeIdentity,
+    executionControlSkillId,
+    executionSubSkillIndex,
+    sourceIdentity: normalizeText(value.sourceIdentity),
+  };
+}
+
+function normalizeAutomaticContinuation(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const edgeIdentity = normalizeText(value.edgeIdentity);
+  const relationType = normalizeText(value.relationType);
+  const sourceControlSkillId = positiveIntegerOrNull(
+    value.sourceControlSkillId
+  );
+  const sourceSubSkillIndex = nonNegativeIntegerOrNull(
+    value.sourceSubSkillIndex
+  );
+  const targetControlSkillId = positiveIntegerOrNull(
+    value.targetControlSkillId
+  );
+  const targetSubSkillIndex = nonNegativeIntegerOrNull(
+    value.targetSubSkillIndex
+  );
+  if (
+    !edgeIdentity ||
+    relationType !== 'automatic-continuation' ||
+    !sourceControlSkillId ||
+    sourceSubSkillIndex == null ||
+    !targetControlSkillId ||
+    targetSubSkillIndex == null
+  ) {
+    return null;
+  }
+  return {
+    edgeIdentity,
+    relationType,
+    sourceControlSkillId,
+    sourceSubSkillIndex,
+    targetControlSkillId,
+    targetSubSkillIndex,
+    targetChainIdentity: normalizeText(value.targetChainIdentity),
+    sourceIdentity: normalizeText(value.sourceIdentity),
   };
 }
 

@@ -74,7 +74,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "99b7647720d4c219b5a38f34f790539fd44a70935ed7c9e01953ee030bd08cce",
+    "packageHash": "91d4bc207d96766cbc722cf71e5ad8744f357926d3633a2082226abcbe133eb9",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -48009,6 +48009,7 @@
         "semanticName": "星鸣技转星决技",
         "publicActionKind": "ultimate",
         "publicActionIdentity": "actor:107001:ultimate",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -95742,8 +95743,8 @@
       "recipeIdentity": "actor:107001:character-combat-recipe:v1",
       "recipeHash": "6126eea19e5ed8d69c73580b47ac7e837837c70711381eb0f4d574025c6d4d63",
       "compilerInputHash": "7d9c86c74e8a53b367a2fb37edcc9000db8f53097ab7ba741212b90a103595eb",
-      "recipeContractHash": "d9fe7716592516c26a2264f69310af728eccdf1ab28991a175cef76e146044ae",
-      "ownerContractHash": "2e8b67f150f5cedbbbb18fd46fa1be5dd35d5c4505a49940afdf2a1a21aa0961"
+      "recipeContractHash": "d43c4d277625eb961d0a902162d3312a7f6bc9c0ffe68843ea4491a60ab85057",
+      "ownerContractHash": "87ada32106fa81845e05e2bbdb6cbcacadef227abe8cb4424560e3529b817ce7"
     },
     "operators": [
       "public-action-binding",
@@ -95777,7 +95778,7 @@
         "packagePath": "actionVariantGraph.contextEdges",
         "operator": "contextual-input-scheduling",
         "recordCount": 1,
-        "recordsHash": "9104f75506867f6d17a615bd781137a554caaf9782e101f678cb26e69fb25ebd"
+        "recordsHash": "39789e8fcc9cb74eb8de55db7ef7fa30877d32b5a14eb73aeacfc36e6991aef6"
       },
       {
         "packagePath": "actionVariantGraph.edges",
@@ -95840,7 +95841,7 @@
         "recordsHash": "e565eb7f1a14f4c243d16335ca2d6ceb4ac0ba7c44d57797ad85774a54c54c04"
       }
     ],
-    "contractHash": "1246401a037959102c2ef74e286e22108334ed52e0b02b4760dde0d3445e0293"
+    "contractHash": "e233df754de76e517f87b2ee854f7e3285afd65d8830ac82b849ef073e76141b"
   },
   "coverage": [
     {
@@ -100323,7 +100324,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "cd8a19a33c402104b5fab29b96ae0fb6795bc6d2d27fe9b8723b758080546b6c"
+    "deterministicInputHash": "d3c97fe627cf3754f3afbd31952984f30501c0c664db61f86d26826d4cf2cc4d"
   },
-  "profileHash": "e38a6584543d5acf751b39365bc2dfd5107b3d35879aedac456741776b3dadc7"
+  "profileHash": "4d09ef0117134855135a4ab0bd5d38278ea9e55a45d89278f8e5c194d3ce1841"
 }

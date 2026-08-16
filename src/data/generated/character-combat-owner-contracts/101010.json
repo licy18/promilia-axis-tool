@@ -51349,6 +51349,7 @@
         "semanticName": "特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -51547,6 +51548,7 @@
         "semanticName": "强化特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -51743,6 +51745,7 @@
         "semanticName": "强化特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -51939,6 +51942,7 @@
         "semanticName": "特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -52134,6 +52138,7 @@
         "semanticName": "强化特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -52333,6 +52338,7 @@
         "semanticName": "特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -52527,6 +52533,7 @@
         "semanticName": "连续重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -108673,7 +108680,7 @@
       "sourceIdentity": "NewTable/hero.rows[id=101010].propertyId=101010|NewTable/unit_property.rows[id=101010].baseAttributeId=101010|NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-7068593164247836478__-7068593164247836478.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=4277244978079165007"
     }
   },
-  "contractHash": "ef0333939fe03c781c6e4eb59e151148ae0d0eefb6573ba4a222054c5e4bcd96",
+  "contractHash": "d18dfc074a6fca27e3f21ed3a7d1815089688594f15004ef0b7a4c82ec0658bf",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 7,
@@ -108705,5 +108712,5 @@
     "thresholdTransitionCount": 1,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "b3ddfb742010401a2058134c590052f03346ac40f116e967c0b644f38d922716"
+  "recipeContractHash": "6b1b7a542fa0d7cc02c4a42900045d96e59a67464103ccffb20b1647a0bb0045"
 }

@@ -1546,6 +1546,10 @@ export function createVerifiedActionVariantRuntime({
                   ?.contextActionId ??
                 attackChainSelection.derivedEntry?.sourceActionId ??
                 null,
+              edgeIdentity:
+                attackChainSelection.authorityPhase?.edgeIdentity ??
+                attackChainSelection.derivedEntry?.edgeIdentity ??
+                null,
               semanticIdentity: `${attackChainSelection.authorityPhase?.formIdentity ?? attackChainSelection.chain?.chainIdentity}:segment:${attackChainSelection.segment.sequenceIndex}`,
               semanticName: attackChainSelection.segment.semanticName
                 ? attackChainSelection.segment.semanticName
@@ -1644,8 +1648,18 @@ export function createVerifiedActionVariantRuntime({
               Number(variant.subSkillIndex) ===
               Number(chaseWindow.targetSubSkillIndex)
           );
+          const automaticContinuation = switchBindings.find(
+            binding =>
+              Number(binding.ownerId) === Number(characterId) &&
+              Number(binding.sourceControlSkillId) ===
+                Number(chaseWindow.targetControlSkillId) &&
+              Number(binding.sourceSubSkillIndex) ===
+                Number(chaseWindow.targetSubSkillIndex) &&
+              binding.relationType === 'automatic-continuation'
+          );
           const chaseFrames = Number(
-            chaseVariant?.frameCounts?.[0]?.frameCount ??
+            automaticContinuation?.activationFrame ??
+              chaseVariant?.frameCounts?.[0]?.frameCount ??
               chaseControlBinding?.frameCounts?.[0]?.frameCount ??
               230
           );
@@ -1674,7 +1688,9 @@ export function createVerifiedActionVariantRuntime({
                 frameRate: FRAME_RATE,
                 sourceKind: 'verified-derived-control-frame-count',
                 sourceIdentity:
-                  chaseControlBinding?.sourcePath ?? chaseWindow.sourceIdentity,
+                  automaticContinuation?.sourceIdentity ??
+                  chaseControlBinding?.sourcePath ??
+                  chaseWindow.sourceIdentity,
               },
               animation: {
                 status: 'applied',
@@ -1683,7 +1699,9 @@ export function createVerifiedActionVariantRuntime({
                 durationFrames: chaseFrames,
                 frameRate: FRAME_RATE,
                 sourceIdentity:
-                  chaseControlBinding?.sourcePath ?? chaseWindow.sourceIdentity,
+                  automaticContinuation?.sourceIdentity ??
+                  chaseControlBinding?.sourcePath ??
+                  chaseWindow.sourceIdentity,
               },
               input: null,
               status: 'applied',
@@ -2074,13 +2092,7 @@ export function createVerifiedActionVariantRuntime({
       ) {
         continue;
       }
-      if (
-        !isActionFrameWithinContextualOccupancy(
-          action,
-          binding.activationFrame,
-          FRAME_RATE
-        )
-      ) {
+      if (!isSwitchBindingWithinContextualOccupancy(action, binding)) {
         continue;
       }
       pendingEvents.push({
@@ -2265,6 +2277,29 @@ export function createVerifiedActionVariantRuntime({
   };
 }
 
+function isSwitchBindingWithinContextualOccupancy(action, binding) {
+  if (
+    isActionFrameWithinContextualOccupancy(
+      action,
+      binding.activationFrame,
+      FRAME_RATE
+    )
+  ) {
+    return true;
+  }
+  if (
+    binding?.relationType !== 'automatic-continuation' ||
+    action?.contextualEffectiveEndMs == null
+  ) {
+    return false;
+  }
+  const contextualEndFrame = msToFrame(
+    Number(action.contextualEffectiveEndMs) - Number(action.startMs),
+    FRAME_RATE
+  );
+  return Number(binding.activationFrame) === contextualEndFrame;
+}
+
 function projectPendingNormalAttackSpecialContinuationCandidates({
   switchWindowHistory = [],
   attackInputChains = [],
@@ -2288,9 +2323,12 @@ function projectPendingNormalAttackSpecialContinuationCandidates({
       const matches = (attackInputChains ?? []).flatMap(chain => {
         if (
           chain?.applied !== true ||
-          chain.entryPolicy?.kind !== 'derived-or-quick-entry' ||
+          (chain.entryPolicy?.kind !== 'derived-or-quick-entry' &&
+            !(
+              window.relationType === 'automatic-continuation' &&
+              chain.entryPolicy?.kind === 'default'
+            )) ||
           Number(chain.ownerId) !== Number(window.ownerId) ||
-          Number(chain.sourceSkillId) !== Number(window.targetControlSkillId) ||
           (window.targetChainIdentity != null &&
             String(chain.chainIdentity) !== String(window.targetChainIdentity))
         ) {
@@ -3338,7 +3376,10 @@ function resolveContextVariantSelection({
   if (
     required &&
     inputCommand === 'normal-attack' &&
-    requestedExecutionControlSkillId == null
+    requestedExecutionControlSkillId == null &&
+    !sourceCandidates.every(
+      binding => binding.outsideWindowFallback === 'default-input'
+    )
   ) {
     return {
       status: 'conflict',
@@ -3371,6 +3412,13 @@ function resolveContextVariantSelection({
     }))
     .filter(candidate => candidate.inputScheduling);
   if (!scheduled.length) {
+    if (
+      sourceCandidates.every(
+        binding => binding.outsideWindowFallback === 'default-input'
+      )
+    ) {
+      return { status: 'none', binding: null, previous };
+    }
     return required
       ? {
           status: 'missing',
@@ -3436,6 +3484,12 @@ function resolveRequestedContextTargetSubSkillIndex(action) {
 }
 
 function resolveRequestedContextExecutionControlSkillId(action, mapping) {
+  const verifiedContextExecutionControlSkillId = Number(
+    action?.attackInput?.contextVariant?.executionControlSkillId
+  );
+  if (Number.isInteger(verifiedContextExecutionControlSkillId)) {
+    return verifiedContextExecutionControlSkillId;
+  }
   const identity = action?.attackInput?.identity;
   if (!identity) return null;
   const matches = [

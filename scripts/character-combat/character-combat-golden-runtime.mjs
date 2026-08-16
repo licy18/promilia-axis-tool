@@ -233,9 +233,7 @@ function runGoldenScenario({
           tuningMarks: scenarioRecipe.initialTuningMarks.map(mark => {
             const profile = (
               mechanicsPackage.tuningMechanicsCatalog?.profiles ?? []
-            ).find(
-              candidate => candidate.key === String(mark.profileKey)
-            );
+            ).find(candidate => candidate.key === String(mark.profileKey));
             if (!profile) {
               throw new Error(
                 `golden initial tuning mark profile missing: ${mark.profileKey}`
@@ -473,13 +471,13 @@ function createGoldenActionDraft({
     durationFrames,
     timingSource: usesSourceBoundedMechanicWindow
       ? 'recipe-source-bounded-mechanic-window'
-      : mapping.actionTiming?.occupancy?.sourceKind ?? null,
+      : (mapping.actionTiming?.occupancy?.sourceKind ?? null),
     timingStatus: usesSourceBoundedMechanicWindow
       ? 'source-bounded-mechanic-window-not-full-occupancy'
-      : mapping.timingStatus ?? 'applied',
+      : (mapping.timingStatus ?? 'applied'),
     timingSourceIdentity: usesSourceBoundedMechanicWindow
-      ? action.mechanicWindowSourceIdentity ?? null
-      : mapping.actionTiming?.occupancy?.sourceIdentity ?? null,
+      ? (action.mechanicWindowSourceIdentity ?? null)
+      : (mapping.actionTiming?.occupancy?.sourceIdentity ?? null),
     needsTimingData: false,
     ...attackInputFields,
   });
@@ -518,12 +516,19 @@ function createGoldenAttackInputFields({
   const sequenceTotal = Number(
     action.attackSequenceTotal ?? segment.sequenceTotal ?? segments.length
   );
+  const runtimeSegment = action.contextActionId
+    ? Object.fromEntries(
+        Object.entries(segment).filter(
+          ([key]) => key !== 'identity' && key !== 'attackInputChainIdentity'
+        )
+      )
+    : segment;
   return {
     attackGroupId: action.attackGroupId ?? `golden-${actionId}`,
     attackSequenceIndex: sequenceIndex,
     attackSequenceTotal: sequenceTotal,
     attackInput: {
-      ...segment,
+      ...runtimeSegment,
       sequenceIndex,
       sequenceTotal,
       selectedSubSkillIndex,
@@ -621,10 +626,8 @@ function createGoldenActualProjection({
                 selection.actualDurationFrames)
         ),
         chargingRelease: selection.chargingRelease ?? null,
-        appliedAssumptionIdentity:
-          selection.appliedAssumptionIdentity ?? null,
-        appliedAssumptionVersion:
-          selection.appliedAssumptionVersion ?? null,
+        appliedAssumptionIdentity: selection.appliedAssumptionIdentity ?? null,
+        appliedAssumptionVersion: selection.appliedAssumptionVersion ?? null,
         appliedAssumptionHash: selection.appliedAssumptionHash ?? null,
         sourceKind: selection.sourceKind ?? null,
       };
@@ -876,8 +879,7 @@ function createGoldenActualProjection({
       // 102001119）——此时保留原始 effectId，避免把两个效果合并显示。
       const effectId =
         sourceElementId == null ||
-        (rawEffectElementId != null &&
-          rawEffectElementId !== sourceElementId)
+        (rawEffectElementId != null && rawEffectElementId !== sourceElementId)
           ? rawEffectId
           : `battle-element:${sourceElementId}`;
       return {
@@ -964,11 +966,9 @@ function createGoldenActualProjection({
         status: event.status ?? null,
         frame: numberOrNull(event.frame),
         entityId: event.entityId ?? null,
-        pickupIdentity:
-          event.pickupIdentity ?? entity?.pickupIdentity ?? null,
+        pickupIdentity: event.pickupIdentity ?? entity?.pickupIdentity ?? null,
         poolKey: event.poolKey ?? entity?.poolKey ?? null,
-        sourceActionId:
-          event.sourceActionId ?? entity?.sourceActionId ?? null,
+        sourceActionId: event.sourceActionId ?? entity?.sourceActionId ?? null,
         pickupSourceActionId:
           event.pickupSourceActionId ?? entity?.sourceActionId ?? null,
         collectorActorId: event.collectorActorId ?? null,
@@ -981,11 +981,7 @@ function createGoldenActualProjection({
     })
     .sort(compareFrameThenIdentity);
   const pickupSummaryByIdentity = Object.fromEntries(
-    [
-      ...new Set(
-        pickupTrace.map(event => event.pickupIdentity).filter(Boolean)
-      ),
-    ]
+    [...new Set(pickupTrace.map(event => event.pickupIdentity).filter(Boolean))]
       .sort()
       .map(pickupIdentity => {
         const rows = pickupTrace.filter(
@@ -995,9 +991,7 @@ function createGoldenActualProjection({
         const collected = rows.filter(
           event => event.kind === 'pickup-collected'
         );
-        const absorbed = rows.filter(
-          event => event.kind === 'pickup-absorbed'
-        );
+        const absorbed = rows.filter(event => event.kind === 'pickup-absorbed');
         const rejected = rows.filter(event => event.applied !== true);
         return [
           pickupIdentity,
@@ -1020,7 +1014,9 @@ function createGoldenActualProjection({
               ),
             ].sort(),
             sourceActionIds: [
-              ...new Set(rows.map(event => event.sourceActionId).filter(Boolean)),
+              ...new Set(
+                rows.map(event => event.sourceActionId).filter(Boolean)
+              ),
             ].sort(),
             poolKeys: [
               ...new Set(rows.map(event => event.poolKey).filter(Boolean)),
@@ -1187,8 +1183,7 @@ function createGoldenActualProjection({
             ].sort(),
             totalChange: roundNumber(
               rows.reduce(
-                (sum, transaction) =>
-                  sum + (Number(transaction.change) || 0),
+                (sum, transaction) => sum + (Number(transaction.change) || 0),
                 0
               )
             ),
@@ -1231,7 +1226,9 @@ function createGoldenActualProjection({
       .filter(actionId => ownerActionIds.has(actionId))
       .sort()
       .map(actionId => {
-        const rows = directHealTrace.filter(event => event.actionId === actionId);
+        const rows = directHealTrace.filter(
+          event => event.actionId === actionId
+        );
         return [
           actionId,
           {
@@ -1248,13 +1245,13 @@ function createGoldenActualProjection({
               sumNumbers(rows, 'effectiveChange')
             ),
             effectIdentities: [
-              ...new Set(rows.map(event => event.effectIdentity).filter(Boolean)),
+              ...new Set(
+                rows.map(event => event.effectIdentity).filter(Boolean)
+              ),
             ].sort(),
             baseFunctionIds: [
               ...new Set(
-                rows
-                  .map(event => event.baseFunctionId)
-                  .filter(Number.isFinite)
+                rows.map(event => event.baseFunctionId).filter(Number.isFinite)
               ),
             ].sort((left, right) => left - right),
             maximumHpSubjects: [
@@ -1570,7 +1567,9 @@ function summarizeSelectedEffectsByElementId(effectTrace) {
             firstAppliedSourceSequencePath:
               appliedRows[0]?.sourceSequencePath ?? null,
             sameFrameVisibilityModes: [
-              ...new Set(rows.map(row => row.sameFrameVisibility).filter(Boolean)),
+              ...new Set(
+                rows.map(row => row.sameFrameVisibility).filter(Boolean)
+              ),
             ].sort(),
             maxStacks: Math.max(
               0,
@@ -1982,9 +1981,8 @@ function resolveMappingDurationFrames(
       candidate =>
         Number(candidate.controlSkillId) === controlSkillId &&
         (selectedSubSkillIndex == null ||
-          Number(
-            candidate.selectedSubSkillIndex ?? candidate.subSkillIndex
-          ) === Number(selectedSubSkillIndex))
+          Number(candidate.selectedSubSkillIndex ?? candidate.subSkillIndex) ===
+            Number(selectedSubSkillIndex))
     );
     value = Number(segment?.durationFrames);
   }

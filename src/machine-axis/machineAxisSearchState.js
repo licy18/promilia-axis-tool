@@ -631,7 +631,7 @@ function normalAttackInputIssue({ code, action, message, details = {} }) {
 }
 
 function frameToMs(frame, fps = 60) {
-  return (Number(frame) * 1000) / Number(fps || 60);
+  return Number(((Number(frame) * 1000) / Number(fps || 60)).toFixed(6));
 }
 
 export function hashSearchState(snapshot) {

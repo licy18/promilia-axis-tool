@@ -25,8 +25,28 @@ export function projectScenarioEffectiveActionTimeline({
     const resolution = actionResolutionById?.get?.(action.id);
     const binding = resolution?.actionBinding ?? resolution ?? {};
     const selection = actionSelectionById?.get?.(action.id) ?? {};
+    const verifiedContextVariant =
+      createProjectedVerifiedContextVariant(selection);
+    const bindingAttackInput = binding.attackInputSegment
+      ? {
+          ...binding.attackInputSegment,
+          ...(action.attackInput?.contextVariant
+            ? { contextVariant: action.attackInput.contextVariant }
+            : {}),
+          ...(action.attackInput?.automaticContinuation
+            ? {
+                automaticContinuation: action.attackInput.automaticContinuation,
+              }
+            : {}),
+        }
+      : action.attackInput;
     const resolvedAttackInput =
-      binding.attackInputSegment ?? action.attackInput;
+      verifiedContextVariant && bindingAttackInput
+        ? {
+            ...bindingAttackInput,
+            contextVariant: verifiedContextVariant,
+          }
+        : bindingAttackInput;
     const attackInput =
       selection.sourceKind === 'verified-input-context-variant' &&
       action.attackInput &&
@@ -73,7 +93,7 @@ export function projectScenarioEffectiveActionTimeline({
       contextualEffectiveEndMs: contextualEndMs ?? null,
       ...(resolution?.ready === true &&
       selection.status === 'verified-action-variant-selection-ready' &&
-      selection.sourceKind === 'verified-input-context-variant' &&
+      isVerifiedProjectedContinuationSelection(selection) &&
       selection.edgeIdentity &&
       selection.contextActionId
         ? {
@@ -84,6 +104,7 @@ export function projectScenarioEffectiveActionTimeline({
               publicControlSkillId: selection.publicControlSkillId,
               executionControlSkillId: selection.executionControlSkillId,
               selectedSubSkillIndex: selection.selectedSubSkillIndex,
+              sourceKind: selection.sourceKind,
             },
           }
         : {}),
@@ -102,6 +123,37 @@ export function projectScenarioEffectiveActionTimeline({
       ).length,
       contextuallyTruncatedActionCount: contextualEndByActionId.size,
     },
+  };
+}
+
+function isVerifiedProjectedContinuationSelection(selection) {
+  return (
+    selection?.status === 'verified-action-variant-selection-ready' &&
+    ['verified-input-context-variant', 'automatic-continuation'].includes(
+      selection?.sourceKind
+    )
+  );
+}
+
+function createProjectedVerifiedContextVariant(selection) {
+  if (
+    selection?.status !== 'verified-action-variant-selection-ready' ||
+    selection?.sourceKind !== 'verified-input-context-variant' ||
+    !selection?.edgeIdentity ||
+    !selection?.contextActionId ||
+    !Number.isInteger(Number(selection.publicControlSkillId)) ||
+    !Number.isInteger(Number(selection.executionControlSkillId)) ||
+    !Number.isInteger(Number(selection.selectedSubSkillIndex))
+  ) {
+    return null;
+  }
+  return {
+    edgeIdentity: selection.edgeIdentity,
+    contextActionId: selection.contextActionId,
+    publicControlSkillId: Number(selection.publicControlSkillId),
+    executionControlSkillId: Number(selection.executionControlSkillId),
+    executionSubSkillIndex: Number(selection.selectedSubSkillIndex),
+    sourceIdentity: selection.sourceIdentity ?? null,
   };
 }
 

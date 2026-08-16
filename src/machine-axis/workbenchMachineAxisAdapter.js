@@ -435,6 +435,12 @@ function createMachineActionFromProject({
     action,
     preservedIntent,
   });
+  const preservedAttackInputChainIdentity =
+    resolvePreservedAttackInputChainIdentity({
+      action,
+      preservedIntent,
+      sequenceIndex: attackInputIndex,
+    });
   return {
     ...base,
     owner: {
@@ -463,13 +469,40 @@ function createMachineActionFromProject({
             contextActionId: textOrNull(
               action.runtimeContextActionId ?? action.contextActionId
             ),
-            chainIdentity:
-              action.attackInputChainSelectionSource === 'user-explicit'
+            chainIdentity: preservedAttackInputChainIdentity.matched
+              ? preservedAttackInputChainIdentity.chainIdentity
+              : action.attackInputChainSelectionSource === 'user-explicit'
                 ? textOrNull(action.attackInputChainIdentity)
                 : null,
           }
         : preservedContextInput,
     },
+  };
+}
+
+function resolvePreservedAttackInputChainIdentity({
+  action,
+  preservedIntent,
+  sequenceIndex,
+}) {
+  const preservedInput = preservedIntent?.attackInput;
+  const currentContextActionId = textOrNull(
+    action.runtimeContextActionId ?? action.contextActionId
+  );
+  if (
+    !preservedInput ||
+    positiveIntegerOrNull(preservedIntent?.publicActionId) !==
+      positiveIntegerOrNull(action.skillId) ||
+    textOrNull(preservedIntent?.actionKind) !==
+      (textOrNull(action.actionKind) ?? textOrNull(action.eventType)) ||
+    positiveIntegerOrNull(preservedInput.sequenceIndex) !== sequenceIndex ||
+    textOrNull(preservedInput.contextActionId) !== currentContextActionId
+  ) {
+    return { matched: false, chainIdentity: null };
+  }
+  return {
+    matched: true,
+    chainIdentity: textOrNull(preservedInput.chainIdentity),
   };
 }
 

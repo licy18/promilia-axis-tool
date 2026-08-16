@@ -100,7 +100,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "99b7647720d4c219b5a38f34f790539fd44a70935ed7c9e01953ee030bd08cce",
+    "packageHash": "91d4bc207d96766cbc722cf71e5ad8744f357926d3633a2082226abcbe133eb9",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -38550,6 +38550,7 @@
         "semanticName": "A3",
         "publicActionKind": "normal-attack",
         "publicActionIdentity": "actor:199001:normal-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -38742,6 +38743,7 @@
         "semanticName": "派生重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:199001:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -38972,6 +38974,7 @@
         "semanticName": "派生重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:199001:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -39202,6 +39205,7 @@
         "semanticName": "突刺追击",
         "publicActionKind": "normal-attack",
         "publicActionIdentity": "actor:199001:normal-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -39437,6 +39441,7 @@
         "semanticName": "突刺追击",
         "publicActionKind": "normal-attack",
         "publicActionIdentity": "actor:199001:normal-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -91246,8 +91251,8 @@
       "recipeIdentity": "actor:199001:character-combat-recipe:v1",
       "recipeHash": "07a3ce3a6a8bcaf2b380563481b4fd0d7426712de60e1056a37f787b9091086b",
       "compilerInputHash": "0bdbdd56943a2d29d050ec8552777820c9c56a14fb3a8250903d59d524c62d32",
-      "recipeContractHash": "95bf71d96131014ceb9cc24adcd5c76590360402e1d0507b003b095fdcfe6e53",
-      "ownerContractHash": "843f9fef9fa8226efd49a15f5e3db8f90b959922b6ac9187a5ddb703863e7e83"
+      "recipeContractHash": "ac8651807d94ed8aedf83f82ef3a359a445dc60132ba2d1bd096534afdb6e23d",
+      "ownerContractHash": "094348ce8b72a93880fe1abb62ad65bb1df6c0dffec045dc8c57c89904cd69f7"
     },
     "operators": [
       "public-action-binding",
@@ -91281,7 +91286,7 @@
         "packagePath": "actionVariantGraph.contextEdges",
         "operator": "contextual-input-scheduling",
         "recordCount": 5,
-        "recordsHash": "46ee70330b6e763115f99ecc9751bc51db6dfa5d8b42d88d56f1559ca544aaa7"
+        "recordsHash": "72407788ab5ac8ecf88d8ca1a1eb94dffa7db5857599a6ae36038779d1173a79"
       },
       {
         "packagePath": "actionVariantGraph.edges",
@@ -91344,7 +91349,7 @@
         "recordsHash": "233cd33896b764f2832aee346023cd36d3e59f6fcf7bf490df5dd92a906eef83"
       }
     ],
-    "contractHash": "2bd21bc7799bc2a79166f8c74068f5d39bd2a7d7ca3aeb9cd5a763aee9dffb07"
+    "contractHash": "b80874ec8bfe95134a447256f3b3d45ade59fbe6a2dbea35d350c85ab77e6846"
   },
   "coverage": [
     {
@@ -92032,7 +92037,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "5d51f47c8abf4cf9d2bc5399d7197eda5766f1b02834605a934f72c1b5dc36c2"
+    "deterministicInputHash": "2889dedefb42372f8a3edf3f0630c7c6c64188bb27e73c192b85c66365210a6e"
   },
-  "profileHash": "1055d930a91b7586c0250a0f8cf6c79bc896ba2e8f134e3bd119193136a4bd4e"
+  "profileHash": "21ea6540f1ce38efbef1324e7d5ce1c01e5f5efa935a4d72d29fdadf5a41dd40"
 }

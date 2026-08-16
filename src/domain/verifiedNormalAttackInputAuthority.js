@@ -613,22 +613,37 @@ function resolveSpecialContinuationPhase({
       .filter(
         window =>
           window?.applied === true &&
-          window.relationType === 'attack-chain-continuity-window' &&
+          ['attack-chain-continuity-window', 'automatic-continuation'].includes(
+            window.relationType
+          ) &&
           window.inputCommand === 'normal-attack'
       )
-      .map(window => ({
-        actorId: window.actorId,
-        sourceKind: window.relationType,
-        sourceActionId: window.sourceActionId,
-        sourceIdentity: window.sourceIdentity,
-        chainIdentity: window.targetChainIdentity,
-        sequenceIndex: window.targetSequenceIndex,
-        controlSkillId: window.targetControlSkillId,
-        subSkillIndex: window.targetSubSkillIndex,
-        groupId: window.groupId ?? null,
-        startsAtMs: window.startsAtMs,
-        endsAtMs: window.endsAtMs,
-      })),
+      .map(window => {
+        const structuralMatches = (form?.segments ?? []).filter(
+          segment =>
+            Number(segment.controlSkillId) ===
+              Number(window.targetControlSkillId) &&
+            Number(segment.subSkillIndex) === Number(window.targetSubSkillIndex)
+        );
+        return {
+          actorId: window.actorId,
+          sourceKind: window.relationType,
+          sourceActionId: window.sourceActionId,
+          edgeIdentity: window.edgeIdentity ?? null,
+          sourceIdentity: window.sourceIdentity,
+          chainIdentity: window.targetChainIdentity ?? form?.chainIdentity,
+          sequenceIndex:
+            window.targetSequenceIndex ??
+            (structuralMatches.length === 1
+              ? structuralMatches[0].sequenceIndex
+              : null),
+          controlSkillId: window.targetControlSkillId,
+          subSkillIndex: window.targetSubSkillIndex,
+          groupId: window.groupId ?? null,
+          startsAtMs: window.startsAtMs,
+          endsAtMs: window.endsAtMs,
+        };
+      }),
     ...(specialContinuationCandidates ?? []),
   ].filter(
     candidate =>
@@ -706,6 +721,7 @@ function resolveSpecialContinuationPhase({
     actorId,
     sourceKind: selected.sourceKind,
     sourceActionId: selected.sourceActionId,
+    edgeIdentity: selected.edgeIdentity,
     sourceIdentity: selected.sourceIdentity,
     sourceGroupId: selected.groupId,
     window: {
@@ -751,6 +767,7 @@ function normalizeSpecialContinuationCandidate(candidate) {
       textOrNull(candidate?.sourceKind ?? candidate?.relationType) ??
       'verified-special-continuation',
     sourceActionId: textOrNull(candidate?.sourceActionId),
+    edgeIdentity: textOrNull(candidate?.edgeIdentity),
     sourceIdentity,
     chainIdentity: textOrNull(
       candidate?.chainIdentity ?? candidate?.targetChainIdentity
@@ -791,6 +808,7 @@ function createPhase({
   actorId,
   sourceKind,
   sourceActionId,
+  edgeIdentity = null,
   sourceIdentity,
   sourceGroupId = null,
   window = null,
@@ -810,6 +828,9 @@ function createPhase({
     sourceSkillId: form.sourceSkillId,
     sourceKind,
     sourceActionId: textOrNull(sourceActionId),
+    ...(textOrNull(edgeIdentity)
+      ? { edgeIdentity: textOrNull(edgeIdentity) }
+      : {}),
     sourceIdentity: textOrNull(sourceIdentity),
     sourceGroupId: textOrNull(sourceGroupId),
     window,

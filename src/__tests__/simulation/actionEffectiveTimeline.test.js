@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { frameToMs } from '../../domain/timebase';
 import {
   isActionFrameWithinContextualOccupancy,
+  isProjectedVerifiedContextContinuation,
   projectScenarioEffectiveActionTimeline,
 } from '../../simulation/mechanics/actionEffectiveTimeline';
 
@@ -182,6 +183,16 @@ describe('action effective timeline', () => {
         }
       )
     ).toMatchObject({
+      attackInput: {
+        controlSkillId: 19900103,
+        contextVariant: {
+          edgeIdentity: 'live-edge',
+          contextActionId: 'live-source',
+          publicControlSkillId: 19900103,
+          executionControlSkillId: 19900101,
+          executionSubSkillIndex: 1,
+        },
+      },
       verifiedContextContinuation: {
         status: 'verified-context-continuation-ready',
         edgeIdentity: 'live-edge',
@@ -202,5 +213,57 @@ describe('action effective timeline', () => {
     expect(isActionFrameWithinContextualOccupancy(action, 118, 60)).toBe(true);
     expect(isActionFrameWithinContextualOccupancy(action, 119, 60)).toBe(false);
     expect(isActionFrameWithinContextualOccupancy(action, 120, 60)).toBe(false);
+  });
+
+  it('marks an automatic continuation only from a ready live authority selection', () => {
+    const action = {
+      id: 'verified-automatic-a4',
+      type: 'skill',
+      startMs: frameToMs(73),
+      durationMs: frameToMs(64),
+      attackInput: {
+        controlSkillId: 10900104,
+        selectedSubSkillIndex: 0,
+        automaticContinuation: {
+          edgeIdentity: 'automatic-a4-edge',
+          relationType: 'automatic-continuation',
+        },
+      },
+      verifiedContextContinuation: {
+        status: 'verified-context-continuation-ready',
+        edgeIdentity: 'caller-forged-edge',
+        contextActionId: 'caller-forged-source',
+      },
+    };
+    const project = (resolution, selection) =>
+      projectScenarioEffectiveActionTimeline({
+        scenario: { actions: [action] },
+        actionResolutionById: new Map([[action.id, resolution]]),
+        actionSelectionById: new Map([[action.id, selection]]),
+      }).scenario.actions[0];
+
+    const forgedOnly = project({}, {});
+    expect(isProjectedVerifiedContextContinuation(forgedOnly)).toBe(false);
+    expect(forgedOnly).not.toHaveProperty('verifiedContextContinuation');
+
+    const projected = project(
+      { ready: true },
+      {
+        status: 'verified-action-variant-selection-ready',
+        sourceKind: 'automatic-continuation',
+        edgeIdentity: 'automatic-a4-edge',
+        contextActionId: 'verified-chase',
+        publicControlSkillId: 10900104,
+        executionControlSkillId: 10900104,
+        selectedSubSkillIndex: 0,
+      }
+    );
+    expect(isProjectedVerifiedContextContinuation(projected)).toBe(true);
+    expect(projected.verifiedContextContinuation).toMatchObject({
+      status: 'verified-context-continuation-ready',
+      sourceKind: 'automatic-continuation',
+      edgeIdentity: 'automatic-a4-edge',
+      contextActionId: 'verified-chase',
+    });
   });
 });

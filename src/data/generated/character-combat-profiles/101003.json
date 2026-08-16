@@ -67,7 +67,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "99b7647720d4c219b5a38f34f790539fd44a70935ed7c9e01953ee030bd08cce",
+    "packageHash": "91d4bc207d96766cbc722cf71e5ad8744f357926d3633a2082226abcbe133eb9",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -27061,6 +27061,7 @@
         "semanticName": "集中闪避反击",
         "publicActionKind": "perfect-parry",
         "publicActionIdentity": "actor:101003:perfect-parry",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -50637,8 +50638,8 @@
       "recipeIdentity": "actor:101003:character-combat-recipe:v1",
       "recipeHash": "6903cd9fbcbe50383f52b9178340584181112b389f685f5ab190584a1a8d6924",
       "compilerInputHash": "ff681612386f7d5002daf5acd5eaf4427b1b5b9dc4ada597bf0208ba9e1a4f1d",
-      "recipeContractHash": "0ae30f82ae2752a94b79cef918f774175773ab08e6dbd6bf94f81c82e7829b14",
-      "ownerContractHash": "d42550e308b37a25e60bf8ecbc28739665a0ac21580c229c4eb1f7a95d329b9a"
+      "recipeContractHash": "46e35118832add12cf4993132fc92896194456f3a8ecd17514387f6be21c2dd7",
+      "ownerContractHash": "fa669a38024ec041d967fae5fd5f0513d63a34a370b83aedb3f79081f997aeaa"
     },
     "operators": [
       "public-action-binding",
@@ -50672,7 +50673,7 @@
         "packagePath": "actionVariantGraph.contextEdges",
         "operator": "contextual-input-scheduling",
         "recordCount": 1,
-        "recordsHash": "10ced476e889c67e12e6a7c9362d0cd82278622dd4eb410254d61fa4d7e3825f"
+        "recordsHash": "e890bceaa31ce19ccbd74845285a0ef15b2c49baf0ac6e5b06ff4ddb6e4b4120"
       },
       {
         "packagePath": "actionVariantGraph.edges",
@@ -50735,7 +50736,7 @@
         "recordsHash": "d5168a72daacffe6c40966fd4320a5143317f7ae6438c872bec06d516c324b02"
       }
     ],
-    "contractHash": "e7b0bcbca3cd7e5f21ea7a889ac2b08718e107c3f96f102e112571e9ca64c6a4"
+    "contractHash": "20dc038f0d90a9b3dc628847c881fa49e9d6c0f76c2ef7e0b715e6d84e72e9aa"
   },
   "coverage": [
     {
@@ -51710,7 +51711,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "35cc00db95772eeb3a645bacc3746f2c04733e880abb1560fab0a4dbeac52490"
+    "deterministicInputHash": "b389d54d3d42a7d10f199e31c78b97675e286705714fdf877cb16a58d63e5772"
   },
-  "profileHash": "920b36ac07211b294e53912040f43374bf1d513921db42cdfded3c29815610c2"
+  "profileHash": "86aa161a870dc45e4f5b26f6de6e9f0419ad935bab11cc11ffac2ac5edf6f060"
 }

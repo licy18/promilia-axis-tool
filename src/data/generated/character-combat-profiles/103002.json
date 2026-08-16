@@ -75,7 +75,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "99b7647720d4c219b5a38f34f790539fd44a70935ed7c9e01953ee030bd08cce",
+    "packageHash": "91d4bc207d96766cbc722cf71e5ad8744f357926d3633a2082226abcbe133eb9",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -75764,6 +75764,7 @@
         "semanticName": "集中闪避反击",
         "publicActionKind": "perfect-parry",
         "publicActionIdentity": "actor:103002:perfect-parry",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -80602,6 +80603,7 @@
           "endFrame": 264,
           "durationFrames": 240
         },
+        "targetChainIdentity": null,
         "compilerBindingIdentity": "ruby-reload-quick-enhanced-entry"
       },
       {
@@ -82330,6 +82332,7 @@
           "endFrame": 240,
           "durationFrames": 240
         },
+        "targetChainIdentity": null,
         "compilerBindingIdentity": "ruby-star-skill-quick-enhanced-entry"
       },
       {
@@ -83976,6 +83979,7 @@
           "endFrame": 537,
           "durationFrames": 208
         },
+        "targetChainIdentity": null,
         "compilerBindingIdentity": "ruby-ultimate-end-quick-enhanced-entry"
       },
       {
@@ -86155,6 +86159,7 @@
         "sourceElementId": null,
         "targetControlSkillId": 10300201,
         "targetSubSkillIndex": 1,
+        "targetChainIdentity": null,
         "activationFrame": 80,
         "decisionFrame": 80,
         "durationMs": 533.3333333333334,
@@ -94103,6 +94108,7 @@
         "sourceElementId": 103002246,
         "targetControlSkillId": 10300201,
         "targetSubSkillIndex": 1,
+        "targetChainIdentity": null,
         "activationFrame": 24,
         "decisionFrame": 24,
         "durationMs": 4000,
@@ -94133,6 +94139,7 @@
         "sourceElementId": 103002246,
         "targetControlSkillId": 10300201,
         "targetSubSkillIndex": 1,
+        "targetChainIdentity": null,
         "activationFrame": 0,
         "decisionFrame": 0,
         "durationMs": 4000,
@@ -94165,6 +94172,7 @@
         "sourceElementId": 103002246,
         "targetControlSkillId": 10300201,
         "targetSubSkillIndex": 1,
+        "targetChainIdentity": null,
         "activationFrame": 297,
         "decisionFrame": 329,
         "durationMs": 4000,
@@ -94195,6 +94203,7 @@
         "sourceElementId": null,
         "targetControlSkillId": 10300201,
         "targetSubSkillIndex": 1,
+        "targetChainIdentity": null,
         "activationFrame": 80,
         "decisionFrame": 80,
         "durationMs": 533.3333333333334,
@@ -133679,8 +133688,8 @@
       "recipeIdentity": "actor:103002:character-combat-recipe:v1",
       "recipeHash": "8433b9eadb1a63c6ce57e25b8226ff2e5d9669d7e21986c64567e8ab94fab3a6",
       "compilerInputHash": "3788fd84ba68d41f1837efa5fce21fedfa68c9a34bee4e244a619b18d3ff4194",
-      "recipeContractHash": "794609e15ef6874b7ae72a78e6bdb7be2b6ffe1b224e2a5bc988b963bae4072a",
-      "ownerContractHash": "1090c845ae03e7fc09d8fb9f92403297cc7abf2a790a4e3a18c965b5bcce4f04"
+      "recipeContractHash": "26273a98e5d6706216db2b358aaa796557c4a7b7383307394454fc23f136466d",
+      "ownerContractHash": "12d4be44824fef5d7a564493fb0aa7fa1349878fb5cd0219440f598e06456feb"
     },
     "operators": [
       "public-action-binding",
@@ -133714,13 +133723,13 @@
         "packagePath": "actionVariantGraph.contextEdges",
         "operator": "contextual-input-scheduling",
         "recordCount": 1,
-        "recordsHash": "72c7391b80039f65642fd0624088f99c1b8024e9604fe10945542bf8523abbb4"
+        "recordsHash": "9bc0d43f48827a13c3878993412944f58bc5dc823a8913524a9f6a00b00d0138"
       },
       {
         "packagePath": "actionVariantGraph.edges",
         "operator": "state-and-resource-variant-selection",
         "recordCount": 301,
-        "recordsHash": "4c3009d0d58e2de50c69ca13bfbf9c4a72be8e031f8790da4e8edc3752f782d1"
+        "recordsHash": "15ba89a92c347cf586ee959cc509da4310d524d1044351eb3c50a7424751df0c"
       },
       {
         "packagePath": "actionVariantGraph.tuningMarkConditionalDamageGroups",
@@ -133777,7 +133786,7 @@
         "recordsHash": "252e20fd1580a751f0903dbcab10e65c043391e299d17361660739bbfb60f847"
       }
     ],
-    "contractHash": "89cc4ac3871ec6ed717eb114a82f0446061718db027e6dad7c9a322999f8f169"
+    "contractHash": "a474f0c8497973a3077ba936a4e2f23773ef45d707655df74aef025598606a76"
   },
   "coverage": [
     {
@@ -145425,7 +145434,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "ae31cac70e9d5f25f433be024c25b5712c04e4d2652b9ce6dc9f8436c086ac35"
+    "deterministicInputHash": "c9e8e5fd72ab7f5029489884778d8283e269b0b9adbcccb9b11448ff53db4e12"
   },
-  "profileHash": "f3808fa0838bfb9fe9ad990da5f74c974c7919cd7d392dc933742969069c5988"
+  "profileHash": "d7a228ff06392a747e6a3ac766d5b5be841da60839d4c8af1aa80329eb2c418b"
 }

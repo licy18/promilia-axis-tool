@@ -959,6 +959,7 @@ export function deriveNextStartFrameByActor(run) {
     (trace.actions ?? []).map(action => [String(action.id), action])
   );
   const latestByActor = new Map();
+  const latestExecutedActionByActor = new Map();
   for (const entry of trace.executionPlan?.actions ?? []) {
     if (entry.execute === false) continue;
     const start = Number(entry.startMs);
@@ -974,6 +975,36 @@ export function deriveNextStartFrameByActor(run) {
     latestByActor.set(
       actorId,
       Math.max(latestByActor.get(actorId) ?? 0, endFrame)
+    );
+    const latest = latestExecutedActionByActor.get(actorId);
+    if (!latest || start >= latest.startMs) {
+      latestExecutedActionByActor.set(actorId, {
+        actionId: String(entry.actionId),
+        startMs: start,
+      });
+    }
+  }
+  for (const candidate of trace.variants
+    ?.normalAttackSpecialContinuationCandidates ?? []) {
+    if (candidate?.applied !== true || candidate.targetActionId != null) {
+      continue;
+    }
+    const actorId = String(candidate.actorId ?? '');
+    const latest = latestExecutedActionByActor.get(actorId);
+    if (
+      !actorId ||
+      !latest ||
+      String(candidate.sourceActionId ?? '') !== latest.actionId
+    ) {
+      continue;
+    }
+    const startsAtMs = Number(candidate.startsAtMs);
+    const endsAtMs = Number(candidate.endsAtMs);
+    if (!Number.isFinite(startsAtMs) || !(endsAtMs > startsAtMs)) continue;
+    const startFrame = msToFrame(startsAtMs);
+    latestByActor.set(
+      actorId,
+      Math.min(latestByActor.get(actorId) ?? startFrame, startFrame)
     );
   }
   return Object.fromEntries(

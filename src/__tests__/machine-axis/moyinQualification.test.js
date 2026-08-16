@@ -4,6 +4,10 @@ import moyinProfile from '../../data/generated/character-combat-profiles/109001.
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+import {
+  createMachineAxisSearchGenerator,
+  deriveNextStartFrameByActor,
+} from '../../machine-axis/machineAxisSearchGenerator';
 
 function createPublicAction({
   id,
@@ -42,6 +46,15 @@ function createStar(id, frame) {
     actionKind: 'star-skill',
     frame,
   });
+}
+
+function createSwitch(id, frame, fromSlotId, targetSlotId) {
+  return {
+    id,
+    owner: { kind: 'actor', slotId: fromSlotId },
+    intent: { kind: 'switch', targetSlotId },
+    schedule: { mode: 'absolute', frame },
+  };
 }
 
 function createUltimate(id, frame) {
@@ -191,6 +204,319 @@ describe('Moyin Machine Axis qualification', () => {
         markId: 250,
         packetElementId: 299,
       },
+    });
+  });
+
+  it('derives star-skill chase into the canonical A4 successor and replays it', () => {
+    const service = createMachineAxisService();
+    const prefix = createQualificationAxis({
+      id: 'moyin-star-chase-a4-prefix',
+      durationFrames: 400,
+      initialThunderCount: 1,
+      actions: [
+        createStar('moyin-star-chase-source', 0),
+        createNormal(
+          'moyin-star-chase-follow-up',
+          1,
+          40,
+          'moyin-star-chase-source'
+        ),
+      ],
+    });
+    const prefixValidation = service.validate(prefix);
+    expect(
+      prefixValidation,
+      JSON.stringify(prefixValidation.issues)
+    ).toMatchObject({
+      valid: true,
+    });
+    expect(
+      service
+        .prepare(prefix)
+        .actionResolutions.find(
+          resolution => resolution.actionId === 'moyin-star-chase-follow-up'
+        )
+    ).toMatchObject({
+      resolvedControlSkillId: 10900143,
+      resolvedSubSkillIndex: 0,
+    });
+    const prefixRun = service.simulate(prefix);
+
+    expect(
+      prefixRun.trace.variants.selections.find(
+        selection => selection.actionId === 'moyin-star-chase-follow-up'
+      )
+    ).toMatchObject({
+      controlSkillId: 10900143,
+      sourceKind: 'verified-input-context-variant',
+    });
+    expect(deriveNextStartFrameByActor(prefixRun)).toMatchObject({
+      'actor-109001': 73,
+    });
+    expect(
+      prefixRun.trace.variants.normalAttackSpecialContinuationCandidates
+    ).toEqual([
+      expect.objectContaining({
+        actorId: 'actor-109001',
+        sourceKind: 'automatic-continuation',
+        sourceActionId: 'moyin-star-chase-follow-up',
+        targetActionId: null,
+        chainIdentity: 'moyin-normal-five-inputs',
+        sequenceIndex: 4,
+        controlSkillId: 10900104,
+        subSkillIndex: 0,
+        applied: true,
+      }),
+    ]);
+
+    const generated = createMachineAxisSearchGenerator({ service })
+      .generateNextActions({
+        axis: prefix,
+        run: prefixRun,
+        nextStartFrameByActor: deriveNextStartFrameByActor(prefixRun),
+        options: {
+          activeActorId: 'actor-109001',
+          includeKibo: false,
+          includeSwitch: false,
+        },
+      })
+      .filter(
+        candidate =>
+          candidate.action.intent.actionKind === 'normal-attack' &&
+          candidate.action.intent.attackInput?.sequenceIndex === 4 &&
+          candidate.action.intent.attackInput?.contextActionId ===
+            'moyin-star-chase-follow-up'
+      );
+    expect(generated).toHaveLength(1);
+    expect(generated[0]).toMatchObject({
+      startFrame: 73,
+      action: {
+        intent: {
+          attackInput: {
+            chainIdentity: 'moyin-normal-five-inputs',
+            sequenceIndex: 4,
+            contextActionId: 'moyin-star-chase-follow-up',
+          },
+        },
+      },
+    });
+
+    const replayAxis = structuredClone(prefix);
+    replayAxis.actions.push(generated[0].action);
+    const replayValidation = service.validate(replayAxis);
+    expect(
+      replayValidation,
+      JSON.stringify(replayValidation.issues)
+    ).toMatchObject({ valid: true });
+    const replay = service.simulate(replayAxis);
+    const replayAgain = service.simulate(structuredClone(replayAxis));
+    const successorActionId = generated[0].action.id;
+    expect(
+      replay.trace.variants.selections.find(
+        selection => selection.actionId === successorActionId
+      )
+    ).toMatchObject({
+      controlSkillId: 10900104,
+      attackInputChainIdentity: 'moyin-normal-five-inputs',
+      attackSequenceIndex: 4,
+    });
+    expect(
+      replay.trace.damage.some(
+        event =>
+          event.actionId === successorActionId &&
+          String(event.hitIdentity ?? '').startsWith('10900104|')
+      )
+    ).toBe(true);
+    expect(replay.hashes).toEqual(replayAgain.hashes);
+  });
+
+  it('derives entry chase into the same canonical A4 successor', () => {
+    const service = createMachineAxisService();
+    const switchActionId = 'moyin-entry-switch';
+    const starCarryActionId =
+      'moyin-entry-switch--on-enter--actor-109001--star-carry';
+    const prefix = createQualificationAxis({
+      id: 'moyin-entry-chase-a4-prefix',
+      durationFrames: 500,
+      initialThunderCount: 1,
+      actions: [
+        createSwitch(switchActionId, 0, 'slot-2', 'slot-1'),
+        createNormal('moyin-entry-chase-follow-up', 1, 108, starCarryActionId),
+      ],
+    });
+    prefix.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-101010',
+      characterId: 101010,
+    };
+    const prefixValidation = service.validate(prefix);
+    expect(
+      prefixValidation,
+      JSON.stringify(prefixValidation.issues)
+    ).toMatchObject({
+      valid: true,
+    });
+    expect(
+      service
+        .prepare(prefix)
+        .actionResolutions.find(
+          resolution => resolution.actionId === 'moyin-entry-chase-follow-up'
+        )
+    ).toMatchObject({
+      resolvedControlSkillId: 10900143,
+      resolvedSubSkillIndex: 0,
+    });
+    const prefixRun = service.simulate(prefix);
+
+    expect(
+      prefixRun.trace.variants.selections.find(
+        selection => selection.actionId === 'moyin-entry-chase-follow-up'
+      )
+    ).toMatchObject({
+      controlSkillId: 10900143,
+      sourceKind: 'verified-input-context-variant',
+    });
+    expect(deriveNextStartFrameByActor(prefixRun)).toMatchObject({
+      'actor-109001': 141,
+    });
+    expect(
+      prefixRun.trace.variants.normalAttackSpecialContinuationCandidates
+    ).toEqual([
+      expect.objectContaining({
+        actorId: 'actor-109001',
+        sourceKind: 'automatic-continuation',
+        sourceActionId: 'moyin-entry-chase-follow-up',
+        chainIdentity: 'moyin-normal-five-inputs',
+        sequenceIndex: 4,
+        controlSkillId: 10900104,
+        subSkillIndex: 0,
+        applied: true,
+      }),
+    ]);
+
+    const generated = createMachineAxisSearchGenerator({ service })
+      .generateNextActions({
+        axis: prefix,
+        run: prefixRun,
+        nextStartFrameByActor: deriveNextStartFrameByActor(prefixRun),
+        options: {
+          activeActorId: 'actor-109001',
+          includeKibo: false,
+          includeSwitch: false,
+        },
+      })
+      .filter(
+        candidate =>
+          candidate.action.intent.actionKind === 'normal-attack' &&
+          candidate.action.intent.attackInput?.sequenceIndex === 4 &&
+          candidate.action.intent.attackInput?.contextActionId ===
+            'moyin-entry-chase-follow-up'
+      );
+    expect(generated).toHaveLength(1);
+    expect(generated[0]).toMatchObject({
+      startFrame: 141,
+      action: {
+        intent: {
+          attackInput: {
+            chainIdentity: 'moyin-normal-five-inputs',
+            sequenceIndex: 4,
+            contextActionId: 'moyin-entry-chase-follow-up',
+          },
+        },
+      },
+    });
+
+    const replayAxis = structuredClone(prefix);
+    replayAxis.actions.push(generated[0].action);
+    const replayValidation = service.validate(replayAxis);
+    expect(
+      replayValidation,
+      JSON.stringify(replayValidation.issues)
+    ).toMatchObject({ valid: true });
+    const replay = service.simulate(replayAxis);
+    expect(
+      replay.trace.variants.selections.find(
+        selection => selection.actionId === generated[0].action.id
+      )
+    ).toMatchObject({
+      controlSkillId: 10900104,
+      attackInputChainIdentity: 'moyin-normal-five-inputs',
+      attackSequenceIndex: 4,
+    });
+  });
+
+  it('rejects an explicitly requested A1 inside the star-skill chase window', () => {
+    const service = createMachineAxisService();
+    const explicitA1 = createNormal(
+      'moyin-star-window-invalid-a1',
+      1,
+      40,
+      'moyin-star-window-invalid-source'
+    );
+    explicitA1.intent.attackInput.chainIdentity = 'moyin-normal-five-inputs';
+    const validation = service.validate(
+      createQualificationAxis({
+        id: 'moyin-star-window-invalid-a1-axis',
+        durationFrames: 400,
+        actions: [
+          createStar('moyin-star-window-invalid-source', 0),
+          explicitA1,
+        ],
+      })
+    );
+
+    expect(validation.valid).toBe(false);
+    expect(validation.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-normal-attack-chain-context-conflict',
+        actionId: 'moyin-star-window-invalid-a1',
+      })
+    );
+  });
+
+  it('allows the default A1 at the right-open end of the star-skill chase window', () => {
+    const service = createMachineAxisService();
+    const validation = service.validate(
+      createQualificationAxis({
+        id: 'moyin-star-window-right-open-a1-axis',
+        durationFrames: 400,
+        actions: [
+          createStar('moyin-star-window-right-open-source', 0),
+          createNormal(
+            'moyin-star-window-right-open-a1',
+            1,
+            77,
+            'moyin-star-window-right-open-source'
+          ),
+        ],
+      })
+    );
+
+    expect(validation, JSON.stringify(validation.issues)).toMatchObject({
+      valid: true,
+    });
+    expect(
+      service
+        .simulate(
+          createQualificationAxis({
+            id: 'moyin-star-window-right-open-a1-replay',
+            durationFrames: 400,
+            actions: [
+              createStar('moyin-star-window-right-open-source', 0),
+              createNormal(
+                'moyin-star-window-right-open-a1',
+                1,
+                77,
+                'moyin-star-window-right-open-source'
+              ),
+            ],
+          })
+        )
+        .trace.variants.selections.find(
+          selection => selection.actionId === 'moyin-star-window-right-open-a1'
+        )
+    ).toMatchObject({
+      controlSkillId: 10900101,
+      attackSequenceIndex: 1,
     });
   });
 

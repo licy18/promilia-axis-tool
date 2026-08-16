@@ -67,7 +67,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "99b7647720d4c219b5a38f34f790539fd44a70935ed7c9e01953ee030bd08cce",
+    "packageHash": "91d4bc207d96766cbc722cf71e5ad8744f357926d3633a2082226abcbe133eb9",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -51408,6 +51408,7 @@
         "semanticName": "特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -51606,6 +51607,7 @@
         "semanticName": "强化特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -51802,6 +51804,7 @@
         "semanticName": "强化特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -51998,6 +52001,7 @@
         "semanticName": "连续重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -52254,6 +52258,7 @@
         "semanticName": "特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -52449,6 +52454,7 @@
         "semanticName": "强化特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 1,
           "frameRate": 60,
@@ -52648,6 +52654,7 @@
         "semanticName": "特殊重击",
         "publicActionKind": "charged-attack",
         "publicActionIdentity": "actor:101010:charged-attack",
+        "outsideWindowFallback": null,
         "executionTiming": {
           "subSkillIndex": 0,
           "frameRate": 60,
@@ -108752,8 +108759,8 @@
       "recipeIdentity": "actor:101010:character-combat-recipe:v1",
       "recipeHash": "91c3d08513e7ed40101be566f0e629b94695e2f59ac9e810c3b49ea602fd7861",
       "compilerInputHash": "0ae82d738e6aabec33bbe1918afe5ccfe9543124ceb47abb2291e121b39ad2e4",
-      "recipeContractHash": "b3ddfb742010401a2058134c590052f03346ac40f116e967c0b644f38d922716",
-      "ownerContractHash": "ef0333939fe03c781c6e4eb59e151148ae0d0eefb6573ba4a222054c5e4bcd96"
+      "recipeContractHash": "6b1b7a542fa0d7cc02c4a42900045d96e59a67464103ccffb20b1647a0bb0045",
+      "ownerContractHash": "d18dfc074a6fca27e3f21ed3a7d1815089688594f15004ef0b7a4c82ec0658bf"
     },
     "operators": [
       "public-action-binding",
@@ -108787,7 +108794,7 @@
         "packagePath": "actionVariantGraph.contextEdges",
         "operator": "contextual-input-scheduling",
         "recordCount": 7,
-        "recordsHash": "42f70bfb27893eefa0d177e9aa61faba7ba37466c96ef976d3e09f5cef05f38b"
+        "recordsHash": "56b854c4bb9693c59676c0320743c47962be88fe10cd4969b960ce0a366afe3c"
       },
       {
         "packagePath": "actionVariantGraph.edges",
@@ -108850,7 +108857,7 @@
         "recordsHash": "0f84e56cd2dbc66d20d989603e5d6f93d61f8117610311fcc0028f9875fecdad"
       }
     ],
-    "contractHash": "adbacf0c9e2f5e7acc1dd58d5f0d7667fd8ef4653eae33ff11f873054325fd68"
+    "contractHash": "a40404dfc1d6531065b749d8145ecbbb9322ac45427422adc919b29003eea62e"
   },
   "coverage": [
     {
@@ -114818,7 +114825,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "af3a01498e0f69241078b26df24739cde70559595117ede837142ee8587b3eca"
+    "deterministicInputHash": "56ce76ccdb839855e29a41a546fabea6788bff02482031b1a7691ff30396cb52"
   },
-  "profileHash": "63df06c1fe969d9d69a8d0366621de7673d073bac43c52a2203e774f8092f12f"
+  "profileHash": "9ea896e7db33f22f8ade0e8b12f554194d2b66187194c7b7967e1fb13a592406"
 }

@@ -1,4 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
+import moyinWindow39Fixture from '../../../fixtures/character-acceptance/109001-window-39.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createWorkbenchDraftSnapshot } from '../../domain/workbenchDraftStorage';
@@ -194,6 +195,30 @@ describe('Workbench Machine Axis adapter', () => {
       restored.contract.actions.find(item => item.id === 'plunging-miss')
         .hitOverrides[PANGPANG_PLUNGING_HIT]
     ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
+  }, 30_000);
+
+  it('does not turn a runtime-resolved normal chain into an explicit chain selection', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const imported = adapter.importContract(moyinWindow39Fixture);
+    const preparedAction = imported.project.actions.find(
+      action => action.id === 'window-offset-39-a1'
+    );
+    const exported = adapter.exportProject(imported.project);
+    const exportedAction = exported.actions.find(
+      action => action.id === 'window-offset-39-a1'
+    );
+
+    expect(preparedAction).toMatchObject({
+      attackInputChainSelectionSource: 'user-explicit',
+      attackInputChainIdentity: 'moyin-normal-five-inputs',
+    });
+    expect(exportedAction.intent.attackInput).toEqual(
+      imported.contract.actions.find(
+        action => action.id === 'window-offset-39-a1'
+      ).intent.attackInput
+    );
+    expect(exportedAction.intent.attackInput.chainIdentity).toBeNull();
   }, 30_000);
 
   it('fails closed when preserved context metadata does not name a verified open window', () => {
