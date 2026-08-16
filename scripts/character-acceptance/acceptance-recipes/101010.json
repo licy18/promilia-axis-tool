@@ -4,11 +4,13 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
-    "recordIdentity": "character-product-acceptance:101010:6833dc95557735f15cc68e74cf667c2acf90edc1:1f89665fc50102a4",
+    "acceptanceCommit": "365df3685b9b16a06ec57da452f05618915b2d11",
+    "recordIdentity": "character-product-acceptance:101010:365df3685b9b16a06ec57da452f05618915b2d11:1f89665fc50102a4",
     "qualificationSubjectHash": "1f89665fc50102a4",
     "scenarioSetHash": "ec225ebcb25647d7",
-    "scenarioIdentities": ["m11-d-101010-visual-acceptance"],
+    "scenarioIdentities": [
+      "m11-d-101010-visual-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-101010-visual-acceptance",
@@ -44,11 +46,13 @@
       }
     ],
     "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/101010.json",
-    "signoffRecordSha256": "3773f6bb3ba2098f651d3b96e7b7fef0be2c94ac3f74fbae4588b9e58d6e9f9b"
+    "signoffRecordSha256": "dcb04a2a611f6954119ea6a637ae4b300bd9a47d6fe43c41d57ecd7539940b47"
   },
   "ownerId": 101010,
   "fixturePath": "fixtures/character-acceptance/101010-visual.json",
-  "goldenReports": ["reports/m10/101010/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/101010/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10101062,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -152,8 +156,15 @@
     "operationPath": "payload.operation",
     "timePath": "timeMs",
     "durationMs": 10000,
-    "requiredOperations": ["transform", "refresh", "expire"],
-    "startOperations": ["transform", "refresh"],
+    "requiredOperations": [
+      "transform",
+      "refresh",
+      "expire"
+    ],
+    "startOperations": [
+      "transform",
+      "refresh"
+    ],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -238,7 +249,9 @@
           }
         }
       ],
-      "requiredExecutableActionIds": ["negative-window-before-source"],
+      "requiredExecutableActionIds": [
+        "negative-window-before-source"
+      ],
       "expectedIssue": {
         "actionId": "negative-window-start-minus-one",
         "code": "machine-axis-action-not-executable",
@@ -351,7 +364,16 @@
       "expectation": {
         "count": 8,
         "orderedValues": {
-          "absoluteFrame": [1125, 1125, 1129, 1129, 1133, 1133, 1137, 1137],
+          "absoluteFrame": [
+            1125,
+            1125,
+            1129,
+            1129,
+            1133,
+            1133,
+            1137,
+            1137
+          ],
           "actorId": [
             "actor-103002",
             "actor-101003",
@@ -363,8 +385,14 @@
             "actor-101003"
           ],
           "change": [
-            0.299988, 0.299988, 0.299988, 0.299988, 0.299988, 0.299988,
-            0.299988, 0.299988
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988
           ]
         }
       }
@@ -464,10 +492,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [272, 278, 284],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                272,
+                278,
+                284
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },
@@ -535,10 +579,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [219, 225, 231],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                219,
+                225,
+                231
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },

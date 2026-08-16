@@ -3,11 +3,13 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
-    "recordIdentity": "character-product-acceptance:107002:6833dc95557735f15cc68e74cf667c2acf90edc1:03b84b84c08443a7",
+    "acceptanceCommit": "365df3685b9b16a06ec57da452f05618915b2d11",
+    "recordIdentity": "character-product-acceptance:107002:365df3685b9b16a06ec57da452f05618915b2d11:03b84b84c08443a7",
     "qualificationSubjectHash": "03b84b84c08443a7",
     "scenarioSetHash": "75fe3457d3d853b7",
-    "scenarioIdentities": ["m12-b3-107002-reduced-action-surface-acceptance"],
+    "scenarioIdentities": [
+      "m12-b3-107002-reduced-action-surface-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
@@ -43,12 +45,14 @@
       }
     ],
     "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/107002.json",
-    "signoffRecordSha256": "a17210be2efa5f4a0ced0a0e98ef06bccd41ae016e2cf4c8460ffd478d34100a"
+    "signoffRecordSha256": "a43fb76eecd717d198bc545ac03f805e6dd71660b854030ab22b2dcd02aec793"
   },
   "ownerId": 107002,
   "runtimeProfileOverlay": true,
   "fixturePath": "fixtures/character-acceptance/107002-visual.json",
-  "goldenReports": ["reports/m10/107002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/107002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10700262,
   "criticalProbe": {
     "preHitAttributeChange": {
@@ -71,7 +75,10 @@
       "identity": "misa-star-source-sub1-not-runtime-reachable",
       "controlSkillId": 10700212,
       "subSkillIndex": 1,
-      "dimensions": ["control-window", "hit"],
+      "dimensions": [
+        "control-window",
+        "hit"
+      ],
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
       "reason": "source-subskill-has-no-runtime-reachable-public-action-form-in-frozen-product-scenario",
       "sourceIdentity": "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
@@ -80,7 +87,10 @@
       "identity": "misa-star-execution-sub1-not-runtime-reachable",
       "controlSkillId": 10700226,
       "subSkillIndex": 1,
-      "dimensions": ["control-window", "hit"],
+      "dimensions": [
+        "control-window",
+        "hit"
+      ],
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
       "reason": "source-subskill-has-no-runtime-reachable-public-action-form-in-frozen-product-scenario",
       "sourceIdentity": "src/data/generated/character-combat-profiles/107002.json#contracts.actionForms[formIdentity=actor:107002:star-skill:misa-star-main-combo].executionControlSkillId=10700226;executionSubSkillIndex=0"

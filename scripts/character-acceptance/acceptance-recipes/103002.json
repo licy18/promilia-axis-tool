@@ -4,14 +4,16 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
-    "recordIdentity": "character-product-acceptance:103002:6833dc95557735f15cc68e74cf667c2acf90edc1:0b8563900dafaac2",
+    "acceptanceCommit": "365df3685b9b16a06ec57da452f05618915b2d11",
+    "recordIdentity": "character-product-acceptance:103002:365df3685b9b16a06ec57da452f05618915b2d11:0b8563900dafaac2",
     "qualificationSubjectHash": "0b8563900dafaac2",
-    "scenarioSetHash": "064ece71bcd82dea",
-    "scenarioIdentities": ["m12-b3-103002-reload-window-boundaries"],
+    "scenarioSetHash": "f8cb92c8e2fae966",
+    "scenarioIdentities": [
+      "m11-d-103002-visual-acceptance"
+    ],
     "automatedEvidence": [
       {
-        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "scenarioIdentity": "m11-d-103002-visual-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
         "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-103002-canonical-trace.png",
@@ -44,12 +46,14 @@
       }
     ],
     "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/103002.json",
-    "signoffRecordSha256": "a010bbdd0f2207c4af9adda442e68e5c5dd42b882dba224e93fe1218f3eb3cb3"
+    "signoffRecordSha256": "9826d19bec65bbedb43bf421c66b37b6a950b93890689bb41b9e8b50b65acabe"
   },
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
   "inputWindowBoundary": null,
-  "goldenReports": ["reports/m10/103002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/103002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
     {
@@ -227,7 +231,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -267,7 +273,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -315,7 +323,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -363,7 +373,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -425,7 +437,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -563,11 +579,26 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "triggerFrame": [173, 237],
-              "absoluteFrame": [1973, 2037],
-              "markCountAtJudgment": [1, 0],
-              "consumedCount": [1, 0],
-              "applied": [true, false],
+              "triggerFrame": [
+                173,
+                237
+              ],
+              "absoluteFrame": [
+                1973,
+                2037
+              ],
+              "markCountAtJudgment": [
+                1,
+                0
+              ],
+              "consumedCount": [
+                1,
+                0
+              ],
+              "applied": [
+                true,
+                false
+              ],
               "status": [
                 "verified-tuning-consume-applied",
                 "verified-tuning-consume-insufficient-marks"
@@ -683,7 +714,9 @@
               }
             }
           ],
-          "requiredExecutableActionIds": ["negative-reload-window-source"],
+          "requiredExecutableActionIds": [
+            "negative-reload-window-source"
+          ],
           "expectedIssue": {
             "actionId": "negative-reload-window-start-minus-one",
             "code": "machine-axis-action-not-executable",
@@ -701,7 +734,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -716,10 +753,17 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": ["expire", "apply"]
+              "operation": [
+                "expire",
+                "apply"
+              ]
             }
           },
-          "select": ["actionId", "operation", "absoluteFrame"]
+          "select": [
+            "actionId",
+            "operation",
+            "absoluteFrame"
+          ]
         }
       ]
     },
@@ -745,9 +789,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [

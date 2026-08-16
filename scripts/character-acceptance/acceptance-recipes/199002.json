@@ -4,11 +4,13 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
-    "recordIdentity": "character-product-acceptance:199002:6833dc95557735f15cc68e74cf667c2acf90edc1:6f582ac781c3e9ee",
+    "acceptanceCommit": "365df3685b9b16a06ec57da452f05618915b2d11",
+    "recordIdentity": "character-product-acceptance:199002:365df3685b9b16a06ec57da452f05618915b2d11:6f582ac781c3e9ee",
     "qualificationSubjectHash": "6f582ac781c3e9ee",
     "scenarioSetHash": "bfc5c4af14b5ba13",
-    "scenarioIdentities": ["m12-b3-starborn-199002-focused-acceptance"],
+    "scenarioIdentities": [
+      "m12-b3-starborn-199002-focused-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
@@ -44,17 +46,22 @@
       }
     ],
     "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/199002.json",
-    "signoffRecordSha256": "d7bff6e164aac0eb06a98364e1f946393045324f3559fc5c23db9a46f58f97c4"
+    "signoffRecordSha256": "618fbb77705771a779cff4cb4a2f4983903f7d5701106438e4d7c384595eb965"
   },
   "ownerId": 199002,
   "optimizationObjectAcceptance": {
     "optimizationObjectId": "STARBORN",
-    "requiredSourceCharacterIds": [199001, 199002],
+    "requiredSourceCharacterIds": [
+      199001,
+      199002
+    ],
     "sourceCharacterId": 199002,
     "sourceAliasIdentity": "STARBORN:source-alias:199002"
   },
   "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
-  "goldenReports": ["reports/m10/199002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/199002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 19900262,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -137,8 +144,13 @@
     "effectIdentity": "battle-element:199002266",
     "targetId": "actor-199002",
     "durationFrames": 1440,
-    "requiredOperations": ["apply", "expire"],
-    "startOperations": ["apply"],
+    "requiredOperations": [
+      "apply",
+      "expire"
+    ],
+    "startOperations": [
+      "apply"
+    ],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -319,7 +331,9 @@
           }
         }
       ],
-      "baselineRequiredExecutableActionIds": ["starborn-m-ultimate"],
+      "baselineRequiredExecutableActionIds": [
+        "starborn-m-ultimate"
+      ],
       "expectedIssue": {
         "actionId": "199002-ultimate-sp-insufficient",
         "code": "machine-axis-action-resource-insufficient"
@@ -423,7 +437,9 @@
           }
         }
       ],
-      "baselineRequiredExecutableActionIds": ["starborn-m-derived-thrust"],
+      "baselineRequiredExecutableActionIds": [
+        "starborn-m-derived-thrust"
+      ],
       "expectedIssue": {
         "actionId": "199002-thrust-window-a1",
         "code": "machine-axis-normal-attack-context-window-conflict"
@@ -809,7 +825,10 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": ["expire", "apply"]
+              "operation": [
+                "expire",
+                "apply"
+              ]
             }
           }
         }

@@ -3,11 +3,13 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
-    "recordIdentity": "character-product-acceptance:108003:6833dc95557735f15cc68e74cf667c2acf90edc1:6d0a592ac143f926",
+    "acceptanceCommit": "365df3685b9b16a06ec57da452f05618915b2d11",
+    "recordIdentity": "character-product-acceptance:108003:365df3685b9b16a06ec57da452f05618915b2d11:6d0a592ac143f926",
     "qualificationSubjectHash": "6d0a592ac143f926",
     "scenarioSetHash": "8617e994967645d3",
-    "scenarioIdentities": ["m12-b3-e20-2-108003-s1-visual-acceptance"],
+    "scenarioIdentities": [
+      "m12-b3-e20-2-108003-s1-visual-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -43,11 +45,13 @@
       }
     ],
     "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/108003.json",
-    "signoffRecordSha256": "ee990a0f602f4539f7a98bec4a230ae518a3d0f6d148e78930dce030141fa4a3"
+    "signoffRecordSha256": "cd9c4b390f5d3d7a43cfaab080a7a325f0e877d22bf50235ec2ee387f00d3317"
   },
   "ownerId": 108003,
   "fixturePath": "fixtures/character-acceptance/108003-active-surface-closure.json",
-  "goldenReports": ["reports/m10/108003/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/108003/golden-trace.json"
+  ],
   "inputWindowBoundary": null,
   "probes": [
     {
@@ -110,9 +114,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [
