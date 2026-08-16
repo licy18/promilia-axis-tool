@@ -145,6 +145,7 @@ export function inspectOptimizationObjectSourceAliasSelection({
 export function validateOptimizationObjectAliasAcceptanceBundle({
   recipe,
   sources,
+  signoffRecordVerified = false,
 } = {}) {
   const issues = [];
   const optimizationObjectId = String(recipe?.optimizationObjectId ?? '');
@@ -441,6 +442,7 @@ export function validateOptimizationObjectAliasAcceptanceBundle({
     requestedProductAcceptance.formalAdmission === true &&
     requestedProductAcceptance.optimizationReady === true;
   const productAcceptanceBindingComplete =
+    signoffRecordVerified &&
     /^[0-9a-f]{40}$/.test(acceptanceCommit) &&
     requestedAcceptanceSubjectHash === acceptanceSubjectHash &&
     acceptanceRecordIdentity === expectedAcceptanceRecordIdentity;

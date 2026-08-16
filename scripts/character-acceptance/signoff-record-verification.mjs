@@ -156,3 +156,94 @@ function computeSpecSha256(projectRoot) {
     return '';
   }
 }
+
+// 对象级（STARBORN）signoff record 认证：与角色级同构——要求
+// acceptanceCommit 指向的 git 对象确实包含 signoff record，且 record 的
+// subject/package/harness hash 与当前派生一致。
+export function verifyOptimizationObjectSignoffRecord(
+  recipe,
+  { projectRoot }
+) {
+  const issues = [];
+  const pva = recipe?.productVisualAcceptance ?? {};
+  const status = String(pva.status ?? 'pending');
+  const acceptanceCommit = String(pva.acceptanceCommit ?? '');
+  const recordPath = String(pva.signoffRecordPath ?? '');
+  const recordSha256 = String(pva.signoffRecordSha256 ?? '');
+  const authentication = {
+    contractName: 'AzPrOptimizationObjectSignoffRecordAuthentication',
+    status: 'pending',
+    acceptanceCommit: acceptanceCommit || null,
+    signoffRecordPath: recordPath || null,
+    recordSha256: recordSha256 || null,
+    issues: [],
+  };
+
+  if (status !== 'accepted') {
+    return { verified: false, issues: ['signoff-record-not-requested'], authentication };
+  }
+  if (!/^[0-9a-f]{40}$/.test(acceptanceCommit)) {
+    issues.push('signoff-record-commit-invalid');
+  }
+  if (!recordPath || !/^[0-9a-f]{64}$/.test(recordSha256)) {
+    issues.push('signoff-record-reference-invalid');
+  }
+  if (issues.length) {
+    authentication.issues = [...issues];
+    return { verified: false, issues, authentication };
+  }
+
+  let recordBytes = null;
+  try {
+    recordBytes = execFileSync(
+      'git',
+      ['show', `${acceptanceCommit}:${recordPath}`],
+      { cwd: projectRoot, encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'] }
+    );
+  } catch (error) {
+    issues.push('signoff-record-missing-in-commit:' + String(error?.status ?? 'git-error'));
+  }
+  if (recordBytes == null) {
+    authentication.issues = [...issues];
+    return { verified: false, issues, authentication };
+  }
+  const actualSha256 = createHash('sha256').update(recordBytes).digest('hex');
+  if (actualSha256 !== recordSha256) {
+    issues.push('signoff-record-sha256-mismatch');
+  }
+  let record = null;
+  try {
+    record = JSON.parse(recordBytes.toString('utf8'));
+  } catch (error) {
+    issues.push('signoff-record-invalid-json');
+  }
+  if (record != null) {
+    const currentPackage = readMechanicsPackageHash(projectRoot);
+    if (String(record.mechanicsPackageHash ?? '') !== currentPackage) {
+      issues.push('signoff-record-mechanics-package-mismatch');
+    }
+    const currentSpecSha256 = computeSpecSha256(projectRoot);
+    if (String(record.captureHarness?.specSha256 ?? '') !== currentSpecSha256) {
+      issues.push('signoff-record-capture-harness-mismatch');
+    }
+    // 对象级 record 的 subject 由生成器派生，此处不比对（对象级协议
+    // 内部校验 subject 自洽）；但仍要求 evidence 与源 alias 匹配。
+    if (
+      String(record.optimizationObjectId ?? '') !==
+      String(recipe.optimizationObjectId ?? '')
+    ) {
+      issues.push('signoff-record-object-mismatch');
+    }
+  }
+
+  authentication.recordPath = recordPath;
+  authentication.recordSha256 = recordSha256;
+  authentication.acceptanceCommit = acceptanceCommit;
+  authentication.status = issues.length ? 'invalid' : 'verified';
+  authentication.issues = issues;
+  return {
+    verified: issues.length === 0,
+    issues,
+    authentication,
+  };
+}

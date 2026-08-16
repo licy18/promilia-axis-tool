@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateOptimizationObjectAliasAcceptanceBundle } from '../src/character-acceptance/optimizationObjectAliasProtocol.js';
+import { verifyOptimizationObjectSignoffRecord } from './character-acceptance/signoff-record-verification.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, '..');
@@ -30,9 +31,13 @@ const sources = await Promise.all(
     scenarioCases: await readProjectJson(alias.scenarioCasesPath),
   }))
 );
+const signoffVerification = verifyOptimizationObjectSignoffRecord(recipe, {
+  projectRoot,
+});
 const validation = validateOptimizationObjectAliasAcceptanceBundle({
   recipe,
   sources,
+  signoffRecordVerified: signoffVerification.verified,
 });
 const requestedProductAcceptance = recipe.productVisualAcceptance ?? {};
 const explicitlyPendingFailClosed =
