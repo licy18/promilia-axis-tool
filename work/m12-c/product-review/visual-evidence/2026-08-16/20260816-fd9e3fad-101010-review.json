@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12COwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 101010,
+  "optimizationObjectId": null,
+  "repositoryHead": "fd9e3fad",
+  "fixturePath": "fixtures/character-acceptance/101010-visual.json",
+  "fixtureSha256": "e593b96a79bffd66b7d444a9a03fb2448bb80438cfc2ba426c1471984a505a4b",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/101010.json",
+  "runtimePackageSha256": "c3a80b98b528e4ea73549e3f1e6f6d0c9a489e33378d2dc2c9c160c8683e79d7",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb",
+  "canonicalTraceHash": "532e9df6de5392b2",
+  "selectedAction": {
+    "actionId": "xiaoyu-enhanced-charged",
+    "controlSkillId": 10101010,
+    "subSkillIndex": 2
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 30 个机器输入 · 32 个实际执行项",
+    "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-101010-import-dialog.png",
+    "importScreenshotSha256": "5f509ce46bf6aa6bcc6449930a3f25f4159b91680966581ebad655cab5b3fb60",
+    "traceScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-101010-canonical-trace.png",
+    "traceScreenshotSha256": "4ac925b55d81bb7adbe7b510aa50b40dbfc02053caccb72b801d548fa33dbec5",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n强化重击\n1400F\n请求\ncharged-attack · 10101001\n实际形态\n强化重击\n执行\ncontrol 10101010 / sub 2\n占轴\n1400F - 1464F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n15\n重击爆发hit1\n20F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n629 · 未暴击\n重击爆发hit2\n31F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n1004 · 未暴击\n重击爆发hit2\n36F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n2522 · 未暴击\n重击爆发hit2\n41F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n3402 · 未暴击\n重击爆发hit2\n46F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n5334 · 未暴击\nHit 6\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 7\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 8\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 9\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 10\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 11\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 12\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 13\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 14\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 15\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n效果事务\n1\n玉未央\n施加 · actor-101010 · 1401F\n3 → 4 · 1 500 · 229 3,200 · {\"actionBindingIdentity\":\"actor|101010|101010...\n资源事务\n4\nactor-sp:actor-101003\nverified-hit-sp-shared-recovery · 8.0494 → 8.2884 / 100 · 1420F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 8.0494 → 8.2884 / 100 · 1420F\n无来源\nactor-sp:actor-101003\nverified-hit-sp-shared-recovery · 8.3115 → 8.5505 / 100 · 1431F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 8.3115 → 8.5505 / 100 · 1431F\n无来源\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n532e9df6de5392b2\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "trackedCleanAtCapture": {
+    "captureInputs": [
+      "fixtures/character-acceptance/",
+      "src/data/generated/verified-combat-mechanics-package.json",
+      "src/data/generated/character-combat-profiles/",
+      "e2e/m12-c-owner-visual-review.spec.js"
+    ],
+    "clean": true,
+    "note": "capture 输入（fixtures/mechanism package/profiles/spec）在捕获时 tracked clean；recipe 落账等非捕获输入允许存在未提交修改"
+  },
+  "captureHarness": {
+    "specPath": "e2e/m12-c-owner-visual-review.spec.js",
+    "specSha256": "33ee8c7fca384a8d905397fccf460be665e0d7c1fe46059c8062bb115165c8e9",
+    "specGitBlobSha1": "bdc44d350a0a112cf35c92239fefe7ae16845678"
+  },
+  "mechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb"
+}

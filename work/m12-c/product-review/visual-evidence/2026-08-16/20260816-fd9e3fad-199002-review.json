@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12COwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 199002,
+  "optimizationObjectId": "STARBORN",
+  "repositoryHead": "fd9e3fad",
+  "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
+  "fixtureSha256": "6398e5ed8cbeb9bf54ad19bfa746e0c5a5ab136589bd9d98e3d7b2a6c61993c9",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/199002.json",
+  "runtimePackageSha256": "000085913721a89c9e4aede3db4a0fe943fce11ab8e0ee587631acb5f596995f",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb",
+  "canonicalTraceHash": "e96dadeaf0c69577",
+  "selectedAction": {
+    "actionId": "starborn-m-thrust-a3",
+    "controlSkillId": 19900203,
+    "subSkillIndex": 0
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 48 个机器输入 · 50 个实际执行项",
+    "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-199002-import-dialog.png",
+    "importScreenshotSha256": "6cc64a80e5aaedf93acc73033aa5155cb8dcef7b13118344a87f6cae2636b755",
+    "traceScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-199002-canonical-trace.png",
+    "traceScreenshotSha256": "fbc033f9dccc5f1daaf27dfeec3c29ea442cbff40de6530160f60db8aa3821d3",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\nA3\n1588F\n请求\nnormal-attack · 19900201\n实际形态\nA3\n执行\ncontrol 19900203 / sub 0\n占轴\n1588F - 1636F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n6\nA3 | hit 1~2\n4F · HP -8 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.86%\n目标抗暴\n0%\n有效暴击率\n5.86%\n暴伤\n151.72%\n采样 ROLL\n7977 · 未暴击\nA3 | hit 1~2\n9F · HP -8 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.86%\n目标抗暴\n0%\n有效暴击率\n5.86%\n暴伤\n151.72%\n采样 ROLL\n3970 · 未暴击\nA3 | hit 1~2\n14F · HP -8 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.86%\n目标抗暴\n0%\n有效暴击率\n5.86%\n暴伤\n151.72%\n采样 ROLL\n4848 · 未暴击\nA3 | hit 3~5 | 左\n29F · HP -15 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.86%\n目标抗暴\n0%\n有效暴击率\n5.86%\n暴伤\n151.72%\n采样 ROLL\n2079 · 未暴击\nA3 | hit 3~5 | 左\n34F · HP -22 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.86%\n目标抗暴\n0%\n有效暴击率\n5.86%\n暴伤\n151.72%\n采样 ROLL\n206 · 暴击\nA3 | hit 3~5 | 左\n39F · HP -15 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.86%\n目标抗暴\n0%\n有效暴击率\n5.86%\n暴伤\n151.72%\n采样 ROLL\n3684 · 未暴击\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\ne96dadeaf0c69577\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "trackedCleanAtCapture": {
+    "captureInputs": [
+      "fixtures/character-acceptance/",
+      "src/data/generated/verified-combat-mechanics-package.json",
+      "src/data/generated/character-combat-profiles/",
+      "e2e/m12-c-owner-visual-review.spec.js"
+    ],
+    "clean": true,
+    "note": "capture 输入（fixtures/mechanism package/profiles/spec）在捕获时 tracked clean；recipe 落账等非捕获输入允许存在未提交修改"
+  },
+  "captureHarness": {
+    "specPath": "e2e/m12-c-owner-visual-review.spec.js",
+    "specSha256": "33ee8c7fca384a8d905397fccf460be665e0d7c1fe46059c8062bb115165c8e9",
+    "specGitBlobSha1": "bdc44d350a0a112cf35c92239fefe7ae16845678"
+  },
+  "mechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb"
+}

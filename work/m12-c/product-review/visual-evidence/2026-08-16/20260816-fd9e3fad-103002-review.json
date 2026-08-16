@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12COwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 103002,
+  "optimizationObjectId": null,
+  "repositoryHead": "fd9e3fad",
+  "fixturePath": "fixtures/character-acceptance/103002-visual.json",
+  "fixtureSha256": "fae2041ab96d93a9d457dfcdc3e7288604ec984a23599a94364e3b5494083564",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/103002.json",
+  "runtimePackageSha256": "3c14f5ab96e4a0385547c7835a13e25e8574b4e5d352bb07290cff80ad73660d",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb",
+  "canonicalTraceHash": "1b9428463a24dd60",
+  "selectedAction": {
+    "actionId": "ruby-chain-e1",
+    "controlSkillId": 10300201,
+    "subSkillIndex": 1
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 10 个机器输入 · 10 个实际执行项",
+    "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-103002-import-dialog.png",
+    "importScreenshotSha256": "cc075ce46b74380f4ac9a49d49d89f634801b0bb9a8c37a01ddf227d9f4cbf7b",
+    "traceScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-103002-canonical-trace.png",
+    "traceScreenshotSha256": "555fe2d1da39fe0f463cd59777f97e8517c66d375249ed208ab39b08404d7c13",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n强化普攻 E1\n672F\n请求\nnormal-attack · 10300201\n实际形态\n强化普攻 E1\n执行\ncontrol 10300201 / sub 1\n占轴\n672F - 696F\n就绪\nready-with-unresolved-conditions\n来源状态\nruntime-dependent / scenario-assumed-zero-distance\n命中\n12\n红宝石 爆发普攻 hit1~3\n17F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n138 · 暴击\n红宝石 爆发普攻 hit1~3\n21F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n8516 · 未暴击\n红宝石 爆发普攻 hit1~3\n26F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n3866 · 未暴击\nHit 4\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 5\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 6\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 7\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 8\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 9\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 10\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 11\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 12\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n效果事务\n6\n以心燃焰\n施加 · actor-103002 · 672F\n0 → 1 · 229 20 · {\"actionBindingIdentity\":\"actor|103002|103002...\n调谐强度提升\n施加 · actor-103002 · 672F\n0 → 1 · 229 20 · {\"actionBindingIdentity\":\"actor|103002|103002...\n强化普攻标记4秒判断极限反击\n施加 · actor-103002 · 675F\n0 → 1 · {\"actionBindingIdentity\":\"ruby-enhanced-limit...\n强化普攻标记4秒判断极限反击\n到期 · actor-103002 · 915F\n1 → 0 · {\"actionBindingIdentity\":\"ruby-enhanced-limit...\n以心燃焰\n到期 · actor-103002 · 1572F\n1 → 0 · 229 20 · {\"actionBindingIdentity\":\"actor|103002|103002...\n调谐强度提升\n到期 · actor-103002 · 1572F\n1 → 0 · 229 20 · {\"actionBindingIdentity\":\"actor|103002|103002...\n效果区间\n3\n以心燃焰\nactor-103002 · 672F - 1572F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n调谐强度提升\nactor-103002 · 672F - 1572F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n强化普攻标记4秒判断极限反击\nactor-103002 · 675F - 915F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n资源事务\n1\nactor:103002:element:103002047\nconsume · 6 → 5 / 12 · 672F\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n1b9428463a24dd60\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "trackedCleanAtCapture": {
+    "captureInputs": [
+      "fixtures/character-acceptance/",
+      "src/data/generated/verified-combat-mechanics-package.json",
+      "src/data/generated/character-combat-profiles/",
+      "e2e/m12-c-owner-visual-review.spec.js"
+    ],
+    "clean": true,
+    "note": "capture 输入（fixtures/mechanism package/profiles/spec）在捕获时 tracked clean；recipe 落账等非捕获输入允许存在未提交修改"
+  },
+  "captureHarness": {
+    "specPath": "e2e/m12-c-owner-visual-review.spec.js",
+    "specSha256": "33ee8c7fca384a8d905397fccf460be665e0d7c1fe46059c8062bb115165c8e9",
+    "specGitBlobSha1": "bdc44d350a0a112cf35c92239fefe7ae16845678"
+  },
+  "mechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb"
+}
