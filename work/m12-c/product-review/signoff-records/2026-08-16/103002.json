@@ -3,20 +3,20 @@
   "contractName": "AzPrCharacterProductVisualSignoffRecord",
   "kind": "azpr-character-product-visual-signoff-record",
   "ownerId": 103002,
-  "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
-  "signoffTime": "2026-08-16T05:05:54.335Z",
+  "scenarioIdentity": "m11-d-103002-visual-acceptance",
+  "signoffTime": "2026-08-16T06:17:18.882Z",
   "signoffInstruction": "继续签收",
-  "repositoryHead": "654e00fc13ab8d5b0e5d8e9020b8665aedb1300f",
+  "repositoryHead": "fd9e3fad796ba616e57c769ed8bf6751d4f4f582",
   "mechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb",
   "captureHarness": {
     "specPath": "e2e/m12-c-owner-visual-review.spec.js",
-    "specSha256": "33ee8c7fca384a8d905397fccf460be665e0d7c1fe46059c8062bb115165c8e9",
-    "specGitBlobSha1": "bdc44d350a0a112cf35c92239fefe7ae16845678"
+    "specSha256": "d04455b0d5fd3764af8b9ecaa6154345b10bf62d58459e2e10a13b5df31f8cb3",
+    "specGitBlobSha1": "0c399cba14cc73659598e28b028ff09e4031daaa"
   },
   "canonicalTraceHash": "1b9428463a24dd60",
   "automatedEvidence": [
     {
-      "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+      "scenarioIdentity": "m11-d-103002-visual-acceptance",
       "evidenceKind": "workbench-playwright-screenshot",
       "status": "automated-workbench-import-passed",
       "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-103002-canonical-trace.png",
@@ -28,6 +28,6 @@
     }
   ],
   "qualificationSubjectHash": "0b8563900dafaac2",
-  "scenarioSetHash": "064ece71bcd82dea",
+  "scenarioSetHash": "f8cb92c8e2fae966",
   "recordIdentity": "character-product-acceptance:103002:654e00fc13ab8d5b0e5d8e9020b8665aedb1300f:0b8563900dafaac2"
 }

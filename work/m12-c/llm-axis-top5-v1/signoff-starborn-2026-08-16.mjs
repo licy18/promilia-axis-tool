@@ -38,12 +38,24 @@ function git(a) {
   }).trim();
 }
 
-const specBytes = fs.readFileSync('e2e/m12-c-owner-visual-review.spec.js');
-const specSha256 = createHash('sha256').update(specBytes).digest('hex');
+// spec SHA-256 必须用 git 规范化字节（capture commit 中的 blob，LF 规范化），
+// 不能用工作树字节（Windows CRLF 会污染哈希，Linux clean checkout 认证失败）。
+const CAPTURE_COMMIT = process.env.M12C_SIGNOFF_CAPTURE_COMMIT ?? '';
+if (!/^[0-9a-f]{40}$/.test(CAPTURE_COMMIT)) {
+  console.error('M12C_SIGNOFF_CAPTURE_COMMIT required (40-hex capture commit)');
+  process.exit(1);
+}
+const specSha256 = createHash('sha256')
+  .update(
+    execFileSync('git', ['show', `${CAPTURE_COMMIT}:e2e/m12-c-owner-visual-review.spec.js`], {
+      encoding: 'buffer',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    })
+  )
+  .digest('hex');
 const pkg = readJson(
   'src/data/generated/verified-combat-mechanics-package.json'
 );
-const repositoryHead = git(['rev-parse', 'HEAD']);
 const PREFIX = process.env.M12C_SIGNOFF_PREFIX ?? '20260816-fd9e3fad';
 const EVIDENCE_DIR = 'work/m12-c/product-review/visual-evidence/2026-08-16';
 
@@ -56,12 +68,14 @@ if (stage1) {
     const traceShot = `${EVIDENCE_DIR}/${PREFIX}-${ownerId}-canonical-trace.png`;
     const importShot = `${EVIDENCE_DIR}/${PREFIX}-${ownerId}-import-dialog.png`;
     const review = readJson(`${EVIDENCE_DIR}/${PREFIX}-${ownerId}-review.json`);
+    const fixture = readJson(String(alias.fixturePath));
+    // 场景身份来自证据 fixture 的真实 scenario.id（P1-2）
+    const scenarioIdentity = String(
+      fixture.scenario?.id ?? 'm11-d-' + ownerId + '-visual-acceptance'
+    );
     return {
       sourceCharacterId: ownerId,
-      scenarioIdentity: String(
-        recipe.productVisualAcceptance?.scenarioIdentities?.[0] ??
-          'm11-d-' + ownerId + '-visual-acceptance'
-      ),
+      scenarioIdentity,
       evidenceKind: 'workbench-playwright-screenshot',
       status: 'automated-workbench-import-passed',
       screenshotPath: traceShot.replaceAll('\\', '/'),
@@ -83,12 +97,12 @@ if (stage1) {
     ),
     signoffTime: new Date().toISOString(),
     signoffInstruction: process.env.M12C_SIGNOFF_INSTRUCTION ?? '继续签收',
-    repositoryHead,
+    repositoryHead: CAPTURE_COMMIT,
     mechanicsPackageHash: pkg.packageHash,
     captureHarness: {
       specPath: 'e2e/m12-c-owner-visual-review.spec.js',
       specSha256,
-      specGitBlobSha1: automatedEvidence[0] ? null : null,
+      specGitBlobSha1: git(['hash-object', 'e2e/m12-c-owner-visual-review.spec.js']),
     },
     automatedEvidence,
     acceptanceSubjectHash: null,

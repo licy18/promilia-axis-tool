@@ -38,12 +38,14 @@
       "e2e/m12-c-owner-visual-review.spec.js"
     ],
     "clean": true,
-    "note": "capture 输入（fixtures/mechanism package/profiles/spec）在捕获时 tracked clean；recipe 落账等非捕获输入允许存在未提交修改"
+    "dirtyCaptureInputs": [],
+    "note": "捕获输入（fixtures/mechanism package/profiles/spec）在捕获时的真实 git status 检查结果；recipe 落账等非捕获输入允许存在未提交修改"
   },
   "captureHarness": {
     "specPath": "e2e/m12-c-owner-visual-review.spec.js",
-    "specSha256": "33ee8c7fca384a8d905397fccf460be665e0d7c1fe46059c8062bb115165c8e9",
-    "specGitBlobSha1": "bdc44d350a0a112cf35c92239fefe7ae16845678"
+    "specSha256": "d04455b0d5fd3764af8b9ecaa6154345b10bf62d58459e2e10a13b5df31f8cb3",
+    "specGitBlobSha1": "0c399cba14cc73659598e28b028ff09e4031daaa",
+    "specSource": "git show fd9e3fad:e2e/m12-c-owner-visual-review.spec.js (LF-normalized blob bytes)"
   },
   "mechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb"
 }

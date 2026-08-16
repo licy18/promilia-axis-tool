@@ -59,8 +59,21 @@ function git(args, { allowFailure = false } = {}) {
   }
 }
 
-const specBytes = fs.readFileSync('e2e/m12-c-owner-visual-review.spec.js');
-const specSha256 = createHash('sha256').update(specBytes).digest('hex');
+// spec SHA-256 必须用 git 规范化字节（capture commit 中的 blob，LF 规范化），
+// 不能用工作树字节（Windows CRLF 会污染哈希，导致 Linux clean checkout 认证失败）。
+const CAPTURE_COMMIT = process.env.M12C_SIGNOFF_CAPTURE_COMMIT ?? '';
+function computeSpecSha256() {
+  if (!/^[0-9a-f]{40}$/.test(CAPTURE_COMMIT)) {
+    throw new Error('M12C_SIGNOFF_CAPTURE_COMMIT required (40-hex capture commit)');
+  }
+  const bytes = execFileSync(
+    'git',
+    ['show', `${CAPTURE_COMMIT}:e2e/m12-c-owner-visual-review.spec.js`],
+    { encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'] }
+  );
+  return createHash('sha256').update(bytes).digest('hex');
+}
+const specSha256 = computeSpecSha256();
 const pkg = readJson(
   'src/data/generated/verified-combat-mechanics-package.json'
 );
@@ -82,15 +95,19 @@ if (stage1) {
     const traceShot = `${EVIDENCE_DIR}/${PREFIX}-${ownerId}-canonical-trace.png`;
     const importShot = `${EVIDENCE_DIR}/${PREFIX}-${ownerId}-import-dialog.png`;
     const recipe = readJson(`${RECIPE_DIR}/${ownerId}.json`);
-    const scenarioIdentity = String(
-      recipe.productVisualAcceptance?.scenarioIdentities?.[0] ??
-        'm11-d-' + ownerId + '-visual-acceptance'
-    );
     const fixture = readJson(
       String(
         recipe.fixturePath ??
           `fixtures/character-acceptance/${ownerId}-visual.json`
       )
+    );
+    // 场景身份必须来自证据 fixture 的真实 scenario.id（P1-2）：record 声明的
+    // 签收场景必须与实际捕获截图的 fixture 一致，不能用 recipe 的旧声明
+    // （曾导致 103002 声称 reload-window-boundaries 但证据来自 visual fixture）。
+    const scenarioIdentity = String(
+      fixture.scenario?.id ??
+        recipe.productVisualAcceptance?.scenarioIdentities?.[0] ??
+        'm11-d-' + ownerId + '-visual-acceptance'
     );
     const record = {
       schemaVersion: 1,
@@ -100,12 +117,12 @@ if (stage1) {
       scenarioIdentity,
       signoffTime: new Date().toISOString(),
       signoffInstruction: process.env.M12C_SIGNOFF_INSTRUCTION ?? '继续签收',
-      repositoryHead,
+      repositoryHead: CAPTURE_COMMIT,
       mechanicsPackageHash: pkg.packageHash,
       captureHarness: {
         specPath: 'e2e/m12-c-owner-visual-review.spec.js',
         specSha256,
-        specGitBlobSha1: review.captureHarness?.specGitBlobSha1 ?? null,
+        specGitBlobSha1: git(['hash-object', 'e2e/m12-c-owner-visual-review.spec.js']),
       },
       canonicalTraceHash: review.canonicalTraceHash,
       automatedEvidence: [
@@ -143,6 +160,11 @@ if (stage2) {
     }
     const recipe = readJson(recipePath);
     const pva = recipe.productVisualAcceptance ?? {};
+    // 场景身份以 record（来自证据 fixture 真实 scenario.id）为准（P1-2）
+    const record1 = readJson(recordPath);
+    const evidenceScenarioIdentity = String(
+      record1.scenarioIdentity ?? 'm11-d-' + ownerId + '-visual-acceptance'
+    );
 
     // 证据 commit + 截图（保留 superseded 历史）
     pva.status = 'accepted';
@@ -152,7 +174,7 @@ if (stage2) {
     pva.recordIdentity = null;
     pva.qualificationSubjectHash = null;
     pva.scenarioSetHash = null;
-    pva.scenarioIdentities = pva.scenarioIdentities ?? [];
+    pva.scenarioIdentities = [evidenceScenarioIdentity];
     const traceShot = `${EVIDENCE_DIR}/${PREFIX}-${ownerId}-canonical-trace.png`;
     const priorEvidence = pva.automatedEvidence ?? [];
     const existingSuperseded = pva.supersededAutomatedEvidence ?? [];
@@ -165,10 +187,7 @@ if (stage2) {
     }
     pva.automatedEvidence = [
       {
-        scenarioIdentity: String(
-          pva.scenarioIdentities?.[0] ??
-            'm11-d-' + ownerId + '-visual-acceptance'
-        ),
+        scenarioIdentity: evidenceScenarioIdentity,
         evidenceKind: 'workbench-playwright-screenshot',
         status: 'automated-workbench-import-passed',
         screenshotPath: traceShot.replaceAll('\\', '/'),
