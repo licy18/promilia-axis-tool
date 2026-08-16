@@ -1,5 +1,16 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.0000000000000000 2026-08-16 15:30 签收链推送当前状态（用户决策：暂停协议级重构）
+
+- 三轮外部审查（27fd547f..c01c1e6f）已修复：签收链认证（signoff record + git show 读取 commit 内容）、证据可复现（harness 先提交 + review 记录真实 HEAD/spec SHA/trackedClean）、场景身份与 fixture 一致（10/10）、对象级 subject 认证、Prettier 18 文件、validator 单元测试（10 用例）、STARBORN manifest 携带 signoffRecordAuthentication。
+- **用户决策：暂停签收链协议级重构，推送当前状态。** 第三轮审查仍指出 4 个 P1 未闭合（详见下），当前提交**不能作为 Formal Search Admission 的 authority 前置**：
+  1. **record 绑定旧 harness**：10 份 record 的 repositoryHead/specSha256 指向 fd9e3fad（不含捕获前 tracked-clean 检查的 harness），新增 clean 检查未覆盖现有证据；需在 hardened harness 的 clean commit 上重捕。
+  2. **STARBORN evidence 非强认证**：对象级 evidence 无双射校验（fixturePath 未绑定 alias、截图/trace 只验正则），需协议级逐 alias 期望映射。
+  3. **对象级 preview subject 非独立派生**：`productAcceptanceBinding.acceptanceSubjectHash` 来自 recipe 自报字段而非协议计算值（协议 409 行的真值未暴露），需协议正式输出 bindingExpectation。
+  4. **clean 检查用 porcelain 解析有 bug**（trim 后 slice(3) 破坏路径解析、宽泛排除），需改用 `git diff --quiet` + `--porcelain=v1 -z`。
+- 推送后当前状态：10/10 owner + STARBORN 显示 `binding=verified` + `optReady=true` + `m12cLocked=false`，但**此 unlock 不作数**——按审查结论，签收链 authority 需在协议级重构 + hardened harness 重捕完成后重新建立。正式 Gate V2 / Formal Search Admission / fresh 搜索**不得**基于当前推送启动。
+- 后续（专门任务）：协议正式输出 bindingExpectation 并纳入 bundleHash → 对象级双射 → hardened harness clean commit 重捕 10/10 → 新 review/record/recipe → 重新落账 → 再跑 Gate V2。
+
 ## 0.000000000000000 2026-08-16 13:40 签收链认证修复（审查 P1-1/P1-2/P1-3 全闭）
 
 - 外部审查指出先前"真实重签"（237320ca）仍由脚本自动把旧证据绑定到当前 subject：acceptanceCommit 只是 40 位字符串、validator 不读取 commit 实际内容；截图声明 HEAD=81e2e56f 但捕获脚本在该 HEAD 之后才提交；Prettier 18 文件不合规。三项均已修复。
