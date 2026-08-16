@@ -31,8 +31,20 @@ const sources = await Promise.all(
     scenarioCases: await readProjectJson(alias.scenarioCasesPath),
   }))
 );
+// 对象级 signoff 认证（P1-3）：两遍派生。第一遍取当前 acceptanceSubjectHash，
+// 用 acceptanceCommit 指向的 git 对象读取并认证不可变 signoff record（要求
+// record 的 acceptanceSubjectHash 等于当前派生值——漂移后旧 record 失效）。
+const previewValidation = validateOptimizationObjectAliasAcceptanceBundle({
+  recipe,
+  sources,
+  signoffRecordVerified: false,
+});
+const previewSubjectHash =
+  previewValidation.bundle?.productAcceptanceBinding?.acceptanceSubjectHash ??
+  null;
 const signoffVerification = verifyOptimizationObjectSignoffRecord(recipe, {
   projectRoot,
+  acceptanceSubjectHash: previewSubjectHash,
 });
 const validation = validateOptimizationObjectAliasAcceptanceBundle({
   recipe,
