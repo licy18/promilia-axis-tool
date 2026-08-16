@@ -73,7 +73,7 @@
 ## 本轮签收落账（认证链）
 
 - 10/10 owner recipe `acceptanceCommit=365df368`（record commit）、`signoffRecordPath/Sha256` 指向 git 对象内不可变 signoff record；qualification subject / scenarioSetHash / recordIdentity 由 owner-only 权威生成器 binding expectation 回填。
-- STARBORN 对象级 recipe `acceptanceCommit=f50bd618`、subject `5d14de6c7098a469`、`formalAdmission=true`；199001/199002 仍只联合为一个 STARBORN 对象。
+- STARBORN 对象级 recipe `acceptanceCommit=f50bd618`、subject `3cb89f7631a6c8cf`、`formalAdmission=true`；199001/199002 仍只联合为一个 STARBORN 对象。
 - validator（scripts/character-acceptance/signoff-record-verification.mjs）用 `git show <commit>:<path>` 读取 record 实际内容并认证：内容 SHA == recipe.signoffRecordSha256、mechanicsPackageHash == 当前机制包、captureHarness.specSha256 == 当前 spec 的 git 规范化字节、qualificationSubjectHash == 当前派生、场景身份/fixture 与证据一致。
 - 10/10 owner `binding=verified` + `signoffRecordAuthentication.status=verified`、`optimization-ready`；STARBORN 同样 verified；101003 保持 pending/unready（非签收范围）。
 - 修复两处验收派生缺陷：112001 twoTwo isolated case 三个 break 结算断言按当前机制包真实语义更新（196f 触发 break / pre-break overlimit / post-break 独立 packet，旧期望 191f 为机制包更新前的 false fact）；11200113 GP加攻（112001256）effect 投影 path_id → elementId 归一化，消除最后 1 个 acceptance-scenario-gap。
@@ -82,5 +82,5 @@
 ## 产品签收结果
 
 - 10/10 owner/alias review 记录全部绑定本轮签收；signoff record commit 为 `365df3685b9b16a06ec57da452f05618915b2d11`（STARBORN `f50bd618c30f7cf3b4a98a4971512e97f28556a6`）。
-- `199001` 与 `199002` 保留各自角色级 manifest，对象级裁决统一绑定 `optimization-object-product-acceptance:STARBORN:f50bd618c30f7cf3b4a98a4971512e97f28556a6:5d14de6c7098a469`。
+- `199001` 与 `199002` 保留各自角色级 manifest，对象级裁决统一绑定 `optimization-object-product-acceptance:STARBORN:f50bd618c30f7cf3b4a98a4971512e97f28556a6:3cb89f7631a6c8cf`。
 - `101003` 不在本轮审阅或签收范围，继续保持 pending/unready。

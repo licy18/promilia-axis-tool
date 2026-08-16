@@ -2258,7 +2258,6 @@ function normalizeEffectIdentity(effectId) {
   if (typeof effectId !== 'string' || !effectId.startsWith('battle-element:')) {
     return effectId;
   }
-  const raw = effectId.slice('battle-element:'.length);
   const match = effectId.match(/^battle-element:(-?\d+)(\|.*)?$/);
   if (!match) return effectId;
   const numeric = Number(match[1]);
