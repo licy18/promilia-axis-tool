@@ -47,10 +47,10 @@
   "inputWindowBoundary": null,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-    "recordIdentity": "character-product-acceptance:112001:829d628bff9476c489d03e152e9377fd8c8e9e3c:314df2338dbf3ed9",
-    "qualificationSubjectHash": "314df2338dbf3ed9",
-    "scenarioSetHash": "f5f9f9a127f59a19",
+    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
+    "recordIdentity": "character-product-acceptance:112001:6833dc95557735f15cc68e74cf667c2acf90edc1:92d63428949df95d",
+    "qualificationSubjectHash": "92d63428949df95d",
+    "scenarioSetHash": "7560fee46ade998b",
     "scenarioIdentities": [
       "m12-b3-112001-assumption-v1-focused-acceptance"
     ],
@@ -59,8 +59,8 @@
         "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-112001-canonical-trace.png",
-        "screenshotSha256": "b1fafb2f80707ac320e105eaf939aba4d50988f9ed4bb54a582115144334f8a7"
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-112001-canonical-trace.png",
+        "screenshotSha256": "cc414cc1f011653ba144b5666b0a42329013a71c9be8dc5ba783c283c1372ae5"
       }
     ],
     "supersededAutomatedEvidence": [
@@ -72,8 +72,24 @@
         "fixtureSha256": "21d7c303df902e247c21b079f478f2dd528ba7250270d4f38ef63f3d9931ce63",
         "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-112001-canonical-trace.png",
         "screenshotSha256": "4367f0877b6d1dd6bbc019efdc3115d2f283e758f387ac0e8511967f14f5930e"
+      },
+      {
+        "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-112001-canonical-trace.png",
+        "screenshotSha256": "b1fafb2f80707ac320e105eaf939aba4d50988f9ed4bb54a582115144334f8a7"
+      },
+      {
+        "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-81e2e56f-112001-canonical-trace.png",
+        "screenshotSha256": "cc414cc1f011653ba144b5666b0a42329013a71c9be8dc5ba783c283c1372ae5"
       }
-    ]
+    ],
+    "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/112001.json",
+    "signoffRecordSha256": "ab20e02ea677313cff0633a69718d751d7faabba3ab15ab234d1ddbcad1dd1a5"
   },
   "runtimeInterruptionCases": [
     {
@@ -1255,14 +1271,14 @@
         },
         {
           "kind": "trace-query",
-          "assertionIdentity": "breaking-191f-packet-reads-pre-break-state",
+          "assertionIdentity": "breaking-196f-packet-reads-pre-break-state",
           "path": "damage",
           "where": {
             "actionId": "isolated-consumer-two-two",
-            "absoluteFrame": 191,
+            "absoluteFrame": 196,
             "eventType": "VERIFIED_COMBAT_HIT",
-            "elementId": 112001261,
-            "effectiveHpDamage": 29,
+            "elementId": 112001245,
+            "effectiveHpDamage": 116,
             "breakTriggered": true,
             "inBreakForHpDamage": false
           },
@@ -1278,16 +1294,16 @@
         },
         {
           "kind": "trace-query",
-          "assertionIdentity": "same-frame-overlimit-packet-reads-post-break-state",
+          "assertionIdentity": "pre-break-191f-overlimit-packet-reads-pre-break-state",
           "path": "damage",
           "where": {
             "actionId": "isolated-consumer-two-two",
             "absoluteFrame": 191,
             "eventType": "VERIFIED_TUNING_DAMAGE",
             "elementId": 296,
-            "effectiveHpDamage": 11856,
+            "effectiveHpDamage": 255,
             "breakTriggered": false,
-            "inBreakForHpDamage": true,
+            "inBreakForHpDamage": false,
             "formula.randomBranch": null,
             "formula.status": "verified-tuning-formula-applied"
           },
@@ -1301,11 +1317,11 @@
         },
         {
           "kind": "trace-query",
-          "assertionIdentity": "post-191f-independent-packet-remains-post-break",
+          "assertionIdentity": "post-break-independent-packet-reads-post-break-state",
           "path": "damage",
           "where": {
             "actionId": "isolated-consumer-two-two",
-            "absoluteFrame": 196,
+            "absoluteFrame": 202,
             "eventType": "VERIFIED_COMBAT_HIT",
             "elementId": 112001245,
             "effectiveHpDamage": 231,

@@ -4,10 +4,10 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-    "recordIdentity": "character-product-acceptance:199001:829d628bff9476c489d03e152e9377fd8c8e9e3c:e43c78ab47c7a985",
-    "qualificationSubjectHash": "e43c78ab47c7a985",
-    "scenarioSetHash": "b8eeecaa1e107312",
+    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
+    "recordIdentity": "character-product-acceptance:199001:6833dc95557735f15cc68e74cf667c2acf90edc1:106404c7cef7d83f",
+    "qualificationSubjectHash": "106404c7cef7d83f",
+    "scenarioSetHash": "ade88dad22bd1344",
     "scenarioIdentities": [
       "m12-b3-starborn-199001-focused-acceptance"
     ],
@@ -16,8 +16,8 @@
         "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-199001-canonical-trace.png",
-        "screenshotSha256": "8f18d4a83242598d8f9ca37c91a2e1b84cc09dd9172f8bf98c989eb1de86148d"
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-199001-canonical-trace.png",
+        "screenshotSha256": "740b7dfad958b74590eee48a9ac6c77345bcf2362b899605e146975bd205d692"
       }
     ],
     "supersededAutomatedEvidence": [
@@ -29,8 +29,24 @@
         "fixtureSha256": "2b7c00a9c2f78fda7b8321eccc960dddc3ce3bdacecea8dd5de8f22ef15d4b32",
         "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-199001-canonical-trace.png",
         "screenshotSha256": "2bc43e2d4b3976c8f7810a097c03d789ef91dd185feafe3517d782b9084a6b35"
+      },
+      {
+        "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-199001-canonical-trace.png",
+        "screenshotSha256": "8f18d4a83242598d8f9ca37c91a2e1b84cc09dd9172f8bf98c989eb1de86148d"
+      },
+      {
+        "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-81e2e56f-199001-canonical-trace.png",
+        "screenshotSha256": "740b7dfad958b74590eee48a9ac6c77345bcf2362b899605e146975bd205d692"
       }
-    ]
+    ],
+    "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/199001.json",
+    "signoffRecordSha256": "74c1a3727d9e57318a7dd4582818e6c2a838c3be56415f4fbedaafdf2724d820"
   },
   "ownerId": 199001,
   "optimizationObjectAcceptance": {

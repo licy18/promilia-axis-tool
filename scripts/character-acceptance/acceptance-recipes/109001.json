@@ -3,10 +3,10 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-    "recordIdentity": "character-product-acceptance:109001:829d628bff9476c489d03e152e9377fd8c8e9e3c:9c8a4cbb8c25a611",
-    "qualificationSubjectHash": "9c8a4cbb8c25a611",
-    "scenarioSetHash": "010a3eb1155f0260",
+    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
+    "recordIdentity": "character-product-acceptance:109001:6833dc95557735f15cc68e74cf667c2acf90edc1:7b296ee673083095",
+    "qualificationSubjectHash": "7b296ee673083095",
+    "scenarioSetHash": "d9da1baebed0c611",
     "scenarioIdentities": [
       "m11-d-109001-visual-acceptance"
     ],
@@ -15,8 +15,8 @@
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-109001-canonical-trace.png",
-        "screenshotSha256": "cfb5c179b6910e1e23c2f673a758019d3a42d65ad019810e1ebf21c3aadc099e"
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-109001-canonical-trace.png",
+        "screenshotSha256": "06ac256f80f76bc27831b32c9877573ef830ad7c1da5e25d236bb32b28d7705a"
       }
     ],
     "supersededAutomatedEvidence": [
@@ -28,8 +28,17 @@
         "fixtureSha256": "3512c5328d64de85aeb44930e646c1f361b9795da32fde607fbe42a497ba80cc",
         "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-109001-canonical-trace.png",
         "screenshotSha256": "06ac256f80f76bc27831b32c9877573ef830ad7c1da5e25d236bb32b28d7705a"
+      },
+      {
+        "scenarioIdentity": "m11-d-109001-visual-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-109001-canonical-trace.png",
+        "screenshotSha256": "cfb5c179b6910e1e23c2f673a758019d3a42d65ad019810e1ebf21c3aadc099e"
       }
-    ]
+    ],
+    "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/109001.json",
+    "signoffRecordSha256": "99d6beda54f1a8bac9533bd5b35421a00fc5edb5f2bdb1ed6d10915a1e00f2e0"
   },
   "ownerId": 109001,
   "fixturePath": "fixtures/character-acceptance/109001-visual.json",

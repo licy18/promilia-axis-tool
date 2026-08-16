@@ -4,18 +4,20 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-    "recordIdentity": "character-product-acceptance:101010:829d628bff9476c489d03e152e9377fd8c8e9e3c:81fa9f4067851a48",
-    "qualificationSubjectHash": "81fa9f4067851a48",
-    "scenarioSetHash": "f47ed3bbb4551a6b",
-    "scenarioIdentities": ["m11-d-101010-visual-acceptance"],
+    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
+    "recordIdentity": "character-product-acceptance:101010:6833dc95557735f15cc68e74cf667c2acf90edc1:1f89665fc50102a4",
+    "qualificationSubjectHash": "1f89665fc50102a4",
+    "scenarioSetHash": "ec225ebcb25647d7",
+    "scenarioIdentities": [
+      "m11-d-101010-visual-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-101010-visual-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-canonical-trace.png",
-        "screenshotSha256": "9c75dc7c59e298be2eeebb7327a412fa11da38524c9f883049dee33dc929c977"
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-101010-canonical-trace.png",
+        "screenshotSha256": "4ac925b55d81bb7adbe7b510aa50b40dbfc02053caccb72b801d548fa33dbec5"
       }
     ],
     "supersededAutomatedEvidence": [
@@ -27,12 +29,30 @@
         "fixtureSha256": "0b9128883b509b8c7cd0a096b9d9c36ad7f5407a74864a9d1b6b21ff8d2a914a",
         "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-101010-canonical-trace.png",
         "screenshotSha256": "05005798c185bf4c7bff789f2256694317e0fc336eea65c248364bb173a66cfa"
+      },
+      {
+        "scenarioIdentity": "m11-d-101010-visual-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-canonical-trace.png",
+        "screenshotSha256": "9c75dc7c59e298be2eeebb7327a412fa11da38524c9f883049dee33dc929c977"
+      },
+      {
+        "scenarioIdentity": "m11-d-101010-visual-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-81e2e56f-101010-canonical-trace.png",
+        "screenshotSha256": "4ac925b55d81bb7adbe7b510aa50b40dbfc02053caccb72b801d548fa33dbec5"
       }
-    ]
+    ],
+    "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/101010.json",
+    "signoffRecordSha256": "3773f6bb3ba2098f651d3b96e7b7fef0be2c94ac3f74fbae4588b9e58d6e9f9b"
   },
   "ownerId": 101010,
   "fixturePath": "fixtures/character-acceptance/101010-visual.json",
-  "goldenReports": ["reports/m10/101010/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/101010/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10101062,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -136,8 +156,15 @@
     "operationPath": "payload.operation",
     "timePath": "timeMs",
     "durationMs": 10000,
-    "requiredOperations": ["transform", "refresh", "expire"],
-    "startOperations": ["transform", "refresh"],
+    "requiredOperations": [
+      "transform",
+      "refresh",
+      "expire"
+    ],
+    "startOperations": [
+      "transform",
+      "refresh"
+    ],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -222,7 +249,9 @@
           }
         }
       ],
-      "requiredExecutableActionIds": ["negative-window-before-source"],
+      "requiredExecutableActionIds": [
+        "negative-window-before-source"
+      ],
       "expectedIssue": {
         "actionId": "negative-window-start-minus-one",
         "code": "machine-axis-action-not-executable",
@@ -335,7 +364,16 @@
       "expectation": {
         "count": 8,
         "orderedValues": {
-          "absoluteFrame": [1125, 1125, 1129, 1129, 1133, 1133, 1137, 1137],
+          "absoluteFrame": [
+            1125,
+            1125,
+            1129,
+            1129,
+            1133,
+            1133,
+            1137,
+            1137
+          ],
           "actorId": [
             "actor-103002",
             "actor-101003",
@@ -347,8 +385,14 @@
             "actor-101003"
           ],
           "change": [
-            0.299988, 0.299988, 0.299988, 0.299988, 0.299988, 0.299988,
-            0.299988, 0.299988
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988
           ]
         }
       }
@@ -448,10 +492,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [272, 278, 284],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                272,
+                278,
+                284
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },
@@ -519,10 +579,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [219, 225, 231],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                219,
+                225,
+                231
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },

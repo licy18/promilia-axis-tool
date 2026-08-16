@@ -190,22 +190,37 @@ if (stage2) {
 
 // ---------- 阶段 3：用 git show 计算 record 真实 SHA 回填 recipe ----------
 if (stage3) {
+  const recordCommit = process.env.M12C_SIGNOFF_RECORD_COMMIT ?? EVIDENCE_COMMIT;
+  if (!/^[0-9a-f]{40}$/.test(recordCommit)) {
+    console.error('M12C_SIGNOFF_RECORD_COMMIT required (40-hex record commit)');
+    process.exit(1);
+  }
   for (const ownerId of owners) {
     const recordPath = path.join(RECORD_DIR, `${ownerId}.json`);
     const recipePath = `${RECIPE_DIR}/${ownerId}.json`;
     const recordRelative = recordPath.replaceAll('\\', '/');
     let recordBytes = null;
     try {
-      recordBytes = execFileSync('git', ['show', `${EVIDENCE_COMMIT}:${recordRelative}`], {
+      recordBytes = execFileSync('git', ['show', `${recordCommit}:${recordRelative}`], {
         encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'],
       });
     } catch (error) {
-      console.log(`${ownerId} FAIL: record not found in ${EVIDENCE_COMMIT.slice(0, 8)}:${recordRelative}`);
+      console.log(`${ownerId} FAIL: record not found in ${recordCommit.slice(0, 8)}:${recordRelative}`);
       continue;
     }
     const recordSha256 = createHash('sha256').update(recordBytes).digest('hex');
     const recipe = readJson(recipePath);
+    recipe.productVisualAcceptance.acceptanceCommit = recordCommit;
     recipe.productVisualAcceptance.signoffRecordSha256 = recordSha256;
+    // recordIdentity 含 commit 段 → 用 recordCommit 重算
+    const record = readJson(recordPath);
+    recipe.productVisualAcceptance.recordIdentity =
+      'character-product-acceptance:' +
+      ownerId +
+      ':' +
+      recordCommit +
+      ':' +
+      record.qualificationSubjectHash;
     writeJson(recipePath, recipe);
     // 重新生成验证
     execFileSync('node', ['scripts/generate-character-acceptance.mjs', '--owner', String(ownerId), '--write'], {
@@ -214,7 +229,7 @@ if (stage3) {
     const finalManifest = readJson(`reports/m11/character-acceptance/${ownerId}/manifest.json`);
     const finalPva = finalManifest.evidence?.productVisualAcceptance ?? {};
     console.log(
-      `${ownerId} stage3: recordSha=${recordSha256.slice(0, 12)} binding=${finalPva.bindingStatus} optReady=${finalManifest.maturity?.optimizationReady} auth=${finalPva.signoffRecordAuthentication?.status ?? 'n/a'}`
+      `${ownerId} stage3: commit=${recordCommit.slice(0, 8)} recordSha=${recordSha256.slice(0, 12)} binding=${finalPva.bindingStatus} optReady=${finalManifest.maturity?.optimizationReady} auth=${finalPva.signoffRecordAuthentication?.status ?? 'n/a'}`
     );
   }
   console.log('STAGE3 DONE');

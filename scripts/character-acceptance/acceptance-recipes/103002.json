@@ -4,18 +4,20 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-    "recordIdentity": "character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:1341fb521686b889",
-    "qualificationSubjectHash": "1341fb521686b889",
-    "scenarioSetHash": "772e03bd84be8025",
-    "scenarioIdentities": ["m12-b3-103002-reload-window-boundaries"],
+    "acceptanceCommit": "6833dc95557735f15cc68e74cf667c2acf90edc1",
+    "recordIdentity": "character-product-acceptance:103002:6833dc95557735f15cc68e74cf667c2acf90edc1:0b8563900dafaac2",
+    "qualificationSubjectHash": "0b8563900dafaac2",
+    "scenarioSetHash": "064ece71bcd82dea",
+    "scenarioIdentities": [
+      "m12-b3-103002-reload-window-boundaries"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-canonical-trace.png",
-        "screenshotSha256": "618014ef0caa89b54cd27921f82237b5e6bcf80f804f4c1c74b0f76a76561cd3"
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-103002-canonical-trace.png",
+        "screenshotSha256": "555fe2d1da39fe0f463cd59777f97e8517c66d375249ed208ab39b08404d7c13"
       }
     ],
     "supersededAutomatedEvidence": [
@@ -27,13 +29,31 @@
         "fixtureSha256": "c8270e9a3fda09698b14d821efe890c7552fc66bbff4e3e3b9a08612e55f2f84",
         "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-103002-canonical-trace.png",
         "screenshotSha256": "3e0a2b76d5037566369bd95cd6240f0c8628bb7fe2c71745b8392b007312b482"
+      },
+      {
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-canonical-trace.png",
+        "screenshotSha256": "618014ef0caa89b54cd27921f82237b5e6bcf80f804f4c1c74b0f76a76561cd3"
+      },
+      {
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-81e2e56f-103002-canonical-trace.png",
+        "screenshotSha256": "555fe2d1da39fe0f463cd59777f97e8517c66d375249ed208ab39b08404d7c13"
       }
-    ]
+    ],
+    "signoffRecordPath": "work/m12-c/product-review/signoff-records/2026-08-16/103002.json",
+    "signoffRecordSha256": "a010bbdd0f2207c4af9adda442e68e5c5dd42b882dba224e93fe1218f3eb3cb3"
   },
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
   "inputWindowBoundary": null,
-  "goldenReports": ["reports/m10/103002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/103002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
     {
@@ -211,7 +231,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -251,7 +273,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -299,7 +323,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -347,7 +373,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -409,7 +437,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -547,11 +579,26 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "triggerFrame": [173, 237],
-              "absoluteFrame": [1973, 2037],
-              "markCountAtJudgment": [1, 0],
-              "consumedCount": [1, 0],
-              "applied": [true, false],
+              "triggerFrame": [
+                173,
+                237
+              ],
+              "absoluteFrame": [
+                1973,
+                2037
+              ],
+              "markCountAtJudgment": [
+                1,
+                0
+              ],
+              "consumedCount": [
+                1,
+                0
+              ],
+              "applied": [
+                true,
+                false
+              ],
               "status": [
                 "verified-tuning-consume-applied",
                 "verified-tuning-consume-insufficient-marks"
@@ -667,7 +714,9 @@
               }
             }
           ],
-          "requiredExecutableActionIds": ["negative-reload-window-source"],
+          "requiredExecutableActionIds": [
+            "negative-reload-window-source"
+          ],
           "expectedIssue": {
             "actionId": "negative-reload-window-start-minus-one",
             "code": "machine-axis-action-not-executable",
@@ -685,7 +734,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -700,10 +753,17 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": ["expire", "apply"]
+              "operation": [
+                "expire",
+                "apply"
+              ]
             }
           },
-          "select": ["actionId", "operation", "absoluteFrame"]
+          "select": [
+            "actionId",
+            "operation",
+            "absoluteFrame"
+          ]
         }
       ]
     },
@@ -729,9 +789,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [
