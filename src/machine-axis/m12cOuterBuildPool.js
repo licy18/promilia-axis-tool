@@ -1,5 +1,5 @@
-import formalAdmissionBinding from '../../reports/m12/m12-b3-binding-matrix.json';
 import qualificationCatalog from '../data/generated/optimization-qualification-catalog.json';
+import verifiedMechanicsPackage from '../data/generated/verified-combat-mechanics-package.json';
 import {
   getOptimizationQualificationCatalog,
   validateOptimizationQualificationCatalog,
@@ -41,28 +41,11 @@ const SOURCE_CONFIG_ID_PREFIX = 'm12c-source-v1';
 const ACTOR_SLOT_ID_PREFIX = 'm12c-slot';
 const EXPECTED_TEAM_COUNT = 28;
 const EXPECTED_SOURCE_CONFIG_COUNT = 35;
-const EXPECTED_KIBO_COUNT = 43;
-// 搜索范围灵子数：资格域排除场景不可达灵子（10097 依赖 limit-counter，
-// 本搜索不排格挡/反击/闪避 → 62-1=61）。就绪/准入计数保持 62。
-const EXPECTED_SEARCH_SOUL_ESSENCE_COUNT = 61;
-const EXPECTED_ADMITTED_SOUL_ESSENCE_COUNT = 62;
-const EXPECTED_GLOBAL_EQUIPMENT_COUNT = 137;
-const EXPECTED_SET_SKILL_COUNT = 12;
-const EXPECTED_M12C_EQUIPMENT_COUNT_BY_SLOT = Object.freeze({
-  weapon: 17,
-  top: 9,
-  bottom: 9,
-  earring: 9,
-  ring: 9,
-});
-const EXPECTED_M12C_EQUIPMENT_COUNT = 53;
-
 const AUTHORITATIVE_QUALIFICATION_HASHES = deepFreeze(
   extractQualificationAuthority(qualificationCatalog)
 );
-const AUTHORITATIVE_FORMAL_ADMISSION_HASH =
-  formalAdmissionBinding.bindingMatrixHash;
-
+const AUTHORITATIVE_VERIFIED_MECHANICS_PACKAGE_HASH =
+  verifiedMechanicsPackage.packageHash;
 export class M12cOuterBuildPoolError extends Error {
   constructor(message, issues = []) {
     super(message);
@@ -73,7 +56,7 @@ export class M12cOuterBuildPoolError extends Error {
 
 export function validateM12cOuterBuildAuthority({
   qualification = getOptimizationQualificationCatalog(),
-  admissionBinding = formalAdmissionBinding,
+  admissionBinding = null,
 } = {}) {
   const issues = [];
   const qualificationValidation =
@@ -91,45 +74,10 @@ export function validateM12cOuterBuildAuthority({
     }
   }
 
-  const expectedReadyCounts = qualification?.summary?.optimizationReadyCounts;
-  const expectedCounts = {
-    character: 9,
-    kibo: EXPECTED_KIBO_COUNT,
-    'soul-essence': EXPECTED_ADMITTED_SOUL_ESSENCE_COUNT,
-    equipment: EXPECTED_GLOBAL_EQUIPMENT_COUNT,
-    'set-skill': EXPECTED_SET_SKILL_COUNT,
-  };
-  for (const [kind, expected] of Object.entries(expectedCounts)) {
-    if (Number(expectedReadyCounts?.[kind]) !== expected) {
-      issues.push(`m12c-outer-qualification-ready-count-invalid:${kind}`);
-    }
-  }
-  if (
-    qualification?.summary?.formalOptimizationUnlocked !== true ||
-    qualification?.summary?.m12cLocked !== false
-  ) {
-    issues.push('m12c-outer-qualification-stage-locked');
-  }
-
-  const admittedCharacters = normalizeOptimizationObjectIds(
-    qualification?.admission?.characters ?? []
-  );
-  const expectedCharacters = normalizeOptimizationObjectIds([
-    M12C_REQUIRED_OPTIMIZATION_OBJECT_ID,
-    ...M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS,
-  ]);
-  if (
-    hashCanonicalValue(admittedCharacters) !==
-    hashCanonicalValue(expectedCharacters)
-  ) {
-    issues.push('m12c-outer-character-admission-mismatch');
-  }
-
-  const formalBindingIssues = validateFormalAdmissionBinding(
+  const productReleaseIssues = validateFormalAdmissionBinding(
     admissionBinding,
     qualification
   );
-  issues.push(...formalBindingIssues);
 
   const fixedProfile = qualification?.cultivation?.fixedOptimizationProfile;
   if (!isFixedM12cCultivationProfile(fixedProfile)) {
@@ -142,9 +90,16 @@ export function validateM12cOuterBuildAuthority({
     issues: uniqueIssues,
     authority: {
       ...authority,
-      formalAdmissionBindingHash: admissionBinding?.bindingMatrixHash ?? null,
       verifiedMechanicsPackageHash:
-        admissionBinding?.hashes?.verifiedMechanicsPackageHash ?? null,
+        AUTHORITATIVE_VERIFIED_MECHANICS_PACKAGE_HASH,
+      searchAdmissionPolicy: 'headless-data-snapshot-v1',
+    },
+    productReleaseAdvisory: {
+      ready: productReleaseIssues.length === 0,
+      status: productReleaseIssues.length === 0 ? 'ready' : 'blocked',
+      blockingForHeadlessSearch: false,
+      issues: productReleaseIssues,
+      bindingMatrixHash: admissionBinding?.bindingMatrixHash ?? null,
     },
   };
 }
@@ -152,7 +107,7 @@ export function validateM12cOuterBuildAuthority({
 export function createM12cTeamCatalog(options = {}) {
   const qualification =
     options.qualification ?? getOptimizationQualificationCatalog();
-  const admissionBinding = options.admissionBinding ?? formalAdmissionBinding;
+  const admissionBinding = options.admissionBinding ?? null;
   const authorityValidation = validateM12cOuterBuildAuthority({
     qualification,
     admissionBinding,
@@ -255,7 +210,7 @@ export function resolveM12cTeamSourceConfig(input, options = {}) {
 export function createM12cOuterBuildPool(options = {}) {
   const qualification =
     options.qualification ?? getOptimizationQualificationCatalog();
-  const admissionBinding = options.admissionBinding ?? formalAdmissionBinding;
+  const admissionBinding = options.admissionBinding ?? null;
   const authorityValidation = validateM12cOuterBuildAuthority({
     qualification,
     admissionBinding,
@@ -705,7 +660,7 @@ export function deriveM12cSetBonuses(
       const threshold = pool.domains.setSkillThresholds.find(
         row => row.setId === setId && row.pieces === pieces
       );
-      if (!threshold?.qualificationReady) {
+      if (!threshold?.searchEligible) {
         issues.push(`m12c-set-threshold-unscoreable:${setId}:${pieces}`);
         continue;
       }
@@ -850,35 +805,21 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
       record,
     ])
   );
-  const kiboIds = [...qualification.admission.kibos]
+  const kiboIds = qualification.records
+    .filter(record => record?.objectKind === 'kibo')
+    .map(record => record.objectId)
     .map(Number)
     .sort(numberSort);
-  // 搜索域 = 资格装配域（cultivation.soulEssence.soulEssenceIds，已排除
-  // 场景不可达灵子）∩ admission 准入列表；admission 缺失时退回准入全量。
-  const admittedSoulEssenceIdSet = new Set(
-    (qualification.admission.soulEssences ?? []).map(Number)
-  );
+  // 搜索域直接使用当前数据快照里的场景装配域；产品视觉签收不裁剪搜索空间。
   const scopedSoulEssenceIds =
     qualification.cultivation?.soulEssence?.soulEssenceIds ?? [];
-  const soulEssenceIds = (
-    scopedSoulEssenceIds.length > 0
-      ? scopedSoulEssenceIds.filter(id =>
-          admittedSoulEssenceIdSet.has(Number(id))
-        )
-      : [...admittedSoulEssenceIdSet]
-  )
-    .map(Number)
-    .sort(numberSort);
+  const soulEssenceIds = scopedSoulEssenceIds.map(Number).sort(numberSort);
   const equipmentProfiles = qualification.cultivation.equipment.profiles;
   const fixedEquipment =
     qualification.cultivation.fixedOptimizationProfile.equipment;
-  const admittedEquipmentIds = new Set(
-    qualification.admission.equipment.map(Number)
-  );
   const equipment = equipmentProfiles
     .filter(
       profile =>
-        admittedEquipmentIds.has(Number(profile.equipmentId)) &&
         Number(profile.rarity) === Number(fixedEquipment.rarity) &&
         Number(profile.maximumEnhancementLevel) >=
           Number(fixedEquipment.enhancementLevel)
@@ -937,7 +878,6 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
       edge =>
         edge.actorObjectId === optimizationObjectId &&
         edge.compatible !== false &&
-        edge.qualificationReady === true &&
         edge.runtimeOwnerIdentity === 'actorSlotId+kiboId' &&
         admittedKiboIds.has(Number(edge.kiboId))
     );
@@ -945,7 +885,6 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
       edge =>
         edge.actorObjectId === optimizationObjectId &&
         edge.compatible === true &&
-        edge.qualificationReady === true &&
         admittedSoulEssenceIds.has(Number(edge.soulEssenceId))
     );
     const equipmentEdges = qualification.bindingMatrix.actorEquipment.filter(
@@ -954,7 +893,6 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
         return (
           edge.actorObjectId === optimizationObjectId &&
           edge.compatible === true &&
-          edge.qualificationReady === true &&
           profile != null &&
           edge.slot === profile.slot
         );
@@ -967,7 +905,7 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
         setId: edge.setId == null ? null : Number(edge.setId),
         compatible: true,
         reason: edge.reason,
-        qualificationReady: true,
+        searchEligible: true,
       }))
       .sort(compareEquipmentProfiles);
     const equipmentIdsBySlot = Object.fromEntries(
@@ -988,7 +926,7 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
         .map(edge => ({
           soulEssenceId: Number(edge.soulEssenceId),
           reason: edge.reason,
-          qualificationReady: edge.qualificationReady,
+          searchEligible: true,
         }))
         .sort((left, right) => left.soulEssenceId - right.soulEssenceId),
       equipmentIds: equipmentBindings.map(binding => binding.equipmentId),
@@ -1001,7 +939,7 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
       setId: Number(edge.setId),
       pieces: Number(edge.pieces),
       skillId: Number(edge.skillId),
-      qualificationReady: edge.qualificationReady === true,
+      searchEligible: true,
       sourceIdentity: edge.sourceIdentity,
       manifestHash: recordsByKey.get(`set-skill:${edge.setId}:${edge.pieces}`)
         ?.manifestHash,
@@ -1044,13 +982,7 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
     })
     .sort((left, right) => left.sourceCharacterId - right.sourceCharacterId);
 
-  validatePoolCensus({
-    kiboIds,
-    soulEssenceIds,
-    equipment,
-    equipmentIdsBySlot,
-    setSkillThresholds,
-  });
+  const equipmentCatalogCount = equipmentProfiles.length;
   return {
     schemaVersion: M12C_OUTER_BUILD_POOL_SCHEMA_VERSION,
     contractName: M12C_OUTER_BUILD_POOL_CONTRACT_NAME,
@@ -1073,7 +1005,7 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
       kiboIds,
       souls,
       soulEssenceIds,
-      globalEquipmentQualifiedCount: qualification.admission.equipment.length,
+      globalEquipmentQualifiedCount: equipmentCatalogCount,
       equipment,
       equipmentIdsBySlot,
       setSkillThresholds,
@@ -1102,7 +1034,7 @@ function createM12cOuterBuildPoolSnapshot({ qualification, authority }) {
       sourceConfigCount: teamCatalog.summary.sourceConfigCount,
       kiboCount: kiboIds.length,
       soulEssenceCount: soulEssenceIds.length,
-      globalEquipmentQualifiedCount: qualification.admission.equipment.length,
+      globalEquipmentQualifiedCount: equipmentCatalogCount,
       m12cEquipmentProjectionCount: equipment.length,
       m12cEquipmentProjectionCountBySlot: Object.fromEntries(
         M12C_EQUIPMENT_SLOTS.map(slot => [
@@ -1411,9 +1343,6 @@ function validateFormalAdmissionBinding(binding, qualification) {
   if (binding?.bindingMatrixHash !== expectedHash) {
     issues.push('m12c-outer-formal-admission-hash-invalid');
   }
-  if (binding?.bindingMatrixHash !== AUTHORITATIVE_FORMAL_ADMISSION_HASH) {
-    issues.push('m12c-outer-formal-admission-authority-mismatch');
-  }
   const expectedHashes = {
     rosterHash: qualification?.rosterHash,
     manifestsHash: qualification?.manifestsHash,
@@ -1459,42 +1388,6 @@ function isFixedM12cCultivationProfile(profile) {
     value.equipment?.bGoldSide === true &&
     Number(value.equipment?.maxValue) === 110
   );
-}
-
-function validatePoolCensus({
-  kiboIds,
-  soulEssenceIds,
-  equipment,
-  equipmentIdsBySlot,
-  setSkillThresholds,
-}) {
-  const issues = [];
-  if (kiboIds.length !== EXPECTED_KIBO_COUNT) {
-    issues.push('m12c-outer-kibo-census-mismatch');
-  }
-  if (soulEssenceIds.length !== EXPECTED_SEARCH_SOUL_ESSENCE_COUNT) {
-    issues.push('m12c-outer-soul-census-mismatch');
-  }
-  if (equipment.length !== EXPECTED_M12C_EQUIPMENT_COUNT) {
-    issues.push('m12c-outer-equipment-projection-census-mismatch');
-  }
-  for (const slot of M12C_EQUIPMENT_SLOTS) {
-    if (
-      equipmentIdsBySlot[slot].length !==
-      EXPECTED_M12C_EQUIPMENT_COUNT_BY_SLOT[slot]
-    ) {
-      issues.push(`m12c-outer-equipment-slot-census-mismatch:${slot}`);
-    }
-  }
-  if (setSkillThresholds.length !== EXPECTED_SET_SKILL_COUNT) {
-    issues.push('m12c-outer-set-skill-census-mismatch');
-  }
-  if (issues.length > 0) {
-    throw new M12cOuterBuildPoolError(
-      'M12-C outer component census mismatch',
-      issues
-    );
-  }
 }
 
 function extractQualificationAuthority(catalog) {

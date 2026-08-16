@@ -990,6 +990,18 @@ describe('verified target-state runtime', () => {
     expect(result.status).toBe('verified-target-state-runtime-ready');
     expect(result.summary.profileCount).toBe(0);
     expect(result.directSpEvents).toHaveLength(15);
+    expect(result.runtimeManagedDirectSpEffects).toEqual([
+      {
+        actionId: 'periodic-first',
+        elementId: 9010,
+        bindingIdentity: 'synthetic-periodic-sp',
+      },
+      {
+        actionId: 'periodic-refresh',
+        elementId: 9010,
+        bindingIdentity: 'synthetic-periodic-sp',
+      },
+    ]);
     expect(
       result.directSpEvents.map(event => [
         event.actionId,

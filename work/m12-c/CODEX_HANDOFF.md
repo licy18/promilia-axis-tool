@@ -1,5 +1,14 @@
 # AzPr M12-C 中央集成续接 Handoff
 
+## 2026-08-16 16:27 当前续接点：headless 搜索与产品视觉发布拆分
+
+- 不再修复四项产品 signoff P1 作为 heuristic 搜索前置；它们继续阻塞产品发布声明，但不阻塞无头搜索。
+- authority producer 从最终 clean pushed HEAD 运行一次 `npm run search:authority:verify`，不是 `release:verify`。必需 executed gates：`character-combat`、`kibo-headless`、`machine-axis-settlement`、`determinism`；descriptor 固定为 `work/m12-c/gates/latest-search-core-authority.json`。
+- Formal Search Admission 只阻断搜索核心合同；`productRelease` 是 advisory。角色 headless scope 直接从当前搜索合同取得 9 个 optimization object，只读验证各自 generated profile + canonical golden 与 mechanics package 的 hash 绑定；视觉、qualification、binding、acceptance manifest 缺失或陈旧均不阻塞。`STARBORN` 的 `199001/199002` 两个 alias 必须同时通过。
+- 108003 的 runtime-managed direct-SP 已与 raw effect 去重，当前 canonical profile/golden 的 owner/all-hero 回复量为 `17/37`；对应 determinism 定向回归 18 files / 278 tests PASS。轻量 authority 的四个子 gate 统一继承 8 GiB V8 heap，避免默认 4 GiB 的 character-combat OOM。
+- search consumer 仍不得建权，只读复核 descriptor/hash/HEAD/工作树/五指纹后创建唯一 fresh run。旧 run/config/checkpoint/results 不得恢复或复用；本轮只称 `AI-guided heuristic Top-5`，`formalRankingReady=false`、`clientParityReady=false`、`measuredClientParity=false`。
+- 下方历史 release/signoff 续接说明仅保留追溯，不再是当前搜索启动顺序。
+
 ## 2026-08-13 00:00 无人监管发布准入续接
 
 - clean `01a032ed1a59dd6bc8bb19f48df3067865d30d51` 上的第六次 release 已真实跨过五个独立 gate、247/247 files 与 2070/2070 tests、全部审计、1903-module build 和 64/64 production preview，且 runner outputs 恢复后 tracked postflight clean；但独立 Formal Search Admission 装载 live normal-input authority 时被原生 Node ESM 拒绝，因为 `verifiedNormalAttackInputAuthority.js` 对 `canonicalSerialization` 和 `timebase` 的两个相对 import 均缺 `.js` 后缀。record=`98956a0729a08c92e3e598857ff4f8fd3625cd072c8a8a6eb860a37be9a627b7`、status=`interrupted`、failureStage=`orchestration`，不得视为 release PASS 或 admission READY。两个后缀及真实 `node.exe` descriptor 导入回归已补齐；live v2 hash 仍为 `530396bf773cc439`，聚焦 21/21 PASS，bundle 仅同步模块原始字节 `30885→30891` 且三项预算全绿。应从新 clean HEAD 完整重跑。

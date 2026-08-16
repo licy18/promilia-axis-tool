@@ -32,6 +32,21 @@ const FIXED_INSTANCE = Object.freeze({
 });
 
 describe('M12-C outer team and build pool', () => {
+  it('keeps product binding optional for the headless search pool', () => {
+    const validation = validateM12cOuterBuildAuthority({
+      qualification: qualificationCatalog,
+      admissionBinding: null,
+    });
+
+    expect(validation.valid).toBe(true);
+    expect(validation.productReleaseAdvisory).toMatchObject({
+      ready: false,
+      status: 'blocked',
+      blockingForHeadlessSearch: false,
+      bindingMatrixHash: null,
+    });
+  });
+
   it('enumerates 28 canonical team identities and 35 source configs', () => {
     const catalog = createM12cTeamCatalog();
 
@@ -116,22 +131,18 @@ describe('M12-C outer team and build pool', () => {
     expect(nonArray.issues).toContain('m12c-team-object-count-invalid');
   });
 
-  it(
-    'materializes a scoreable canonical build for every one of the 35 source configs',
-    () => {
-      const pool = createM12cOuterBuildPool();
-      const builds = pool.teamCatalog.sourceConfigs.map(sourceConfig =>
-        createM12cBuildCandidate(createLegalSelection(pool, sourceConfig), {
-          pool,
-        })
-      );
+  it('materializes a scoreable canonical build for every one of the 35 source configs', () => {
+    const pool = createM12cOuterBuildPool();
+    const builds = pool.teamCatalog.sourceConfigs.map(sourceConfig =>
+      createM12cBuildCandidate(createLegalSelection(pool, sourceConfig), {
+        pool,
+      })
+    );
 
     expect(builds).toHaveLength(35);
     expect(builds.every(result => result.scoreable && result.build)).toBe(true);
     expect(new Set(builds.map(result => result.build.buildHash)).size).toBe(35);
-    },
-    30_000
-  );
+  }, 30_000);
 
   it('derives the qualified 43/61/137 catalogs and the 53-instance M12-C projection', () => {
     const pool = createM12cOuterBuildPool();
@@ -198,8 +209,7 @@ describe('M12-C outer team and build pool', () => {
               edge.actorObjectId === actorDomain.optimizationObjectId &&
               Number(edge.equipmentId) === profile.equipmentId &&
               edge.slot === profile.slot &&
-              edge.compatible === true &&
-              edge.qualificationReady === true
+              edge.compatible === true
           )
         )
         .map(profile => profile.equipmentId)
@@ -213,7 +223,7 @@ describe('M12-C outer team and build pool', () => {
         actorDomain.equipmentBindings.every(
           binding =>
             binding.compatible === true &&
-            binding.qualificationReady === true &&
+            binding.searchEligible === true &&
             binding.reason === 'public-equipment-slot-contract'
         )
       ).toBe(true);
@@ -251,9 +261,8 @@ describe('M12-C outer team and build pool', () => {
     expect(first.build.authority).toMatchObject({
       qualificationCatalogHash: qualificationCatalog.catalogHash,
       qualificationBindingMatrixHash: qualificationCatalog.bindingMatrixHash,
-      formalAdmissionBindingHash: formalAdmissionBinding.bindingMatrixHash,
-      verifiedMechanicsPackageHash:
-        formalAdmissionBinding.hashes.verifiedMechanicsPackageHash,
+      verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
+      searchAdmissionPolicy: 'headless-data-snapshot-v1',
     });
   });
 
@@ -582,7 +591,7 @@ describe('M12-C outer team and build pool', () => {
     }
   });
 
-  it('fails closed on forged qualification, binding, pool, and build hashes', () => {
+  it('fails closed on forged search data while keeping product binding advisory', () => {
     const forgedQualification = structuredClone(qualificationCatalog);
     forgedQualification.records.find(
       record => record.objectKind === 'kibo'
@@ -596,17 +605,19 @@ describe('M12-C outer team and build pool', () => {
         admissionBinding: formalAdmissionBinding,
       }).valid
     ).toBe(false);
-    expect(
-      validateM12cOuterBuildAuthority({
-        qualification: qualificationCatalog,
-        admissionBinding: forgedBinding,
-      }).issues
-    ).toEqual(
-      expect.arrayContaining([
+    const bindingAdvisory = validateM12cOuterBuildAuthority({
+      qualification: qualificationCatalog,
+      admissionBinding: forgedBinding,
+    });
+    expect(bindingAdvisory.valid).toBe(true);
+    expect(bindingAdvisory.productReleaseAdvisory).toMatchObject({
+      ready: false,
+      status: 'blocked',
+      blockingForHeadlessSearch: false,
+      issues: expect.arrayContaining([
         'm12c-outer-formal-admission-not-passed',
-        'm12c-outer-formal-admission-hash-invalid',
-      ])
-    );
+      ]),
+    });
 
     const pool = createM12cOuterBuildPool();
     const sourceConfig = nonStarbornSourceConfig(pool);

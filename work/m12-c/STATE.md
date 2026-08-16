@@ -1,5 +1,14 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0 2026-08-16 16:27 搜索准入与产品视觉发布门禁拆分
+
+- 用户决定停止让角色人工视觉签收反复阻塞无头搜索。产品发布链保持原强度：`optimizationReady`、visual acceptance、qualification product lock、E22 binding、full Vitest/build/preview 与 `release:verify` 继续用于发布，不得因搜索放行而宣称通过。
+- 新增独立 headless search boundary：角色范围直接来自当前 M12-C 搜索合同，逐对象只要求 generated profile 与 canonical golden 的验证、回放和 mechanics-package hash 绑定；人工截图/签收、qualification catalog、binding report 与 acceptance manifest 均不参与该判定，缺失也不阻塞。`STARBORN` 仍是一个 optimization object，并要求 `199001/199002` 两个 source alias 同时通过。
+- 新增轻量 producer 命令 `npm run search:authority:verify`：只执行 `character-combat`、`kibo-headless`、`machine-axis-settlement`、`determinism` 与新的 Formal Search Admission，输出 `work/m12-c/gates/latest-search-core-authority.json`。它不执行 visual acceptance、binding、全量 Vitest、build 或 preview。
+- `m12cOuterBuildPool` 不再用产品 signoff/binding 状态裁剪或阻断搜索域；binding 仅作为 `productReleaseAdvisory`。搜索按当前数据快照生成 Top-N，记录数据库及机制指纹，仍对 legality、canonical replay、finalScoreEligible、闭环/击杀 proof、HEAD/指纹漂移 fail closed。
+- 本节取代下方历史段落中“必须先完成全部视觉签收/完整 release 才能开始 heuristic 搜索”的旧顺序。旧 run、checkpoint、results 与旧 authority 仍永久隔离；新代码提交并推送后，先执行一次轻量 search authority，再由独立 consumer 创建唯一 fresh run。
+- 本批同时修复 108003 direct-SP 双结算：runtime-managed 的 action/element 会屏蔽同一 raw direct-SP，canonical profile/golden 由 `18/39` 更新为真实 `17/37`；定向 determinism 为 18 files / 278 tests PASS。Search Core Authority 子阶段统一使用 8 GiB heap，避免 character-combat generator 在默认 4 GiB 下 OOM。
+
 ## 0.0000000000000000 2026-08-16 15:30 签收链推送当前状态（用户决策：暂停协议级重构）
 
 - 三轮外部审查（27fd547f..c01c1e6f）已修复：签收链认证（signoff record + git show 读取 commit 内容）、证据可复现（harness 先提交 + review 记录真实 HEAD/spec SHA/trackedClean）、场景身份与 fixture 一致（10/10）、对象级 subject 认证、Prettier 18 文件、validator 单元测试（10 用例）、STARBORN manifest 携带 signoffRecordAuthentication。

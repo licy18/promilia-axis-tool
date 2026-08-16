@@ -90,6 +90,7 @@ export function applyVerifiedTargetStateRuntime({
   const actionEffectActivationResults = [];
   const periodicActivations = [];
   const actionHitActivationResults = [];
+  const runtimeManagedDirectSpEffects = new Map();
   let eventSequence = 0;
 
   for (const [actionId, resolution] of actionResolutionById) {
@@ -223,6 +224,15 @@ export function applyVerifiedTargetStateRuntime({
         Number(binding.subSkillIndex) !== subSkillIndex
       ) {
         continue;
+      }
+      const directSpElementId = Number(binding.directSp?.elementId);
+      if (Number.isInteger(directSpElementId)) {
+        const runtimeManagedKey = `${String(action.id)}\u0000${directSpElementId}`;
+        runtimeManagedDirectSpEffects.set(runtimeManagedKey, {
+          actionId: action.id,
+          elementId: directSpElementId,
+          bindingIdentity: binding.bindingIdentity ?? null,
+        });
       }
       if (binding.triggerKind === 'landed-hit') {
         for (const hitBinding of binding.hitBindings ?? []) {
@@ -692,6 +702,16 @@ export function applyVerifiedTargetStateRuntime({
     events,
     effectCommands,
     directSpEvents,
+    runtimeManagedDirectSpEffects: [
+      ...runtimeManagedDirectSpEffects.values(),
+    ].sort(
+      (left, right) =>
+        String(left.actionId).localeCompare(String(right.actionId)) ||
+        Number(left.elementId) - Number(right.elementId) ||
+        String(left.bindingIdentity ?? '').localeCompare(
+          String(right.bindingIdentity ?? '')
+        )
+    ),
     groupResults,
     actionEffectActivationResults,
     actionHitActivationResults,
@@ -720,6 +740,7 @@ export function applyVerifiedTargetStateRuntime({
       ).length,
       effectCommandCount: effectCommands.length,
       directSpEventCount: directSpEvents.length,
+      runtimeManagedDirectSpEffectCount: runtimeManagedDirectSpEffects.size,
     },
     ready: true,
     applied: true,
@@ -736,6 +757,7 @@ function createEmptyResult(actionResolutionById) {
     events: [],
     effectCommands: [],
     directSpEvents: [],
+    runtimeManagedDirectSpEffects: [],
     groupResults: [],
     actionEffectActivationResults: [],
     actionHitActivationResults: [],
@@ -751,6 +773,7 @@ function createEmptyResult(actionResolutionById) {
       suppressedActionHitConditionCount: 0,
       effectCommandCount: 0,
       directSpEventCount: 0,
+      runtimeManagedDirectSpEffectCount: 0,
     },
     ready: true,
     applied: true,

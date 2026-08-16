@@ -1,6 +1,4 @@
-import {
-  resolveVerifiedCombatActionMechanics,
-} from '../../data/verifiedCombatMechanicsPackage';
+import { resolveVerifiedCombatActionMechanics } from '../../data/verifiedCombatMechanicsPackage';
 import {
   ACTION_TYPES,
   EFFECT_OPERATIONS,
@@ -104,8 +102,7 @@ export function evaluateVerifiedBattleEffectConditions({
       if (!Number.isInteger(elementTag) || elementTag === 0) {
         return {
           matched: false,
-          reason:
-            'verified-effect-property-condition-element-tag-unresolved',
+          reason: 'verified-effect-property-condition-element-tag-unresolved',
         };
       }
       if (Number(condition.subConditionType) !== 0) {
@@ -120,8 +117,7 @@ export function evaluateVerifiedBattleEffectConditions({
       if (layers < Math.max(1, Number(condition.maxChangeCount) || 1)) {
         return {
           matched: false,
-          reason:
-            'verified-effect-property-condition-element-tag-not-matched',
+          reason: 'verified-effect-property-condition-element-tag-not-matched',
         };
       }
       continue;
@@ -138,16 +134,14 @@ export function evaluateVerifiedBattleEffectConditions({
       if (!Number.isInteger(elementId) || elementId === 0) {
         return {
           matched: false,
-          reason:
-            'verified-effect-property-condition-element-id-unresolved',
+          reason: 'verified-effect-property-condition-element-id-unresolved',
         };
       }
       const key = `${targetKind}:${targetId}`;
       if (!elementIdsHeld?.get(key)?.has(elementId)) {
         return {
           matched: false,
-          reason:
-            'verified-effect-property-condition-element-id-not-matched',
+          reason: 'verified-effect-property-condition-element-id-not-matched',
         };
       }
       continue;
@@ -165,8 +159,7 @@ export function evaluateVerifiedBattleEffectConditions({
       if (!Number.isInteger(layerElementId) || layerElementId === 0) {
         return {
           matched: false,
-          reason:
-            'verified-effect-property-condition-element-layer-unresolved',
+          reason: 'verified-effect-property-condition-element-layer-unresolved',
         };
       }
       const key = `${targetKind}:${targetId}`;
@@ -195,6 +188,7 @@ export function createVerifiedBattleEffectGeneration({
   mechanicsPackage = null,
   controlledActorTimeline = null,
   generatedDirectSpEvents = [],
+  runtimeManagedDirectSpEffects = [],
 } = {}) {
   const executionByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
@@ -211,10 +205,18 @@ export function createVerifiedBattleEffectGeneration({
   const elementTagLayers = new Map();
   const elementIdsHeld = new Map();
   const stackElementLayers = new Map();
+  const runtimeManagedDirectSpEffectKeys = new Set(
+    runtimeManagedDirectSpEffects
+      .filter(
+        entry =>
+          entry?.actionId != null && Number.isInteger(Number(entry?.elementId))
+      )
+      .map(entry => `${String(entry.actionId)}\u0000${Number(entry.elementId)}`)
+  );
   const suppressedWatcherEffectIdentities = new Set(
-    (
-      mechanicsPackage?.actionVariantGraph?.breakTriggerWatchers ?? []
-    ).flatMap(watcher => watcher.suppressedEffectIdentities ?? [])
+    (mechanicsPackage?.actionVariantGraph?.breakTriggerWatchers ?? []).flatMap(
+      watcher => watcher.suppressedEffectIdentities ?? []
+    )
   );
   const defaultWillHit =
     (scenario?.combatScenario?.projectile?.defaultWillHit ??
@@ -240,20 +242,14 @@ export function createVerifiedBattleEffectGeneration({
     // sourceIdentity）只处理一次；semantic 已覆盖的原始效果按 pathId 跳过。
     const semanticEffects = resolution.semanticEffects ?? [];
     const semanticPathIds = new Set(
-      semanticEffects
-        .map(effect => String(effect.pathId ?? ''))
-        .filter(Boolean)
+      semanticEffects.map(effect => String(effect.pathId ?? '')).filter(Boolean)
     );
     const mergedEffects = [
       ...semanticEffects,
       ...(resolution.effects ?? []).filter(
         effect =>
           effect.classification === 'applied' &&
-          !isConsumedBySemanticEffect(
-            effect,
-            semanticEffects,
-            semanticPathIds
-          )
+          !isConsumedBySemanticEffect(effect, semanticEffects, semanticPathIds)
       ),
     ];
     // 预扫"元素限定 pack"（如 500025"给雷属性角色注入调谐提升"）：这类
@@ -266,8 +262,7 @@ export function createVerifiedBattleEffectGeneration({
       mergedEffects
         .filter(
           effect =>
-            effect.kind === 'pack' &&
-            /(角色|元素|属性)/.test(effect.name ?? '')
+            effect.kind === 'pack' && /(角色|元素|属性)/.test(effect.name ?? '')
         )
         .map(effect => String(effect.pathId ?? ''))
         .filter(Boolean)
@@ -294,6 +289,14 @@ export function createVerifiedBattleEffectGeneration({
     for (const effect of runtimeEffects) {
       if (effect.role && effect.role !== 'gameplay-effect') continue;
       if (effect.tuningMark || effect.tuningOverlimit) continue;
+      if (
+        effect.directSp &&
+        runtimeManagedDirectSpEffectKeys.has(
+          `${String(action.id)}\u0000${Number(effect.elementId)}`
+        )
+      ) {
+        continue;
+      }
       // 合法跳过（在 target/value 解析之前）：damage 由 hit 系统结算；
       // inject/pack 是效果图内部组合/注入结构（子效果已单独列出）。
       // 注意：部分奇波恢复节点 kind='damage' 但携带 heal/shield
@@ -363,10 +366,7 @@ export function createVerifiedBattleEffectGeneration({
         }
         // 普通 damage 由 hit 系统结算；DoT 声明（无 damage 字段 + 生命周期
         // 时长）但未识别为周期伤害时，记录 known-gap（不得静默当作普通 hit）。
-        if (
-          !effect.damage &&
-          Number(effect.lifecycle?.durationMs) > 0
-        ) {
+        if (!effect.damage && Number(effect.lifecycle?.durationMs) > 0) {
           knownGaps.push({
             actionId: action.id,
             effectIdentity: resolveEffectIdentity(effect),
@@ -380,7 +380,10 @@ export function createVerifiedBattleEffectGeneration({
       if (effect.kind === 'inject' || effect.kind === 'pack') {
         // pack 的元素限定（如 500025"对雷属性角色注入调谐提升"）尚无
         // 结构化字段，子效果按 team-actors 全量展开，记录 known-gap。
-        if (effect.kind === 'pack' && /(角色|元素|属性)/.test(effect.name ?? '')) {
+        if (
+          effect.kind === 'pack' &&
+          /(角色|元素|属性)/.test(effect.name ?? '')
+        ) {
           knownGaps.push({
             actionId: action.id,
             effectIdentity: resolveEffectIdentity(effect),
@@ -397,8 +400,10 @@ export function createVerifiedBattleEffectGeneration({
       if (
         elementLimitedPackPathIds.size > 0 &&
         Array.isArray(effect.relationPath) &&
-        effect.relationPath.some(
-          edge => elementLimitedPackPathIds.has(String(edge.from ?? '').replace(/^element:/, ''))
+        effect.relationPath.some(edge =>
+          elementLimitedPackPathIds.has(
+            String(edge.from ?? '').replace(/^element:/, '')
+          )
         )
       ) {
         knownGaps.push({
@@ -651,7 +656,8 @@ function isConsumedBySemanticEffect(effect, semanticEffects, semanticPathIds) {
   return false;
 }
 
-function isSuppressedBreakWatcherEffect(effect, suppressedIdentities) {  if (suppressedIdentities.size === 0) return false;
+function isSuppressedBreakWatcherEffect(effect, suppressedIdentities) {
+  if (suppressedIdentities.size === 0) return false;
   if (
     suppressedIdentities.has(effect?.effectIdentity) ||
     suppressedIdentities.has(effect?.semanticIdentity)
@@ -737,12 +743,11 @@ function createPropertyEffectCommand({
   resolution,
 }) {
   const effectIdentity = resolveEffectIdentity(effect);
-  const triggerSequencePath =
-    resolveStrictSameFrameEffectSequencePath({
-      action,
-      effect,
-      resolution,
-    });
+  const triggerSequencePath = resolveStrictSameFrameEffectSequencePath({
+    action,
+    effect,
+    resolution,
+  });
   const effectDisplay = createBattlePropertyEffectDisplayLabel({
     sourceText: effect.displayLabel ?? effect.name,
     effectKind: effect.kind,
@@ -1104,8 +1109,7 @@ function createVerifiedDotCommand({
       rootNode?.lifecycle?.combineNumber ??
         rootNode?.lifecycle?.maxStacks ??
         effect.lifecycle?.maxStacks
-    ) ??
-    3;
+    ) ?? 3;
   const elementalType = Number(
     effect.damage?.elementalType ??
       node?.damage?.elementalType ??
@@ -1144,7 +1148,9 @@ function createVerifiedDotCommand({
     ratioAtLevel,
     valueByLevel,
     formula: {
-      baseFunctionId: Number(effect.formula?.baseFunctionId ?? node?.formula?.baseFunctionId),
+      baseFunctionId: Number(
+        effect.formula?.baseFunctionId ?? node?.formula?.baseFunctionId
+      ),
       baseExpression:
         effect.formula?.baseExpression ?? node?.formula?.baseExpression ?? null,
     },

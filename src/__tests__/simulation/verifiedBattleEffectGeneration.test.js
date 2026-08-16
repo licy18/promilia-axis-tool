@@ -84,8 +84,12 @@ describe('verified Battle effect generation', () => {
       reason:
         'verified-effect-property-condition-element-tag-target-unresolved',
     });
-    const elementTagLayers = new Map([['actor:actor-101010', new Map([[54, 2]])]]);
-    const elementIdsHeld = new Map([['actor:actor-101010', new Set([500206002])]]);
+    const elementTagLayers = new Map([
+      ['actor:actor-101010', new Map([[54, 2]])],
+    ]);
+    const elementIdsHeld = new Map([
+      ['actor:actor-101010', new Set([500206002])],
+    ]);
     expect(
       evaluateVerifiedBattleEffectConditions({
         conditions: [
@@ -123,8 +127,7 @@ describe('verified Battle effect generation', () => {
       })
     ).toMatchObject({
       matched: false,
-      reason:
-        'verified-effect-property-condition-element-tag-not-matched',
+      reason: 'verified-effect-property-condition-element-tag-not-matched',
     });
     expect(
       evaluateVerifiedBattleEffectConditions({
@@ -156,8 +159,7 @@ describe('verified Battle effect generation', () => {
       })
     ).toMatchObject({
       matched: false,
-      reason:
-        'verified-effect-property-condition-element-id-not-matched',
+      reason: 'verified-effect-property-condition-element-id-not-matched',
     });
     const stackElementLayers = new Map([
       ['actor:actor-101010', new Map([[750, 3]])],
@@ -187,8 +189,7 @@ describe('verified Battle effect generation', () => {
       })
     ).toMatchObject({
       matched: false,
-      reason:
-        'verified-effect-property-condition-element-layer-not-matched',
+      reason: 'verified-effect-property-condition-element-layer-not-matched',
     });
     expect(
       evaluateVerifiedBattleEffectConditions({
@@ -203,11 +204,14 @@ describe('verified Battle effect generation', () => {
       })
     ).toMatchObject({
       matched: false,
-      reason:
-        'verified-effect-property-condition-element-layer-not-matched',
+      reason: 'verified-effect-property-condition-element-layer-not-matched',
     });
     expect(
-      evaluateVerifiedBattleEffectConditions({ conditions: [], action, resolution })
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [],
+        action,
+        resolution,
+      })
     ).toEqual({ matched: true, reason: null });
   });
 
@@ -381,6 +385,65 @@ describe('verified Battle effect generation', () => {
     expect(generation.effectCommands).toEqual([]);
     expect(generation.directSpEvents).toEqual([]);
     expect(generation.actionResolutionById.size).toBe(0);
+  });
+
+  it('does not duplicate raw direct SP owned by a verified runtime binding', () => {
+    const action = {
+      id: 'runtime-managed-direct-sp',
+      type: 'skill',
+      actorId: 'actor-fixture',
+      actor: { id: 'actor-fixture', stats: {} },
+      startMs: 0,
+      durationMs: frameToMs(60),
+    };
+    const effect = {
+      semanticIdentity: 'semantic-effect:runtime-managed-direct-sp',
+      elementId: 9010,
+      kind: 'sp',
+      role: 'gameplay-effect',
+      classification: 'applied',
+      trigger: { startFrame: 0 },
+      target: { kind: 'source-owner' },
+      directSp: {
+        recoverType: 0,
+        shareType: 0,
+        stopSharing: true,
+      },
+      formula: {
+        commonFunctionId: 1,
+        baseFunctionId: 5,
+        paramsByLevel: { 1: [2, 0, 0, 0, 0, 0, 10000] },
+      },
+      sourceIdentities: ['fixture:runtime-managed-direct-sp'],
+    };
+    const mechanicsPackage = createFixtureMechanicsPackage();
+    const resolution = createFixtureResolution({
+      semanticEffects: [effect],
+    });
+    const generatedEvent = {
+      eventIdentity: 'runtime-binding:periodic-direct-sp',
+      actionId: action.id,
+      value: 2,
+    };
+    const generate = runtimeManagedDirectSpEffects =>
+      createVerifiedBattleEffectGeneration({
+        scenario: { actions: [action], actors: [action.actor] },
+        mechanicsPackage,
+        actionResolutionById: new Map([[action.id, resolution]]),
+        generatedDirectSpEvents: [generatedEvent],
+        runtimeManagedDirectSpEffects,
+      });
+
+    expect(generate([]).directSpEvents).toHaveLength(2);
+    expect(
+      generate([
+        {
+          actionId: action.id,
+          elementId: effect.elementId,
+          bindingIdentity: 'fixture-periodic-binding',
+        },
+      ]).directSpEvents
+    ).toEqual([generatedEvent]);
   });
 
   it('keeps same-frame property effects distinct by element identity', () => {
@@ -631,10 +694,7 @@ describe('verified Battle effect generation', () => {
           [landedHitIdentity]: { willHit: true },
         },
       }).effectCommands.map(command => command.sourceIdentity.effectIdentity)
-    ).toEqual([
-      'fixture-conditional-wrapper',
-      'fixture-landed-wrapper',
-    ]);
+    ).toEqual(['fixture-conditional-wrapper', 'fixture-landed-wrapper']);
     expect(
       generate({
         defaultWillHit: true,

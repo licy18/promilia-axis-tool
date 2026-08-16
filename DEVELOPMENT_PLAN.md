@@ -2,6 +2,14 @@
 
 最后更新：2026-08-12
 
+## 2026-08-16 M12-C 搜索/发布双门禁
+
+- 产品发布门禁保持完整 `release:verify`：人工视觉签收、qualification、binding、full Vitest、build 和 preview 均不降级。
+- 无头 heuristic 搜索改用独立轻量 `search:authority:verify`：只证明当前 HEAD 的角色 profile + canonical golden、奇波动作目录、结算与确定性搜索核心可执行。产品视觉、qualification、binding 及其派生文件允许缺失或陈旧，只以 `productRelease` advisory 记录，不再阻塞搜索。
+- 搜索池从当前数据快照取域并记录数据库 hash；不以产品视觉签收状态裁剪角色、奇波、灵子或装备。数据库或 HEAD 漂移仍使 run 立即失效。
+- 108003 的周期回能由 runtime binding 独占消费；同一 action/element 的 raw direct-SP 不再重复结算。当前 canonical golden 的 owner/all-hero 回复量为 `17/37`，搜索建权会对此做自动 replay，而不要求重新截取视觉证据。
+- 只有完整确定性闭合才可称 formal ranking；当前 Top-N 固定标注 `AI-guided heuristic`，客户端实测边界继续独立为 false。
+
 ## 2026-08-12 M12-C 旧中央线程紧急收口
 
 - 旧 Codex 中央线程因桌面端无法可靠打开而停止继续扩展；未启动新的长跑或正式搜索。实现恢复点为 `master@32835990ff14deb2289d0070ade48b8125b6f0d7`，收口文档提交是其直接后继；续接以实际 `git rev-parse HEAD` 为准。

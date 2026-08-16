@@ -93,7 +93,8 @@ export function simulateScenario(
     acceptedSkillStartTransitions:
       actionRuleDiagnostics.acceptedSkillStartTransitions,
     criticalRandomSource: criticalRuntime.createFinalRandomSource(),
-    soulEventCriticalRandomSource: criticalRuntime.createPreflightRandomSource(),
+    soulEventCriticalRandomSource:
+      criticalRuntime.createPreflightRandomSource(),
   });
   const verifiedCombatRuntime = attachVerifiedExecutionBlocks(
     runtimeBundle.verifiedCombatRuntime,
@@ -418,6 +419,9 @@ function createVerifiedRuntimeBundle({
         mechanicsPackage: getInstalledVerifiedCombatMechanicsPackage(),
         controlledActorTimeline,
         generatedDirectSpEvents: actionVariantRuntime?.directSpEvents ?? [],
+        runtimeManagedDirectSpEffects:
+          actionVariantRuntime?.targetStateRuntime
+            ?.runtimeManagedDirectSpEffects ?? [],
       })
     : null;
   const pickupGeneration = isVerifiedCombatMechanicsScenario(scenario)
@@ -531,9 +535,7 @@ function createVerifiedRuntimeBundle({
   const kiboReceiveDamageEvents = soulEventCombatRuntime
     ? deriveKiboReceiveDamageEventsFromCombatRuntime(soulEventCombatRuntime)
     : [];
-  const finalKiboPassiveGeneration = isVerifiedCombatMechanicsScenario(
-    scenario
-  )
+  const finalKiboPassiveGeneration = isVerifiedCombatMechanicsScenario(scenario)
     ? createVerifiedKiboPassiveGeneration({
         scenario,
         actionExecutionPlan,

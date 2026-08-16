@@ -5,6 +5,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import * as scopePolicyModule from '../../../domain/kiboAxisActionScopePolicy.js';
 import {
   createKiboAxisActionScopeEvidence,
+  createHeadlessCharacterSearchScope,
   evaluateFormalSearchAdmission,
   loadFormalSearchAdmissionEvidence,
 } from '../../../../scripts/gates/formal-search-admission.mjs';
@@ -12,14 +13,33 @@ import { getGateDefinition } from '../../../../scripts/gates/gate-definitions.mj
 
 let currentEvidence;
 
+const SEARCH_CORE_GATE_NAMES = [
+  'character-combat',
+  'kibo-headless',
+  'machine-axis-settlement',
+  'determinism',
+];
+
 beforeAll(async () => {
   currentEvidence = await loadFormalSearchAdmissionEvidence({
     repositoryRoot: process.cwd(),
-    releaseProof: {
+    searchCoreProof: {
+      gate: 'search-core-authority',
+      kind: 'azpr-search-core-authority',
       status: 'pass',
       mode: 'executed',
       exitCode: 0,
-      head: 'test-head',
+      head: 'a'.repeat(40),
+      workingTreeFingerprint: 'b'.repeat(64),
+      gates: SEARCH_CORE_GATE_NAMES.map((gate, index) => ({
+        gate,
+        status: 'pass',
+        mode: 'executed',
+        exitCode: 0,
+        recordId: String(index + 1).repeat(64),
+        dependencyFingerprint: String(index + 5).repeat(64),
+        gateDefinitionVersion: getGateDefinition(gate).version,
+      })),
     },
     deterministicProof: {
       status: 'pass',
@@ -101,6 +121,7 @@ describe('formal search admission', () => {
         'unique-a1-exact-control-subskill-contiguous-adjacency',
       contractHash: expect.stringMatching(/^[a-f0-9]{16}$/),
     });
+    const currentKiboCensus = currentEvidence.kiboAxisActionScope.census;
     expect(currentEvidence.kiboAxisActionScope).toMatchObject({
       ready: true,
       status: 'kibo-axis-action-scope-ready',
@@ -111,33 +132,137 @@ describe('formal search admission', () => {
         retainedCalculationSurfaces: ['signature', 'joint-attack', 'passive'],
       },
       census: {
-        admittedKiboCount: 43,
-        deferredAutonomousSurfaceCount: 71,
-        normalAttackSurfaceCount: 43,
-        activeSurfaceCount: 28,
-        signatureSurfaceCount: 43,
-        jointAttackSurfaceCount: 43,
         missingCatalogKiboIds: [],
         unexpectedSurfaceKeys: [],
       },
     });
+    expect(currentKiboCensus.admittedKiboCount).toBeGreaterThan(0);
+    expect(currentKiboCensus.catalogKiboCount).toBe(
+      currentKiboCensus.admittedKiboCount
+    );
+    expect(currentKiboCensus.normalAttackSurfaceCount).toBe(
+      currentKiboCensus.admittedKiboCount
+    );
+    expect(currentKiboCensus.signatureSurfaceCount).toBe(
+      currentKiboCensus.admittedKiboCount
+    );
+    expect(currentKiboCensus.jointAttackSurfaceCount).toBe(
+      currentKiboCensus.admittedKiboCount
+    );
     expect(result.clientParity).toMatchObject({
       ready: false,
       blockingForCurrentFormalScore: false,
     });
   });
 
-  it('still requires an executed clean release proof', async () => {
+  it('requires an executed search-core authority proof', async () => {
     const evidence = structuredClone(currentEvidence);
-    evidence.releaseProof = {
-      ...evidence.releaseProof,
+    evidence.searchCoreProof = {
+      ...evidence.searchCoreProof,
       status: 'fail',
       exitCode: 1,
     };
     const blocked = await evaluateFormalSearchAdmission(evidence);
 
     expect(blocked.status).toBe('blocked');
-    expect(blocked.blockers).toContain('release-verify-executed-pass');
+    expect(blocked.blockers).toContain('search-authority-executed-pass');
+
+    const missingGate = structuredClone(currentEvidence);
+    missingGate.searchCoreProof.gates =
+      missingGate.searchCoreProof.gates.filter(
+        proof => proof.gate !== 'character-combat'
+      );
+    expect(
+      (await evaluateFormalSearchAdmission(missingGate)).blockers
+    ).toContain('search-authority-executed-pass');
+
+    const missingRecord = structuredClone(currentEvidence);
+    delete missingRecord.searchCoreProof.gates[0].recordId;
+    expect(
+      (await evaluateFormalSearchAdmission(missingRecord)).blockers
+    ).toContain('search-authority-executed-pass');
+  });
+
+  it('treats product visual qualification and binding as advisory for headless search', async () => {
+    const evidence = structuredClone(currentEvidence);
+    evidence.qualificationSummary.m12cLocked = true;
+    evidence.qualificationCatalog.summary.m12cLocked = true;
+    evidence.bindingReport.summary.allPassed = false;
+    evidence.bindingReport.summary.blockedCount = 1;
+    evidence.productAcceptance.normalAcceptance[0].optimizationReady = false;
+    evidence.productAcceptance.starborn.optimizationReady = false;
+
+    const result = await evaluateFormalSearchAdmission(evidence);
+
+    expect(result.ready).toBe(true);
+    expect(result.blockers).toEqual([]);
+    expect(result.productRelease).toMatchObject({
+      ready: false,
+      status: 'blocked',
+      blockingForHeadlessSearch: false,
+    });
+
+    const missingProductEvidence = structuredClone(currentEvidence);
+    missingProductEvidence.qualificationSummary = null;
+    missingProductEvidence.qualificationCatalog = null;
+    missingProductEvidence.bindingReport = null;
+    expect(
+      (await evaluateFormalSearchAdmission(missingProductEvidence)).ready
+    ).toBe(true);
+  });
+
+  it('requires both STARBORN aliases and every headless character object', async () => {
+    const scope = structuredClone(currentEvidence.headlessCharacterScope);
+    const femaleAlias = scope.sources.find(source => source.ownerId === 199001);
+    femaleAlias.ready = false;
+    femaleAlias.status = 'headless-character-search-blocked';
+    femaleAlias.blockers = ['headless-search-replay-gate-failed'];
+    const starborn = scope.objects.find(
+      object => object.optimizationObjectId === 'STARBORN'
+    );
+    starborn.ready = false;
+    starborn.blockers = ['headless-search-replay-gate-failed'];
+    scope.ready = false;
+    scope.status = 'headless-character-scope-blocked';
+    scope.issues = ['headless-search-character-object-not-ready:STARBORN'];
+
+    const evidence = structuredClone(currentEvidence);
+    evidence.headlessCharacterScope = scope;
+    expect((await evaluateFormalSearchAdmission(evidence)).blockers).toContain(
+      'headless-character-scope-ready'
+    );
+  });
+
+  it('derives STARBORN as one object backed by exactly two source aliases', () => {
+    const current = currentEvidence.headlessCharacterScope;
+    const profiles = current.sources.map(source => ({
+      owner: { ownerId: source.ownerId },
+      profileHash: `profile-${source.ownerId}`,
+      sourcePackage: { packageHash: 'synthetic-package-hash' },
+      validation: {
+        status: 'character-combat-profile-valid',
+        issues: [],
+      },
+    }));
+    const goldens = current.sources.map(source => ({
+      ownerId: source.ownerId,
+      profileHash: `profile-${source.ownerId}`,
+      sourcePackageHash: 'synthetic-package-hash',
+      replayHash: `replay-${source.ownerId}`,
+      status: 'authoritative-golden-runtime-verified',
+      validation: { passed: true, failedCount: 0 },
+    }));
+    const missingAlias = createHeadlessCharacterSearchScope({
+      formalRoster: current.formalRoster,
+      starbornSourceCharacterIds: [199001],
+      profiles,
+      goldens,
+    });
+
+    expect(missingAlias.ready).toBe(false);
+    expect(missingAlias.issues).toContain(
+      'headless-search-starborn-alias-census-invalid'
+    );
   });
 
   it('fails closed when combo authority coverage or its descriptor hash is missing', async () => {
@@ -196,22 +321,15 @@ describe('formal search admission', () => {
     expect(ready).toMatchObject({
       ready: true,
       status: 'kibo-axis-action-scope-ready',
-      expectedCensus: {
-        admittedKiboCount: 43,
-        catalogKiboCount: 43,
-        deferredAutonomousSurfaceCount: 71,
-        normalAttackSurfaceCount: 43,
-        activeSurfaceCount: 28,
-        includedActionSurfaceCount: 86,
-        signatureSurfaceCount: 43,
-        jointAttackSurfaceCount: 43,
+      coveragePolicy: {
+        databaseCardinality: 'record-current-catalog-do-not-freeze-count',
+        catalogCoverage: 'every-current-kibo',
       },
       census: {
         admittedKiboCount: 43,
         deferredAutonomousSurfaceCount: 71,
         includedActionSurfaceCount: 86,
       },
-      denominatorMismatches: [],
     });
 
     const missingBreakFixture = createKiboScopeFixture();
@@ -237,14 +355,34 @@ describe('formal search admission', () => {
       ...missingActiveFixture,
       scopePolicyModule,
     });
-    expect(missingActive.ready).toBe(false);
-    expect(missingActive.issues).toEqual(
-      expect.arrayContaining([
-        'kibo-axis-action-scope-denominator-mismatch',
-        'kibo-axis-action-scope-denominator-mismatch:deferredAutonomousSurfaceCount',
-        'kibo-axis-action-scope-denominator-mismatch:activeSurfaceCount',
-      ])
-    );
+    expect(missingActive).toMatchObject({
+      ready: true,
+      issues: [],
+      census: {
+        admittedKiboCount: 43,
+        activeSurfaceCount: 27,
+      },
+    });
+  });
+
+  it('records current Kibo cardinality without enforcing a frozen database count', () => {
+    const fortyFour = createKiboAxisActionScopeEvidence({
+      ...createKiboScopeFixture(44),
+      scopePolicyModule,
+    });
+
+    expect(fortyFour).toMatchObject({
+      ready: true,
+      issues: [],
+      census: {
+        admittedKiboCount: 44,
+        catalogKiboCount: 44,
+        normalAttackSurfaceCount: 44,
+        activeSurfaceCount: 28,
+        signatureSurfaceCount: 44,
+        jointAttackSurfaceCount: 44,
+      },
+    });
   });
 
   it('fails closed when the scope policy validator or action kind drifts', () => {
@@ -280,13 +418,12 @@ describe('formal search admission', () => {
   });
 });
 
-function createKiboScopeFixture() {
-  const kiboIds = Array.from({ length: 43 }, (_, index) => 500001 + index);
+function createKiboScopeFixture(kiboCount = 43) {
+  const kiboIds = Array.from(
+    { length: kiboCount },
+    (_, index) => 500001 + index
+  );
   return {
-    qualificationCatalog: {
-      catalogHash: 'qualification-hash',
-      admission: { kibos: kiboIds },
-    },
     kiboActionCatalog: {
       items: kiboIds.map((kiboId, index) => ({
         kiboId,

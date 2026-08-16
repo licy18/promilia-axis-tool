@@ -16,6 +16,7 @@ export const GATE_SYSTEM_FILES = Object.freeze([
   'scripts/gates/repository-hygiene-policy.mjs',
   'scripts/gates/run-repository-hygiene.mjs',
   'scripts/release-verify.mjs',
+  'scripts/search-core-authority-verify.mjs',
   'scripts/run-smart-gates.mjs',
 ]);
 
@@ -876,11 +877,11 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'formal-search-admission',
-    version: 4,
+    version: 5,
     order: 510,
     kind: 'derived-formal-decision',
     description:
-      'Explicit formal search admission from release and product contracts',
+      'Explicit formal search admission from headless search contracts',
     dependencies: [
       ...bindingSources,
       'reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json',
@@ -896,6 +897,27 @@ export const GATE_DEFINITIONS = deepFreeze([
     ],
     smartTriggers: [],
     environmentKeys: [],
+    parser: 'formal-admission',
+    command: null,
+  },
+  {
+    name: 'search-core-authority',
+    version: 1,
+    order: 515,
+    kind: 'search-authority',
+    description:
+      'Lightweight executed authority for headless heuristic search; product visual review remains advisory',
+    dependencies: [
+      ...machineAxisSources,
+      ...mechanismSources,
+      ...dataSources,
+      ...FORMAL_DETERMINISM_TEST_FILES,
+      'reports/m10/**/golden-trace.json',
+      'scripts/search-core-authority-verify.mjs',
+      ...packageAndTestConfig,
+    ],
+    smartTriggers: [],
+    environmentKeys: ['CI', 'NODE_OPTIONS', 'PROMILIA_VITEST_WORKERS'],
     parser: 'formal-admission',
     command: null,
   },
@@ -933,6 +955,13 @@ export const RELEASE_EXTRA_GATE_NAMES = Object.freeze([
   'binding',
   'kibo-headless',
   'machine-axis-settlement',
+]);
+
+export const SEARCH_CORE_GATE_NAMES = Object.freeze([
+  'character-combat',
+  'kibo-headless',
+  'machine-axis-settlement',
+  'determinism',
 ]);
 
 export const TRIAL_RELEASE_COMPONENTS = deepFreeze([

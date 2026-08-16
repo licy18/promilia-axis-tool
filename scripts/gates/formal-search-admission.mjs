@@ -3,34 +3,14 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const EXPECTED_DENOMINATORS = Object.freeze({
-  character: 9,
-  kibo: 43,
-  'soul-essence': 62,
-  equipment: 137,
-  'set-skill': 12,
-});
-
-const EXPECTED_KIBO_AXIS_ACTION_CENSUS = Object.freeze({
-  admittedKiboCount: 43,
-  catalogKiboCount: 43,
-  deferredAutonomousSurfaceCount: 71,
-  normalAttackSurfaceCount: 43,
-  activeSurfaceCount: 28,
-  includedActionSurfaceCount: 86,
-  signatureSurfaceCount: 43,
-  jointAttackSurfaceCount: 43,
-});
+const EXPECTED_CHARACTER_OPTIMIZATION_OBJECT_COUNT = 9;
 
 const KIBO_AXIS_ACTION_SCOPE_CONTRACT = 'AzPrM12CKiboAxisActionScope';
 
 export const FORMAL_SEARCH_ADMISSION_CHECK_IDS = Object.freeze([
-  'release-verify-executed-pass',
+  'search-authority-executed-pass',
   'database-content-hash-recorded',
-  'm12c-lock-open',
-  'qualification-hash-binding-consistent',
-  'binding-matrix-complete',
-  'binding-authority-hashes-match',
+  'headless-character-scope-ready',
   'formal-initial-state-authority',
   'deterministic-canonical-proof',
   'unresolved-skipped-pre-score-pruning',
@@ -42,6 +22,7 @@ export const FORMAL_SEARCH_ADMISSION_CHECK_IDS = Object.freeze([
 
 export async function loadFormalSearchAdmissionEvidence({
   repositoryRoot,
+  searchCoreProof,
   releaseProof,
   deterministicProof,
 } = {}) {
@@ -56,22 +37,26 @@ export async function loadFormalSearchAdmissionEvidence({
     settlementModule,
     kiboScopeModule,
     normalAttackInputAuthorityModule,
+    outerBuildPoolModule,
     kiboActionCatalogSource,
     kiboSchedulerSource,
     kiboSearchGeneratorSource,
     machineAxisServiceSource,
   ] = await Promise.all([
-    readJson(
+    readOptionalJson(
       root,
       'reports/m12/m12-b3-optimization-qualification-summary.json'
     ),
-    readJson(
+    readOptionalJson(
       root,
       'src/data/generated/optimization-qualification-catalog.json'
     ),
-    readJson(root, 'reports/m12/m12-b3-binding-matrix.json'),
-    readJson(root, 'src/data/generated/character-acceptance-catalog.json'),
-    readJson(
+    readOptionalJson(root, 'reports/m12/m12-b3-binding-matrix.json'),
+    readOptionalJson(
+      root,
+      'src/data/generated/character-acceptance-catalog.json'
+    ),
+    readOptionalJson(
       root,
       'reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json'
     ),
@@ -85,6 +70,7 @@ export async function loadFormalSearchAdmissionEvidence({
       root,
       'src/domain/verifiedNormalAttackInputAuthority.js'
     ),
+    importRepositoryModule(root, 'src/machine-axis/m12cOuterBuildPool.js'),
     readFile(
       path.join(
         root,
@@ -118,12 +104,35 @@ export async function loadFormalSearchAdmissionEvidence({
     settlementModule.getMachineAxisEnemySettlementFormalReadiness();
   const settlementContract =
     settlementModule.getMachineAxisEnemySettlementContract();
-  const formalRoster =
-    characterAcceptanceCatalog.optimizationCandidateRoster
-      ?.formalOptimizationObjectIds ?? [];
+  const formalRoster = [
+    outerBuildPoolModule.M12C_REQUIRED_OPTIMIZATION_OBJECT_ID,
+    ...outerBuildPoolModule.M12C_OPTIONAL_OPTIMIZATION_OBJECT_IDS,
+  ];
+  const starbornSourceCharacterIds = [
+    ...outerBuildPoolModule.M12C_STARBORN_SOURCE_CHARACTER_IDS,
+  ];
   const normalRoster = formalRoster.filter(identity => identity !== 'STARBORN');
+  const headlessManifestOwnerIds = uniqueSortedNumbers([
+    ...normalRoster,
+    ...starbornSourceCharacterIds,
+  ]);
+  const [headlessProfiles, headlessGoldens] = await Promise.all([
+    Promise.all(
+      headlessManifestOwnerIds.map(ownerId =>
+        readJson(
+          root,
+          `src/data/generated/character-combat-profiles/${ownerId}.json`
+        )
+      )
+    ),
+    Promise.all(
+      headlessManifestOwnerIds.map(ownerId =>
+        readJson(root, `reports/m10/${ownerId}/golden-trace.json`)
+      )
+    ),
+  ]);
   const normalAcceptance = normalRoster.map(identity => {
-    const entry = characterAcceptanceCatalog.entries?.find(
+    const entry = characterAcceptanceCatalog?.entries?.find(
       candidate => String(candidate.ownerId) === String(identity)
     );
     return {
@@ -136,6 +145,7 @@ export async function loadFormalSearchAdmissionEvidence({
   });
   return {
     repositoryRoot: root,
+    searchCoreProof,
     releaseProof,
     deterministicProof,
     qualificationSummary,
@@ -145,13 +155,20 @@ export async function loadFormalSearchAdmissionEvidence({
       formalRoster,
       normalAcceptance,
       starborn: {
-        status: starbornManifest.status,
-        formalAdmission: starbornManifest.formalAdmission,
-        optimizationReady: starbornManifest.optimizationReady,
-        productVisualAcceptance: starbornManifest.productVisualAcceptance,
-        validation: starbornManifest.validation,
+        status: starbornManifest?.status ?? null,
+        formalAdmission: starbornManifest?.formalAdmission ?? null,
+        optimizationReady: starbornManifest?.optimizationReady === true,
+        productVisualAcceptance:
+          starbornManifest?.productVisualAcceptance ?? null,
+        validation: starbornManifest?.validation ?? null,
       },
     },
+    headlessCharacterScope: createHeadlessCharacterSearchScope({
+      formalRoster,
+      starbornSourceCharacterIds,
+      profiles: headlessProfiles,
+      goldens: headlessGoldens,
+    }),
     initialStateAuthority: {
       schemaVersion: initialStateModule.M12C_INITIAL_STATE_SCHEMA_VERSION,
       contractName: initialStateModule.M12C_INITIAL_STATE_CONTRACT_NAME,
@@ -170,7 +187,6 @@ export async function loadFormalSearchAdmissionEvidence({
     },
     databaseContentHash,
     kiboAxisActionScope: createKiboAxisActionScopeEvidence({
-      qualificationCatalog,
       kiboActionCatalog: JSON.parse(kiboActionCatalogSource.toString('utf8')),
       actionCatalogSource: kiboActionCatalogSource,
       schedulerSource: kiboSchedulerSource,
@@ -182,7 +198,6 @@ export async function loadFormalSearchAdmissionEvidence({
 }
 
 export function createKiboAxisActionScopeEvidence({
-  qualificationCatalog,
   kiboActionCatalog,
   actionCatalogSource,
   schedulerSource,
@@ -191,7 +206,7 @@ export function createKiboAxisActionScopeEvidence({
   scopePolicyModule,
 } = {}) {
   const admittedKiboIds = uniqueSortedNumbers(
-    qualificationCatalog?.admission?.kibos ?? []
+    (kiboActionCatalog?.items ?? []).map(item => item?.kiboId)
   );
   const itemByKiboId = new Map(
     (kiboActionCatalog?.items ?? []).map(item => [Number(item.kiboId), item])
@@ -250,7 +265,7 @@ export function createKiboAxisActionScopeEvidence({
     )
   );
   const authority = {
-    qualificationCatalogHash: qualificationCatalog?.catalogHash ?? null,
+    actionCatalogKiboCount: admittedKiboIds.length,
     actionCatalogSha256: sha256(
       actionCatalogSource ??
         Buffer.from(JSON.stringify(kiboActionCatalog ?? null))
@@ -290,24 +305,17 @@ export function createKiboAxisActionScopeEvidence({
       surface => surface.key
     ),
   };
-  const denominatorMismatches = Object.entries(EXPECTED_KIBO_AXIS_ACTION_CENSUS)
-    .filter(([field, expected]) => census[field] !== expected)
-    .map(([field, expected]) => ({
-      field,
-      expected,
-      actual: census[field] ?? null,
-    }));
   const ready =
     policyValidation.valid &&
     admittedKiboIds.length > 0 &&
-    denominatorMismatches.length === 0 &&
+    census.catalogKiboCount === census.admittedKiboCount &&
     missingCatalogKiboIds.length === 0 &&
     kiboIdsWithoutDeferredSurface.length === 0 &&
     kiboIdsMissingIncludedKind.length === 0 &&
     unexpectedSurfaces.length === 0 &&
     invalidDeferredClassifications.length === 0;
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     contractName: KIBO_AXIS_ACTION_SCOPE_CONTRACT,
     status: ready
       ? 'kibo-axis-action-scope-ready'
@@ -316,9 +324,13 @@ export function createKiboAxisActionScopeEvidence({
     authority,
     policy: scopePolicy ?? null,
     policyValidation,
-    expectedCensus: EXPECTED_KIBO_AXIS_ACTION_CENSUS,
+    coveragePolicy: {
+      databaseCardinality: 'record-current-catalog-do-not-freeze-count',
+      catalogCoverage: 'every-current-kibo',
+      includedActionKinds: 'every-current-kibo',
+      deferredActionKinds: 'at-least-one-per-current-kibo',
+    },
     census,
-    denominatorMismatches,
     issues: ready
       ? []
       : [
@@ -338,16 +350,139 @@ export function createKiboAxisActionScopeEvidence({
           ...(invalidDeferredClassifications.length
             ? ['kibo-axis-action-scope-classification-invalid']
             : []),
-          ...(denominatorMismatches.length
-            ? [
-                'kibo-axis-action-scope-denominator-mismatch',
-                ...denominatorMismatches.map(
-                  mismatch =>
-                    `kibo-axis-action-scope-denominator-mismatch:${mismatch.field}`
-                ),
-              ]
-            : []),
         ],
+  };
+}
+
+export function createHeadlessCharacterSearchScope({
+  formalRoster = [],
+  starbornSourceCharacterIds = [],
+  profiles = [],
+  goldens = [],
+} = {}) {
+  const normalizedRoster = [...new Set(formalRoster.map(String))];
+  const normalObjectIds = normalizedRoster.filter(
+    identity => identity !== 'STARBORN'
+  );
+  const starbornAliases = uniqueSortedNumbers(starbornSourceCharacterIds);
+  const profileByOwnerId = new Map(
+    profiles
+      .filter(profile => Number.isInteger(Number(profile?.owner?.ownerId)))
+      .map(profile => [Number(profile.owner.ownerId), profile])
+  );
+  const goldenByOwnerId = new Map(
+    goldens
+      .filter(golden => Number.isInteger(Number(golden?.ownerId)))
+      .map(golden => [Number(golden.ownerId), golden])
+  );
+  const sourceOwnerIds = uniqueSortedNumbers([
+    ...normalObjectIds,
+    ...starbornAliases,
+  ]);
+  const sources = sourceOwnerIds.map(ownerId => {
+    const profile = profileByOwnerId.get(ownerId);
+    const golden = goldenByOwnerId.get(ownerId);
+    const checks = {
+      profilePresent: Boolean(profile),
+      profileValid:
+        profile?.validation?.status === 'character-combat-profile-valid' &&
+        Array.isArray(profile?.validation?.issues) &&
+        profile.validation.issues.length === 0,
+      goldenPresent: Boolean(golden),
+      goldenReplayPassed:
+        golden?.status === 'authoritative-golden-runtime-verified' &&
+        golden?.validation?.passed === true &&
+        golden?.validation?.failedCount === 0,
+      profileHashBound:
+        typeof profile?.profileHash === 'string' &&
+        profile.profileHash.length > 0 &&
+        golden?.profileHash === profile.profileHash,
+      packageHashBound:
+        typeof profile?.sourcePackage?.packageHash === 'string' &&
+        profile.sourcePackage.packageHash.length > 0 &&
+        golden?.sourcePackageHash === profile.sourcePackage.packageHash,
+    };
+    const blockers = Object.entries(checks)
+      .filter(([, passed]) => passed !== true)
+      .map(([check]) => `headless-search-${check}`);
+    const ready = blockers.length === 0;
+    return {
+      ownerId,
+      present: Boolean(profile) && Boolean(golden),
+      profileHash: profile?.profileHash ?? null,
+      sourcePackageHash: profile?.sourcePackage?.packageHash ?? null,
+      replayHash: golden?.replayHash ?? null,
+      ready,
+      status: ready
+        ? 'headless-character-search-ready'
+        : 'headless-character-search-blocked',
+      checks,
+      blockers,
+    };
+  });
+  const sourceByOwnerId = new Map(
+    sources.map(source => [source.ownerId, source])
+  );
+  const objects = normalObjectIds.map(objectId => {
+    const ownerId = Number(objectId);
+    const source = sourceByOwnerId.get(ownerId);
+    return {
+      optimizationObjectId: objectId,
+      sourceOwnerIds: [ownerId],
+      ready: source?.ready === true,
+      blockers: source?.blockers ?? ['headless-search-profile-missing'],
+    };
+  });
+  if (normalizedRoster.includes('STARBORN')) {
+    const aliasSources = starbornAliases.map(ownerId =>
+      sourceByOwnerId.get(ownerId)
+    );
+    objects.push({
+      optimizationObjectId: 'STARBORN',
+      sourceOwnerIds: starbornAliases,
+      ready:
+        starbornAliases.length === 2 &&
+        aliasSources.every(source => source?.ready === true),
+      blockers: [
+        ...(starbornAliases.length === 2
+          ? []
+          : ['headless-search-starborn-alias-census-invalid']),
+        ...aliasSources.flatMap(source => source?.blockers ?? []),
+      ],
+    });
+  }
+  const issues = [];
+  if (
+    normalizedRoster.length !== EXPECTED_CHARACTER_OPTIMIZATION_OBJECT_COUNT
+  ) {
+    issues.push('headless-search-character-object-census-invalid');
+  }
+  if (!normalizedRoster.includes('STARBORN')) {
+    issues.push('headless-search-starborn-object-missing');
+  }
+  if (starbornAliases.length !== 2) {
+    issues.push('headless-search-starborn-alias-census-invalid');
+  }
+  for (const object of objects) {
+    if (!object.ready) {
+      issues.push(
+        `headless-search-character-object-not-ready:${object.optimizationObjectId}`
+      );
+    }
+  }
+  return {
+    schemaVersion: 2,
+    contractName: 'AzPrM12CHeadlessCharacterSearchScope',
+    status:
+      issues.length === 0
+        ? 'headless-character-scope-ready'
+        : 'headless-character-scope-blocked',
+    ready: issues.length === 0,
+    formalRoster: normalizedRoster,
+    starbornSourceCharacterIds: starbornAliases,
+    objects,
+    sources,
+    issues: [...new Set(issues)].sort(),
   };
 }
 
@@ -365,16 +500,53 @@ export async function evaluateFormalSearchAdmission(evidence) {
     checks.push({ id, passed: passed === true, category, details });
   };
 
+  const searchAuthority = evidence.searchCoreProof ?? evidence.releaseProof;
+  const requiredSearchGates = [
+    'character-combat',
+    'kibo-headless',
+    'machine-axis-settlement',
+    'determinism',
+  ];
+  const gateProofs = Array.isArray(searchAuthority?.gates)
+    ? searchAuthority.gates
+    : [];
+  const fullReleaseProof = searchAuthority?.gate === 'release-verify';
+  const searchCoreProofComplete =
+    searchAuthority?.kind === 'azpr-search-core-authority' &&
+    searchAuthority?.gate === 'search-core-authority' &&
+    /^[a-f0-9]{40}$/u.test(searchAuthority?.head ?? '') &&
+    /^[a-f0-9]{64}$/u.test(searchAuthority?.workingTreeFingerprint ?? '') &&
+    gateProofs.length === requiredSearchGates.length &&
+    requiredSearchGates.every(gate => {
+      const matchingProofs = gateProofs.filter(proof => proof?.gate === gate);
+      const proof = matchingProofs[0];
+      return (
+        matchingProofs.length === 1 &&
+        proof?.status === 'pass' &&
+        proof?.mode === 'executed' &&
+        proof?.exitCode === 0 &&
+        /^[a-f0-9]{64}$/u.test(proof?.recordId ?? '') &&
+        /^[a-f0-9]{64}$/u.test(proof?.dependencyFingerprint ?? '') &&
+        Number.isInteger(proof?.gateDefinitionVersion) &&
+        proof.gateDefinitionVersion > 0
+      );
+    });
   add(
-    'release-verify-executed-pass',
-    evidence.releaseProof?.status === 'pass' &&
-      evidence.releaseProof?.mode === 'executed' &&
-      evidence.releaseProof?.exitCode === 0,
+    'search-authority-executed-pass',
+    searchAuthority?.status === 'pass' &&
+      searchAuthority?.mode === 'executed' &&
+      searchAuthority?.exitCode === 0 &&
+      (fullReleaseProof || searchCoreProofComplete),
     {
-      status: evidence.releaseProof?.status ?? null,
-      mode: evidence.releaseProof?.mode ?? null,
-      exitCode: evidence.releaseProof?.exitCode ?? null,
-      head: evidence.releaseProof?.head ?? null,
+      gate: searchAuthority?.gate ?? null,
+      kind: searchAuthority?.kind ?? null,
+      status: searchAuthority?.status ?? null,
+      mode: searchAuthority?.mode ?? null,
+      exitCode: searchAuthority?.exitCode ?? null,
+      head: searchAuthority?.head ?? null,
+      requiredSearchGates,
+      searchCoreProofComplete,
+      gateProofs,
     }
   );
 
@@ -385,77 +557,12 @@ export async function evaluateFormalSearchAdmission(evidence) {
       /^[a-f0-9]{64}$/.test(evidence.databaseContentHash),
     { databaseContentHash: evidence.databaseContentHash ?? null }
   );
+  const headlessCharacterScope = evidence.headlessCharacterScope;
   add(
-    'm12c-lock-open',
-    evidence.qualificationSummary?.m12cLocked === false &&
-      evidence.qualificationCatalog?.summary?.m12cLocked === false &&
-      evidence.qualificationCatalog?.summary?.qualificationStage?.m12cLocked ===
-        false,
-    {
-      summary: evidence.qualificationSummary?.m12cLocked ?? null,
-      catalog: evidence.qualificationCatalog?.summary?.m12cLocked ?? null,
-      stage:
-        evidence.qualificationCatalog?.summary?.qualificationStage
-          ?.m12cLocked ?? null,
-    }
-  );
-  add(
-    'qualification-hash-binding-consistent',
-    evidence.qualificationSummary?.catalogHash ===
-      evidence.qualificationCatalog?.catalogHash &&
-      evidence.qualificationSummary?.rosterHash ===
-        evidence.qualificationCatalog?.rosterHash &&
-      evidence.qualificationSummary?.manifestsHash ===
-        evidence.qualificationCatalog?.manifestsHash &&
-      evidence.qualificationSummary?.ledgerHash ===
-        evidence.qualificationCatalog?.gapLedgerHash &&
-      evidence.qualificationSummary?.bindingMatrixHash ===
-        evidence.qualificationCatalog?.bindingMatrixHash,
-    {
-      summary: {
-        catalogHash: evidence.qualificationSummary?.catalogHash ?? null,
-        rosterHash: evidence.qualificationSummary?.rosterHash ?? null,
-        manifestsHash: evidence.qualificationSummary?.manifestsHash ?? null,
-        ledgerHash: evidence.qualificationSummary?.ledgerHash ?? null,
-        bindingMatrixHash:
-          evidence.qualificationSummary?.bindingMatrixHash ?? null,
-      },
-      catalog: {
-        catalogHash: evidence.qualificationCatalog?.catalogHash ?? null,
-        rosterHash: evidence.qualificationCatalog?.rosterHash ?? null,
-        manifestsHash: evidence.qualificationCatalog?.manifestsHash ?? null,
-        ledgerHash: evidence.qualificationCatalog?.gapLedgerHash ?? null,
-        bindingMatrixHash:
-          evidence.qualificationCatalog?.bindingMatrixHash ?? null,
-      },
-    }
-  );
-
-  const binding = evidence.bindingReport;
-  add(
-    'binding-matrix-complete',
-    binding?.summary?.allPassed === true &&
-      binding?.summary?.checkCount === binding?.summary?.passedCount &&
-      binding?.summary?.blockedCount === 0 &&
-      binding?.summary?.checkCount > 0 &&
-      binding?.reLock?.status === 'passed',
-    {
-      summary: binding?.summary ?? null,
-      reLockStatus: binding?.reLock?.status ?? null,
-    }
-  );
-  add(
-    'binding-authority-hashes-match',
-    binding?.hashes?.rosterHash === evidence.qualificationCatalog?.rosterHash &&
-      binding?.hashes?.manifestsHash ===
-        evidence.qualificationCatalog?.manifestsHash &&
-      binding?.hashes?.ledgerHash ===
-        evidence.qualificationCatalog?.gapLedgerHash &&
-      binding?.hashes?.bindingMatrixHash ===
-        evidence.qualificationCatalog?.bindingMatrixHash &&
-      binding?.hashes?.qualificationCatalogHash ===
-        evidence.qualificationCatalog?.catalogHash,
-    binding?.hashes ?? null
+    'headless-character-scope-ready',
+    headlessCharacterScope?.ready === true &&
+      headlessCharacterScope?.status === 'headless-character-scope-ready',
+    headlessCharacterScope ?? null
   );
 
   const authority = evidence.initialStateAuthority;
@@ -568,13 +675,29 @@ export async function evaluateFormalSearchAdmission(evidence) {
   }
 
   const blockers = checks.filter(check => !check.passed).map(check => check.id);
+  const productReleaseReady =
+    evidence.qualificationSummary?.m12cLocked === false &&
+    evidence.qualificationCatalog?.summary?.m12cLocked === false &&
+    evidence.bindingReport?.summary?.allPassed === true &&
+    evidence.bindingReport?.reLock?.status === 'passed';
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: 'azpr-formal-search-admission',
     status: blockers.length === 0 ? 'ready' : 'blocked',
     ready: blockers.length === 0,
     blockers,
     checks,
+    productRelease: {
+      ready: productReleaseReady,
+      status: productReleaseReady ? 'ready' : 'blocked',
+      blockingForHeadlessSearch: false,
+      qualificationLocked:
+        evidence.qualificationSummary?.m12cLocked !== false ||
+        evidence.qualificationCatalog?.summary?.m12cLocked !== false,
+      bindingPassed:
+        evidence.bindingReport?.summary?.allPassed === true &&
+        evidence.bindingReport?.reLock?.status === 'passed',
+    },
     clientParity: {
       ready: runtime?.clientParityReady === true,
       blockingForCurrentFormalScore:
@@ -625,6 +748,14 @@ export function validateFormalSearchAdmissionRecord(admission) {
 async function readJson(root, relativePath) {
   const file = path.join(root, ...relativePath.split('/'));
   return JSON.parse(await readFile(file, 'utf8'));
+}
+
+async function readOptionalJson(root, relativePath) {
+  try {
+    return await readJson(root, relativePath);
+  } catch {
+    return null;
+  }
 }
 
 async function importRepositoryModule(root, relativePath) {
