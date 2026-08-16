@@ -171,6 +171,14 @@ function createManifestInput({
     qualificationSubjectHash: binding.qualificationSubjectHash,
     scenarioSetHash: binding.scenarioSetHash,
   };
+  // 合成签收场景显式声明 signoff record 已认证（真实路径由生成器的
+  // verifySignoffRecord 用 git show 认证；此处测试协议其余派生逻辑）。
+  input.signoffRecordVerified = true;
+  input.signoffRecordAuthentication = {
+    contractName: 'AzPrCharacterProductVisualSignoffRecordAuthentication',
+    status: 'verified',
+    issues: [],
+  };
   return input;
 }
 

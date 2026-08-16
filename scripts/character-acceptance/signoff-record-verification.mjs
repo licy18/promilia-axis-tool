@@ -52,7 +52,13 @@ export function verifySignoffRecord(
   }
   if (issues.length) {
     authentication.issues = [...issues];
-    return { verified: false, issues, recordPath: null, recordSha256: null, authentication };
+    return {
+      verified: false,
+      issues,
+      recordPath: null,
+      recordSha256: null,
+      authentication,
+    };
   }
 
   // 从 acceptanceCommit 读取 record 实际内容（认证 commit 内部真实存在该文件）
@@ -61,14 +67,26 @@ export function verifySignoffRecord(
     recordBytes = execFileSync(
       'git',
       ['show', `${acceptanceCommit}:${recordPath}`],
-      { cwd: projectRoot, encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'] }
+      {
+        cwd: projectRoot,
+        encoding: 'buffer',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }
     );
   } catch (error) {
-    issues.push('signoff-record-missing-in-commit:' + String(error?.status ?? 'git-error'));
+    issues.push(
+      'signoff-record-missing-in-commit:' + String(error?.status ?? 'git-error')
+    );
   }
   if (recordBytes == null) {
     authentication.issues = [...issues];
-    return { verified: false, issues, recordPath, recordSha256, authentication };
+    return {
+      verified: false,
+      issues,
+      recordPath,
+      recordSha256,
+      authentication,
+    };
   }
   const actualSha256 = createHash('sha256').update(recordBytes).digest('hex');
   if (actualSha256 !== recordSha256) {
@@ -95,19 +113,20 @@ export function verifySignoffRecord(
       );
     }
     const currentSpecSha256 = computeSpecSha256(projectRoot);
-    if (
-      String(record.captureHarness?.specSha256 ?? '') !== currentSpecSha256
-    ) {
+    if (String(record.captureHarness?.specSha256 ?? '') !== currentSpecSha256) {
       issues.push('signoff-record-capture-harness-mismatch');
     }
-    if (String(record.qualificationSubjectHash ?? '') !== qualificationSubjectHash) {
+    if (
+      String(record.qualificationSubjectHash ?? '') !== qualificationSubjectHash
+    ) {
       issues.push('signoff-record-qualification-subject-mismatch');
     }
     const evidence = record.automatedEvidence?.[0] ?? {};
     const recipeEvidence = pva.automatedEvidence?.[0] ?? {};
     if (
       evidence.screenshotSha256 &&
-      String(evidence.screenshotSha256) !== String(recipeEvidence.screenshotSha256 ?? '')
+      String(evidence.screenshotSha256) !==
+        String(recipeEvidence.screenshotSha256 ?? '')
     ) {
       issues.push('signoff-record-screenshot-sha256-mismatch');
     }
@@ -160,10 +179,7 @@ function computeSpecSha256(projectRoot) {
 // 对象级（STARBORN）signoff record 认证：与角色级同构——要求
 // acceptanceCommit 指向的 git 对象确实包含 signoff record，且 record 的
 // subject/package/harness hash 与当前派生一致。
-export function verifyOptimizationObjectSignoffRecord(
-  recipe,
-  { projectRoot }
-) {
+export function verifyOptimizationObjectSignoffRecord(recipe, { projectRoot }) {
   const issues = [];
   const pva = recipe?.productVisualAcceptance ?? {};
   const status = String(pva.status ?? 'pending');
@@ -180,7 +196,11 @@ export function verifyOptimizationObjectSignoffRecord(
   };
 
   if (status !== 'accepted') {
-    return { verified: false, issues: ['signoff-record-not-requested'], authentication };
+    return {
+      verified: false,
+      issues: ['signoff-record-not-requested'],
+      authentication,
+    };
   }
   if (!/^[0-9a-f]{40}$/.test(acceptanceCommit)) {
     issues.push('signoff-record-commit-invalid');
@@ -198,10 +218,16 @@ export function verifyOptimizationObjectSignoffRecord(
     recordBytes = execFileSync(
       'git',
       ['show', `${acceptanceCommit}:${recordPath}`],
-      { cwd: projectRoot, encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'] }
+      {
+        cwd: projectRoot,
+        encoding: 'buffer',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }
     );
   } catch (error) {
-    issues.push('signoff-record-missing-in-commit:' + String(error?.status ?? 'git-error'));
+    issues.push(
+      'signoff-record-missing-in-commit:' + String(error?.status ?? 'git-error')
+    );
   }
   if (recordBytes == null) {
     authentication.issues = [...issues];

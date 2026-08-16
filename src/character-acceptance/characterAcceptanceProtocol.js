@@ -39,7 +39,11 @@ export const UNNAMED_SECONDARY_PASSIVE_REASON =
 
 export function finalizeCharacterAcceptanceManifest(
   input,
-  { signoffRecordVerified = false, signoffRecordAuthentication = null } = {}
+  {
+    signoffRecordVerified = input?.signoffRecordVerified ?? false,
+    signoffRecordAuthentication =
+      input?.signoffRecordAuthentication ?? null,
+  } = {}
 ) {
   const base = structuredClone(input ?? {});
   delete base.maturity;

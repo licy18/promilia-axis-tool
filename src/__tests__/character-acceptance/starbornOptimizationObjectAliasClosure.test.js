@@ -48,6 +48,7 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
     const validation = validateOptimizationObjectAliasAcceptanceBundle({
       recipe: objectRecipe,
       sources: createSources(),
+      signoffRecordVerified: true,
     });
 
     expect(validation.valid).toBe(true);
