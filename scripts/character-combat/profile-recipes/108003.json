@@ -11,15 +11,8 @@
     "zeroDistance": {
       "projectileImpactPolicy": "scenario-assumed-zero-distance",
       "requiredResourceIdentities": [],
-      "requiredActionEffectBindingIdentities": [
-        "miti-full-charge-thunder-mark",
-        "miti-ultimate-thunder-mark-two-occurrences",
-        "miti-star-carry-thunder-mark-two-occurrences"
-      ],
-      "requiredPassiveIdentities": [
-        "actor:108003:passive:10800361",
-        "actor:108003:passive:10800362"
-      ]
+      "requiredActionEffectBindingIdentities": ["miti-full-charge-thunder-mark", "miti-ultimate-thunder-mark-two-occurrences", "miti-star-carry-thunder-mark-two-occurrences"],
+      "requiredPassiveIdentities": ["actor:108003:passive:10800361", "actor:108003:passive:10800362"]
     }
   },
   "mechanicsDiscovery": {
@@ -41,12 +34,7 @@
   },
   "compiler": {
     "timingPolicy": "verified-input-reopen",
-    "reachableControlSkillIds": [
-      10800301, 10800302, 10800303, 10800310, 10800311, 10800312, 10800313,
-      10800314, 10800315, 10800316, 10800321, 10800322, 10800324, 10800325,
-      10800326, 10800327, 10800331, 10800341, 10800342, 10800343, 10800344,
-      10800349, 10800360, 10800361, 10800362, 48006201
-    ],
+    "reachableControlSkillIds": [10800301, 10800302, 10800303, 10800310, 10800311, 10800312, 10800313, 10800314, 10800315, 10800316, 10800321, 10800322, 10800324, 10800325, 10800326, 10800327, 10800331, 10800341, 10800342, 10800343, 10800344, 10800349, 10800360, 10800361, 10800362, 48006201],
     "contextInputEdges": [],
     "publicActionDeclarations": [],
     "publicActionForms": [
@@ -64,7 +52,9 @@
           "sourceKind": "declared-verified-input-reopen-occupancy",
           "sourceIdentity": "skill_control_10800312.asset#attack-reopen-window-start=112F"
         },
-        "condition": { "kind": "always" }
+        "condition": {
+          "kind": "always"
+        }
       },
       {
         "publicActionKind": "ultimate",
@@ -80,7 +70,9 @@
           "sourceKind": "declared-verified-input-reopen-occupancy",
           "sourceIdentity": "skill_control_10800313.asset#attack-reopen-window-start=200F"
         },
-        "condition": { "kind": "always" }
+        "condition": {
+          "kind": "always"
+        }
       },
       {
         "publicActionKind": "star-carry",
@@ -96,14 +88,18 @@
           "sourceKind": "declared-control-frame-count-occupancy",
           "sourceIdentity": "skill_control_10800322.asset#skillResourceMaps[0].frameCountDict[0]=90"
         },
-        "condition": { "kind": "always" }
+        "condition": {
+          "kind": "always"
+        }
       }
     ],
     "attackInputChains": [
       {
         "chainIdentity": "miti-normal-three-inputs",
         "sourceSkillId": 10800301,
-        "condition": { "kind": "always" },
+        "condition": {
+          "kind": "always"
+        },
         "segments": [
           {
             "controlSkillId": 10800301,
@@ -115,7 +111,10 @@
             "subSkillIndex": 0,
             "nextControlSkillId": 10800303
           },
-          { "controlSkillId": 10800303, "subSkillIndex": 0 }
+          {
+            "controlSkillId": 10800303,
+            "subSkillIndex": 0
+          }
         ]
       }
     ],
@@ -127,12 +126,7 @@
       "settlementContract": {
         "contractIdentity": "m12-enemy-settlement-runtime-v2",
         "contractHash": "2e3095db4b8c9232",
-        "packetOrder": [
-          "read-pre-break-state-for-hp-output",
-          "settle-toughness-and-break-transition",
-          "commit-current-packet-hp-mutation",
-          "publish-updated-break-state-to-later-canonical-packets"
-        ],
+        "packetOrder": ["read-pre-break-state-for-hp-output", "settle-toughness-and-break-transition", "commit-current-packet-hp-mutation", "publish-updated-break-state-to-later-canonical-packets"],
         "clientParityReady": false
       },
       "assumptions": [
@@ -571,13 +565,8 @@
       {
         "skillId": 10800361,
         "runtimeGenerationMode": "target-state-runtime",
-        "sourceElementIds": [
-          108003141, 108003143, 108003144, 108003163, 108003164
-        ],
-        "runtimeBindingIdentities": [
-          "miti-passive61-team-sp-periodic",
-          "miti-passive61-team-attack"
-        ],
+        "sourceElementIds": [108003141, 108003143, 108003144, 108003163, 108003164],
+        "runtimeBindingIdentities": ["miti-passive61-team-sp-periodic", "miti-passive61-team-attack"],
         "effectId": "battle-element:108003143",
         "effectElementId": 108003143,
         "markerElementId": 108003141,
@@ -608,560 +597,392 @@
       "identity": "actor:108003|control:10800349|sub:0|0-189|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_-8745323313159042400__-8745323313159042400.json#behaviorlineControl[0].behaviorList[pathId=1741702029549800096]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_1741702029549800096__1741702029549800096.json",
       "sourceKind": "control-window",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-control-window"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-control-window"],
       "sourceIdentity": "skill_control_10800349.asset#sub0-window-0-189"
     },
     {
       "identity": "actor:108003|control:10800349|sub:0|25-200|target:10800349/sub:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_-6253566385692046688__-6253566385692046688.json#behaviorlineControl[0].behaviorList[pathId=103117997894634144]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_103117997894634144__103117997894634144.json",
       "sourceKind": "control-window",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-control-window"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-control-window"],
       "sourceIdentity": "skill_control_10800349.asset#sub0-window-25-200-to-reaction"
     },
     {
       "identity": "actor:108003|control:10800349|sub:0|25-214|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_3862429541939710624__3862429541939710624.json#behaviorlineControl[0].behaviorList[pathId=6111971943730940576]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_6111971943730940576__6111971943730940576.json",
       "sourceKind": "control-window",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-control-window"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-control-window"],
       "sourceIdentity": "skill_control_10800349.asset#sub0-window-25-214"
     },
     {
       "identity": "actor:108003|control:10800349|sub:0|50-239|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_2409325687596550816__2409325687596550816.json#behaviorlineControl[0].behaviorList[pathId=-3097627021391918432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/MonoBehaviour_-3097627021391918432__-3097627021391918432.json",
       "sourceKind": "control-window",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-control-window"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-control-window"],
       "sourceIdentity": "skill_control_10800349.asset#sub0-window-50-239"
     },
     {
       "identity": "actor|108003|10800301|1|10800310|charged-attack",
       "sourceKind": "public-action",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-input-variant-selector",
-        "charge-staging-control-selects-short-or-full-runtime-form"
-      ],
+      "reasons": ["covered-by-applied-input-variant-selector", "charge-staging-control-selects-short-or-full-runtime-form"],
       "sourceIdentity": "skill_control_10800310.asset#25F->10800341;52F->10800342|character-combat-recipe:108003#inputVariantSelectors.miti-charged-stage-selector"
     },
     {
       "identity": "actor|108003|10800301|6|10800315|dodge-attack",
       "sourceKind": "public-action",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "dedicated-dodge-attack-requires-excluded-reaction-stimulus"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "dedicated-dodge-attack-requires-excluded-reaction-stimulus"],
       "sourceIdentity": "hero-module:108003#skill:10800301#集中闪避|skill_control_10800315.asset"
     },
     {
       "identity": "effect:10800311|0|elements|2|1192741723615063400|element:1192741723615063400|36|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "verified-zero-buff-template-no-gameplay-child",
-        "all-gameplay-dimensions-source-verified-zero"
-      ],
+      "reasons": ["verified-zero-buff-template-no-gameplay-child", "all-gameplay-dimensions-source-verified-zero"],
       "sourceIdentity": "ast_108003114#Buff元素模板#duration=300;children=empty|character-combat-owner-contract:108003#dimensions-verified-zero"
     },
     {
       "identity": "effect:10800312|0|elements|6|2611469280720299036|element:2611469280720299036|80|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-target-state-transaction",
-        "electrified-star-skill-gain-runtime-applied"
-      ],
+      "reasons": ["covered-by-applied-target-state-transaction", "electrified-star-skill-gain-runtime-applied"],
       "sourceIdentity": "skill_control_10800312.asset#element108003118@80F|character-combat-recipe:108003#targetStateTransactions.miti-electrified-from-star-skill"
     },
     {
       "identity": "effect:10800313|0|elements|1|2611469280720299036|element:2611469280720299036|114|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-target-state-transaction",
-        "electrified-ultimate-gain-runtime-applied"
-      ],
+      "reasons": ["covered-by-applied-target-state-transaction", "electrified-ultimate-gain-runtime-applied"],
       "sourceIdentity": "skill_control_10800313.asset#element108003118@114F|character-combat-recipe:108003#targetStateTransactions.miti-electrified-from-ultimate"
     },
     {
       "identity": "effect:10800313|0|bulletElements|1|element-250|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-mark-binding",
-        "shared-tuning-component-reference-not-independent-occurrence"
-      ],
+      "reasons": ["covered-by-applied-tuning-mark-binding", "shared-tuning-component-reference-not-independent-occurrence"],
       "sourceIdentity": "skill_control_10800313.asset#bulletElements[1]=element250|ast_250->component253|character-combat-recipe:108003#miti-ultimate-thunder-mark-two-occurrences"
     },
     {
       "identity": "effect:10800313|0|bulletElements|1|element-250|element:-637110086033006477|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-mark-binding",
-        "shared-held-damage-reference-not-independent-occurrence"
-      ],
+      "reasons": ["covered-by-applied-tuning-mark-binding", "shared-held-damage-reference-not-independent-occurrence"],
       "sourceIdentity": "skill_control_10800313.asset#bulletElements[1]=element250|ast_250->component251|verified-tuning-runtime:thunder"
     },
     {
       "identity": "effect:10800313|0|bulletElements|1|element-250|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-mark-binding",
-        "shared-tuning-component-reference-not-independent-occurrence"
-      ],
+      "reasons": ["covered-by-applied-tuning-mark-binding", "shared-tuning-component-reference-not-independent-occurrence"],
       "sourceIdentity": "skill_control_10800313.asset#bulletElements[1]=element250|ast_250->component252|character-combat-recipe:108003#miti-ultimate-thunder-mark-two-occurrences"
     },
     {
       "identity": "effect:10800313|0|bulletElements|2|element-253|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-persistent-modifier",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["covered-by-applied-tuning-persistent-modifier", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800313.asset#bulletElements[2]=element253|verified-tuning-runtime:thunder#attribute8"
     },
     {
       "identity": "effect:10800313|0|bulletElements|3|element-252|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-persistent-modifier",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["covered-by-applied-tuning-persistent-modifier", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800313.asset#bulletElements[3]=element252|verified-tuning-runtime:thunder#attribute7"
     },
     {
       "identity": "effect:10800313|0|elements|3|-3809486317990090417|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "covered-by-applied-tuning-mark-binding"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "covered-by-applied-tuning-mark-binding"],
       "sourceIdentity": "skill_control_10800313.asset#elements[3]=element250|ast_250->component253|character-combat-recipe:108003#sourceReferenceKind=bulletElements"
     },
     {
       "identity": "effect:10800313|0|elements|3|-3809486317990090417|element:-3809486317990090417|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "bullet-consumer-proves-single-two-layer-transaction"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "bullet-consumer-proves-single-two-layer-transaction"],
       "sourceIdentity": "skill_control_10800313.asset#elements[3]=element250|bullet10800319#two-own-element-occurrences-max1"
     },
     {
       "identity": "effect:10800313|0|elements|3|-3809486317990090417|element:-637110086033006477|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "covered-by-verified-tuning-held-damage-runtime"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "covered-by-verified-tuning-held-damage-runtime"],
       "sourceIdentity": "skill_control_10800313.asset#elements[3]=element250|verified-tuning-runtime:thunder#component251"
     },
     {
       "identity": "effect:10800313|0|elements|3|-3809486317990090417|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "covered-by-applied-tuning-mark-binding"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "covered-by-applied-tuning-mark-binding"],
       "sourceIdentity": "skill_control_10800313.asset#elements[3]=element250|ast_250->component252|character-combat-recipe:108003#sourceReferenceKind=bulletElements"
     },
     {
       "identity": "effect:10800313|0|elements|4|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800313.asset#elements[4]=element253|verified-tuning-runtime:thunder#attribute8"
     },
     {
       "identity": "effect:10800313|0|elements|5|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800313.asset#elements[5]=element252|verified-tuning-runtime:thunder#attribute7"
     },
     {
       "identity": "effect:10800342|0|elements|1|-3455256716426193645|element:2611469280720299036|4|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-target-state-transaction",
-        "electrified-clear-wrapper-runtime-applied-at-4f"
-      ],
+      "reasons": ["covered-by-applied-target-state-transaction", "electrified-clear-wrapper-runtime-applied-at-4f"],
       "sourceIdentity": "skill_control_10800342.asset#element108003120@4F->element108003118|character-combat-recipe:108003#targetStateTransactions.miti-electrified-full-charge-consume"
     },
     {
       "identity": "effect:10800342|0|elements|1|-3455256716426193645|element:5425475631875380505|4|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "source-clear-wrapper-not-battle-property-modifier",
-        "covered-by-applied-target-state-consume-operator"
-      ],
+      "reasons": ["source-clear-wrapper-not-battle-property-modifier", "covered-by-applied-target-state-consume-operator"],
       "sourceIdentity": "ast_108003120#清除buff标记重击3闪电球|skill_control_10800342.asset#clear@4F|character-combat-recipe:108003#miti-electrified-full-charge-consume"
     },
     {
       "identity": "effect:10800342|0|bulletElements|1|element-250|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-mark-binding",
-        "shared-tuning-component-reference-not-independent-occurrence"
-      ],
+      "reasons": ["covered-by-applied-tuning-mark-binding", "shared-tuning-component-reference-not-independent-occurrence"],
       "sourceIdentity": "skill_control_10800342.asset#bulletElements[1]=element250|ast_250->component253|character-combat-recipe:108003#miti-full-charge-thunder-mark"
     },
     {
       "identity": "effect:10800342|0|bulletElements|1|element-250|element:-637110086033006477|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-mark-binding",
-        "shared-held-damage-reference-not-independent-occurrence"
-      ],
+      "reasons": ["covered-by-applied-tuning-mark-binding", "shared-held-damage-reference-not-independent-occurrence"],
       "sourceIdentity": "skill_control_10800342.asset#bulletElements[1]=element250|ast_250->component251|verified-tuning-runtime:thunder"
     },
     {
       "identity": "effect:10800342|0|bulletElements|1|element-250|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-mark-binding",
-        "shared-tuning-component-reference-not-independent-occurrence"
-      ],
+      "reasons": ["covered-by-applied-tuning-mark-binding", "shared-tuning-component-reference-not-independent-occurrence"],
       "sourceIdentity": "skill_control_10800342.asset#bulletElements[1]=element250|ast_250->component252|character-combat-recipe:108003#miti-full-charge-thunder-mark"
     },
     {
       "identity": "effect:10800342|0|bulletElements|2|element-253|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-persistent-modifier",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["covered-by-applied-tuning-persistent-modifier", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800342.asset#bulletElements[2]=element253|verified-tuning-runtime:thunder#attribute8"
     },
     {
       "identity": "effect:10800342|0|bulletElements|3|element-252|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-tuning-persistent-modifier",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["covered-by-applied-tuning-persistent-modifier", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800342.asset#bulletElements[3]=element252|verified-tuning-runtime:thunder#attribute7"
     },
     {
       "identity": "effect:10800342|0|elements|6|-3809486317990090417|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "covered-by-applied-tuning-mark-binding"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "covered-by-applied-tuning-mark-binding"],
       "sourceIdentity": "skill_control_10800342.asset#elements[6]=element250|ast_250->component253|character-combat-recipe:108003#sourceReferenceKind=bulletElements"
     },
     {
       "identity": "effect:10800342|0|elements|6|-3809486317990090417|element:-3809486317990090417|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "arrow-collision-consumer-proves-one-mark-per-landed-arrow"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "arrow-collision-consumer-proves-one-mark-per-landed-arrow"],
       "sourceIdentity": "skill_control_10800342.asset#elements[6]=element250|ast_bullet_10800311/17#own-element-on-collision"
     },
     {
       "identity": "effect:10800342|0|elements|6|-3809486317990090417|element:-637110086033006477|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "covered-by-verified-tuning-held-damage-runtime"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "covered-by-verified-tuning-held-damage-runtime"],
       "sourceIdentity": "skill_control_10800342.asset#elements[6]=element250|verified-tuning-runtime:thunder#component251"
     },
     {
       "identity": "effect:10800342|0|elements|6|-3809486317990090417|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "covered-by-applied-tuning-mark-binding"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "covered-by-applied-tuning-mark-binding"],
       "sourceIdentity": "skill_control_10800342.asset#elements[6]=element250|ast_250->component252|character-combat-recipe:108003#sourceReferenceKind=bulletElements"
     },
     {
       "identity": "effect:10800342|0|elements|7|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800342.asset#elements[7]=element253|verified-tuning-runtime:thunder#attribute8"
     },
     {
       "identity": "effect:10800342|0|elements|8|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "dependency-inventory-reference-not-runtime-occurrence",
-        "duplicate-component-reference-through-element250"
-      ],
+      "reasons": ["dependency-inventory-reference-not-runtime-occurrence", "duplicate-component-reference-through-element250"],
       "sourceIdentity": "skill_control_10800342.asset#elements[8]=element252|verified-tuning-runtime:thunder#attribute7"
     },
     {
       "identity": "effect:10800361|0|elements|0|2840154760276311923|element:2840154760276311923|0|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-applied-runtime-effect-binding",
-        "ten-one-second-shared-sp-ticks-runtime-applied"
-      ],
+      "reasons": ["covered-by-applied-runtime-effect-binding", "ten-one-second-shared-sp-ticks-runtime-applied"],
       "sourceIdentity": "skill_control_10800361.asset#element108003163@0F|character-combat-recipe:108003#runtimeEffectBindings.miti-wingbreak-team-sp-ticks"
     },
     {
       "identity": "effect:10800349|1|bulletElements|1|element-250|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-tuning-branch"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-tuning-branch"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-reaction-branch#element250->253"
     },
     {
       "identity": "effect:10800349|1|bulletElements|1|element-250|element:-3809486317990090417|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-tuning-branch"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-tuning-branch"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-reaction-branch#element250"
     },
     {
       "identity": "effect:10800349|1|bulletElements|1|element-250|element:-637110086033006477|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-tuning-branch"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-tuning-branch"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-reaction-branch#element250->251"
     },
     {
       "identity": "effect:10800349|1|bulletElements|1|element-250|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-tuning-branch"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-tuning-branch"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-reaction-branch#element250->252"
     },
     {
       "identity": "effect:10800349|1|bulletElements|2|element-253|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-tuning-component"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-tuning-component"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-reaction-branch#element253"
     },
     {
       "identity": "effect:10800349|1|bulletElements|3|element-252|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-tuning-component"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-tuning-component"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-reaction-branch#element252"
     },
     {
       "identity": "effect:10800349|1|elements|2|-3809486317990090417|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-dependency-reference"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-dependency-reference"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-elements[2]=element250->253"
     },
     {
       "identity": "effect:10800349|1|elements|2|-3809486317990090417|element:-3809486317990090417|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-dependency-reference"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-dependency-reference"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-elements[2]=element250"
     },
     {
       "identity": "effect:10800349|1|elements|2|-3809486317990090417|element:-637110086033006477|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-dependency-reference"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-dependency-reference"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-elements[2]=element250->251"
     },
     {
       "identity": "effect:10800349|1|elements|2|-3809486317990090417|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-dependency-reference"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-dependency-reference"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-elements[2]=element250->252"
     },
     {
       "identity": "effect:10800349|1|elements|3|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-dependency-reference"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-dependency-reference"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-elements[3]=element253"
     },
     {
       "identity": "effect:10800349|1|elements|4|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-dependency-reference"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-dependency-reference"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-elements[4]=element252"
     },
     {
       "identity": "hit:10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "source-projectile-occurrence-runtime-applied"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "source-projectile-occurrence-runtime-applied"],
       "sourceIdentity": "skill_control_10800301.asset#bullet10800301-occurrence1|golden:108003#miti-normal-a1"
     },
     {
       "identity": "hit:10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:5972264583403352192|config:0|bullet:10800301:0:0|element:108003002:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "source-projectile-occurrence-runtime-applied"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "source-projectile-occurrence-runtime-applied"],
       "sourceIdentity": "skill_control_10800301.asset#bullet10800301-occurrence2|golden:108003#miti-normal-a1"
     },
     {
       "identity": "hit:10800302|0|projectile|108003123|10800302|0|0|control:10800302|sub:0|behavior:-3235136937659631629|config:0|bullet:10800302:0:0|element:108003123:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "source-projectile-occurrence-runtime-applied"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "source-projectile-occurrence-runtime-applied"],
       "sourceIdentity": "skill_control_10800302.asset#bullet10800302-occurrence1|golden:108003#miti-normal-a2"
     },
     {
       "identity": "hit:10800302|0|projectile|108003123|10800302|0|0|control:10800302|sub:0|behavior:-243336891521665037|config:0|bullet:10800302:0:0|element:108003123:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "source-projectile-occurrence-runtime-applied"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "source-projectile-occurrence-runtime-applied"],
       "sourceIdentity": "skill_control_10800302.asset#bullet10800302-occurrence2|golden:108003#miti-normal-a2"
     },
     {
       "identity": "hit:10800302|0|projectile|108003123|10800302|0|0|control:10800302|sub:0|behavior:8405483391543638003|config:0|bullet:10800302:0:0|element:108003123:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "source-projectile-occurrence-runtime-applied"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "source-projectile-occurrence-runtime-applied"],
       "sourceIdentity": "skill_control_10800302.asset#bullet10800302-occurrence3|golden:108003#miti-normal-a2"
     },
     {
       "identity": "hit:10800310|1|projectile|108003124|10800316|0|0|control:10800310|sub:1|behavior:8998957930748088436|config:0|bullet:10800316:0:0|element:108003124:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "charge-selector-staging-control-not-final-action-form",
-        "short-and-full-output-controls-runtime-applied"
-      ],
+      "reasons": ["charge-selector-staging-control-not-final-action-form", "short-and-full-output-controls-runtime-applied"],
       "sourceIdentity": "skill_control_10800310.asset#sub1-staging-projectile|character-combat-recipe:108003#miti-charged-stage-selector"
     },
     {
       "identity": "hit:10800313|0|projectile|108003137|10800310|0|0|control:10800313|sub:0|behavior:-3701019818254093200|config:0|bullet:10800310:0:0|element:108003137:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "single-target-history-allows-one-chain-hit-only"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "single-target-history-allows-one-chain-hit-only"],
       "sourceIdentity": "skill_control_10800313.asset#bullet10800310@146F|ast_bullet_10800310#persistent-target-history|golden:108003#miti-ultimate"
     },
     {
       "identity": "hit:10800341|0|projectile|108003125|10800314|0|0|control:10800341|sub:0|behavior:-5881325328861887341|config:0|bullet:10800314:0:0|element:108003125:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "weak-orb-creation-gated-by-landed-arrow"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "weak-orb-creation-gated-by-landed-arrow"],
       "sourceIdentity": "skill_control_10800341.asset#bullet10800314@1F|golden:108003#miti-short-charge-electrified-on"
     },
     {
       "identity": "hit:10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "covered-by-zero-distance-canonical-hit-settlement",
-        "base-and-conditional-arrow-occurrence-cardinality-runtime-applied"
-      ],
+      "reasons": ["covered-by-zero-distance-canonical-hit-settlement", "base-and-conditional-arrow-occurrence-cardinality-runtime-applied"],
       "sourceIdentity": "skill_control_10800342.asset#base-bullet10800311@3F|conditional-bullet10800317x2@3F|golden:108003#miti-full-charge-electrified-on/off"
     },
     {
       "identity": "hit:10800349|1|projectile|108003024|10800309|0|0|control:10800349|sub:1|behavior:-3020611592930401851|config:0|bullet:10800309:0:0|element:108003024:0",
       "sourceKind": "hit",
       "status": "not-applicable",
-      "reasons": [
-        "m12c-zero-distance-passive-boss-out-of-scope",
-        "reaction-only-projectile"
-      ],
+      "reasons": ["m12c-zero-distance-passive-boss-out-of-scope", "reaction-only-projectile"],
       "sourceIdentity": "skill_control_10800349.asset#sub1-reaction-projectile10800309"
     }
   ],
@@ -1172,19 +993,19 @@
     "teamCharacterIds": [108003, 101010, 103002],
     "initialControlledCharacterId": 108003,
     "initialActorSp": {
-      "108003": 100,
       "101010": 0,
-      "103002": 0
+      "103002": 0,
+      "108003": 100
     },
     "kiboByCharacterId": {
-      "108003": 500001,
       "101010": 500003,
-      "103002": 500039
+      "103002": 500039,
+      "108003": 500001
     },
     "initialKiboSp": {
-      "108003": 100,
       "101010": 100,
-      "103002": 100
+      "103002": 100,
+      "108003": 100
     },
     "actions": [
       {
@@ -1337,8 +1158,8 @@
         "resources.tuningMarkAcquireByActionId.miti-full-charge-electrified-off.eventCount": 1,
         "resources.tuningMarkAcquireByActionId.miti-full-charge-electrified-off.totalDelta": 0,
         "resources.tuningMarkAcquireByActionId.miti-switch-out-star-carry--on-exit--actor-108003--star-carry.eventCount": 1,
-        "resources.ownerDirectSp.eventCount": 17,
-        "resources.ownerDirectSp.totalChange": 37,
+        "resources.ownerDirectSp.eventCount": 18,
+        "resources.ownerDirectSp.totalChange": 39,
         "resources.targetStateSummary.appliedGroupCount": 1,
         "resources.targetStateSummary.skippedGroupCount": 1,
         "resources.targetStateSummary.directSpEventCount": 22
