@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "5f97bd6ab3e8d046",
+  "manifestIndexHash": "b1a6e4e8ac37f9b2",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -738,13 +738,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 47,
+      "blockingLedgerCount": 50,
       "matrixRequiredCount": 155,
-      "matrixPassedCount": 114,
-      "manifestHash": "c43ff930d131d0b5",
-      "qualificationSubjectHash": "1e80ff9781c58884",
-      "sourceOfTruthHash": "2a034816e5e509dc",
-      "profileHash": "2195733cd231453067a209314ad4da1a7b2a0273af049865183d864607eb42ef",
+      "matrixPassedCount": 111,
+      "manifestHash": "cf864af3ff3c2c0a",
+      "qualificationSubjectHash": "6d7d5f104674af9c",
+      "sourceOfTruthHash": "ab6209538f5648e4",
+      "profileHash": "920b36ac07211b294e53912040f43374bf1d513921db42cdfded3c29815610c2",
       "visualScenarioIds": [
         "m11-d-101003-visual-acceptance"
       ]
@@ -764,10 +764,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 202,
       "matrixPassedCount": 202,
-      "manifestHash": "8a1e15ff4e68e5bf",
-      "qualificationSubjectHash": "df559f6d60bbe4b6",
-      "sourceOfTruthHash": "40723fe34fbd180a",
-      "profileHash": "8ee6f40bf8807ad7acf007bdaa2b4b516bd3bc734b8d9f2c9b5d7bcf77b2daaa",
+      "manifestHash": "6dbacd1711c26c27",
+      "qualificationSubjectHash": "1f89665fc50102a4",
+      "sourceOfTruthHash": "e6528be0ccd513da",
+      "profileHash": "63df06c1fe969d9d69a8d0366621de7673d073bac43c52a2203e774f8092f12f",
       "visualScenarioIds": [
         "m11-d-101010-visual-acceptance"
       ]
@@ -787,10 +787,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 108,
       "matrixPassedCount": 108,
-      "manifestHash": "bd91f4c86c62ecdd",
-      "qualificationSubjectHash": "f6620a95238c9c26",
-      "sourceOfTruthHash": "7066322b80e46cad",
-      "profileHash": "ec67a7c6281acb81074e0635d92389bee368158920730312ca8e55135102bd52",
+      "manifestHash": "a17b216d1732a670",
+      "qualificationSubjectHash": "8b9f82063380d02a",
+      "sourceOfTruthHash": "dd972fac2f267040",
+      "profileHash": "6918e186666b62a206c92095127c029558aac8baf217ee68c65059a5884747bc",
       "visualScenarioIds": [
         "m12-b3-102001-zero-distance-acceptance"
       ]
@@ -810,10 +810,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 190,
       "matrixPassedCount": 190,
-      "manifestHash": "bbe9dda65cb82f12",
-      "qualificationSubjectHash": "4c9df864d850235e",
-      "sourceOfTruthHash": "9a0852fcad5e4ea9",
-      "profileHash": "82c6699478ac5fb95045d10271e82b95ca1b990510b8aee53b6f290ca312c1a8",
+      "manifestHash": "dd1950e63a810a4a",
+      "qualificationSubjectHash": "e513aa44bf21be0f",
+      "sourceOfTruthHash": "488a0584810f4ab9",
+      "profileHash": "f3808fa0838bfb9fe9ad990da5f74c974c7919cd7d392dc933742969069c5988",
       "visualScenarioIds": [
         "m12-b3-103002-reload-window-boundaries"
       ]
@@ -833,10 +833,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 80,
       "matrixPassedCount": 80,
-      "manifestHash": "8f8cd12223da615e",
-      "qualificationSubjectHash": "487a5f39b99368d9",
-      "sourceOfTruthHash": "a85cf0843f6c73c3",
-      "profileHash": "6e97e1a03e0344711f0bbfac023e10cc18089ec4b28c8b6b3cc3f8f26b070705",
+      "manifestHash": "bf2904bbeff6398e",
+      "qualificationSubjectHash": "d374d3686c54e95c",
+      "sourceOfTruthHash": "2ac18abaa9373fc4",
+      "profileHash": "e38a6584543d5acf751b39365bc2dfd5107b3d35879aedac456741776b3dadc7",
       "visualScenarioIds": [
         "m12-b3-107001-focused-acceptance"
       ]
@@ -844,24 +844,22 @@
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "visually-accepted",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
         "runtime-integrated",
-        "visually-accepted"
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
-      ],
-      "blockingLedgerCount": 9,
+      "optimizationReady": true,
+      "blockers": [],
+      "blockingLedgerCount": 0,
       "matrixRequiredCount": 108,
-      "matrixPassedCount": 99,
-      "manifestHash": "54d76158bda91cc4",
-      "qualificationSubjectHash": "dc29087c03a41033",
-      "sourceOfTruthHash": "034aff8dd0ac0e6e",
-      "profileHash": "d5c80b070ac5dae8b4ea3d79a008af7d27e42ae8cfc0049eb6329fb0d6a72590",
+      "matrixPassedCount": 108,
+      "manifestHash": "10fd74fea0cf32f4",
+      "qualificationSubjectHash": "4658db6425710175",
+      "sourceOfTruthHash": "53008f1144b330eb",
+      "profileHash": "e88202be4bc8255ea22de8c3a393994bf534ee45ef9f23068c8b16c2c9fbadfa",
       "visualScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
       ]
@@ -881,10 +879,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 134,
       "matrixPassedCount": 134,
-      "manifestHash": "b5496f24bd580b5e",
-      "qualificationSubjectHash": "26c8b9e69624f34c",
-      "sourceOfTruthHash": "7f613ba2fe52761e",
-      "profileHash": "6c142271d239d743c4899cae2306bbf158fd986c9519e8abfd4723a3879f17ce",
+      "manifestHash": "5eb64ecbdfb150f6",
+      "qualificationSubjectHash": "4485203408a56283",
+      "sourceOfTruthHash": "6ee5b6b7436dc319",
+      "profileHash": "eaeeb187bb5ad8a41e6446837c654c13feb8b80e85e520525715647379e1c6f4",
       "visualScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
       ]
@@ -904,10 +902,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 134,
       "matrixPassedCount": 134,
-      "manifestHash": "1a2c78f801ce3cf5",
-      "qualificationSubjectHash": "2154d32918223a7c",
-      "sourceOfTruthHash": "4af26aef2ccddba1",
-      "profileHash": "3a5e713c62424857e4b28226d1ad3470bd845deb83f809ae84287b8d19e4df6e",
+      "manifestHash": "b09e9a1244582e45",
+      "qualificationSubjectHash": "7b296ee673083095",
+      "sourceOfTruthHash": "f2c3f3b9a4ba90e0",
+      "profileHash": "5155ba4cba1820584d5f9c35d479b92c55150b4b0f5406c3e23d21e7639366cd",
       "visualScenarioIds": [
         "m11-d-109001-visual-acceptance"
       ]
@@ -926,13 +924,13 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 99,
+      "blockingLedgerCount": 100,
       "matrixRequiredCount": 184,
-      "matrixPassedCount": 85,
-      "manifestHash": "52be7885e5d33bee",
-      "qualificationSubjectHash": "c058090bba6aa7d9",
-      "sourceOfTruthHash": "b309109200e61512",
-      "profileHash": "1654726b5b4e59dbfca1fea165c73a477a1effa89ba84091d4fdbc9d832e6261",
+      "matrixPassedCount": 84,
+      "manifestHash": "ad58977832094190",
+      "qualificationSubjectHash": "28f660ec62af488f",
+      "sourceOfTruthHash": "415647449e7a5506",
+      "profileHash": "236da5a8b278b30182f804a32ee629e0cadda4ba9e05bd59b77c35641043f330",
       "visualScenarioIds": [
         "m12-b3-112001-assumption-v1-focused-acceptance"
       ]
@@ -952,10 +950,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 195,
       "matrixPassedCount": 195,
-      "manifestHash": "3791f1a07248b75d",
-      "qualificationSubjectHash": "0e810f7f05c6370c",
-      "sourceOfTruthHash": "98518f7a9af725f9",
-      "profileHash": "5795d1738e5869adafa995db8feaae09243c7077aa533679045d9c19b3b086ef",
+      "manifestHash": "bcf69a4816a1419a",
+      "qualificationSubjectHash": "01d2caea5bfd39be",
+      "sourceOfTruthHash": "4cf905d52ac402f4",
+      "profileHash": "1055d930a91b7586c0250a0f8cf6c79bc896ba2e8f134e3bd119193136a4bd4e",
       "visualScenarioIds": [
         "m12-b3-starborn-199001-focused-acceptance"
       ]
@@ -975,10 +973,10 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 195,
       "matrixPassedCount": 195,
-      "manifestHash": "b9d13ec4c4a88d02",
-      "qualificationSubjectHash": "85d129e7e4ac382c",
-      "sourceOfTruthHash": "3b86b1f8a875c348",
-      "profileHash": "a1fda6f8525c64d49c5f92383d332c415e890fe866533e6bc5165bec6c059aaa",
+      "manifestHash": "f5de2964647204fd",
+      "qualificationSubjectHash": "bb964c42f4124ec5",
+      "sourceOfTruthHash": "2ed82f17f7c6d5ba",
+      "profileHash": "6b00ff19d4fc9b1fe34156e136337a5e7fb59670ba9eddb358b2002162a045fd",
       "visualScenarioIds": [
         "m12-b3-starborn-199002-focused-acceptance"
       ]
@@ -990,10 +988,9 @@
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
       "extracted": 2,
-      "optimization-ready": 8,
-      "visually-accepted": 1
+      "optimization-ready": 9
     },
-    "optimizationReadyCount": 8
+    "optimizationReadyCount": 9
   },
-  "catalogHash": "105a3f6e015afe8e"
+  "catalogHash": "17071bb68a1d4fa8"
 }

@@ -3957,7 +3957,7 @@ function inspectNegativeActionCase(service, fixture, negativeCase) {
   };
 }
 
-function inspectIsolatedActionCase(service, fixture, isolatedCase, profile) {
+export function inspectIsolatedActionCase(service, fixture, isolatedCase, profile) {
   const contract = structuredClone(fixture);
   contract.actions = structuredClone(isolatedCase.actions ?? []);
   contract.scenario.id += '--isolated--' + String(isolatedCase.identity);
