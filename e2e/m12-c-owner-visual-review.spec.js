@@ -88,6 +88,33 @@ test.skip(!ownerCase, 'Set M12C_VISUAL_OWNER to a supported owner id');
 
 test(`[m12-c-owner-visual-review] ${ownerId}`, async ({ page }) => {
   test.setTimeout(180_000);
+  // 捕获前完整 tracked tree clean 检查（P1-3 二次审查）：截图必须由
+  // 声明 HEAD 的 tracked tree 产生。排除预期输出目录与已知 untracked
+  // 诊断文件；任何其他 tracked 修改（含 src/ 运行时、生成器、recipe、
+  // 配置）都使证据不可复现，捕获必须失败。
+  const treeStatus = execFileSync('git', ['status', '--porcelain'], {
+    encoding: 'utf8',
+  })
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean)
+    .filter(line => {
+      const path = line.slice(3);
+      if (
+        path.startsWith('work/m12-c/product-review/visual-evidence/') ||
+        path.startsWith('work/m12-c/product-review/runtime-package-') ||
+        path === 'work/m12-c/product-review/signoff-records/'
+      ) {
+        return false;
+      }
+      return true;
+    });
+  if (treeStatus.length > 0) {
+    throw new Error(
+      'Capture requires tracked-clean tree; dirty: ' +
+        treeStatus.slice(0, 10).join(', ')
+    );
+  }
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/#/workbench');
   await page.evaluate(() => window.localStorage.clear());

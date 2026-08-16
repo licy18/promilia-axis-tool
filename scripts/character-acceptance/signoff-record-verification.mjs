@@ -1,20 +1,24 @@
-// Signoff record 认证（P1-1/P1-2/P1-4 修复）：
+// Signoff record 认证（P1-1/P1-2/P1-4 + 二次审查修复）：
 // 对 status=accepted 的 recipe，要求 acceptanceCommit 指向的 git 对象确实
-// 包含不可变 signoff record 文件，且 record 内容与当前派生一致：
-//   - record 必须是非 null 对象且 contract/schema/kind/必填字段完整
+// 包含不可变 signoff record 文件，且 record 内容与【独立派生值】一致——
+// 所有比对值必须由调用方（生成器 preview manifest）派生传入，而非来自
+// recipe 声明（recipe 是可被篡改的待验证对象）：
+//   - record 必须是非 null 对象且 schema/contract/kind/必填字段完整
 //   - record 内容 SHA-256 == recipe.signoffRecordSha256（commit 内内容未被改）
 //   - record.ownerId == recipe.ownerId
 //   - record.mechanicsPackageHash == 当前机制包 packageHash（机制包漂移 → 失效）
 //   - record.captureHarness.specSha256 == git 规范化字节的 spec SHA-256
-//     （用 `git show <captureCommit>:<specPath>` 取 blob 字节，避免 CRLF 污染；
-//      captureCommit 由 record.repositoryHead 提供）
-//   - record.qualificationSubjectHash == 当前派生 subject（subject 漂移 → 失效）
-//   - record.scenarioIdentity / fixtureSha256 / canonicalTraceHash 与
-//     recipe 自动化证据一致（场景漂移 → 失效）
-//   - record.automatedEvidence[0].screenshotSha256 == recipe 截图 SHA
+//   - record.qualificationSubjectHash == 当前派生 subject
+//   - record.scenarioSetHash == 当前派生 scenarioSetHash
+//   - record.scenarioIdentity == 当前派生场景（须与 evidence fixture 一致）
+//   - record.canonicalTraceHash == 当前派生 canonical trace hash
+//   - record.automatedEvidence 每条：fixtureSha256 与当前 fixture 一致、
+//     screenshotSha256 与 recipe 证据一致、fixture.scenario.id == 场景
+//   - 以上全部为强校验：缺失/不匹配一律 fail-closed
 //
-// 用法：verifySignoffRecord(recipe, { projectRoot, qualificationSubjectHash })
-// 返回 { verified, issues, recordPath, recordSha256, authentication }。
+// 用法：verifySignoffRecord(recipe, { projectRoot, derived }) 其中
+// derived = { qualificationSubjectHash, scenarioSetHash,
+//             scenarioIdentities, canonicalTraceHash }。
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -23,10 +27,7 @@ import path from 'node:path';
 const SIGN_OFF_CONTRACT = 'AzPrCharacterProductVisualSignoffRecord';
 const SIGN_OFF_KIND = 'azpr-character-product-visual-signoff-record';
 
-export function verifySignoffRecord(
-  recipe,
-  { projectRoot, qualificationSubjectHash }
-) {
+export function verifySignoffRecord(recipe, { projectRoot, derived = {} }) {
   const issues = [];
   const pva = recipe.productVisualAcceptance ?? {};
   const status = String(pva.status ?? 'pending');
@@ -56,6 +57,25 @@ export function verifySignoffRecord(
   }
   if (!recordPath || !/^[0-9a-f]{64}$/.test(recordSha256)) {
     issues.push('signoff-record-reference-invalid');
+  }
+  // 派生值必须存在（缺失 → fail-closed，不能跳过认证）
+  const derivedSubject = String(derived.qualificationSubjectHash ?? '');
+  const derivedScenarioSet = String(derived.scenarioSetHash ?? '');
+  const derivedScenarioIdentities = Array.isArray(derived.scenarioIdentities)
+    ? derived.scenarioIdentities.map(String)
+    : [];
+  const derivedTrace = String(derived.canonicalTraceHash ?? '');
+  if (!/^[0-9a-f]{16}$/.test(derivedSubject)) {
+    issues.push('signoff-record-derived-subject-unavailable');
+  }
+  if (!/^[0-9a-f]{16}$/.test(derivedScenarioSet)) {
+    issues.push('signoff-record-derived-scenario-set-unavailable');
+  }
+  if (derivedScenarioIdentities.length === 0) {
+    issues.push('signoff-record-derived-scenario-unavailable');
+  }
+  if (!/^[0-9a-f]{16}$/.test(derivedTrace)) {
+    issues.push('signoff-record-derived-trace-unavailable');
   }
   if (issues.length) {
     authentication.issues = [...issues];
@@ -144,9 +164,12 @@ export function verifySignoffRecord(
   }
   if (
     !Array.isArray(record.automatedEvidence) ||
-    record.automatedEvidence.length === 0
+    record.automatedEvidence.length === 0 ||
+    record.automatedEvidence.some(
+      e => e == null || typeof e !== 'object' || Array.isArray(e)
+    )
   ) {
-    issues.push('signoff-record-evidence-missing');
+    issues.push('signoff-record-evidence-invalid');
   }
 
   const currentPackage = readMechanicsPackageHash(projectRoot);
@@ -173,46 +196,62 @@ export function verifySignoffRecord(
     issues.push('signoff-record-capture-harness-mismatch');
   }
 
-  if (
-    String(record.qualificationSubjectHash ?? '') !== qualificationSubjectHash
-  ) {
+  // 与独立派生值强比对（非条件式）
+  if (String(record.qualificationSubjectHash ?? '') !== derivedSubject) {
     issues.push('signoff-record-qualification-subject-mismatch');
   }
-
-  // 场景绑定认证：scenarioIdentity / fixtureSha256 / canonicalTraceHash
-  const evidence = record.automatedEvidence?.[0] ?? {};
-  const recipeEvidence = pva.automatedEvidence?.[0] ?? {};
+  if (String(record.scenarioSetHash ?? '') !== derivedScenarioSet) {
+    issues.push('signoff-record-scenario-set-mismatch');
+  }
   if (
-    evidence.scenarioIdentity &&
-    recipeEvidence.scenarioIdentity &&
-    String(evidence.scenarioIdentity) !==
-      String(recipeEvidence.scenarioIdentity)
+    !derivedScenarioIdentities.includes(String(record.scenarioIdentity ?? ''))
   ) {
     issues.push('signoff-record-scenario-identity-mismatch');
   }
-  if (
-    evidence.fixtureSha256 &&
-    recipe.fixturePath &&
-    String(evidence.fixtureSha256) !==
-      sha256Hex(readProjectFileOrEmpty(projectRoot, recipe.fixturePath))
-  ) {
-    issues.push('signoff-record-fixture-sha256-mismatch');
+  if (String(record.canonicalTraceHash ?? '') !== derivedTrace) {
+    issues.push('signoff-record-canonical-trace-mismatch');
   }
-  if (
-    evidence.screenshotSha256 &&
-    String(evidence.screenshotSha256) !==
-      String(recipeEvidence.screenshotSha256 ?? '')
-  ) {
-    issues.push('signoff-record-screenshot-sha256-mismatch');
-  }
-  // canonicalTraceHash：若 record 有而 review/recipe 没有则跳过（recipe 无此字段，
-  // 由 generate 脚本用 visualScenario 的 canonicalHashes 认证——此处确保 record
-  // 自身字段完整）
-  if (
-    !evidence.scenarioIdentity ||
-    !/^[0-9a-f]{16}$/.test(String(record.canonicalTraceHash ?? ''))
-  ) {
-    issues.push('signoff-record-canonical-trace-hash-invalid');
+
+  // 逐条 evidence 强校验：fixture 场景一致 + fixture SHA + 截图 SHA
+  const recipeEvidence = pva.automatedEvidence ?? [];
+  for (const [index, evidence] of record.automatedEvidence.entries()) {
+    const scenarioIdentity = String(evidence.scenarioIdentity ?? '');
+    if (!derivedScenarioIdentities.includes(scenarioIdentity)) {
+      issues.push('signoff-record-evidence-scenario-mismatch:' + index);
+    }
+    const fixturePath = String(evidence.fixturePath ?? '');
+    const fixtureSha256 = String(evidence.fixtureSha256 ?? '');
+    if (!fixturePath || !/^[0-9a-f]{64}$/.test(fixtureSha256)) {
+      issues.push('signoff-record-evidence-fixture-invalid:' + index);
+    } else {
+      const fixtureBytes = readProjectFileOrEmpty(projectRoot, fixturePath);
+      if (sha256Hex(fixtureBytes) !== fixtureSha256) {
+        issues.push('signoff-record-evidence-fixture-sha-mismatch:' + index);
+      } else {
+        let fixture = null;
+        try {
+          fixture = JSON.parse(fixtureBytes.toString('utf8'));
+        } catch (error) {
+          fixture = null;
+        }
+        if (
+          fixture == null ||
+          String(fixture.scenario?.id ?? '') !== scenarioIdentity
+        ) {
+          issues.push(
+            'signoff-record-evidence-fixture-scene-mismatch:' + index
+          );
+        }
+      }
+    }
+    const screenshotSha256 = String(evidence.screenshotSha256 ?? '');
+    const recipeMatch = recipeEvidence[index];
+    if (
+      !/^[0-9a-f]{64}$/.test(screenshotSha256) ||
+      String(recipeMatch?.screenshotSha256 ?? '') !== screenshotSha256
+    ) {
+      issues.push('signoff-record-evidence-screenshot-mismatch:' + index);
+    }
   }
 
   authentication.recordPath = recordPath;
@@ -281,7 +320,8 @@ function readProjectFileOrEmpty(projectRoot, relativePath) {
 
 // 对象级（STARBORN）signoff record 认证：与角色级同构——要求
 // acceptanceCommit 指向的 git 对象确实包含 signoff record，且 record 的
-// subject/package/harness hash 与当前派生一致。
+// subject/package/harness hash 与当前派生一致。所有比对值必须由调用方
+// （对象生成器 preview 派生）传入，缺失即 fail-closed。
 const OBJECT_SIGN_OFF_CONTRACT =
   'AzPrOptimizationObjectProductVisualSignoffRecord';
 const OBJECT_SIGN_OFF_KIND =
@@ -289,7 +329,7 @@ const OBJECT_SIGN_OFF_KIND =
 
 export function verifyOptimizationObjectSignoffRecord(
   recipe,
-  { projectRoot, acceptanceSubjectHash }
+  { projectRoot, derived = {} }
 ) {
   const issues = [];
   const pva = recipe?.productVisualAcceptance ?? {};
@@ -318,6 +358,11 @@ export function verifyOptimizationObjectSignoffRecord(
   }
   if (!recordPath || !/^[0-9a-f]{64}$/.test(recordSha256)) {
     issues.push('signoff-record-reference-invalid');
+  }
+  // 派生 subject 必须存在（null/缺失 → fail-closed）
+  const derivedSubject = String(derived.acceptanceSubjectHash ?? '');
+  if (!/^[0-9a-f]{16}$/.test(derivedSubject)) {
+    issues.push('signoff-record-derived-subject-unavailable');
   }
   if (issues.length) {
     authentication.issues = [...issues];
@@ -400,19 +445,61 @@ export function verifyOptimizationObjectSignoffRecord(
   ) {
     issues.push('signoff-record-capture-harness-mismatch');
   }
-  // P1-3：对象级 record 必须绑定当前派生 object subject，否则旧 record 可
-  // 被重绑到漂移后的新 subject 而继续认证通过。
-  if (
-    acceptanceSubjectHash != null &&
-    String(record.acceptanceSubjectHash ?? '') !== acceptanceSubjectHash
-  ) {
+  // 对象级 record 必须绑定当前派生 object subject（漂移后旧 record 失效）
+  if (String(record.acceptanceSubjectHash ?? '') !== derivedSubject) {
     issues.push('signoff-record-acceptance-subject-mismatch');
   }
   if (
     !Array.isArray(record.automatedEvidence) ||
-    record.automatedEvidence.length === 0
+    record.automatedEvidence.length === 0 ||
+    record.automatedEvidence.some(
+      e => e == null || typeof e !== 'object' || Array.isArray(e)
+    )
   ) {
-    issues.push('signoff-record-evidence-missing');
+    issues.push('signoff-record-evidence-invalid');
+  } else {
+    // 逐条 evidence 强校验：fixture 场景一致 + fixture SHA
+    const requiredAliases = (recipe.requiredSourceCharacterIds ?? []).map(
+      Number
+    );
+    for (const [index, evidence] of record.automatedEvidence.entries()) {
+      const sourceCharacterId = Number(evidence.sourceCharacterId);
+      if (!requiredAliases.includes(sourceCharacterId)) {
+        issues.push('signoff-record-evidence-alias-mismatch:' + index);
+      }
+      const fixturePath = String(evidence.fixturePath ?? '');
+      const fixtureSha256 = String(evidence.fixtureSha256 ?? '');
+      if (!fixturePath || !/^[0-9a-f]{64}$/.test(fixtureSha256)) {
+        issues.push('signoff-record-evidence-fixture-invalid:' + index);
+      } else {
+        const fixtureBytes = readProjectFileOrEmpty(projectRoot, fixturePath);
+        if (sha256Hex(fixtureBytes) !== fixtureSha256) {
+          issues.push('signoff-record-evidence-fixture-sha-mismatch:' + index);
+        } else {
+          let fixture = null;
+          try {
+            fixture = JSON.parse(fixtureBytes.toString('utf8'));
+          } catch (error) {
+            fixture = null;
+          }
+          if (
+            fixture == null ||
+            String(fixture.scenario?.id ?? '') !==
+              String(evidence.scenarioIdentity ?? '')
+          ) {
+            issues.push(
+              'signoff-record-evidence-fixture-scene-mismatch:' + index
+            );
+          }
+        }
+      }
+      if (!/^[0-9a-f]{64}$/.test(String(evidence.screenshotSha256 ?? ''))) {
+        issues.push('signoff-record-evidence-screenshot-invalid:' + index);
+      }
+      if (!/^[0-9a-f]{16}$/.test(String(evidence.canonicalTraceHash ?? ''))) {
+        issues.push('signoff-record-evidence-trace-invalid:' + index);
+      }
+    }
   }
 
   authentication.recordPath = recordPath;

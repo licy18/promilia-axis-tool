@@ -277,9 +277,23 @@ try {
         ?.qualificationSubjectHash ??
       previewManifest.qualificationSubjectHash ??
       null;
+    const previewPva = previewManifest.evidence?.productVisualAcceptance ?? {};
     const signoffVerification = verifySignoffRecord(recipe, {
       projectRoot,
-      qualificationSubjectHash: derivedSubjectHash,
+      derived: {
+        qualificationSubjectHash: derivedSubjectHash,
+        scenarioSetHash:
+          previewPva.bindingExpectation?.scenarioSetHash ??
+          previewPva.scenarioSetHash ??
+          null,
+        scenarioIdentities:
+          previewPva.bindingExpectation?.scenarioIdentities ??
+          previewPva.scenarioIdentities ??
+          [],
+        canonicalTraceHash:
+          previewManifest.evidence?.machineScenarios?.[0]?.canonicalHashes
+            ?.trace ?? null,
+      },
     });
     const manifest = toJsonCompatible(
       createCharacterAcceptanceManifest({

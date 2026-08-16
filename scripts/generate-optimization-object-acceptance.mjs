@@ -44,7 +44,7 @@ const previewSubjectHash =
   null;
 const signoffVerification = verifyOptimizationObjectSignoffRecord(recipe, {
   projectRoot,
-  acceptanceSubjectHash: previewSubjectHash,
+  derived: { acceptanceSubjectHash: previewSubjectHash },
 });
 const validation = validateOptimizationObjectAliasAcceptanceBundle({
   recipe,
@@ -67,7 +67,24 @@ if (!validation.valid && !explicitlyPendingFailClosed) {
 }
 
 const outputPath = path.resolve(projectRoot, recipe.outputPath);
-const output = JSON.stringify(validation.bundle, null, 2) + '\n';
+// 把 signoff record authentication 写入输出 bundle（P2：manifest 必须携带
+// 可审计的认证结果，不能只靠调用方布尔参数）
+const outputBundle = {
+  ...validation.bundle,
+  ...(signoffVerification.authentication == null
+    ? {}
+    : {
+        signoffRecordAuthentication: {
+          status: signoffVerification.authentication.status,
+          acceptanceCommit: signoffVerification.authentication.acceptanceCommit,
+          signoffRecordPath:
+            signoffVerification.authentication.signoffRecordPath,
+          recordSha256: signoffVerification.authentication.recordSha256,
+          issues: signoffVerification.authentication.issues,
+        },
+      }),
+};
+const output = JSON.stringify(outputBundle, null, 2) + '\n';
 if (writeMode) {
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, output, 'utf8');

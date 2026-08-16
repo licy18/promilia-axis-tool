@@ -16,89 +16,125 @@ const REPO_ROOT = path.resolve(
   '..'
 );
 
-function git(args) {
-  return execFileSync('git', args, {
-    cwd: REPO_ROOT,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  }).trim();
-}
-
 function readJson(relativePath) {
   return JSON.parse(
     fs.readFileSync(path.join(REPO_ROOT, relativePath), 'utf8')
   );
 }
 
-function sha256(bytes) {
-  return createHash('sha256').update(bytes).digest('hex');
-}
-
-function currentCommitRecordBytes(recipe) {
-  return execFileSync(
-    'git',
-    [
-      'show',
-      `${recipe.productVisualAcceptance.acceptanceCommit}:${recipe.productVisualAcceptance.signoffRecordPath}`,
-    ],
-    { cwd: REPO_ROOT, encoding: 'buffer', stdio: ['ignore', 'pipe', 'pipe'] }
+function deriveFromManifest(ownerId) {
+  const manifest = readJson(
+    `reports/m11/character-acceptance/${ownerId}/manifest.json`
   );
+  const pva = manifest.evidence?.productVisualAcceptance ?? {};
+  return {
+    qualificationSubjectHash:
+      pva.bindingExpectation?.qualificationSubjectHash ??
+      manifest.qualificationSubjectHash,
+    scenarioSetHash:
+      pva.bindingExpectation?.scenarioSetHash ?? pva.scenarioSetHash,
+    scenarioIdentities:
+      pva.bindingExpectation?.scenarioIdentities ??
+      pva.scenarioIdentities ??
+      [],
+    canonicalTraceHash:
+      manifest.evidence?.machineScenarios?.[0]?.canonicalHashes?.trace ?? null,
+  };
 }
 
-describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
+describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
   it('verifies the committed 101010 signoff record end-to-end', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
-    const manifest = readJson(
-      'reports/m11/character-acceptance/101010/manifest.json'
-    );
-    const subject =
-      manifest.evidence?.productVisualAcceptance?.bindingExpectation
-        ?.qualificationSubjectHash ?? manifest.qualificationSubjectHash;
     const result = verifySignoffRecord(recipe, {
       projectRoot: REPO_ROOT,
-      qualificationSubjectHash: subject,
+      derived: deriveFromManifest(101010),
     });
     expect(result.verified).toBe(true);
     expect(result.issues).toEqual([]);
     expect(result.authentication.status).toBe('verified');
   });
 
-  it('rejects a null record body instead of silently passing (P1-1)', () => {
+  it('fails closed when derived values are unavailable (cannot skip auth)', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
-    // 从 commit 取真实 record 路径，把 commit 内容替换为 JSON null 无法直接做
-    // ——改为验证：validator 对非对象 record 必须 fail-closed。构造一个指向
-    // 合法 commit 内 null 内容的场景不现实，因此验证结构必填字段缺失路径：
-    const forged = structuredClone(recipe);
-    forged.productVisualAcceptance.signoffRecordSha256 = sha256(
-      Buffer.from('null')
-    );
-    // 指向同 commit 同路径但 SHA 不匹配 → sha256-mismatch，fail-closed
-    const result = verifySignoffRecord(forged, {
+    const result = verifySignoffRecord(recipe, {
       projectRoot: REPO_ROOT,
-      qualificationSubjectHash: '0'.repeat(16),
+      derived: {},
     });
     expect(result.verified).toBe(false);
-    expect(
-      result.issues.some(i => i.startsWith('signoff-record-sha256-mismatch'))
-    ).toBe(true);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        'signoff-record-derived-subject-unavailable',
+        'signoff-record-derived-scenario-set-unavailable',
+        'signoff-record-derived-scenario-unavailable',
+        'signoff-record-derived-trace-unavailable',
+      ])
+    );
   });
 
   it('rejects subject drift (mechanism package rebuild invalidates old signoff)', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
+    const derived = deriveFromManifest(101010);
     const result = verifySignoffRecord(recipe, {
       projectRoot: REPO_ROOT,
-      qualificationSubjectHash: 'deadbeefdeadbeef',
+      derived: { ...derived, qualificationSubjectHash: 'deadbeefdeadbeef' },
     });
     expect(result.verified).toBe(false);
     expect(result.issues).toContain(
       'signoff-record-qualification-subject-mismatch'
     );
+  });
+
+  it('rejects scenario drift (record scene not in derived identities)', () => {
+    const recipe = readJson(
+      'scripts/character-acceptance/acceptance-recipes/101010.json'
+    );
+    const derived = deriveFromManifest(101010);
+    const result = verifySignoffRecord(recipe, {
+      projectRoot: REPO_ROOT,
+      derived: {
+        ...derived,
+        scenarioIdentities: ['some-other-scene'],
+      },
+    });
+    expect(result.verified).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        'signoff-record-scenario-identity-mismatch',
+        'signoff-record-evidence-scenario-mismatch:0',
+      ])
+    );
+  });
+
+  it('rejects canonical trace drift', () => {
+    const recipe = readJson(
+      'scripts/character-acceptance/acceptance-recipes/101010.json'
+    );
+    const derived = deriveFromManifest(101010);
+    const result = verifySignoffRecord(recipe, {
+      projectRoot: REPO_ROOT,
+      derived: { ...derived, canonicalTraceHash: 'deadbeefdeadbeef' },
+    });
+    expect(result.verified).toBe(false);
+    expect(result.issues).toContain('signoff-record-canonical-trace-mismatch');
+  });
+
+  it('rejects scenario set drift', () => {
+    const recipe = readJson(
+      'scripts/character-acceptance/acceptance-recipes/101010.json'
+    );
+    const derived = deriveFromManifest(101010);
+    const result = verifySignoffRecord(recipe, {
+      projectRoot: REPO_ROOT,
+      derived: { ...derived, scenarioSetHash: 'deadbeefdeadbeef' },
+    });
+    expect(result.verified).toBe(false);
+    expect(result.issues).toContain('signoff-record-scenario-set-mismatch');
   });
 
   it('rejects tampered record SHA (forged rebinding of old evidence)', () => {
@@ -109,27 +145,12 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
     forged.productVisualAcceptance.signoffRecordSha256 = '0'.repeat(64);
     const result = verifySignoffRecord(forged, {
       projectRoot: REPO_ROOT,
-      qualificationSubjectHash: readJson(
-        'reports/m11/character-acceptance/101010/manifest.json'
-      ).qualificationSubjectHash,
+      derived: deriveFromManifest(101010),
     });
     expect(result.verified).toBe(false);
     expect(
       result.issues.some(i => i.startsWith('signoff-record-sha256-mismatch'))
     ).toBe(true);
-  });
-
-  it('rejects scenario identity drift (record claims a different scene than evidence)', () => {
-    const recipe = readJson(
-      'scripts/character-acceptance/acceptance-recipes/101010.json'
-    );
-    const record = JSON.parse(
-      currentCommitRecordBytes(recipe).toString('utf8')
-    );
-    expect(record.scenarioIdentity).toBe('m11-d-101010-visual-acceptance');
-    // record 的 scenarioIdentity 必须与 recipe 证据一致（validator 检查）
-    const recipeEvidence = recipe.productVisualAcceptance.automatedEvidence[0];
-    expect(recipeEvidence.scenarioIdentity).toBe(record.scenarioIdentity);
   });
 
   it('rejects an invalid record commit (missing record in commit)', () => {
@@ -140,11 +161,30 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
     forged.productVisualAcceptance.acceptanceCommit = '0'.repeat(40);
     const result = verifySignoffRecord(forged, {
       projectRoot: REPO_ROOT,
-      qualificationSubjectHash: '1f89665fc50102a4',
+      derived: deriveFromManifest(101010),
     });
     expect(result.verified).toBe(false);
     expect(
       result.issues.some(i => i.startsWith('signoff-record-missing-in-commit'))
+    ).toBe(true);
+  });
+
+  it('rejects an empty evidence record (fail-closed structure)', () => {
+    const recipe = readJson(
+      'scripts/character-acceptance/acceptance-recipes/101010.json'
+    );
+    // 通过改 recipe 的 evidence 与 record 不匹配来触发截图 mismatch：
+    const forged = structuredClone(recipe);
+    forged.productVisualAcceptance.automatedEvidence = [
+      { screenshotSha256: '0'.repeat(64), scenarioIdentity: 'x' },
+    ];
+    const result = verifySignoffRecord(forged, {
+      projectRoot: REPO_ROOT,
+      derived: deriveFromManifest(101010),
+    });
+    expect(result.verified).toBe(false);
+    expect(
+      result.issues.some(i => i.startsWith('signoff-record-evidence-'))
     ).toBe(true);
   });
 
@@ -156,21 +196,33 @@ describe('signoff record verification (P1-1/P1-2/P1-4)', () => {
       'reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json'
     );
     const subject = manifest.productAcceptanceBinding?.acceptanceSubjectHash;
+    expect(subject).toMatch(/^[0-9a-f]{16}$/);
     const result = verifyOptimizationObjectSignoffRecord(recipe, {
       projectRoot: REPO_ROOT,
-      acceptanceSubjectHash: subject,
+      derived: { acceptanceSubjectHash: subject },
     });
     expect(result.verified).toBe(true);
     expect(result.issues).toEqual([]);
+    expect(result.authentication.status).toBe('verified');
 
     // subject 漂移 → 拒绝
     const drifted = verifyOptimizationObjectSignoffRecord(recipe, {
       projectRoot: REPO_ROOT,
-      acceptanceSubjectHash: 'deadbeefdeadbeef',
+      derived: { acceptanceSubjectHash: 'deadbeefdeadbeef' },
     });
     expect(drifted.verified).toBe(false);
     expect(drifted.issues).toContain(
       'signoff-record-acceptance-subject-mismatch'
+    );
+
+    // null subject → fail-closed（不能跳过认证）
+    const missing = verifyOptimizationObjectSignoffRecord(recipe, {
+      projectRoot: REPO_ROOT,
+      derived: {},
+    });
+    expect(missing.verified).toBe(false);
+    expect(missing.issues).toContain(
+      'signoff-record-derived-subject-unavailable'
     );
   });
 });
