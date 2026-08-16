@@ -1405,6 +1405,31 @@ function executeVisualScenario({
           sourceIdentity: event.sourceIdentity ?? null,
           modifiers: structuredClone(event.modifiers ?? []),
         })),
+        // 回血/护盾等直接效果（VERIFIED_DIRECT_HEAL/SHIELD）：不走
+        // effectTimeline，但验收 coverage 需要它们被断言（否则 heal 类
+        // 效果永远 coverage-missing——107002 大招全体回血即此类）。
+        ...(first.trace?.events ?? [])
+          .filter(
+            event =>
+              ['VERIFIED_DIRECT_HEAL', 'VERIFIED_DIRECT_SHIELD'].includes(
+                event.type
+              ) &&
+              event.payload?.effectIdentity != null
+          )
+          .map((event, index) => ({
+            projectionIdentity:
+              'machine-direct-effect:' + fixture.scenario.id + ':' + index,
+            actionId: event.actionId ?? null,
+            effectIdentity: event.payload.effectIdentity,
+            operation:
+              event.type === 'VERIFIED_DIRECT_HEAL' ? 'heal' : 'shield',
+            targetId: event.targetId ?? null,
+            absoluteFrame: event.absoluteFrame ?? null,
+            frameIndex:
+              event.absoluteFrame ?? event.frame ?? event.frameIndex ?? null,
+            timeMs: event.timeMs ?? null,
+            modifiers: [],
+          })),
         ...(first.trace?.damage ?? [])
           .filter(event => Number.isInteger(Number(event.elementId)))
           .map((event, index) => ({
@@ -4395,6 +4420,29 @@ function createIsolatedMachineTraceProjection({ run, profile, scenarioId }) {
         sourceIdentity: event.sourceIdentity ?? null,
         modifiers: structuredClone(event.modifiers ?? []),
       })),
+      // 回血/护盾直接效果（同主场景路径，供 coverage 匹配）
+      ...(run.trace?.events ?? [])
+        .filter(
+          event =>
+            ['VERIFIED_DIRECT_HEAL', 'VERIFIED_DIRECT_SHIELD'].includes(
+              event.type
+            ) &&
+            event.payload?.effectIdentity != null
+        )
+        .map((event, index) => ({
+          projectionIdentity:
+            'machine-isolated-direct-effect:' + scenarioId + ':' + index,
+          actionId: event.actionId ?? null,
+          effectIdentity: event.payload.effectIdentity,
+          operation:
+            event.type === 'VERIFIED_DIRECT_HEAL' ? 'heal' : 'shield',
+          targetId: event.targetId ?? null,
+          absoluteFrame: event.absoluteFrame ?? null,
+          frameIndex:
+            event.absoluteFrame ?? event.frame ?? event.frameIndex ?? null,
+          timeMs: event.timeMs ?? null,
+          modifiers: [],
+        })),
       ...(run.trace?.damage ?? [])
         .filter(event => Number.isInteger(Number(event.elementId)))
         .map((event, index) => ({

@@ -838,6 +838,11 @@ export async function createVerifiedCombatMechanicsBuild({
       });
     },
     createGoldenRuntimeForOwner({ recipe, mechanicsPackage }) {
+      // 临时调试开关：AZPR_SYNC_SKIP_GOLDEN=1 跳过 orchestrator golden
+      //（机制包重建流程用：先写盘新包 → 更新 golden 期望 → 恢复校验）。
+      if (process.env.AZPR_SYNC_SKIP_GOLDEN === '1') {
+        return null;
+      }
       return createCharacterCombatGoldenRuntime({
         repositoryRoot: REPO_ROOT,
         mechanicsPackage,
@@ -9881,12 +9886,22 @@ function createSemanticEffectCandidate({
       Number(effect.elementId) === Number(node.elementId) &&
       effect.lifecycle
   )?.lifecycle;
-  const settlementOrderedEffect = rawEffects.find(
-    effect =>
-      effect.hitSettlementOrder != null &&
-      effect.sourceOrder?.contractName === 'AzPrVerifiedEffectSourceSequence' &&
-      effect.sourceOrder?.status === 'verified-battle-effect-source-order-ready'
-  );
+  const settlementOrderedEffect =
+    rawEffects.find(
+      effect =>
+        effect.hitSettlementOrder != null &&
+        effect.sourceOrder?.contractName === 'AzPrVerifiedEffectSourceSequence' &&
+        effect.sourceOrder?.status === 'verified-battle-effect-source-order-ready'
+    ) ??
+    // 回血/护盾/回能等非 hit 效果没有 hitSettlementOrder，但仍有合法的
+    // sourceOrder——缺失时 semantic 效果 sourceOrder=null → 直接效果
+    // sourceSequencePath 解析失败 → applied=false → runtime 跳过结算
+    // （107002 大招全体回血即因此静默丢失）。
+    rawEffects.find(
+      effect =>
+        effect.sourceOrder?.contractName === 'AzPrVerifiedEffectSourceSequence' &&
+        effect.sourceOrder?.status === 'verified-battle-effect-source-order-ready'
+    );
   const runtimeBoundEffect = rawEffects.find(
     effect =>
       effect.assumptionIdentity != null ||

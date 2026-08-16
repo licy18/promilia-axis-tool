@@ -4319,6 +4319,12 @@ function createDirectVitalEvent({
         ? Number(directEvent.value)
         : Number(after) - Number(before);
   const change = Number(after) - Number(before);
+  const directEffect = directEvent?.effect ?? null;
+  const effectElementId =
+    directEvent?.effectElementId ??
+    directEffect?.elementId ??
+    directEffect?.damage?.elementalType ??
+    null;
   return {
     type,
     timeMs: descriptor.timeMs,
@@ -4327,6 +4333,13 @@ function createDirectVitalEvent({
     targetId: directEvent.target.id,
     sourceSequencePath: descriptor.sourceSequencePath ?? null,
     payload: {
+      // 验收 coverage 依赖 effectIdentity（battle-element:<elementId>）：
+      // 回血/护盾等直接效果需携带，否则验收场景断言无法匹配覆盖选择器。
+      effectIdentity:
+        directEvent?.effectIdentity ??
+        (effectElementId == null
+          ? null
+          : `battle-element:${effectElementId}`),
       before: roundValue(before),
       change: roundValue(change),
       after: roundValue(after),
@@ -4352,7 +4365,9 @@ function createDirectVitalEvent({
       valueShields: vital
         ? vital.valueShields.map(shield => ({ ...shield }))
         : [],
-      effectIdentity: directEvent.effect.effectIdentity,
+      effectIdentity:
+        directEvent.effect?.effectIdentity ??
+        (effectElementId == null ? null : `battle-element:${effectElementId}`),
       sourceIdentity: directEvent.sourceIdentity,
       applied,
       reason,
