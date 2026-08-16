@@ -37,7 +37,10 @@ export const CHARACTER_ACCEPTANCE_LEDGER_STATUSES = Object.freeze([
 export const UNNAMED_SECONDARY_PASSIVE_REASON =
   'unnamed-secondary-passive-not-implemented-current-client';
 
-export function finalizeCharacterAcceptanceManifest(input) {
+export function finalizeCharacterAcceptanceManifest(
+  input,
+  { signoffRecordVerified = false, signoffRecordAuthentication = null } = {}
+) {
   const base = structuredClone(input ?? {});
   delete base.maturity;
   delete base.validation;
@@ -61,6 +64,8 @@ export function finalizeCharacterAcceptanceManifest(input) {
       ownerId: base.owner?.ownerId,
       qualificationSubjectHash,
       scenarioCases: base.scenarioCases,
+      signoffRecordVerified,
+      signoffRecordAuthentication,
     }),
   };
   base.derivation = {
@@ -683,6 +688,8 @@ function deriveProductVisualAcceptance({
   ownerId,
   qualificationSubjectHash,
   scenarioCases,
+  signoffRecordVerified = false,
+  signoffRecordAuthentication = null,
 }) {
   const automatedEvidence = structuredClone(
     productVisualAcceptance.automatedEvidence ?? []
@@ -722,8 +729,13 @@ function deriveProductVisualAcceptance({
     ':' +
     qualificationSubjectHash;
   const accepted = productVisualAcceptance.status === 'accepted';
+  // signoff record 认证（P1-1 修复）：accepted 且 binding 判定要求
+  // acceptanceCommit 指向的 git 对象确实包含不可变 signoff record，且
+  // record 内容（subject/package/harness hash/截图 SHA）与当前派生一致。
+  // signoffRecordVerified 由调用方（生成器）用 git show 读取并认证。
   const bindingVerified =
     accepted &&
+    signoffRecordVerified === true &&
     /^[0-9a-f]{40}$/.test(String(acceptanceCommit ?? '')) &&
     productVisualAcceptance.recordIdentity === expectedRecordIdentity &&
     productVisualAcceptance.qualificationSubjectHash ===
@@ -739,6 +751,10 @@ function deriveProductVisualAcceptance({
     qualificationSubjectHash:
       productVisualAcceptance.qualificationSubjectHash ?? null,
     scenarioSetHash: productVisualAcceptance.scenarioSetHash ?? null,
+    signoffRecordAuthentication:
+      accepted && signoffRecordAuthentication != null
+        ? structuredClone(signoffRecordAuthentication)
+        : null,
     bindingStatus: accepted
       ? bindingVerified
         ? 'verified'

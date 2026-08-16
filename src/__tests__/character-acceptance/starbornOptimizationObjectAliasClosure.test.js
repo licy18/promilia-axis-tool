@@ -64,8 +64,8 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
         requiredCount: 390,
         passedCount: 390,
         blockedCount: 0,
-        assertionCount: 3237,
-        assertionPassedCount: 3237,
+        assertionCount: 3271,
+        assertionPassedCount: 3271,
       },
     });
   });

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterProductVisualSignoffRecord",
+  "kind": "azpr-character-product-visual-signoff-record",
+  "ownerId": 112001,
+  "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
+  "signoffTime": "2026-08-16T05:05:54.349Z",
+  "signoffInstruction": "继续签收",
+  "repositoryHead": "654e00fc13ab8d5b0e5d8e9020b8665aedb1300f",
+  "mechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb",
+  "captureHarness": {
+    "specPath": "e2e/m12-c-owner-visual-review.spec.js",
+    "specSha256": "33ee8c7fca384a8d905397fccf460be665e0d7c1fe46059c8062bb115165c8e9",
+    "specGitBlobSha1": "bdc44d350a0a112cf35c92239fefe7ae16845678"
+  },
+  "canonicalTraceHash": "1bb74aaaa6ef43a4",
+  "automatedEvidence": [
+    {
+      "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
+      "evidenceKind": "workbench-playwright-screenshot",
+      "status": "automated-workbench-import-passed",
+      "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-112001-canonical-trace.png",
+      "screenshotSha256": "cc414cc1f011653ba144b5666b0a42329013a71c9be8dc5ba783c283c1372ae5",
+      "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-16/20260816-fd9e3fad-112001-import-dialog.png",
+      "importScreenshotSha256": "589f18fca965c04d301cd4642db21e57197a30a9d008670a25912b7baf2f404c",
+      "fixturePath": "fixtures/character-acceptance/112001-visual.json",
+      "fixtureSha256": "26671f5b24a8b2467adbeb03c5fabfacea317a2fb6873d072db5724504ad4567"
+    }
+  ],
+  "qualificationSubjectHash": "92d63428949df95d",
+  "scenarioSetHash": "7560fee46ade998b",
+  "recordIdentity": "character-product-acceptance:112001:654e00fc13ab8d5b0e5d8e9020b8665aedb1300f:92d63428949df95d"
+}

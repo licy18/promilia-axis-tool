@@ -49,6 +49,8 @@ export function createCharacterAcceptanceManifest({
   goldens,
   visualScenario,
   additionalVisualScenarios = [],
+  signoffRecordVerified = false,
+  signoffRecordAuthentication = null,
 }) {
   const sourceGapRecords = applyCharacterAcceptanceSourceGapDispositions(
     unresolvedLedger?.records ?? [],
@@ -102,6 +104,10 @@ export function createCharacterAcceptanceManifest({
       qualificationSubjectHash:
         recipe.productVisualAcceptance?.qualificationSubjectHash ?? null,
       scenarioSetHash: recipe.productVisualAcceptance?.scenarioSetHash ?? null,
+      signoffRecordPath:
+        recipe.productVisualAcceptance?.signoffRecordPath ?? null,
+      signoffRecordSha256:
+        recipe.productVisualAcceptance?.signoffRecordSha256 ?? null,
       automatedEvidence: structuredClone(
         (recipe.productVisualAcceptance?.automatedEvidence ?? []).map(
           evidence => ({
@@ -150,7 +156,10 @@ export function createCharacterAcceptanceManifest({
       runtimeCoverageSummary: structuredClone(runtimeCoverage?.summary ?? {}),
     },
   };
-  return finalizeCharacterAcceptanceManifest(input);
+  return finalizeCharacterAcceptanceManifest(input, {
+    signoffRecordVerified,
+    signoffRecordAuthentication,
+  });
 }
 
 export function createCharacterAcceptanceMatrix({

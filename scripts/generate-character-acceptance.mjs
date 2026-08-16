@@ -10,6 +10,7 @@ import {
   validateUnnamedSecondaryPassiveBoundary,
 } from './character-acceptance/character-acceptance-generation.mjs';
 import { verifyProductVisualEvidenceFiles } from './character-acceptance/visual-evidence-verification.mjs';
+import { verifySignoffRecord } from './character-acceptance/signoff-record-verification.mjs';
 import {
   validateCharacterAcceptanceManifest,
   validateCharacterAcceptanceManifestIndex,
@@ -83,6 +84,7 @@ for (const recipe of recipes) {
   }
 }
 const mechanicsPackage = await readJson(verifiedMechanicsPackagePath);
+const pathIdToElementIdByPackage = createPathIdToElementIdIndex(mechanicsPackage);
 const vite = await createServer({
   root: projectRoot,
   server: { middlewareMode: true },
@@ -254,6 +256,28 @@ try {
           runtimePackage,
         })
     );
+    // signoff record 认证（P1-1）：两遍生成。第一遍取得派生 subject，
+    // 用 acceptanceCommit 指向的 git 对象读取并认证不可变 signoff record，
+    // 第二遍把认证结果传入 manifest 最终化（binding 判定要求认证通过，
+    // 见 characterAcceptanceProtocol.deriveProductVisualAcceptance）。
+    const previewManifest = toJsonCompatible(
+      createCharacterAcceptanceManifest({
+        recipe,
+        profile,
+        runtimeCoverage,
+        unresolvedLedger,
+        goldens,
+        visualScenario,
+        additionalVisualScenarios,
+      })
+    );
+    const derivedSubjectHash =
+      previewManifest.evidence?.productVisualAcceptance?.bindingExpectation
+        ?.qualificationSubjectHash ?? previewManifest.qualificationSubjectHash ?? null;
+    const signoffVerification = verifySignoffRecord(recipe, {
+      projectRoot,
+      qualificationSubjectHash: derivedSubjectHash,
+    });
     const manifest = toJsonCompatible(
       createCharacterAcceptanceManifest({
         recipe,
@@ -263,6 +287,9 @@ try {
         goldens,
         visualScenario,
         additionalVisualScenarios,
+        signoffRecordVerified: signoffVerification.verified,
+        signoffRecordAuthentication:
+          signoffVerification.authentication ?? null,
       })
     );
     const validation = validateCharacterAcceptanceManifest(manifest, {
@@ -1404,7 +1431,9 @@ function executeVisualScenario({
           projectionIdentity:
             'machine-effect:' + fixture.scenario.id + ':' + index,
           actionId: event.actionId ?? null,
-          effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
+          effectIdentity: normalizeEffectIdentity(
+            event.effectId ?? event.runtimeEffectId ?? null
+          ),
           operation: event.operation ?? null,
           targetId: event.targetId ?? null,
           absoluteFrame: event.absoluteFrame ?? null,
@@ -2200,6 +2229,41 @@ function inspectMitiForegroundBackgroundSwitch(run) {
       })),
     },
   };
+}
+
+// runtime effects.events 的 effectId 使用 battle path_id（如
+// battle-element:3913813892884989758），而 requirement coverageSelector
+// 使用 elementId（如 battle-element:112001256）。投影断言必须把 path_id
+// 归一化为 elementId，否则该效果的 coverage 永远匹配不上（11200113
+// GP加攻 曾因此 coverage-missing）。
+function normalizeEffectIdentity(effectId) {
+  if (typeof effectId !== 'string' || !effectId.startsWith('battle-element:')) {
+    return effectId;
+  }
+  const raw = effectId.slice('battle-element:'.length);
+  const match = effectId.match(/^battle-element:(-?\d+)(\|.*)?$/);
+  if (!match) return effectId;
+  const numeric = Number(match[1]);
+  if (!Number.isInteger(numeric)) return effectId;
+  const elementByPathId = pathIdToElementIdByPackage ?? new Map();
+  const elementId = elementByPathId.get(numeric);
+  return elementId == null
+    ? effectId
+    : 'battle-element:' + elementId + (match[2] ?? '');
+}
+
+function createPathIdToElementIdIndex(mechanicsPackage) {
+  const index = new Map();
+  for (const binding of mechanicsPackage?.controlBindings ?? []) {
+    for (const effect of binding?.effects ?? []) {
+      const elementId = Number(effect?.elementId);
+      const pathId = Number(effect?.pathId);
+      if (Number.isInteger(elementId) && Number.isInteger(pathId)) {
+        index.set(pathId, elementId);
+      }
+    }
+  }
+  return index;
 }
 
 function projectVerifiedTuningComponentEffects(run, scenarioId) {
@@ -4419,7 +4483,9 @@ function createIsolatedMachineTraceProjection({ run, profile, scenarioId }) {
         projectionIdentity:
           'machine-isolated-effect:' + scenarioId + ':' + index,
         actionId: event.actionId ?? null,
-        effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
+        effectIdentity: normalizeEffectIdentity(
+          event.effectId ?? event.runtimeEffectId ?? null
+        ),
         operation: event.operation ?? null,
         targetId: event.targetId ?? null,
         absoluteFrame: event.absoluteFrame ?? null,
