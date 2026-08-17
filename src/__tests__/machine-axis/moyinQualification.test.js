@@ -4,6 +4,7 @@ import moyinProfile from '../../data/generated/character-combat-profiles/109001.
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
 import {
   createMachineAxisSearchGenerator,
   deriveNextStartFrameByActor,
@@ -444,7 +445,7 @@ describe('Moyin Machine Axis qualification', () => {
     });
   });
 
-  it('rejects an explicitly requested A1 inside the star-skill chase window', () => {
+  it('corrects a displayed A1 to the unique star-skill chase form', () => {
     const service = createMachineAxisService();
     const explicitA1 = createNormal(
       'moyin-star-window-invalid-a1',
@@ -453,7 +454,7 @@ describe('Moyin Machine Axis qualification', () => {
       'moyin-star-window-invalid-source'
     );
     explicitA1.intent.attackInput.chainIdentity = 'moyin-normal-five-inputs';
-    const validation = service.validate(
+    const prepared = service.prepareValidated(
       createQualificationAxis({
         id: 'moyin-star-window-invalid-a1-axis',
         durationFrames: 400,
@@ -464,13 +465,98 @@ describe('Moyin Machine Axis qualification', () => {
       })
     );
 
-    expect(validation.valid).toBe(false);
-    expect(validation.issues).toContainEqual(
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+    expect(
+      prepared.run.trace.variants.selections.find(
+        selection => selection.actionId === 'moyin-star-window-invalid-a1'
+      )
+    ).toMatchObject({
+      controlSkillId: 10900143,
+      subSkillIndex: 0,
+    });
+    expect(prepared.warnings).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-normal-attack-chain-context-conflict',
+        code: 'machine-axis-normal-attack-input-display-mismatch',
         actionId: 'moyin-star-window-invalid-a1',
       })
     );
+  });
+
+  it('resolves a left-click before the chase window to the unique default A1', () => {
+    const prepared = createMachineAxisService().prepareValidated(
+      createQualificationAxis({
+        id: 'moyin-star-window-too-early-axis',
+        durationFrames: 400,
+        actions: [
+          createStar('moyin-star-window-too-early-source', 0),
+          createNormal(
+            'moyin-star-window-too-early-input',
+            5,
+            39,
+            'forged-display-context'
+          ),
+        ],
+      })
+    );
+
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+    expect(
+      prepared.run.trace.variants.selections.find(
+        selection => selection.actionId === 'moyin-star-window-too-early-input'
+      )
+    ).toMatchObject({ controlSkillId: 10900101, subSkillIndex: 0 });
+    expect(prepared.warnings).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-normal-attack-input-display-mismatch',
+        actionId: 'moyin-star-window-too-early-input',
+        mismatchFields: expect.arrayContaining([
+          'sequenceIndex',
+          'contextActionId',
+        ]),
+      })
+    );
+  });
+
+  it('allows a formal handwritten chase successor without an explicit A1-A3 prefix', () => {
+    const service = createMachineAxisService();
+    const chaseId = 'moyin-formal-handwritten-chase';
+    const axis = createQualificationAxis({
+      id: 'moyin-formal-handwritten-a4-axis',
+      durationFrames: 500,
+      actions: [
+        createStar('moyin-formal-handwritten-star', 0),
+        createNormal(chaseId, 1, 40, 'moyin-formal-handwritten-star'),
+        createNormal('moyin-formal-handwritten-a4', 4, 73, chaseId),
+      ],
+    });
+    axis.scenario.objectiveContract = createMachineAxisObjectiveContract(
+      'cycle-dps-no-toughness'
+    );
+    const prepared = service.prepareValidated(axis);
+
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+    expect(prepared.actionLegalityProof).toMatchObject({
+      passed: true,
+      finalScoreEligible: true,
+    });
+    expect(
+      prepared.run.trace.variants.selections.find(
+        selection => selection.actionId === 'moyin-formal-handwritten-a4'
+      )
+    ).toMatchObject({
+      controlSkillId: 10900104,
+      subSkillIndex: 0,
+    });
+    expect(
+      prepared.compilation.actionResolutions.find(
+        resolution => resolution.actionId === 'moyin-formal-handwritten-a4'
+      )
+    ).toMatchObject({
+      normalAttackInputResolution: {
+        status: 'matched',
+        actual: { sequenceIndex: 4, controlSkillId: 10900104 },
+      },
+    });
   });
 
   it('allows the default A1 at the right-open end of the star-skill chase window', () => {

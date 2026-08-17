@@ -7,6 +7,7 @@ import {
   installVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
+import { NORMAL_ATTACK_INPUT_RESOLUTION_MODE } from '../../domain/normalAttackInputResolution';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
@@ -1536,12 +1537,15 @@ describe('verified action variant and special resource runtime', () => {
       });
 
       const beforeStart = runAt(Number(edge.inputWindow.startFrame) - 1);
-      expect(beforeStart.runtime.executionBlocks).toContainEqual(
-        expect.objectContaining({
-          actionId: beforeStart.thrust.id,
-          reason: 'verified-context-window-input-missing',
-        })
+      expect(beforeStart.runtime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: beforeStart.thrust.id })
       );
+      expect(
+        beforeStart.runtime.selectionByActionId.get(beforeStart.thrust.id)
+      ).toMatchObject({
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 0,
+      });
 
       const beforeEnd = runAt(Number(edge.inputWindow.endFrame) - 1);
       expect(
@@ -1573,32 +1577,42 @@ describe('verified action variant and special resource runtime', () => {
           },
         });
       } else {
-        expect(atEnd.runtime.executionBlocks).toContainEqual(
-          expect.objectContaining({
-            actionId: atEnd.thrust.id,
-            reason: 'verified-context-window-input-missing',
-          })
+        expect(atEnd.runtime.executionBlocks).not.toContainEqual(
+          expect.objectContaining({ actionId: atEnd.thrust.id })
         );
+        expect(
+          atEnd.runtime.selectionByActionId.get(atEnd.thrust.id)
+        ).toMatchObject({
+          executionControlSkillId: ownerId * 100 + 1,
+          selectedSubSkillIndex: 0,
+        });
       }
 
       const outsideWindow = runAt(Number(edge.inputWindow.endFrame) + 1);
-      expect(outsideWindow.runtime.executionBlocks).toContainEqual(
-        expect.objectContaining({
-          actionId: outsideWindow.thrust.id,
-          reason: 'verified-context-window-input-missing',
-        })
+      expect(outsideWindow.runtime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: outsideWindow.thrust.id })
       );
+      expect(
+        outsideWindow.runtime.selectionByActionId.get(outsideWindow.thrust.id)
+      ).toMatchObject({
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 0,
+      });
 
       const wrongTarget = runAt(
         Number(edge.inputWindow.startFrame),
         ownerId * 100 + 1
       );
-      expect(wrongTarget.runtime.executionBlocks).toContainEqual(
-        expect.objectContaining({
-          actionId: wrongTarget.thrust.id,
-          reason: 'verified-context-window-input-conflict',
-        })
+      expect(wrongTarget.runtime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: wrongTarget.thrust.id })
       );
+      expect(
+        wrongTarget.runtime.selectionByActionId.get(wrongTarget.thrust.id)
+      ).toMatchObject({
+        sourceKind: 'verified-input-context-variant',
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 1,
+      });
 
       fixture.actionVariantGraph.contextEdges.push({
         ...structuredClone(edge),
@@ -1615,7 +1629,7 @@ describe('verified action variant and special resource runtime', () => {
   );
 
   it.each(STARBORN_IDS)(
-    'fails STARBORN %i special context closed for missing, cross-actor, wrong-group, and wrong-sequence inputs',
+    'resolves STARBORN %i left clicks independently of stale display metadata',
     ownerId => {
       const mapping = normalMappingByOwnerId.get(ownerId);
       const source = createStarbornContextSource({
@@ -1642,28 +1656,32 @@ describe('verified action variant and special resource runtime', () => {
         id: 'missing-context',
         contextActionId: 'missing-source',
       });
-      expect(run([missing]).executionBlocks).toContainEqual(
-        expect.objectContaining({
-          actionId: missing.id,
-          reason: 'verified-context-window-input-missing',
-        })
+      const missingRuntime = run([missing]);
+      expect(missingRuntime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: missing.id })
       );
+      expect(missingRuntime.selectionByActionId.get(missing.id)).toMatchObject({
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 0,
+      });
 
       const foreignSource = structuredClone(source);
       foreignSource.actorId = `foreign-${ownerId}`;
       foreignSource.actor.id = foreignSource.actorId;
       const crossActor = createThrust({ id: 'cross-actor' });
-      expect(
-        run(
-          [foreignSource, crossActor],
-          [foreignSource.actor, crossActor.actor]
-        ).executionBlocks
-      ).toContainEqual(
-        expect.objectContaining({
-          actionId: crossActor.id,
-          reason: 'verified-context-window-input-missing',
-        })
+      const crossActorRuntime = run(
+        [foreignSource, crossActor],
+        [foreignSource.actor, crossActor.actor]
       );
+      expect(crossActorRuntime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: crossActor.id })
+      );
+      expect(
+        crossActorRuntime.selectionByActionId.get(crossActor.id)
+      ).toMatchObject({
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 0,
+      });
 
       const validThrust = createThrust({ id: 'valid-thrust' });
       const wrongGroup = createStarbornContextNormalAction({
@@ -1677,35 +1695,45 @@ describe('verified action variant and special resource runtime', () => {
         sourceSegment: mapping.attackInputSegments[2],
         groupId: 'different-context-group',
       });
-      expect(
-        run([source, validThrust, wrongGroup]).executionBlocks
-      ).toContainEqual(
-        expect.objectContaining({
-          actionId: wrongGroup.id,
-          reason: 'verified-context-window-group-conflict',
-        })
+      const wrongGroupRuntime = run([source, validThrust, wrongGroup]);
+      expect(wrongGroupRuntime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: wrongGroup.id })
       );
+      expect(
+        wrongGroupRuntime.selectionByActionId.get(wrongGroup.id)
+      ).toMatchObject({
+        executionControlSkillId: ownerId * 100 + 3,
+        selectedSubSkillIndex: 0,
+      });
 
       const wrongSequence = createThrust({
         id: 'wrong-sequence',
         sequenceIndex: 2,
         sourceSegment: mapping.attackInputSegments[1],
       });
-      expect(run([source, wrongSequence]).executionBlocks).toContainEqual(
-        expect.objectContaining({
-          actionId: wrongSequence.id,
-          reason: 'verified-context-window-input-conflict',
-        })
+      const wrongSequenceRuntime = run([source, wrongSequence]);
+      expect(wrongSequenceRuntime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: wrongSequence.id })
       );
+      expect(
+        wrongSequenceRuntime.selectionByActionId.get(wrongSequence.id)
+      ).toMatchObject({
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 1,
+      });
 
       const strippedIdentity = createThrust({ id: 'stripped-identity' });
       delete strippedIdentity.attackInput.identity;
-      expect(run([source, strippedIdentity]).executionBlocks).toContainEqual(
-        expect.objectContaining({
-          actionId: strippedIdentity.id,
-          reason: 'verified-context-window-input-conflict',
-        })
+      const strippedRuntime = run([source, strippedIdentity]);
+      expect(strippedRuntime.executionBlocks).not.toContainEqual(
+        expect.objectContaining({ actionId: strippedIdentity.id })
       );
+      expect(
+        strippedRuntime.selectionByActionId.get(strippedIdentity.id)
+      ).toMatchObject({
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 1,
+      });
     }
   );
 
@@ -3784,7 +3812,10 @@ function createStarbornContextNormalAction({
       subSkillIndex,
       selectedSubSkillIndex: subSkillIndex,
     },
-    attackInputIntent: createPublicNormalAttackIntent(ownerId * 100 + 1),
+    attackInputIntent: {
+      ...createPublicNormalAttackIntent(ownerId * 100 + 1),
+      normalFormResolution: NORMAL_ATTACK_INPUT_RESOLUTION_MODE,
+    },
   });
   action.attackGroupId = groupId;
   return action;

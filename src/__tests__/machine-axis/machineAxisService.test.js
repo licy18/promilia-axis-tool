@@ -1,4 +1,3 @@
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import authorityFixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
 import rubyVisualFixture from '../../../fixtures/character-acceptance/103002-visual.json';
@@ -322,7 +321,7 @@ describe('Machine Axis service', () => {
     });
   }, 30_000);
 
-  it('enforces Moyin normal-input continuation and recovery boundaries before scoring', () => {
+  it('resolves Moyin left clicks to the unique continuation while preserving real recovery boundaries', () => {
     const service = createMachineAxisService();
     const opener = createMoyinNormalAction({
       id: 'moyin-a1',
@@ -355,22 +354,45 @@ describe('Machine Axis service', () => {
       });
     }
 
-    const invalidCases = [
-      {
-        label: 'early-a2',
-        action: createSuccessor(17),
-        reason: 'normal-attack-successor-window-not-open',
-      },
-      {
-        label: 'fresh-a1-in-successor-window',
-        action: createMoyinNormalAction({
-          id: 'moyin-illegal-a1-18',
+    const corrected = service.prepareValidated(
+      createPair(
+        createMoyinNormalAction({
+          id: 'moyin-displayed-a1-18',
           sequenceIndex: 1,
           frame: 18,
           groupId: 'fresh-chain-at-18',
-        }),
-        reason: 'normal-attack-successor-window-target-conflict',
-      },
+        })
+      )
+    );
+    expect(corrected.valid, JSON.stringify(corrected.issues)).toBe(true);
+    expect(
+      corrected.run.trace.actions.find(
+        action => action.id === 'moyin-displayed-a1-18'
+      )
+    ).toMatchObject({ controlSkillId: 11200102 });
+    expect(corrected.warnings).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-normal-attack-input-display-mismatch',
+        actionId: 'moyin-displayed-a1-18',
+        requested: expect.objectContaining({ sequenceIndex: 1 }),
+        actual: expect.objectContaining({ sequenceIndex: 2 }),
+      })
+    );
+
+    const early = service.prepareValidated(createPair(createSuccessor(17)));
+    expect(early.valid).toBe(false);
+    expect(early.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-action-not-executable',
+        actionId: 'moyin-a2-17',
+        reason: 'verified-normal-attack-input-phase-conflict',
+        reasons: expect.arrayContaining([
+          'normal-attack-successor-window-not-open',
+        ]),
+      })
+    );
+
+    const invalidCases = [
       {
         label: 'a1-during-recovery',
         action: createMoyinNormalAction({
@@ -403,9 +425,7 @@ describe('Machine Axis service', () => {
           reasons: expect.arrayContaining([reason]),
           formIdentity: expect.stringMatching(/^normal-attack-form:/),
           expectedAttackInput: expect.any(Object),
-          actualAttackInput: expect.objectContaining({
-            sequenceIndex: action.intent.attackInput.sequenceIndex,
-          }),
+          actualAttackInput: expect.any(Object),
         })
       );
       expect(
@@ -484,7 +504,7 @@ describe('Machine Axis service', () => {
     30_000
   );
 
-  it('resolves an explicit global normal-chain identity without a profile overlay', () => {
+  it('treats a declared global normal-chain identity as display metadata', () => {
     const axis = createOwnerNormalAttackAxis(107001, 1);
     const mapping = mechanicsPackage.actionMappings.find(
       candidate =>
@@ -498,12 +518,21 @@ describe('Machine Axis service', () => {
 
     expect(prepared.issues).toEqual([]);
     expect(prepared.project.actions[0]).toMatchObject({
-      attackInputChainIdentity: mapping.attackInputChainIdentity,
-      attackInputChainSelectionSource: 'user-explicit',
+      attackInputChainIdentity: null,
+      attackInputChainSelectionSource: 'runtime-projected',
       attackInput: {
         sequenceIndex: 1,
         controlSkillId: 10700101,
         selectedSubSkillIndex: 0,
+      },
+    });
+    expect(prepared.actionResolutions[0]).toMatchObject({
+      normalAttackInputResolution: {
+        status: 'matched',
+        actual: {
+          sequenceIndex: 1,
+          chainIdentity: mapping.attackInputChainIdentity,
+        },
       },
     });
   });
@@ -547,13 +576,24 @@ describe('Machine Axis service', () => {
         resolvedControlSkillId: ownerId * 100 + 1,
         resolvedSubSkillIndex: 1,
         variantResolutionStatus: 'verified-action-variant-selection-ready',
+        normalAttackInputResolution: {
+          status: 'corrected',
+          actual: { subSkillIndex: 1 },
+        },
       });
+      expect(prepared.warnings).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-normal-attack-input-display-mismatch',
+          actionId: thrustId,
+          mismatchFields: expect.arrayContaining(['subSkillIndex']),
+        })
+      );
     },
     30_000
   );
 
   it.each([199001, 199002])(
-    'fails STARBORN %s contextual normal forms closed for missing owner, group, and sequence authority',
+    'corrects stale STARBORN %s display context, group, chain, and A-index metadata',
     ownerId => {
       const service = createMachineAxisService();
       const createChargedAxis = () =>
@@ -562,41 +602,58 @@ describe('Machine Axis service', () => {
           sourceKind: 'charged-attack',
         });
 
-      const missing = createChargedAxis();
-      missing.actions[1].intent.attackInput.contextActionId = 'missing-source';
-      expect(service.validate(missing).issues).toContainEqual(
-        expect.objectContaining({
-          code: 'machine-axis-normal-attack-context-action-missing',
-          actionId: missing.actions[1].id,
-        })
-      );
+      const cases = [
+        {
+          label: 'missing-context',
+          actionIndex: 1,
+          mutate: input => {
+            input.contextActionId = 'missing-source';
+          },
+          mismatchField: 'contextActionId',
+        },
+        {
+          label: 'wrong-group',
+          actionIndex: 2,
+          mutate: input => {
+            input.groupId = 'forged-other-group';
+          },
+          mismatchField: 'groupId',
+        },
+        {
+          label: 'wrong-sequence',
+          actionIndex: 1,
+          mutate: input => {
+            input.sequenceIndex = 2;
+          },
+          mismatchField: 'sequenceIndex',
+        },
+        {
+          label: 'wrong-chain',
+          actionIndex: 1,
+          mutate: input => {
+            input.chainIdentity = 'forged-display-chain';
+          },
+          mismatchField: 'chainIdentity',
+        },
+      ];
 
-      const crossActor = createChargedAxis();
-      crossActor.actions[0].owner = { kind: 'actor', slotId: 'slot-2' };
-      expect(service.validate(crossActor).issues).toContainEqual(
-        expect.objectContaining({
-          code: 'machine-axis-normal-attack-context-owner-conflict',
-          actionId: crossActor.actions[1].id,
-        })
-      );
-
-      const wrongGroup = createChargedAxis();
-      wrongGroup.actions[2].intent.attackInput.groupId = 'forged-other-group';
-      expect(service.validate(wrongGroup).issues).toContainEqual(
-        expect.objectContaining({
-          code: 'machine-axis-normal-attack-context-group-conflict',
-          actionId: wrongGroup.actions[2].id,
-        })
-      );
-
-      const wrongSequence = createChargedAxis();
-      wrongSequence.actions[1].intent.attackInput.sequenceIndex = 2;
-      expect(service.validate(wrongSequence).issues).toContainEqual(
-        expect.objectContaining({
-          code: 'machine-axis-normal-attack-context-window-conflict',
-          actionId: wrongSequence.actions[1].id,
-        })
-      );
+      for (const testCase of cases) {
+        const axis = createChargedAxis();
+        const action = axis.actions[testCase.actionIndex];
+        testCase.mutate(action.intent.attackInput);
+        const prepared = service.prepareValidated(axis);
+        expect(
+          prepared.valid,
+          `${testCase.label}: ${JSON.stringify(prepared.issues)}`
+        ).toBe(true);
+        expect(prepared.warnings, testCase.label).toContainEqual(
+          expect.objectContaining({
+            code: 'machine-axis-normal-attack-input-display-mismatch',
+            actionId: action.id,
+            mismatchFields: expect.arrayContaining([testCase.mismatchField]),
+          })
+        );
+      }
     },
     30_000
   );
@@ -693,7 +750,7 @@ describe('Machine Axis service', () => {
     });
   }, 30_000);
 
-  it('rejects a fresh Sifliya A1 at frame 19 with the exact normal-input violation', () => {
+  it('still rejects a Sifliya left click while no normal form is executable', () => {
     const axis = createOwnerNormalAttackAxis(107001, 1);
     axis.actions.push({
       id: 'owner-107001-fresh-a1-19',
@@ -718,8 +775,9 @@ describe('Machine Axis service', () => {
         code: 'machine-axis-action-not-executable',
         actionId: 'owner-107001-fresh-a1-19',
         reason: 'verified-normal-attack-input-phase-conflict',
-        reasons: ['normal-attack-successor-window-not-open'],
-        violationCodes: ['VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT'],
+        reasons: expect.arrayContaining([
+          'normal-attack-successor-window-not-open',
+        ]),
       })
     );
   }, 30_000);
@@ -1134,24 +1192,31 @@ describe('Machine Axis service', () => {
     );
   }, 15_000);
 
-  it('rejects the legacy M11-B direct-A3 fixture under the normal-input authority', () => {
-    const legacyAxis = structuredClone(fixture);
-    legacyAxis.dataIdentity.verifiedMechanicsPackageHash =
-      mechanicsPackage.packageHash;
-    const prepared = createMachineAxisService().validate(legacyAxis);
+  it('corrects a standalone formal A3 display input to the only executable A1', () => {
+    const axis = createOwnerNormalAttackAxis(107002, 1);
+    axis.actions[0].intent.attackInput.sequenceIndex = 3;
+    axis.scenario.objectiveContract = createMachineAxisObjectiveContract(
+      'cycle-dps-no-toughness'
+    );
+    const prepared = createMachineAxisService().prepareValidated(axis);
 
-    expect(prepared.valid).toBe(false);
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
     expect(prepared.actionLegalityProof).toMatchObject({
-      passed: false,
-      finalScoreEligible: false,
+      passed: true,
+      finalScoreEligible: true,
       normalAttackInputAuthority: expect.objectContaining({
         contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
       }),
     });
-    expect(prepared.issues).toContainEqual(
+    expect(prepared.warnings).toContainEqual(
       expect.objectContaining({
-        actionId: 'a3-inherit',
-        reason: 'verified-normal-attack-input-phase-conflict',
+        code: 'machine-axis-normal-attack-input-display-mismatch',
+        actionId: 'owner-107002-a1',
+        requested: expect.objectContaining({ sequenceIndex: 3 }),
+        actual: expect.objectContaining({
+          sequenceIndex: 1,
+          controlSkillId: 10700201,
+        }),
       })
     );
   }, 15_000);
@@ -1366,7 +1431,7 @@ describe('Machine Axis service', () => {
     );
   }, 15_000);
 
-  it('fails closed when an explicit attack chain conflicts with a contextual window', () => {
+  it('treats Ruby chain labels as expectations and executes the unique contextual form', () => {
     installRubyProfileOverlay();
     const createRubyAxis = chainIdentity => {
       const axis = createAxis({
@@ -1401,6 +1466,10 @@ describe('Machine Axis service', () => {
       });
       axis.scenario.team[2].initialSp = 100;
       axis.scenario.initialRuntimeState = {
+        controlledActor: {
+          actorId: 'actor-103002',
+          characterId: 103002,
+        },
         specialResourcesByActor: [
           {
             actorId: 'actor-103002',
@@ -1414,16 +1483,23 @@ describe('Machine Axis service', () => {
       return axis;
     };
 
-    const conflict = createMachineAxisService().validate(
+    const conflict = createMachineAxisService().prepareValidated(
       createRubyAxis('ruby-normal-default-three-inputs')
     );
-    expect(conflict.valid).toBe(false);
-    expect(conflict.issues).toContainEqual(
+    expect(conflict.valid, JSON.stringify(conflict.issues)).toBe(true);
+    expect(
+      conflict.run.trace.actions.find(
+        action => action.id === 'ruby-explicit-chain-a1'
+      )
+    ).toMatchObject({
+      controlSkillId: 10300201,
+      subSkillIndex: 1,
+    });
+    expect(conflict.warnings).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-normal-attack-chain-context-conflict',
+        code: 'machine-axis-normal-attack-input-display-mismatch',
         actionId: 'ruby-explicit-chain-a1',
-        requestedChainIdentity: 'ruby-normal-default-three-inputs',
-        contextualChainIdentity: 'ruby-enhanced-twelve-inputs',
+        mismatchFields: expect.arrayContaining(['chainIdentity']),
       })
     );
 
@@ -1444,36 +1520,50 @@ describe('Machine Axis service', () => {
       },
       schedule: { mode: 'absolute', frame: 353 },
     });
-    const matching = createMachineAxisService().prepare(matchingAxis);
-    expect(matching.issues).toEqual([]);
+    const matching = createMachineAxisService().prepareValidated(matchingAxis);
+    expect(matching.valid, JSON.stringify(matching.issues)).toBe(true);
     expect(
-      matching.project.actions.find(
+      matching.compilation.project.actions.find(
         action => action.id === 'ruby-explicit-chain-a1'
       )
     ).toMatchObject({
-      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
-      attackInputChainSelectionSource: 'user-explicit',
-      controlSubSkillIndex: 1,
+      attackInputChainIdentity: null,
+      attackInputChainSelectionSource: 'runtime-projected',
+      controlSubSkillIndex: 0,
       attackInput: {
-        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        attackInputChainIdentity: null,
         controlSkillId: 10300201,
-        selectedSubSkillIndex: 1,
+        selectedSubSkillIndex: 0,
       },
     });
     expect(
-      matching.project.actions.find(
+      matching.compilation.actionResolutions.find(
+        action => action.actionId === 'ruby-explicit-chain-a1'
+      )
+    ).toMatchObject({
+      resolvedControlSkillId: 10300201,
+      resolvedSubSkillIndex: 1,
+      normalAttackInputResolution: { status: 'matched' },
+    });
+    expect(
+      matching.compilation.project.actions.find(
         action => action.id === 'ruby-explicit-chain-a2'
       )
     ).toMatchObject({
-      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
-      attackInputChainSelectionSource: 'user-explicit',
-      controlSubSkillIndex: 2,
+      attackInputChainIdentity: null,
+      attackInputChainSelectionSource: 'runtime-projected',
+      controlSubSkillIndex: 0,
       attackInput: {
-        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        attackInputChainIdentity: null,
         controlSkillId: 10300201,
-        selectedSubSkillIndex: 2,
+        selectedSubSkillIndex: 0,
       },
     });
+    expect(
+      matching.run.trace.actions.find(
+        action => action.id === 'ruby-explicit-chain-a2'
+      )
+    ).toMatchObject({ controlSkillId: 10300201, subSkillIndex: 2 });
   });
 
   it('imports the signed Ruby phase transition from the installed graph without an owner overlay', () => {
@@ -1489,15 +1579,25 @@ describe('Machine Axis service', () => {
     ).toMatchObject({
       attackGroupId: 'm11-d-ruby-normal',
       attackSequenceIndex: 1,
-      attackSequenceTotal: 12,
-      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
-      controlSubSkillIndex: 1,
+      attackSequenceTotal: 3,
+      attackInputChainIdentity: null,
+      attackInputChainSelectionSource: 'runtime-projected',
+      controlSubSkillIndex: 0,
       attackInput: {
-        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        attackInputChainIdentity: null,
         controlSkillId: 10300201,
-        selectedSubSkillIndex: 1,
-        durationFrames: 24,
+        selectedSubSkillIndex: 0,
+        durationFrames: 15,
       },
+    });
+    expect(
+      prepared.actionResolutions.find(
+        resolution => resolution.actionId === 'ruby-chain-e1'
+      )
+    ).toMatchObject({
+      resolvedControlSkillId: 10300201,
+      resolvedSubSkillIndex: 1,
+      normalAttackInputResolution: { status: 'matched' },
     });
 
     const run = service.simulate(axis);

@@ -17,22 +17,23 @@ import {
   ATTACK_INPUT_EXPANSION_MODES,
 } from '../domain/workbenchAttackInputChain';
 import {
+  createNormalAttackInputDisplayExpectation,
+  createNormalAttackInputResolution,
+  isRuntimeResolvedNormalAttackInput,
+  NORMAL_ATTACK_INPUT_RESOLUTION_MODE,
+} from '../domain/normalAttackInputResolution';
+import {
   classifyKiboAxisActionKind,
   getKiboAxisActionScopePolicy,
   isKiboAutonomousActionKindDeferred,
 } from '../domain/kiboAxisActionScopePolicy';
 import { frameToMs, msToFrame } from '../domain/timebase';
-import {
-  projectVerifiedAttackInputChainSegment,
-  resolveVerifiedContextInputScheduling,
-} from '../domain/verifiedActionContextScheduling';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import generatedCharacters from '../data/generated/characters.json';
 import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kibo-action-catalog.json';
 import {
   getInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionMapping,
-  getVerifiedSwitchTriggerProfile,
 } from '../data/verifiedCombatMechanicsPackage';
 import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import {
@@ -690,7 +691,6 @@ export function createMachineAxisService({
         index,
         contract,
         teamBySlot,
-        gameData,
         kiboCatalogById,
         issues,
       })
@@ -1007,8 +1007,15 @@ export function createMachineAxisService({
           template,
           actionVariantPreflight,
         });
+        const normalAttackInputResolution = createNormalAttackInputResolution({
+          expectation: template.resolution.normalAttackInputExpectation,
+          selection: variantSelection,
+        });
         return {
           ...template.resolution,
+          ...(normalAttackInputResolution
+            ? { normalAttackInputResolution }
+            : {}),
           availableHitIdentities,
           index: template.index,
           sourceSequenceIndex: template.index,
@@ -1379,7 +1386,6 @@ function createActionTemplate({
   index,
   contract,
   teamBySlot,
-  gameData,
   kiboCatalogById,
   issues,
 }) {
@@ -1476,8 +1482,6 @@ function createActionTemplate({
     action,
     index,
     ownerSlot,
-    contract,
-    gameData,
     issues,
     formalOptimization:
       contract.scenario.optimizationQualification?.mode === 'formal',
@@ -1488,8 +1492,6 @@ function createActorActionTemplate({
   action,
   index,
   ownerSlot,
-  contract,
-  gameData,
   issues,
   formalOptimization,
 }) {
@@ -1586,7 +1588,7 @@ function createActorActionTemplate({
   }
   const segment =
     mapping.actionKind === 'normal-attack'
-      ? resolveAttackInputSegment(action, mapping, contract, index, issues)
+      ? resolveAttackInputSegment(action, mapping, index, issues)
       : null;
   if (mapping.actionKind === 'normal-attack' && !segment) return null;
   const semanticVariantResolution = resolveSemanticVariantSelection({
@@ -1651,7 +1653,12 @@ function createActorActionTemplate({
   const attackInputFields = segment
     ? createAttackInputFields(action, mapping, segment)
     : {};
-  const contextActionId = action.intent.attackInput?.contextActionId;
+  const normalAttackInputExpectation = segment
+    ? createNormalAttackInputDisplayExpectation({
+        attackInput: action.intent.attackInput,
+        mapping,
+      })
+    : null;
   return {
     actionId: action.id,
     index,
@@ -1705,7 +1712,6 @@ function createActorActionTemplate({
           : null,
       hitOverrides: toProjectHitOverrides(action.hitOverrides),
       note: action.note,
-      ...(contextActionId ? { contextActionId: String(contextActionId) } : {}),
       ...attackInputFields,
     },
     resolution: {
@@ -1729,6 +1735,7 @@ function createActorActionTemplate({
         ]),
       ].sort((left, right) => left.localeCompare(right, 'en')),
       semanticVariant,
+      ...(normalAttackInputExpectation ? { normalAttackInputExpectation } : {}),
     },
   };
 }
@@ -1881,851 +1888,34 @@ function createKiboActionTemplate({
     },
   };
 }
-function resolveAttackInputSegment(action, mapping, contract, index, issues) {
-  const sequenceIndex = action.intent.attackInput?.sequenceIndex;
-  if (!sequenceIndex) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-input-required',
-        `actions.${index}.intent.attackInput.sequenceIndex`,
-        'Normal attacks require a semantic input sequenceIndex',
-        { actionId: action.id }
-      )
-    );
-    return null;
-  }
+function resolveAttackInputSegment(machineAction, mapping, index, issues) {
+  const displaySequenceIndex = positiveIntegerOrNull(
+    machineAction.intent.attackInput?.sequenceIndex
+  );
   const defaultSegments =
-    mapping.attackInputSegments ?? mapping.attackInputSourceSegments ?? [];
-  const profileSegments = mapping.profileAttackInputSegments ?? [];
-  const requestedChainIdentity =
-    action.intent.attackInput?.chainIdentity ?? null;
-  const requestedProfileSegments =
-    requestedChainIdentity == null
-      ? []
-      : profileSegments.filter(
-          segment =>
-            String(segment.attackInputChainIdentity ?? '') ===
-            String(requestedChainIdentity)
-        );
-  const requestedGraphSegments =
-    requestedChainIdentity == null || requestedProfileSegments.length > 0
-      ? []
-      : projectVerifiedGraphAttackInputChainSegments({
-          mapping,
-          chainIdentity: requestedChainIdentity,
-        });
-  const candidatePool =
-    requestedChainIdentity == null
-      ? defaultSegments
-      : requestedProfileSegments.length > 0
-        ? requestedProfileSegments
-        : requestedGraphSegments.length > 0
-          ? requestedGraphSegments
-          : String(requestedChainIdentity) ===
-              String(mapping.attackInputChainIdentity ?? '')
-            ? defaultSegments
-            : requestedProfileSegments;
-  const candidates = candidatePool.filter(
-    segment => Number(segment.sequenceIndex) === sequenceIndex
+    (mapping.attackInputSegments?.length
+      ? mapping.attackInputSegments
+      : mapping.attackInputSourceSegments) ?? [];
+  const openerPlaceholders = defaultSegments.filter(
+    segment => Number(segment.sequenceIndex) === 1
   );
-  if (candidates.length !== 1) {
+  const placeholders = openerPlaceholders;
+  if (placeholders.length !== 1) {
     issues.push(
       createMachineAxisDiagnostic(
-        candidates.length
-          ? 'machine-axis-normal-attack-input-ambiguous'
-          : 'machine-axis-normal-attack-input-missing',
-        `actions.${index}.intent.attackInput.sequenceIndex`,
-        `Unable to resolve normal attack input ${sequenceIndex}`,
-        { actionId: action.id }
-      )
-    );
-    return null;
-  }
-  const requestedSegment = candidates[0];
-  const contextActionId = action.intent.attackInput?.contextActionId;
-  if (!contextActionId) return requestedSegment;
-  const contextAction = resolveContractContextAction({
-    contract,
-    contextActionId,
-    action,
-    ownerId: mapping.ownerId,
-  });
-  if (!contextAction) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-context-action-missing',
-        `actions.${index}.intent.attackInput.contextActionId`,
-        'Explicit normal attack context action does not exist',
-        { actionId: action.id, contextActionId: String(contextActionId) }
-      )
-    );
-    return null;
-  }
-  if (
-    String(contextAction.owner?.kind ?? '') !==
-      String(action.owner?.kind ?? '') ||
-    String(contextAction.owner?.slotId ?? '') !==
-      String(action.owner?.slotId ?? '')
-  ) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-context-owner-conflict',
-        `actions.${index}.intent.attackInput.contextActionId`,
-        'Normal attack context action must belong to the same actor slot',
-        { actionId: action.id, contextActionId: String(contextActionId) }
-      )
-    );
-    return null;
-  }
-  const contextFrame = absoluteScheduleFrame(contextAction);
-  const actionFrame = absoluteScheduleFrame(action);
-  const contextSequenceIndex =
-    contextAction?.intent?.attackInput?.sequenceIndex;
-  if (!Number.isFinite(contextFrame) || !Number.isFinite(actionFrame)) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-context-schedule-unresolved',
-        `actions.${index}.schedule`,
-        'Explicit normal attack context requires absolute source and target frames',
-        { actionId: action.id, contextActionId: contextAction.id }
-      )
-    );
-    return null;
-  }
-  const graphContextResolution = resolveGraphContextualAttackInputSegment({
-    action,
-    mapping,
-    contract,
-    contextAction,
-    contextFrame,
-    actionFrame,
-    requestedChainIdentity,
-    requestedSegment,
-    index,
-    issues,
-  });
-  if (graphContextResolution.status === 'selected') {
-    return graphContextResolution.segment;
-  }
-  if (graphContextResolution.status === 'blocked') return null;
-  if (!contextSequenceIndex) {
-    const contextMapping = getVerifiedCombatActionMapping({
-      type: ACTION_TYPES.SKILL,
-      skillId: contextAction?.intent?.publicActionId,
-      actionKind: contextAction?.intent?.actionKind,
-      actor: { characterId: mapping.ownerId },
-    });
-    if (!contextMapping) return requestedSegment;
-    const offsetFrames = actionFrame - contextFrame;
-    const matchingBindings = (mapping.profileVariantWindowBindings ?? [])
-      .filter(
-        binding =>
-          Number(binding.sourceControlSkillId) ===
-            Number(contextMapping.controlSkillId) &&
-          Number(binding.sourceSubSkillIndex ?? 0) ===
-            Number(contextMapping.selectedSubSkillIndex ?? 0) &&
-          offsetFrames >= Number(binding.inputWindow?.startFrame) &&
-          offsetFrames < Number(binding.inputWindow?.endFrame)
-      )
-      .flatMap(binding =>
-        profileSegments.filter(
-          segment =>
-            Number(segment.sequenceIndex) === Number(sequenceIndex) &&
-            Number(segment.controlSkillId) ===
-              Number(binding.targetControlSkillId) &&
-            Number(segment.subSkillIndex ?? segment.selectedSubSkillIndex) ===
-              Number(binding.targetSubSkillIndex ?? 0)
-        )
-      );
-    return selectContextualAttackInputSegment({
-      action,
-      index,
-      issues,
-      requestedChainIdentity,
-      requestedSegment,
-      contextualSegments: matchingBindings,
-    });
-  }
-  const contextChainIdentity =
-    contextAction?.intent?.attackInput?.chainIdentity ?? null;
-  const contextSegmentPool = contextChainIdentity
-    ? profileSegments.filter(
-        segment =>
-          String(segment.attackInputChainIdentity ?? '') ===
-          String(contextChainIdentity)
-      )
-    : defaultSegments;
-  const sourceSegment = contextSegmentPool.find(
-    segment => Number(segment.sequenceIndex) === Number(contextSequenceIndex)
-  );
-  const offsetFrames = actionFrame - contextFrame;
-  const matchingWindows = [
-    ...new Map(
-      [sourceSegment?.linkWindow, ...(sourceSegment?.linkWindows ?? [])]
-        .filter(
-          window =>
-            window &&
-            Number.isFinite(Number(window.startFrame)) &&
-            Number.isFinite(Number(window.endFrame)) &&
-            offsetFrames >= Number(window.startFrame) &&
-            offsetFrames < Number(window.endFrame) &&
-            (window.allowAttack === true ||
-              (window.allowedInputCommands ?? []).includes('normal-attack')) &&
-            Number.isInteger(Number(window.targetControlSkillId))
-        )
-        .map(window => [
-          [
-            window.startFrame,
-            window.endFrame,
-            window.targetControlSkillId,
-            window.targetSubSkillIndex ?? 0,
-            window.sourceIdentity ?? '',
-          ].join('|'),
-          window,
-        ])
-    ).values(),
-  ];
-  if (matchingWindows.length !== 1) return requestedSegment;
-  const window = matchingWindows[0];
-  const linked = contextSegmentPool.filter(
-    segment =>
-      Number(segment.controlSkillId) === Number(window.targetControlSkillId) &&
-      Number(segment.selectedSubSkillIndex) ===
-        Number(window.targetSubSkillIndex ?? 0)
-  );
-  return selectContextualAttackInputSegment({
-    action,
-    index,
-    issues,
-    requestedChainIdentity,
-    requestedSegment,
-    contextualSegments: linked,
-  });
-}
-
-function resolveContractContextAction({
-  contract,
-  contextActionId,
-  action,
-  ownerId,
-}) {
-  const declared = (contract.actions ?? []).find(
-    candidate => String(candidate.id) === String(contextActionId)
-  );
-  if (declared) return declared;
-
-  const ownerSlotId = String(action.owner?.slotId ?? '');
-  const derivedId = String(contextActionId);
-  const parentSwitch = (contract.actions ?? []).find(candidate => {
-    if (candidate.intent?.kind !== 'switch') return false;
-    if (String(candidate.intent?.targetSlotId ?? '') !== ownerSlotId) {
-      return false;
-    }
-    return (
-      `${candidate.id}--on-enter--actor-${Number(ownerId)}--star-carry` ===
-      derivedId
-    );
-  });
-  if (!parentSwitch) return null;
-
-  const profile = getVerifiedSwitchTriggerProfile(ownerId, 'on-enter');
-  const parentFrame = absoluteScheduleFrame(parentSwitch);
-  const triggerFrameOffset = Number(profile?.triggerFrameOffset ?? 0);
-  if (
-    profile?.applied !== true ||
-    !Number.isInteger(Number(profile.sourceSkillId)) ||
-    !Number.isFinite(parentFrame) ||
-    !Number.isFinite(triggerFrameOffset)
-  ) {
-    return null;
-  }
-  return {
-    id: derivedId,
-    owner: { kind: action.owner?.kind, slotId: ownerSlotId },
-    intent: {
-      kind: 'public-action',
-      publicActionId: Number(profile.sourceSkillId),
-      actionKind: 'star-carry',
-      level: 1,
-    },
-    schedule: {
-      mode: 'absolute',
-      frame: parentFrame + triggerFrameOffset,
-    },
-    derivedContext: {
-      kind: 'switch-triggered-star-carry',
-      parentActionId: String(parentSwitch.id),
-      triggerPhase: 'on-enter',
-      profileIdentity: profile.profileIdentity ?? null,
-    },
-  };
-}
-
-function resolveGraphContextualAttackInputSegment({
-  action,
-  mapping,
-  contract,
-  contextAction,
-  contextFrame,
-  actionFrame,
-  requestedChainIdentity,
-  requestedSegment,
-  index,
-  issues,
-}) {
-  const mechanicsPackage = requireMechanicsPackage();
-  const contextEdges = mechanicsPackage.actionVariantGraph?.contextEdges ?? [];
-  const sourceForm = resolveContractActionExecutionForm({
-    action: contextAction,
-    ownerId: mapping.ownerId,
-    contract,
-  });
-  if (!sourceForm) return { status: 'not-applicable', segment: null };
-  const automaticContinuationResolution =
-    resolveGraphAutomaticAttackContinuationSegment({
-      action,
-      mapping,
-      contextAction,
-      contextFrame,
-      actionFrame,
-      sourceForm,
-      requestedChainIdentity,
-      requestedSegment,
-      index,
-      issues,
-    });
-  if (automaticContinuationResolution.status !== 'not-applicable') {
-    return automaticContinuationResolution;
-  }
-  if (
-    sourceForm.actionKind === 'normal-attack' &&
-    sourceForm.contextDerived !== true
-  ) {
-    return { status: 'not-applicable', segment: null };
-  }
-  if (
-    sourceForm.actionKind === 'normal-attack' &&
-    String(contextAction.intent?.attackInput?.groupId ?? '') !==
-      String(action.intent?.attackInput?.groupId ?? '')
-  ) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-context-group-conflict',
-        `actions.${index}.intent.attackInput.groupId`,
-        'Context-derived normal attacks must remain in the predecessor input group',
-        { actionId: action.id, contextActionId: contextAction.id }
-      )
-    );
-    return { status: 'blocked', segment: null };
-  }
-  const sourceEdges = contextEdges.filter(
-    edge =>
-      edge.applied === true &&
-      Number(edge.ownerId) === Number(mapping.ownerId) &&
-      Number(edge.sourceControlSkillId) ===
-        Number(sourceForm.executionControlSkillId) &&
-      Number(edge.sourceSubSkillIndex ?? 0) ===
-        Number(sourceForm.executionSubSkillIndex ?? 0) &&
-      String(edge.inputCommand ?? '') === String(mapping.actionKind ?? '')
-  );
-  if (!sourceEdges.length) {
-    return { status: 'not-applicable', segment: null };
-  }
-  const scheduled = sourceEdges
-    .map(edge => ({
-      edge,
-      inputScheduling: resolveVerifiedContextInputScheduling({
-        edges: [edge],
-        predecessorStartMs: frameToMs(contextFrame),
-        predecessorEffectiveEndFrame: sourceForm.effectiveDurationFrames,
-        requestedExecutionStartMs: frameToMs(actionFrame),
-      }),
-    }))
-    .filter(candidate => candidate.inputScheduling);
-  if (!scheduled.length) {
-    if (
-      sourceEdges.every(edge => edge.outsideWindowFallback === 'default-input')
-    ) {
-      return { status: 'not-applicable', segment: null };
-    }
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-context-window-missing',
-        `actions.${index}.intent.attackInput.contextActionId`,
-        'Explicit normal attack context is outside every verified context window',
+        'machine-axis-normal-attack-runtime-placeholder-unresolved',
+        `actions.${index}.intent.attackInput`,
+        'Normal attack left-click input has no unique runtime placeholder',
         {
-          actionId: action.id,
-          contextActionId: contextAction.id,
-          sourceControlSkillId: sourceForm.executionControlSkillId,
-          sourceSubSkillIndex: sourceForm.executionSubSkillIndex,
-        }
-      )
-    );
-    return { status: 'blocked', segment: null };
-  }
-  const targeted = scheduled.filter(
-    candidate =>
-      (Number(candidate.edge.targetControlSkillId) ===
-        Number(mapping.controlSkillId) ||
-        Number(candidate.edge.targetControlSkillId) ===
-          Number(mapping.sourceSkillId)) &&
-      (candidate.edge.outsideWindowFallback === 'default-input' ||
-        Number(candidate.edge.executionControlSkillId) ===
-          Number(requestedSegment.controlSkillId))
-  );
-  if (targeted.length !== 1) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        targeted.length
-          ? 'machine-axis-normal-attack-context-window-ambiguous'
-          : 'machine-axis-normal-attack-context-window-conflict',
-        `actions.${index}.intent.attackInput.contextActionId`,
-        targeted.length
-          ? 'Verified context window does not select one unique normal attack form'
-          : 'Verified context window targets a different public normal attack form',
-        {
-          actionId: action.id,
-          contextActionId: contextAction.id,
-          requestedControlSkillId: mapping.controlSkillId,
-          candidateEdgeIdentities: scheduled.map(
-            candidate => candidate.edge.edgeIdentity
-          ),
-        }
-      )
-    );
-    return { status: 'blocked', segment: null };
-  }
-  if (requestedChainIdentity) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-chain-context-conflict',
-        `actions.${index}.intent.attackInput.chainIdentity`,
-        'Explicit default attack chain conflicts with a verified special context form',
-        {
-          actionId: action.id,
-          requestedChainIdentity: String(requestedChainIdentity),
-          contextEdgeIdentity: targeted[0].edge.edgeIdentity,
-        }
-      )
-    );
-    return { status: 'blocked', segment: null };
-  }
-  const { edge, inputScheduling } = targeted[0];
-  const occupancy = edge.executionTiming?.occupancy ?? {};
-  const durationFrames = positiveIntegerOrNull(occupancy.durationFrames);
-  if (durationFrames == null) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-context-duration-unresolved',
-        `actions.${index}.intent.attackInput.contextActionId`,
-        'Verified context form has no executable occupancy',
-        { actionId: action.id, contextEdgeIdentity: edge.edgeIdentity }
-      )
-    );
-    return { status: 'blocked', segment: null };
-  }
-  return {
-    status: 'selected',
-    segment: {
-      ...requestedSegment,
-      controlSkillId: Number(edge.targetControlSkillId),
-      subSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
-      selectedSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
-      effectiveDurationFrames: durationFrames,
-      durationFrames,
-      durationStatus: 'applied',
-      durationBasis: 'verified-input-context-variant',
-      durationSourceIdentity:
-        occupancy.sourceIdentity ?? edge.sourceIdentity ?? null,
-      actionScheduling: {
-        status: 'exact',
-        kind: 'exact-selected-context-variant-occupancy',
-        durationFrames,
-        planningDurationFrames: null,
-        selectedSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
-        sourceIdentity: occupancy.sourceIdentity ?? edge.sourceIdentity ?? null,
-        sourceStatus: 'verified-input-occupancy',
-        variantModelStatus: 'resolved',
-        reasons: [],
-      },
-      contextVariant: {
-        edgeIdentity: edge.edgeIdentity,
-        executionControlSkillId: Number(edge.executionControlSkillId),
-        executionSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
-        inputScheduling,
-        sourceIdentity: edge.sourceIdentity ?? null,
-      },
-    },
-  };
-}
-
-function resolveGraphAutomaticAttackContinuationSegment({
-  action,
-  mapping,
-  contextAction,
-  contextFrame,
-  actionFrame,
-  sourceForm,
-  requestedChainIdentity,
-  requestedSegment,
-  index,
-  issues,
-}) {
-  if (
-    sourceForm.actionKind !== 'normal-attack' ||
-    sourceForm.contextDerived !== true
-  ) {
-    return { status: 'not-applicable', segment: null };
-  }
-  const sourceEdges = (
-    requireMechanicsPackage().actionVariantGraph?.edges ?? []
-  ).filter(
-    edge =>
-      edge.applied === true &&
-      edge.relationType === 'automatic-continuation' &&
-      String(edge.inputCommand ?? '') === String(mapping.actionKind ?? '') &&
-      Number(edge.ownerId) === Number(mapping.ownerId) &&
-      Number(edge.sourceControlSkillId) ===
-        Number(sourceForm.executionControlSkillId) &&
-      Number(edge.sourceSubSkillIndex ?? 0) ===
-        Number(sourceForm.executionSubSkillIndex ?? 0)
-  );
-  if (!sourceEdges.length) {
-    return { status: 'not-applicable', segment: null };
-  }
-  const offsetFrames = actionFrame - contextFrame;
-  const openEdges = sourceEdges.filter(
-    edge =>
-      offsetFrames >= Number(edge.inputWindow?.startFrame) &&
-      offsetFrames < Number(edge.inputWindow?.endFrame)
-  );
-  if (!openEdges.length) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-automatic-continuation-window-missing',
-        `actions.${index}.intent.attackInput.contextActionId`,
-        'Explicit automatic continuation is outside its verified input window',
-        {
-          actionId: action.id,
-          contextActionId: contextAction.id,
-          sourceControlSkillId: sourceForm.executionControlSkillId,
-          sourceSubSkillIndex: sourceForm.executionSubSkillIndex,
-        }
-      )
-    );
-    return { status: 'blocked', segment: null };
-  }
-  const targeted = openEdges.filter(
-    edge =>
-      Number(edge.targetControlSkillId) ===
-        Number(requestedSegment.controlSkillId) &&
-      Number(edge.targetSubSkillIndex ?? 0) ===
-        Number(
-          requestedSegment.subSkillIndex ??
-            requestedSegment.selectedSubSkillIndex ??
-            0
-        ) &&
-      (requestedChainIdentity == null ||
-        edge.targetChainIdentity == null ||
-        String(edge.targetChainIdentity) === String(requestedChainIdentity))
-  );
-  if (targeted.length !== 1) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        targeted.length
-          ? 'machine-axis-normal-attack-automatic-continuation-ambiguous'
-          : 'machine-axis-normal-attack-automatic-continuation-conflict',
-        `actions.${index}.intent.attackInput.contextActionId`,
-        targeted.length
-          ? 'Verified automatic continuation does not select one unique normal attack segment'
-          : 'Verified automatic continuation targets a different normal attack segment',
-        {
-          actionId: action.id,
-          contextActionId: contextAction.id,
-          requestedChainIdentity:
-            requestedChainIdentity == null
-              ? null
-              : String(requestedChainIdentity),
-          requestedControlSkillId: requestedSegment.controlSkillId,
-          candidateEdgeIdentities: openEdges.map(edge => edge.edgeIdentity),
-        }
-      )
-    );
-    return { status: 'blocked', segment: null };
-  }
-  const edge = targeted[0];
-  return {
-    status: 'selected',
-    segment: {
-      ...requestedSegment,
-      attackInputChainIdentity:
-        edge.targetChainIdentity ??
-        requestedSegment.attackInputChainIdentity ??
-        null,
-      automaticContinuation: {
-        edgeIdentity: edge.edgeIdentity,
-        relationType: edge.relationType,
-        sourceControlSkillId: Number(edge.sourceControlSkillId),
-        sourceSubSkillIndex: Number(edge.sourceSubSkillIndex ?? 0),
-        targetControlSkillId: Number(edge.targetControlSkillId),
-        targetSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
-        targetChainIdentity: edge.targetChainIdentity ?? null,
-        sourceIdentity: edge.sourceIdentity ?? null,
-      },
-    },
-  };
-}
-
-function resolveContractActionExecutionForm({
-  action,
-  ownerId,
-  contract,
-  visitedActionIds = new Set(),
-}) {
-  if (!action || visitedActionIds.has(String(action.id))) return null;
-  const nextVisitedActionIds = new Set(visitedActionIds);
-  nextVisitedActionIds.add(String(action.id));
-  const mapping = getVerifiedCombatActionMapping({
-    type: ACTION_TYPES.SKILL,
-    skillId: action.intent?.publicActionId,
-    actionKind: action.intent?.actionKind,
-    ...(action.intent?.semanticVariant?.publicVariantIndex != null
-      ? {
-          actionVariantIndex: Number(
-            action.intent.semanticVariant.publicVariantIndex
-          ),
-        }
-      : {}),
-    actor: { characterId: ownerId },
-  });
-  if (!mapping) return null;
-  if (mapping.actionKind === 'normal-attack') {
-    const sequenceIndex = Number(action.intent?.attackInput?.sequenceIndex);
-    const sourceSegment = (
-      mapping.attackInputSegments ??
-      mapping.attackInputSourceSegments ??
-      []
-    ).find(segment => Number(segment.sequenceIndex) === sequenceIndex);
-    if (!sourceSegment) return null;
-    const contextActionId = action.intent?.attackInput?.contextActionId;
-    if (contextActionId) {
-      const contextAction = (contract.actions ?? []).find(
-        candidate => String(candidate.id) === String(contextActionId)
-      );
-      const predecessor = resolveContractActionExecutionForm({
-        action: contextAction,
-        ownerId,
-        contract,
-        visitedActionIds: nextVisitedActionIds,
-      });
-      const contextFrame = absoluteScheduleFrame(contextAction);
-      const actionFrame = absoluteScheduleFrame(action);
-      if (
-        predecessor &&
-        Number.isFinite(contextFrame) &&
-        Number.isFinite(actionFrame)
-      ) {
-        const matches = (
-          requireMechanicsPackage().actionVariantGraph?.contextEdges ?? []
-        )
-          .filter(
-            edge =>
-              edge.applied === true &&
-              Number(edge.ownerId) === Number(ownerId) &&
-              Number(edge.sourceControlSkillId) ===
-                Number(predecessor.executionControlSkillId) &&
-              Number(edge.sourceSubSkillIndex ?? 0) ===
-                Number(predecessor.executionSubSkillIndex ?? 0) &&
-              String(edge.inputCommand ?? '') === 'normal-attack' &&
-              (Number(edge.targetControlSkillId) ===
-                Number(mapping.controlSkillId) ||
-                Number(edge.targetControlSkillId) ===
-                  Number(mapping.sourceSkillId))
-          )
-          .map(edge => ({
-            edge,
-            scheduling: resolveVerifiedContextInputScheduling({
-              edges: [edge],
-              predecessorStartMs: frameToMs(contextFrame),
-              predecessorEffectiveEndFrame: predecessor.effectiveDurationFrames,
-              requestedExecutionStartMs: frameToMs(actionFrame),
-            }),
-          }))
-          .filter(candidate => candidate.scheduling);
-        if (matches.length === 1) {
-          const edge = matches[0].edge;
-          return {
-            actionKind: mapping.actionKind,
-            contextDerived: true,
-            executionControlSkillId: Number(edge.executionControlSkillId),
-            executionSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
-            effectiveDurationFrames: positiveIntegerOrNull(
-              edge.executionTiming?.occupancy?.durationFrames
-            ),
-          };
-        }
-      }
-    }
-    return {
-      actionKind: mapping.actionKind,
-      contextDerived: false,
-      executionControlSkillId: Number(sourceSegment.controlSkillId),
-      executionSubSkillIndex: Number(
-        sourceSegment.subSkillIndex ?? sourceSegment.selectedSubSkillIndex ?? 0
-      ),
-      effectiveDurationFrames: positiveIntegerOrNull(
-        sourceSegment.effectiveDurationFrames ?? sourceSegment.durationFrames
-      ),
-    };
-  }
-  const semanticVariant = action.intent?.semanticVariant;
-  if (semanticVariant) {
-    const graph = requireMechanicsPackage().actionVariantGraph;
-    const contracts = (graph?.derivedControlContracts ?? []).filter(
-      candidate =>
-        candidate.resolutionStatus === 'applied' &&
-        Number(candidate.ownerId) === Number(ownerId) &&
-        Number(candidate.controlSkillId) === Number(mapping.controlSkillId)
-    );
-    const options = contracts.flatMap(
-      candidate => candidate.inputSelector?.options ?? []
-    );
-    const matches = options.filter(
-      option =>
-        (semanticVariant.selectorIdentity == null ||
-          String(option.selectorIdentity) ===
-            String(semanticVariant.selectorIdentity)) &&
-        (semanticVariant.publicVariantIndex == null ||
-          Number(option.publicVariantIndex) ===
-            Number(semanticVariant.publicVariantIndex))
-    );
-    if (matches.length !== 1) return null;
-    return {
-      actionKind: mapping.actionKind,
-      executionControlSkillId: Number(matches[0].executionControlSkillId),
-      executionSubSkillIndex: Number(
-        matches[0].executionSubSkillIndex ?? matches[0].subSkillIndex ?? 0
-      ),
-      effectiveDurationFrames: positiveIntegerOrNull(
-        matches[0].executionTiming?.occupancy?.durationFrames ??
-          matches[0].durationFrames
-      ),
-    };
-  }
-  return {
-    actionKind: mapping.actionKind,
-    executionControlSkillId: Number(mapping.controlSkillId),
-    executionSubSkillIndex: Number(mapping.selectedSubSkillIndex ?? 0),
-    effectiveDurationFrames: positiveIntegerOrNull(
-      mapping.actionTiming?.occupancy?.durationFrames ??
-        mapping.actionScheduling?.durationFrames
-    ),
-  };
-}
-
-function projectVerifiedGraphAttackInputChainSegments({
-  mapping,
-  chainIdentity,
-}) {
-  const graph = requireMechanicsPackage().actionVariantGraph;
-  const chains = (graph?.attackInputChains ?? []).filter(
-    chain =>
-      chain.applied === true &&
-      chain.status === 'verified-attack-input-chain-ready' &&
-      String(chain.chainIdentity ?? '') === String(chainIdentity ?? '') &&
-      Number(chain.ownerId) === Number(mapping.ownerId) &&
-      Number(chain.sourceSkillId) === Number(mapping.sourceSkillId)
-  );
-  if (chains.length !== 1) return [];
-  const chain = chains[0];
-  const segments = chain.segments ?? [];
-  if (
-    segments.length === 0 ||
-    segments.some(
-      (segment, index) =>
-        segment.applied !== true ||
-        segment.status !== 'verified-attack-input-chain-segment-ready' ||
-        Number(segment.sequenceIndex) !== index + 1 ||
-        Number(segment.sequenceTotal) !== segments.length ||
-        !Number.isInteger(Number(segment.controlSkillId)) ||
-        !Number.isInteger(Number(segment.subSkillIndex)) ||
-        Number(segment.subSkillIndex) < 0 ||
-        !(Number(segment.durationFrames) > 0) ||
-        segment.executionTiming?.occupancy?.status !== 'applied' ||
-        Number(segment.executionTiming.occupancy.durationFrames) !==
-          Number(segment.durationFrames)
-    )
-  ) {
-    return [];
-  }
-  const sourceSegments =
-    mapping.attackInputSourceSegments ?? mapping.attackInputSegments ?? [];
-  const projected = segments.map(segment => {
-    const sources = sourceSegments.filter(
-      source => Number(source.controlSkillId) === Number(segment.controlSkillId)
-    );
-    if (sources.length !== 1) return null;
-    return projectVerifiedAttackInputChainSegment(
-      sources[0],
-      segment,
-      Number(segment.sequenceIndex),
-      segments.length,
-      chain.chainIdentity,
-      Number(segment.sequenceIndex)
-    );
-  });
-  return projected.every(Boolean) ? projected : [];
-}
-
-function selectContextualAttackInputSegment({
-  action,
-  index,
-  issues,
-  requestedChainIdentity,
-  requestedSegment,
-  contextualSegments,
-}) {
-  if (contextualSegments.length !== 1) return requestedSegment;
-  const contextualSegment = contextualSegments[0];
-  if (
-    Number(contextualSegment.sequenceIndex) !==
-    Number(requestedSegment.sequenceIndex)
-  ) {
-    return requestedSegment;
-  }
-  if (
-    requestedChainIdentity &&
-    (String(contextualSegment.attackInputChainIdentity ?? '') !==
-      String(requestedChainIdentity) ||
-      Number(contextualSegment.controlSkillId) !==
-        Number(requestedSegment.controlSkillId) ||
-      Number(
-        contextualSegment.subSkillIndex ??
-          contextualSegment.selectedSubSkillIndex ??
-          0
-      ) !==
-        Number(
-          requestedSegment.subSkillIndex ??
-            requestedSegment.selectedSubSkillIndex ??
-            0
-        ))
-  ) {
-    issues.push(
-      createMachineAxisDiagnostic(
-        'machine-axis-normal-attack-chain-context-conflict',
-        `actions.${index}.intent.attackInput.chainIdentity`,
-        'Explicit attack input chain conflicts with the contextual window',
-        {
-          actionId: action.id,
-          requestedChainIdentity: String(requestedChainIdentity),
-          contextualChainIdentity:
-            contextualSegment.attackInputChainIdentity ?? null,
+          actionId: machineAction.id,
+          displaySequenceIndex,
+          placeholderCount: placeholders.length,
         }
       )
     );
     return null;
   }
-  return contextualSegment;
+  return placeholders[0];
 }
 
 function absoluteScheduleFrame(action) {
@@ -2735,41 +1925,34 @@ function absoluteScheduleFrame(action) {
 }
 
 function createAttackInputFields(action, mapping, segment) {
+  const runtimePlaceholder = {
+    ...segment,
+    attackInputChainIdentity: null,
+  };
   return {
-    ...(action.intent.attackInput?.contextActionId
-      ? {
-          contextActionId: String(action.intent.attackInput.contextActionId),
-        }
-      : {}),
     attackGroupId:
       action.intent.attackInput?.groupId ?? `machine-axis-${action.id}`,
     attackSequenceIndex: segment.sequenceIndex,
     attackSequenceTotal: segment.sequenceTotal,
     attackChainSequenceIndex:
       segment.chainSequenceIndex ?? segment.sequenceIndex,
-    attackInputChainIdentity:
-      action.intent.attackInput?.chainIdentity ??
-      segment.attackInputChainIdentity ??
-      mapping.attackInputChainIdentity ??
-      null,
+    attackInputChainIdentity: null,
     attackInputChainSelectionSource:
-      action.intent.attackInput?.chainIdentity == null &&
-      segment.contextVariant != null
-        ? ATTACK_INPUT_CHAIN_SELECTION_SOURCES.RUNTIME_PROJECTED
-        : ATTACK_INPUT_CHAIN_SELECTION_SOURCES.USER_EXPLICIT,
+      ATTACK_INPUT_CHAIN_SELECTION_SOURCES.RUNTIME_PROJECTED,
     attackInputExpansionMode: ATTACK_INPUT_EXPANSION_MODES.SINGLE_INPUT,
     attackInputIntent: {
       schemaVersion: 1,
       contractName: 'AzPrWorkbenchAttackInputIntent',
       kind: 'public-normal-attack',
       selectionMode: 'runtime-context',
+      normalFormResolution: NORMAL_ATTACK_INPUT_RESOLUTION_MODE,
       sourceSkillId: mapping.sourceSkillId,
       actionVariantIndex: mapping.actionVariantIndex,
       sourceIdentity:
         mapping.bindingSourceIdentity ??
         `machine-axis-public-normal-attack:${mapping.sourceSkillId}`,
     },
-    attackInput: segment,
+    attackInput: runtimePlaceholder,
   };
 }
 
@@ -3397,6 +2580,8 @@ function collectContextWindowConflictIssues({ contract, project }) {
   );
   for (const action of actions) {
     const attackInput = action.intent?.attackInput ?? {};
+    const projectAction = projectActionByContractId.get(String(action.id));
+    if (isRuntimeResolvedNormalAttackInput(projectAction)) continue;
     const contextActionId = attackInput.contextActionId;
     if (!contextActionId || action.intent?.actionKind !== 'normal-attack') {
       continue;
@@ -3465,7 +2650,6 @@ function collectContextWindowConflictIssues({ contract, project }) {
         offsetFrames < Number(edge.inputWindow?.endFrame)
     );
     if (edges.length === 0) continue;
-    const projectAction = projectActionByContractId.get(String(action.id));
     const requestedControlSkillId = Number(
       projectAction?.attackInput?.controlSkillId ??
         projectAction?.controlSubSkillId ??
@@ -3637,6 +2821,20 @@ function collectExecutionWarnings({ compilation, run }) {
     }
   }
   for (const resolution of compilation.actionResolutions ?? []) {
+    const normalAttackInputResolution =
+      resolution.normalAttackInputResolution ?? null;
+    if (normalAttackInputResolution?.status === 'corrected') {
+      add({
+        code: 'machine-axis-normal-attack-input-display-mismatch',
+        path: `actions.${resolution.index ?? 0}.intent.attackInput`,
+        actionId: resolution.actionId,
+        reason: 'normal-attack-display-expectation-corrected',
+        requested: normalAttackInputResolution.requested,
+        actual: normalAttackInputResolution.actual,
+        mismatchFields: normalAttackInputResolution.mismatchFields,
+        message: `Action ${resolution.actionId} normal-attack display expectation was corrected to the unique runtime form`,
+      });
+    }
     const sourceEvidenceStatus = String(resolution.sourceEvidenceStatus ?? '');
     const scenarioRuntimeStatus = String(
       resolution.scenarioRuntimeStatus ?? ''

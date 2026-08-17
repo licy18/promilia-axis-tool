@@ -431,6 +431,8 @@ function createMachineActionFromProject({
   const attackInputIndex = positiveIntegerOrNull(
     action.attackSequenceIndex ?? action.attackInput?.sequenceIndex
   );
+  const preservedNormalAttackDisplayInput =
+    resolvePreservedNormalAttackDisplayInput({ action, preservedIntent });
   const preservedContextInput = resolvePreservedContextInput({
     action,
     preservedIntent,
@@ -462,21 +464,44 @@ function createMachineActionFromProject({
             mode: action.variantInputSelection.mode,
           }
         : null,
-      attackInput: attackInputIndex
-        ? {
-            sequenceIndex: attackInputIndex,
-            groupId: textOrNull(action.attackGroupId),
-            contextActionId: textOrNull(
-              action.runtimeContextActionId ?? action.contextActionId
-            ),
-            chainIdentity: preservedAttackInputChainIdentity.matched
-              ? preservedAttackInputChainIdentity.chainIdentity
-              : action.attackInputChainSelectionSource === 'user-explicit'
-                ? textOrNull(action.attackInputChainIdentity)
-                : null,
-          }
-        : preservedContextInput,
+      attackInput:
+        preservedNormalAttackDisplayInput ??
+        (attackInputIndex
+          ? {
+              sequenceIndex: attackInputIndex,
+              groupId: textOrNull(action.attackGroupId),
+              contextActionId: textOrNull(
+                action.runtimeContextActionId ?? action.contextActionId
+              ),
+              chainIdentity: preservedAttackInputChainIdentity.matched
+                ? preservedAttackInputChainIdentity.chainIdentity
+                : action.attackInputChainSelectionSource === 'user-explicit'
+                  ? textOrNull(action.attackInputChainIdentity)
+                  : null,
+            }
+          : preservedContextInput),
     },
+  };
+}
+
+function resolvePreservedNormalAttackDisplayInput({ action, preservedIntent }) {
+  const preservedInput = preservedIntent?.attackInput;
+  if (
+    !preservedInput ||
+    textOrNull(preservedIntent?.actionKind) !== 'normal-attack' ||
+    positiveIntegerOrNull(preservedIntent?.publicActionId) !==
+      positiveIntegerOrNull(action.skillId)
+  ) {
+    return null;
+  }
+  const sequenceIndex = positiveIntegerOrNull(preservedInput.sequenceIndex);
+  if (!sequenceIndex) return null;
+  return {
+    sequenceIndex,
+    groupId:
+      textOrNull(preservedInput.groupId) ?? textOrNull(action.attackGroupId),
+    contextActionId: textOrNull(preservedInput.contextActionId),
+    chainIdentity: textOrNull(preservedInput.chainIdentity),
   };
 }
 

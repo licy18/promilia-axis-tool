@@ -11,6 +11,10 @@ import {
   matchVerifiedNormalAttackInput,
   resolveVerifiedNormalAttackInputPhase,
 } from '../../domain/verifiedNormalAttackInputAuthority';
+import {
+  isRuntimeContextNormalAttackInput,
+  isRuntimeResolvedNormalAttackInput,
+} from '../../domain/normalAttackInputResolution';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import {
   getInstalledVerifiedCombatMechanicsPackage,
@@ -1277,7 +1281,9 @@ function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
     ? ACTION_RULE_STATUSES.VIOLATED
     : ACTION_RULE_STATUSES.UNRESOLVED;
   const ordinaryAttackInputActions = actions.filter(
-    action => !isProjectedVerifiedContextContinuation(action)
+    action =>
+      !isProjectedVerifiedContextContinuation(action) &&
+      !isRuntimeResolvedNormalAttackInput(action)
   );
   const diagnostics = ordinaryAttackInputActions
     .filter(action => action.attackInputLegacyStatus === 'legacy-unresolved')
@@ -1589,6 +1595,10 @@ function createNormalAttackInputPhaseDiagnostics(
       acceptedByActorId.delete(actorId);
       continue;
     }
+    if (isRuntimeResolvedNormalAttackInput(action)) {
+      acceptedByActorId.delete(actorId);
+      continue;
+    }
     if (mapping?.actionKind !== 'normal-attack') {
       if (actorId) acceptedByActorId.delete(actorId);
       continue;
@@ -1600,10 +1610,7 @@ function createNormalAttackInputPhaseDiagnostics(
       acceptedByActorId.delete(actorId);
       continue;
     }
-    const runtimeContextIntent =
-      action.attackInputIntent?.kind === 'public-normal-attack' &&
-      action.attackInputIntent?.selectionMode === 'runtime-context' &&
-      action.attackInputChainSelectionSource !== 'user-explicit';
+    const runtimeContextIntent = isRuntimeContextNormalAttackInput(action);
     const accepted = acceptedByActorId.get(actorId) ?? null;
     const phase = resolveVerifiedNormalAttackInputPhase({
       mapping,
@@ -2005,6 +2012,17 @@ function createLaneOverlapDiagnostics(actions) {
           blocking.contextActionId === candidate.actionId ||
           candidate.contextActionId === blocking.actionId
         ) {
+          continue;
+        }
+        const immediatePredecessor = sortedRanges[candidateIndex - 1];
+        if (
+          candidate.runtimeResolvedNormalInput &&
+          immediatePredecessor?.actionId === blocking.actionId
+        ) {
+          // A Machine Axis normal-attack is a left-click input, not a trusted
+          // declaration of an A-index. Its overlap with the immediately
+          // preceding actor action can only be decided after the verified
+          // context/chain authority resolves the unique executable form.
           continue;
         }
         diagnostics.push({
@@ -2680,8 +2698,7 @@ function enqueueAcceptedCooldownReductionTransactions({
       action.level ?? resolution?.actionBinding?.controlVariantSkillLevel
     );
     const rawValue = Number(
-      reduction?.valueByLevel?.[String(level)] ??
-        reduction?.valueByLevel?.['1']
+      reduction?.valueByLevel?.[String(level)] ?? reduction?.valueByLevel?.['1']
     );
     if (
       Number(reduction?.recoverType) !== 3 ||
@@ -2720,9 +2737,7 @@ function enqueueAcceptedCooldownReductionTransactions({
       // 百分比模式（cdRecoveryType=1）的目标剩余冷却在 apply 时才确定，
       // 这里不填，避免 canonical 输出出现 -430 → 430000ms 的虚假固定值。
       reductionMs:
-        Number(reduction.cdRecoveryType) === 1
-          ? null
-          : -rawValue * 1000,
+        Number(reduction.cdRecoveryType) === 1 ? null : -rawValue * 1000,
       sourceSequencePath,
       sourceSequenceStatus: Array.isArray(sourceSequencePath)
         ? 'verified-cooldown-reduction-source-sequence-ready'
@@ -2825,10 +2840,7 @@ function applyCooldownReductionTransaction({
       consumed: true,
     };
   }
-  if (
-    transaction.cdRecoveryType !== 0 &&
-    transaction.cdRecoveryType !== 1
-  ) {
+  if (transaction.cdRecoveryType !== 0 && transaction.cdRecoveryType !== 1) {
     return {
       ...transaction,
       status: 'cooldown-reduction-transaction-consumed-unsupported-mode',
@@ -3787,6 +3799,7 @@ function createActionRange(action) {
     endMs: startMs + durationMs,
     contextActionId:
       action.runtimeContextActionId ?? action.contextActionId ?? null,
+    runtimeResolvedNormalInput: isRuntimeResolvedNormalAttackInput(action),
     sourceSequenceIndex: action.sourceSequenceIndex ?? null,
     sourceSequencePath: action.sourceSequencePath ?? null,
   };

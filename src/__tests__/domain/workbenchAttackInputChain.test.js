@@ -9,12 +9,39 @@ import {
   ATTACK_INPUT_LEGACY_UNRESOLVED,
   createWorkbenchAttackInputChainDrafts,
   migrateLegacyAttackInputActionDrafts,
+  normalizeAttackInputActionFields,
   reconcileWorkbenchAttackInputIntentGroups,
 } from '../../domain/workbenchAttackInputChain';
+import { NORMAL_ATTACK_INPUT_RESOLUTION_MODE } from '../../domain/normalAttackInputResolution';
 import { resolveVerifiedAttackInputChainEntry } from '../../domain/verifiedActionContextScheduling';
 import { frameToMs, msToFrame } from '../../domain/timebase';
 
 describe('workbench normal attack input chain', () => {
+  it('preserves the explicit unique-form marker without upgrading ordinary Workbench input', () => {
+    const source = {
+      attackInputIntent: {
+        kind: 'public-normal-attack',
+        selectionMode: 'runtime-context',
+        sourceSkillId: 10900101,
+      },
+    };
+
+    expect(
+      normalizeAttackInputActionFields(source).attackInputIntent
+    ).not.toHaveProperty('normalFormResolution');
+    expect(
+      normalizeAttackInputActionFields({
+        ...source,
+        attackInputIntent: {
+          ...source.attackInputIntent,
+          normalFormResolution: NORMAL_ATTACK_INPUT_RESOLUTION_MODE,
+        },
+      }).attackInputIntent
+    ).toMatchObject({
+      normalFormResolution: NORMAL_ATTACK_INPUT_RESOLUTION_MODE,
+    });
+  });
+
   it('materializes one live input without expanding the selected chain tail', () => {
     const mapping = findNormalAttack(103002);
     const resolved = resolveVerifiedAttackInputChainEntry({

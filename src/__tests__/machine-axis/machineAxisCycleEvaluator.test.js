@@ -441,7 +441,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
   });
 
-  it('rejects a standalone normal-chain successor before cycle scoring', () => {
+  it('resolves a standalone displayed A2 to the only executable normal form before cycle scoring', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
       mechanicsPackage.packageHash;
@@ -464,27 +464,36 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     ];
     envelope.loop = { startFrame: 60, endFrame: 360 };
 
-    const report = createMachineAxisService().evaluateCycle(envelope, {
+    const service = createMachineAxisService();
+    const prepared = service.prepareValidated(envelope.contract);
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+    expect(prepared.warnings).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-normal-attack-input-display-mismatch',
+        actionId: 'formal-standalone-a2',
+        requested: expect.objectContaining({ sequenceIndex: 2 }),
+        actual: expect.objectContaining({
+          sequenceIndex: 1,
+          controlSkillId: 10300201,
+        }),
+      })
+    );
+
+    const report = service.evaluateCycle(envelope, {
       allowUnverifiedRuntimeTiming: true,
     });
     expect(report).toMatchObject({
-      valid: false,
-      status: 'rejected',
+      valid: true,
+      status: 'closed',
       actionLegalityProof: {
-        passed: false,
-        finalScoreEligible: false,
-        rejectionCodes: expect.arrayContaining([
-          'attack-input-chain-incomplete',
-        ]),
+        passed: true,
       },
     });
-    expect(report.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'machine-axis-action-not-executable',
-          actionId: 'formal-standalone-a2',
-        }),
-      ])
+    expect(report.warnings).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-normal-attack-input-display-mismatch',
+        actionId: 'formal-standalone-a2',
+      })
     );
   });
 

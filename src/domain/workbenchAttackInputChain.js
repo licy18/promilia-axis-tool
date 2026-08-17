@@ -600,6 +600,7 @@ function normalizeAttackInputIntent(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   const kind = normalizeText(value.kind);
   const selectionMode = normalizeText(value.selectionMode);
+  const normalFormResolution = normalizeText(value.normalFormResolution);
   const sourceSkillId = positiveIntegerOrNull(value.sourceSkillId);
   if (!kind || !selectionMode || !sourceSkillId) return null;
   return {
@@ -607,6 +608,7 @@ function normalizeAttackInputIntent(value) {
     contractName: ATTACK_INPUT_INTENT_CONTRACT_NAME,
     kind,
     selectionMode,
+    ...(normalFormResolution ? { normalFormResolution } : {}),
     sourceSkillId,
     actionVariantIndex: nonNegativeIntegerOrNull(value.actionVariantIndex) ?? 0,
     sourceIdentity:

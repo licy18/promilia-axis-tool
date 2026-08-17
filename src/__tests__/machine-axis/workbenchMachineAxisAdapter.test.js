@@ -26,6 +26,14 @@ import {
 
 const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
+function createMoyinChaseInputAxis() {
+  const contract = structuredClone(moyinWindow39Fixture);
+  contract.scenario.durationFrames = 400;
+  contract.actions = contract.actions.slice(0, 2);
+  contract.actions[1].schedule.frame = 40;
+  return contract;
+}
+
 describe('Workbench Machine Axis adapter', () => {
   beforeEach(() => {
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
@@ -200,7 +208,8 @@ describe('Workbench Machine Axis adapter', () => {
   it('does not turn a runtime-resolved normal chain into an explicit chain selection', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
-    const imported = adapter.importContract(moyinWindow39Fixture);
+    const contract = createMoyinChaseInputAxis();
+    const imported = adapter.importContract(contract);
     const preparedAction = imported.project.actions.find(
       action => action.id === 'window-offset-39-a1'
     );
@@ -210,8 +219,8 @@ describe('Workbench Machine Axis adapter', () => {
     );
 
     expect(preparedAction).toMatchObject({
-      attackInputChainSelectionSource: 'user-explicit',
-      attackInputChainIdentity: 'moyin-normal-five-inputs',
+      attackInputChainSelectionSource: 'runtime-projected',
+      attackInputChainIdentity: null,
     });
     expect(exportedAction.intent.attackInput).toEqual(
       imported.contract.actions.find(
@@ -221,36 +230,40 @@ describe('Workbench Machine Axis adapter', () => {
     expect(exportedAction.intent.attackInput.chainIdentity).toBeNull();
   }, 30_000);
 
-  it('fails closed when preserved context metadata does not name a verified open window', () => {
+  it('warns and round-trips normal-attack display metadata without treating it as authority', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
-    const contract = structuredClone(fixture);
-    const actionId = 'xiaoyu-charged';
+    const contract = createMoyinChaseInputAxis();
+    const actionId = 'window-offset-39-a1';
     const sourceAction = contract.actions.find(
       action => action.id === actionId
     );
     sourceAction.intent.attackInput = {
-      sequenceIndex: 1,
-      groupId: 'fixture-context-input',
-      contextActionId: 'switch-to-xiaoyu',
-      chainIdentity: null,
+      sequenceIndex: 5,
+      groupId: 'display-only-group',
+      contextActionId: 'display-only-context',
+      chainIdentity: 'display-only-chain',
     };
-    expect(() => adapter.importContract(contract)).toThrow(
-      MachineAxisValidationError
+    const imported = adapter.importContract(contract);
+    const resolution = imported.actionResolutions.find(
+      candidate => candidate.actionId === actionId
     );
-    try {
-      adapter.importContract(contract);
-    } catch (error) {
-      expect(error).toMatchObject({
-        issues: expect.arrayContaining([
-          expect.objectContaining({
-            actionId,
-            reason: 'verified-context-window-input-missing',
-            violationCodes: ['VERIFIED_ACTION_CONTEXT_WINDOW_MISSING'],
-          }),
-        ]),
-      });
-    }
+    const exported = adapter.exportProject(imported.project);
+    const exportedInput = exported.actions.find(
+      action => action.id === actionId
+    ).intent.attackInput;
+
+    expect(resolution.normalAttackInputResolution).toMatchObject({
+      status: 'corrected',
+      requested: expect.objectContaining(sourceAction.intent.attackInput),
+      mismatchFields: expect.arrayContaining([
+        'sequenceIndex',
+        'contextActionId',
+        'chainIdentity',
+      ]),
+    });
+    expect(exportedInput).toEqual(sourceAction.intent.attackInput);
+    expect(() => adapter.importContract(exported)).not.toThrow();
   }, 30_000);
 
   it('round-trips the formal objective and structured enemy profile without defaulting', () => {

@@ -29,9 +29,14 @@ import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 import { resolveVerifiedActionLevelValue } from '../../domain/verifiedActionLevel';
 import { resolveVerifiedChargingReleaseWindow } from '../../domain/verifiedChargingReleaseSelection';
 import {
+  VERIFIED_NORMAL_ATTACK_INPUT_PHASES,
   matchVerifiedNormalAttackInput,
   resolveVerifiedNormalAttackInputPhase,
 } from '../../domain/verifiedNormalAttackInputAuthority';
+import {
+  isRuntimeContextNormalAttackInput,
+  isRuntimeResolvedNormalAttackInput,
+} from '../../domain/normalAttackInputResolution';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -1135,6 +1140,9 @@ export function createVerifiedActionVariantRuntime({
       continue;
     }
     const mapping = getVerifiedCombatActionMapping(action);
+    const runtimeResolvedNormalInput =
+      mapping?.actionKind === 'normal-attack' &&
+      isRuntimeResolvedNormalAttackInput(action);
     if (mapping?.actionKind !== 'normal-attack') {
       removeAttackChainContinuityWindows(activeSwitchWindows, action.actorId);
     }
@@ -1161,17 +1169,24 @@ export function createVerifiedActionVariantRuntime({
           actorState,
           controlSkillId: initialPublicControlSkillId,
           selectedSubSkillIndex:
-            mapping?.actionKind === 'normal-attack'
+            mapping?.actionKind === 'normal-attack' &&
+            !runtimeResolvedNormalInput
               ? resolveRequestedContextTargetSubSkillIndex(action)
               : null,
           requestedExecutionControlSkillId:
-            mapping?.actionKind === 'normal-attack'
+            mapping?.actionKind === 'normal-attack' &&
+            !runtimeResolvedNormalInput
               ? resolveRequestedContextExecutionControlSkillId(action, mapping)
               : null,
+          allowAnyTargetControlSkillId: runtimeResolvedNormalInput,
           timeMs: actionTimeMs,
           inputCommand: mapping?.actionKind ?? null,
-          required: hasExplicitContextPredecessor(action),
-          attackGroupId: action.attackGroupId ?? null,
+          required:
+            !runtimeResolvedNormalInput &&
+            hasExplicitContextPredecessor(action),
+          attackGroupId: runtimeResolvedNormalInput
+            ? (contextPredecessor?.attackGroupId ?? null)
+            : (action.attackGroupId ?? null),
         })
       : { status: 'none', binding: null };
     const contextConsumesInput = [
@@ -1237,10 +1252,65 @@ export function createVerifiedActionVariantRuntime({
       lastResolvedActionByActorId.delete(action.actorId);
       continue;
     }
-    const runtimeAction = attackChainSelection.action ?? action;
-    const publicControlSkillId = contextConsumesInput
-      ? initialPublicControlSkillId
-      : resolveActionControlSkillId(runtimeAction, mapping);
+    if (
+      runtimeResolvedNormalInput &&
+      isWithinResolvedActionOccupancy({
+        predecessor: contextPredecessor,
+        inputTimeMs: actionTimeMs,
+      }) &&
+      !isVerifiedRuntimeNormalAttackContinuation({
+        predecessor: contextPredecessor,
+        contextSelection,
+        attackChainSelection,
+        activeSwitchWindows,
+        switchWindowHistory,
+        switchBindings,
+      })
+    ) {
+      const block = createNormalAttackInputOccupancyExecutionBlock({
+        action,
+        actorState,
+        predecessor: contextPredecessor,
+      });
+      executionBlocks.push(block);
+      actionResolutionById.set(action.id, {
+        ...resolveVerifiedCombatActionMechanics(action, {
+          combatScenario: scenario.combatScenario,
+        }),
+        ready: false,
+        applied: false,
+        status: block.reason,
+        reasons: block.reasons,
+      });
+      selectionByActionId.set(action.id, {
+        actionId: action.id,
+        actorId: action.actorId,
+        ownerId: characterId || null,
+        controlSkillId: null,
+        selectedSubSkillIndex: null,
+        selectionReason: block.reason,
+        sourceKind: block.sourceKind,
+        sourceIdentity: block.sourceIdentity,
+        status: block.reason,
+      });
+      lastResolvedActionByActorId.delete(action.actorId);
+      continue;
+    }
+    const runtimeContextNormalAttackForm =
+      runtimeResolvedNormalInput && contextSelection.binding
+        ? materializeRuntimeContextNormalAttackInput({
+            action,
+            mapping,
+            contextSelection,
+          })
+        : null;
+    const runtimeAction =
+      runtimeContextNormalAttackForm ?? attackChainSelection.action ?? action;
+    const publicControlSkillId = contextSelection.binding
+      ? Number(contextSelection.binding.targetControlSkillId)
+      : contextConsumesInput
+        ? initialPublicControlSkillId
+        : resolveActionControlSkillId(runtimeAction, mapping);
     if (!contextConsumesInput && actorState) {
       contextSelection = resolveContextVariantSelection({
         contextBindings,
@@ -1248,20 +1318,24 @@ export function createVerifiedActionVariantRuntime({
         actorState,
         controlSkillId: publicControlSkillId,
         selectedSubSkillIndex:
-          mapping?.actionKind === 'normal-attack'
+          mapping?.actionKind === 'normal-attack' && !runtimeResolvedNormalInput
             ? resolveRequestedContextTargetSubSkillIndex(runtimeAction)
             : null,
         requestedExecutionControlSkillId:
-          mapping?.actionKind === 'normal-attack'
+          mapping?.actionKind === 'normal-attack' && !runtimeResolvedNormalInput
             ? resolveRequestedContextExecutionControlSkillId(
                 runtimeAction,
                 mapping
               )
             : null,
+        allowAnyTargetControlSkillId: runtimeResolvedNormalInput,
         timeMs: actionTimeMs,
         inputCommand: mapping?.actionKind ?? null,
-        required: hasExplicitContextPredecessor(action),
-        attackGroupId: runtimeAction.attackGroupId ?? null,
+        required:
+          !runtimeResolvedNormalInput && hasExplicitContextPredecessor(action),
+        attackGroupId: runtimeResolvedNormalInput
+          ? (contextPredecessor?.attackGroupId ?? null)
+          : (runtimeAction.attackGroupId ?? null),
       });
     }
     const directExecutionForm = resolveDirectPublicActionExecutionForm({
@@ -1622,7 +1696,8 @@ export function createVerifiedActionVariantRuntime({
       if (
         mapping?.actionKind === 'normal-attack' &&
         !activeSelection.binding &&
-        !contextSelection.binding
+        !contextSelection.binding &&
+        (!attackChainSelection.segment || !runtimeResolvedNormalInput)
       ) {
         const chaseWindow = activeSwitchWindows.find(
           window =>
@@ -1632,7 +1707,8 @@ export function createVerifiedActionVariantRuntime({
             !publicControlSkillIdsByOwner
               .get(characterId)
               ?.has(Number(window.targetControlSkillId)) &&
-            action.contextActionId === window.sourceActionId &&
+            (runtimeResolvedNormalInput ||
+              action.contextActionId === window.sourceActionId) &&
             runtimeWindowContainsTime(window, actionTimeMs)
         );
         if (chaseWindow) {
@@ -2476,6 +2552,82 @@ function createResolvedActionContext({
   };
 }
 
+function isWithinResolvedActionOccupancy({ predecessor, inputTimeMs }) {
+  if (!predecessor?.ready) return false;
+  const startMs = Number(predecessor.startMs);
+  const effectiveDurationFrames = Number(predecessor.effectiveDurationFrames);
+  if (!Number.isFinite(startMs)) return false;
+  if (Number.isFinite(effectiveDurationFrames) && effectiveDurationFrames > 0) {
+    return msToFrame(Number(inputTimeMs) - startMs) < effectiveDurationFrames;
+  }
+  const durationMs = Number(predecessor.action?.durationMs);
+  return (
+    Number.isFinite(durationMs) &&
+    durationMs > 0 &&
+    Number(inputTimeMs) < startMs + durationMs - 0.000001
+  );
+}
+
+function isVerifiedRuntimeNormalAttackContinuation({
+  predecessor,
+  contextSelection,
+  attackChainSelection,
+  activeSwitchWindows,
+  switchWindowHistory,
+  switchBindings,
+}) {
+  const predecessorActionId = String(predecessor?.actionId ?? '');
+  if (contextSelection?.status != null && contextSelection.status !== 'none') {
+    return true;
+  }
+  if (
+    (switchBindings ?? []).some(
+      binding =>
+        Number(binding?.sourceControlSkillId) ===
+          Number(predecessor?.controlSkillId) &&
+        Number(binding?.sourceSubSkillIndex) ===
+          Number(predecessor?.selectedSubSkillIndex) &&
+        String(binding?.inputCommand ?? '') === 'normal-attack'
+    )
+  ) {
+    return true;
+  }
+  if (
+    predecessorActionId &&
+    [...(activeSwitchWindows ?? []), ...(switchWindowHistory ?? [])].some(
+      window =>
+        String(window?.sourceActionId ?? '') === predecessorActionId &&
+        String(window?.inputCommand ?? '') === 'normal-attack'
+    )
+  ) {
+    return true;
+  }
+  if (Number(contextSelection?.sourceCandidateCount) > 0) {
+    return true;
+  }
+  if (contextSelection?.fallback === 'default-input') {
+    return true;
+  }
+  if (contextSelection?.status === 'selected' && contextSelection.binding) {
+    return true;
+  }
+  if (
+    attackChainSelection?.status !== 'selected' ||
+    attackChainSelection.authorityPhase?.phase !==
+      VERIFIED_NORMAL_ATTACK_INPUT_PHASES.SUCCESSOR_WINDOW
+  ) {
+    return false;
+  }
+  if (!predecessorActionId) return false;
+  return [
+    attackChainSelection.authorityPhase?.expected?.contextActionId,
+    attackChainSelection.authorityPhase?.sourceActionId,
+    attackChainSelection.derivedEntry?.sourceActionId,
+  ].some(
+    sourceActionId => String(sourceActionId ?? '') === predecessorActionId
+  );
+}
+
 function createStructuralAuthorityOnlyActionContext({
   action,
   mapping,
@@ -2575,10 +2727,7 @@ function resolveAttackInputChainAction({
     action.attackInputChainIdentity ??
     action.attackInput?.attackInputChainIdentity ??
     null;
-  const runtimeContextIntent =
-    action.attackInputIntent?.kind === 'public-normal-attack' &&
-    action.attackInputIntent?.selectionMode === 'runtime-context' &&
-    action.attackInputChainSelectionSource !== 'user-explicit';
+  const runtimeContextIntent = isRuntimeContextNormalAttackInput(action);
   const matchingChains = ownerChains.filter(chain =>
     isRuntimeConditionSatisfied(chain.stateCondition, actorState)
   );
@@ -3330,6 +3479,48 @@ function applyAttackInputChainTimingResolution({
   };
 }
 
+function materializeRuntimeContextNormalAttackInput({
+  action,
+  mapping,
+  contextSelection,
+}) {
+  const binding = contextSelection?.binding;
+  if (!binding) return null;
+  const executionControlSkillId = Number(binding.executionControlSkillId);
+  const selectedSubSkillIndex = Number(binding.targetSubSkillIndex ?? 0);
+  const matchingSegments = (mapping?.attackInputSegments ?? []).filter(
+    segment =>
+      Number(segment.controlSkillId) === executionControlSkillId &&
+      Number(segment.subSkillIndex ?? segment.selectedSubSkillIndex ?? 0) ===
+        selectedSubSkillIndex
+  );
+  const predecessor = contextSelection.previous ?? null;
+  const sequenceIndex =
+    matchingSegments.length === 1
+      ? Number(matchingSegments[0].sequenceIndex)
+      : predecessor?.actionKind !== 'normal-attack'
+        ? 1
+        : Number(action.attackSequenceIndex);
+  const attackGroupId =
+    predecessor?.actionKind === 'normal-attack'
+      ? (predecessor.attackGroupId ?? action.attackGroupId ?? null)
+      : (action.attackGroupId ?? null);
+  return {
+    ...action,
+    attackGroupId,
+    attackSequenceIndex: sequenceIndex,
+    runtimeContextActionId: predecessor?.actionId ?? null,
+    controlSubSkillIndex: selectedSubSkillIndex,
+    attackInput: {
+      ...(action.attackInput ?? {}),
+      sequenceIndex,
+      controlSkillId: executionControlSkillId,
+      subSkillIndex: selectedSubSkillIndex,
+      selectedSubSkillIndex,
+    },
+  };
+}
+
 function resolveContextVariantSelection({
   contextBindings,
   previous,
@@ -3337,6 +3528,7 @@ function resolveContextVariantSelection({
   controlSkillId,
   selectedSubSkillIndex = null,
   requestedExecutionControlSkillId = null,
+  allowAnyTargetControlSkillId = false,
   timeMs,
   inputCommand = null,
   required = false,
@@ -3371,7 +3563,12 @@ function resolveContextVariantSelection({
     return true;
   });
   if (!sourceCandidates.length) {
-    return { status: 'none', binding: null, previous };
+    return {
+      status: 'none',
+      binding: null,
+      previous,
+      sourceCandidateCount: 0,
+    };
   }
   if (
     required &&
@@ -3417,7 +3614,13 @@ function resolveContextVariantSelection({
         binding => binding.outsideWindowFallback === 'default-input'
       )
     ) {
-      return { status: 'none', binding: null, previous };
+      return {
+        status: 'none',
+        binding: null,
+        previous,
+        fallback: 'default-input',
+        sourceCandidateCount: sourceCandidates.length,
+      };
     }
     return required
       ? {
@@ -3426,15 +3629,21 @@ function resolveContextVariantSelection({
           previous,
           conflictingEdges: sourceCandidates,
         }
-      : { status: 'none', binding: null, previous };
+      : {
+          status: 'none',
+          binding: null,
+          previous,
+          sourceCandidateCount: sourceCandidates.length,
+        };
   }
   const requestedSubSkillIndex = Number(selectedSubSkillIndex);
   const hasRequestedSubSkillIndex =
     selectedSubSkillIndex != null && Number.isInteger(requestedSubSkillIndex);
   const candidates = scheduled.filter(
     candidate =>
-      Number(candidate.binding.targetControlSkillId) ===
-        Number(controlSkillId) &&
+      (allowAnyTargetControlSkillId ||
+        Number(candidate.binding.targetControlSkillId) ===
+          Number(controlSkillId)) &&
       (requestedExecutionControlSkillId == null ||
         Number(candidate.binding.executionControlSkillId) ===
           Number(requestedExecutionControlSkillId)) &&
@@ -4722,6 +4931,35 @@ function createNormalAttackInputPhaseExecutionBlock({
     attackInputChainIdentity: phase?.chainIdentity ?? null,
     expectedAttackInput: phase?.expected ?? null,
     actualAttackInput: match?.actual ?? null,
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    timeMs: action.startMs,
+    controlSkillId: null,
+    selectedSubSkillIndex: null,
+    resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
+    resourceName: actorState?.profile?.name ?? null,
+    requiredValue: null,
+    currentValue: actorState?.current ?? null,
+    maxValue: actorState?.profile?.capacity ?? null,
+  };
+}
+
+function createNormalAttackInputOccupancyExecutionBlock({
+  action,
+  actorState,
+  predecessor,
+}) {
+  return {
+    ...createActionSourceSequenceFields(action),
+    code: 'VERIFIED_NORMAL_ATTACK_INPUT_OCCUPANCY_BLOCKED',
+    status: 'blocked',
+    reason: 'verified-normal-attack-input-occupancy-blocked',
+    reasons: ['normal-attack-input-has-no-executable-form-during-occupancy'],
+    message: `${actorState?.actor?.name ?? action.actor?.name ?? '角色'} 当前动作占用期内没有可执行的普攻续段，本次左键输入不执行`,
+    sourceKind: 'azpr-verified-normal-attack-input-authority',
+    sourceIdentity: predecessor?.sourceIdentity ?? null,
+    blockingActionId: predecessor?.actionId ?? null,
     actionId: action.id,
     actionName: action.name,
     actorId: action.actorId,
