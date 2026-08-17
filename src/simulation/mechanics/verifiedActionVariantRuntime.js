@@ -1140,10 +1140,21 @@ export function createVerifiedActionVariantRuntime({
       continue;
     }
     const mapping = getVerifiedCombatActionMapping(action);
+    const tracksActorActionContext = action.type === ACTION_TYPES.SKILL;
+    const clearActorActionContext = () => {
+      if (tracksActorActionContext) {
+        lastResolvedActionByActorId.delete(action.actorId);
+      }
+    };
+    const rememberActorActionContext = context => {
+      if (!tracksActorActionContext || !context) return;
+      lastResolvedActionByActorId.set(action.actorId, context);
+      resolvedActionContextById.set(String(action.id), context);
+    };
     const runtimeResolvedNormalInput =
       mapping?.actionKind === 'normal-attack' &&
       isRuntimeResolvedNormalAttackInput(action);
-    if (mapping?.actionKind !== 'normal-attack') {
+    if (tracksActorActionContext && mapping?.actionKind !== 'normal-attack') {
       removeAttackChainContinuityWindows(activeSwitchWindows, action.actorId);
     }
     const actorState = variantActorStateById.get(action.actorId);
@@ -1153,11 +1164,13 @@ export function createVerifiedActionVariantRuntime({
         scenarioActor?.characterId ??
         actorState?.profile?.ownerId
     );
-    const contextPredecessor = resolveContextPredecessor({
-      action,
-      lastResolvedActionByActorId,
-      resolvedActionContextById,
-    });
+    const contextPredecessor = tracksActorActionContext
+      ? resolveContextPredecessor({
+          action,
+          lastResolvedActionByActorId,
+          resolvedActionContextById,
+        })
+      : null;
     const initialPublicControlSkillId = resolveActionControlSkillId(
       action,
       mapping
@@ -1204,7 +1217,9 @@ export function createVerifiedActionVariantRuntime({
           actorState,
           attackInputChains,
           activeSwitchWindows,
-          previous: lastResolvedActionByActorId.get(action.actorId),
+          previous: tracksActorActionContext
+            ? lastResolvedActionByActorId.get(action.actorId)
+            : null,
           timeMs: actionTimeMs,
         });
     if (
@@ -1249,7 +1264,7 @@ export function createVerifiedActionVariantRuntime({
           null,
         status: block.reason,
       });
-      lastResolvedActionByActorId.delete(action.actorId);
+      clearActorActionContext();
       continue;
     }
     if (
@@ -1293,7 +1308,7 @@ export function createVerifiedActionVariantRuntime({
         sourceIdentity: block.sourceIdentity,
         status: block.reason,
       });
-      lastResolvedActionByActorId.delete(action.actorId);
+      clearActorActionContext();
       continue;
     }
     const runtimeContextNormalAttackForm =
@@ -1382,7 +1397,7 @@ export function createVerifiedActionVariantRuntime({
           directExecutionForm?.executionPrerequisite?.sourceIdentity ?? null,
         status: block.reason,
       });
-      lastResolvedActionByActorId.delete(action.actorId);
+      clearActorActionContext();
       continue;
     }
     const derivedControlContract = getVerifiedDerivedControlContract({
@@ -1853,7 +1868,7 @@ export function createVerifiedActionVariantRuntime({
           appliedAssumptionIdentity: chargingBinding.assumptionIdentity,
           status: block.reason,
         });
-        lastResolvedActionByActorId.delete(action.actorId);
+        clearActorActionContext();
         continue;
       }
       sourceChargingResolution = resolveVerifiedCombatActionMechanics(
@@ -2044,10 +2059,9 @@ export function createVerifiedActionVariantRuntime({
         selectedSubSkillIndex,
       });
       if (structuralContext) {
-        lastResolvedActionByActorId.set(action.actorId, structuralContext);
-        resolvedActionContextById.set(String(action.id), structuralContext);
+        rememberActorActionContext(structuralContext);
       } else {
-        lastResolvedActionByActorId.delete(action.actorId);
+        clearActorActionContext();
       }
       continue;
     }
@@ -2062,8 +2076,7 @@ export function createVerifiedActionVariantRuntime({
         selectedSubSkillIndex,
         verifiedContextContinuation: contextSelection.status === 'selected',
       });
-      lastResolvedActionByActorId.set(action.actorId, structuralContext);
-      resolvedActionContextById.set(String(action.id), structuralContext);
+      rememberActorActionContext(structuralContext);
       continue;
     }
     if (!actorState) {
@@ -2076,21 +2089,22 @@ export function createVerifiedActionVariantRuntime({
         executionControlSkillId,
         selectedSubSkillIndex,
       });
-      lastResolvedActionByActorId.set(action.actorId, resolvedActionContext);
-      resolvedActionContextById.set(String(action.id), resolvedActionContext);
+      rememberActorActionContext(resolvedActionContext);
       continue;
     }
 
-    const continuationWindow = createAttackChainContinuationWindow({
-      actorState,
-      action,
-      actionTimeMs,
-      executionControlSkillId,
-      selectedSubSkillIndex,
-      previous: lastResolvedActionByActorId.get(action.actorId),
-      attackInputChains,
-      activeSwitchWindows,
-    });
+    const continuationWindow = tracksActorActionContext
+      ? createAttackChainContinuationWindow({
+          actorState,
+          action,
+          actionTimeMs,
+          executionControlSkillId,
+          selectedSubSkillIndex,
+          previous: lastResolvedActionByActorId.get(action.actorId),
+          attackInputChains,
+          activeSwitchWindows,
+        })
+      : null;
     if (continuationWindow) {
       activeSwitchWindows.push(continuationWindow);
       switchWindowHistory.push(continuationWindow);
@@ -2128,7 +2142,7 @@ export function createVerifiedActionVariantRuntime({
         status: block.reason,
         reasons: block.reasons,
       });
-      lastResolvedActionByActorId.delete(action.actorId);
+      clearActorActionContext();
       continue;
     }
 
@@ -2231,8 +2245,7 @@ export function createVerifiedActionVariantRuntime({
       executionControlSkillId,
       selectedSubSkillIndex,
     });
-    lastResolvedActionByActorId.set(action.actorId, resolvedActionContext);
-    resolvedActionContextById.set(String(action.id), resolvedActionContext);
+    rememberActorActionContext(resolvedActionContext);
   }
 
   flushPending(Number(scenario?.time?.durationMs) || 0);

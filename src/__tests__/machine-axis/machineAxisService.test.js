@@ -10,7 +10,10 @@ import {
   MachineAxisValidationError,
 } from '../../machine-axis/machineAxisService';
 import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
-import { createSearchStateSnapshot } from '../../machine-axis/machineAxisSearchState';
+import {
+  createSearchNormalAttackInputProof,
+  createSearchStateSnapshot,
+} from '../../machine-axis/machineAxisSearchState';
 
 const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
@@ -286,6 +289,42 @@ function createKiboAxis({
     ],
   };
   return axis;
+}
+
+function addXunlangSignature(axis, frame) {
+  const characterId = Number(axis.scenario.team[0].characterId);
+  axis.scenario.team[0].loadout = { kiboId: 500001 };
+  axis.scenario.initialRuntimeState = {
+    ...(axis.scenario.initialRuntimeState ?? {}),
+    kiboEnergyBySlot: [
+      {
+        slotId: 'slot-1',
+        actorId: `actor-${characterId}`,
+        characterId,
+        kiboId: 500001,
+        kiboName: '迅狼',
+        currentValue: 100,
+        maxValue: 100,
+      },
+    ],
+  };
+  const action = {
+    id: 'overlap-kibo-signature',
+    owner: { kind: 'kibo', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: 50000102,
+      actionKind: 'signature',
+      level: 1,
+    },
+    schedule: { mode: 'absolute', frame },
+  };
+  axis.actions.push(action);
+  axis.actions.sort(
+    (left, right) =>
+      Number(left.schedule?.frame ?? 0) - Number(right.schedule?.frame ?? 0)
+  );
+  return action;
 }
 
 describe('Machine Axis service', () => {
@@ -1016,6 +1055,89 @@ describe('Machine Axis service', () => {
       MachineAxisValidationError
     );
   }, 30_000);
+
+  it('allows an actor A1 while the equipped Kibo signature remains in occupancy', () => {
+    const axis = createOwnerNormalAttackAxis(109001, 1);
+    axis.actions[0].schedule.frame = 1;
+    const kiboAction = addXunlangSignature(axis, 0);
+    const prepared = createMachineAxisService().prepareValidated(axis);
+
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+    expect(prepared.actionLegalityProof).toMatchObject({
+      passed: true,
+      finalScoreEligible: true,
+    });
+    expect(
+      prepared.run.trace.executionPlan.actions.map(action => [
+        action.actionId,
+        action.execute,
+      ])
+    ).toEqual([
+      [kiboAction.id, true],
+      ['owner-109001-a1', true],
+    ]);
+    expect(
+      prepared.run.trace.variants.selections.find(
+        selection => selection.actionId === 'owner-109001-a1'
+      )
+    ).toMatchObject({
+      attackSequenceIndex: 1,
+      controlSkillId: 10900101,
+    });
+    expect(
+      prepared.run.trace.executionPlan.actions.find(
+        action => action.actionId === 'owner-109001-a1'
+      )?.violationCodes
+    ).not.toContain('VERIFIED_NORMAL_ATTACK_INPUT_OCCUPANCY_BLOCKED');
+  });
+
+  it('preserves A1 to A2 continuation across an overlapping Kibo signature', () => {
+    const axis = createOwnerNormalAttackAxis(109001, 2);
+    const [a1, a2] = axis.actions;
+    const kiboAction = addXunlangSignature(axis, 1);
+    const prepared = createMachineAxisService().prepareValidated(axis);
+
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+    expect(
+      prepared.run.trace.executionPlan.actions.map(action => [
+        action.actionId,
+        action.execute,
+      ])
+    ).toEqual([
+      [a1.id, true],
+      [kiboAction.id, true],
+      [a2.id, true],
+    ]);
+    expect(
+      prepared.run.trace.variants.selections.find(
+        selection => selection.actionId === a2.id
+      )
+    ).toMatchObject({
+      attackSequenceIndex: 2,
+      controlSkillId: 10900102,
+      contextActionId: a1.id,
+    });
+    expect(
+      createSearchNormalAttackInputProof({
+        trace: prepared.run.trace,
+        fps: 60,
+      })
+    ).toMatchObject({
+      passed: true,
+      issues: [],
+      decisions: [
+        expect.objectContaining({
+          actionId: a1.id,
+          match: expect.objectContaining({ accepted: true }),
+        }),
+        expect.objectContaining({
+          actionId: a2.id,
+          phase: expect.objectContaining({ sourceActionId: a1.id }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+      ],
+    });
+  });
 
   it('reports concrete actor resource shortage without a failed action block', () => {
     const axis = createAxis({
