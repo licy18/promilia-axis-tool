@@ -37,6 +37,10 @@ import {
   isRuntimeContextNormalAttackInput,
   isRuntimeResolvedNormalAttackInput,
 } from '../../domain/normalAttackInputResolution';
+import {
+  applyVerifiedSwitchExitTailSettlement,
+  isVerifiedSwitchExitTailPolicy,
+} from '../generation/verifiedSwitchExitTailPolicy';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -830,21 +834,23 @@ export function createVerifiedActionVariantRuntime({
         Number(response.sourceSubSkillIndex) === Number(selectedSubSkillIndex)
     );
     for (const response of responses) {
-      if (response.cancelPeriodicOnStart) {
-        companion.periodicRevision += 1;
-      }
       const group = response.conditionalDamageGroup;
+      const scheduledHits = [];
       let hitIndex = 0;
       for (const triggerFrame of group.triggerFrames ?? []) {
         for (const hitDelayMs of group.hitDelaysMs ?? [0]) {
           hitIndex += 1;
-          pendingEvents.push({
+          const timeMs =
+            Number(action.startMs) +
+            framesToMs(triggerFrame, group.frameRate) +
+            Number(hitDelayMs);
+          if (isPostSwitchOwnerBoundEvent({ scenario, action, timeMs })) {
+            continue;
+          }
+          scheduledHits.push({
             kind: 'companion-attack',
             attackKind: 'action-response',
-            timeMs:
-              Number(action.startMs) +
-              framesToMs(triggerFrame, group.frameRate) +
-              Number(hitDelayMs),
+            timeMs,
             actorId: action.actorId,
             revision: companion.revision,
             periodicRevision: companion.periodicRevision,
@@ -858,22 +864,29 @@ export function createVerifiedActionVariantRuntime({
           });
         }
       }
+      if (scheduledHits.length > 0 && response.cancelPeriodicOnStart) {
+        companion.periodicRevision += 1;
+      }
+      pendingEvents.push(...scheduledHits);
       if (
         response.endsCompanionAtFrame != null &&
         Number.isInteger(Number(response.endsCompanionAtFrame))
       ) {
-        pendingEvents.push({
-          kind: 'companion-despawn',
-          timeMs:
-            Number(action.startMs) +
-            framesToMs(response.endsCompanionAtFrame, group.frameRate),
-          actorId: action.actorId,
-          revision: companion.revision,
-          sourceActionId: action.id,
-          sourceIdentity: response.sourceIdentity,
-          reason: 'action-response-complete',
-          priority: 0,
-        });
+        const timeMs =
+          Number(action.startMs) +
+          framesToMs(response.endsCompanionAtFrame, group.frameRate);
+        if (!isPostSwitchOwnerBoundEvent({ scenario, action, timeMs })) {
+          pendingEvents.push({
+            kind: 'companion-despawn',
+            timeMs,
+            actorId: action.actorId,
+            revision: companion.revision,
+            sourceActionId: action.id,
+            sourceIdentity: response.sourceIdentity,
+            reason: 'action-response-complete',
+            priority: 0,
+          });
+        }
       }
     }
   };
@@ -2030,6 +2043,11 @@ export function createVerifiedActionVariantRuntime({
         resolution.actualDurationFrames = effectiveDuration;
       }
     }
+    resolution = applyVerifiedSwitchExitTailSettlement({
+      policy: action.switchExitTailPolicy,
+      resolution,
+      mechanicsPackage,
+    });
     actionResolutionById.set(action.id, resolution);
     selectionByActionId.set(
       action.id,
@@ -2154,20 +2172,25 @@ export function createVerifiedActionVariantRuntime({
     });
 
     for (const operation of selectedOperations) {
+      const operationTimeMs =
+        actionTimeMs + framesToMs(operation.triggerFrame, operation.frameRate);
       if (
         !isActionFrameWithinContextualOccupancy(
           action,
           operation.triggerFrame,
           operation.frameRate ?? FRAME_RATE
-        )
+        ) ||
+        isPostSwitchOwnerBoundEvent({
+          scenario,
+          action,
+          timeMs: operationTimeMs,
+        })
       ) {
         continue;
       }
       pendingEvents.push({
         kind: 'resource-operation',
-        timeMs:
-          actionTimeMs +
-          framesToMs(operation.triggerFrame, operation.frameRate),
+        timeMs: operationTimeMs,
         action,
         resolution,
         binding: operation,
@@ -2185,9 +2208,20 @@ export function createVerifiedActionVariantRuntime({
       if (!isSwitchBindingWithinContextualOccupancy(action, binding)) {
         continue;
       }
+      const bindingTimeMs =
+        actionTimeMs + framesToMs(binding.activationFrame, FRAME_RATE);
+      if (
+        isPostSwitchOwnerBoundEvent({
+          scenario,
+          action,
+          timeMs: bindingTimeMs,
+        })
+      ) {
+        continue;
+      }
       pendingEvents.push({
         kind: 'switch-window',
-        timeMs: actionTimeMs + framesToMs(binding.activationFrame, FRAME_RATE),
+        timeMs: bindingTimeMs,
         action,
         binding,
         priority: 2,
@@ -2207,7 +2241,14 @@ export function createVerifiedActionVariantRuntime({
             action,
             trigger.triggerFrame,
             trigger.frameRate ?? FRAME_RATE
-          )
+          ) ||
+          isPostSwitchOwnerBoundEvent({
+            scenario,
+            action,
+            timeMs:
+              actionTimeMs +
+              framesToMs(trigger.triggerFrame, trigger.frameRate),
+          })
         ) {
           continue;
         }
@@ -2360,6 +2401,17 @@ export function createVerifiedActionVariantRuntime({
       conditionalHitGroupCount: targetStateRuntime.groupResults.length,
       directSpEventCount: targetStateRuntime.directSpEvents.length,
       executionBlockCount: executionBlocks.length,
+      switchExitTailSettlementCount: [...actionResolutionById.values()].filter(
+        resolution => resolution.switchExitTailSettlement != null
+      ).length,
+      switchExitCancelledPacketCount: [...actionResolutionById.values()].reduce(
+        (sum, resolution) =>
+          sum +
+          Number(
+            resolution.switchExitTailSettlement?.cancelledPacketCount ?? 0
+          ),
+        0
+      ),
     },
     ready: true,
     applied: true,
@@ -2387,6 +2439,19 @@ function isSwitchBindingWithinContextualOccupancy(action, binding) {
     FRAME_RATE
   );
   return Number(binding.activationFrame) === contextualEndFrame;
+}
+
+function isPostSwitchOwnerBoundEvent({ scenario, action, timeMs }) {
+  const policy = action?.switchExitTailPolicy;
+  if (!isVerifiedSwitchExitTailPolicy(policy)) return false;
+  const fps = Number(scenario?.time?.fps) || FRAME_RATE;
+  const switchBoundaryTimeMs =
+    (Number(policy.switchBoundaryFrame) * 1000) / fps;
+  return (
+    Number.isFinite(Number(timeMs)) &&
+    Number.isFinite(switchBoundaryTimeMs) &&
+    Number(timeMs) > switchBoundaryTimeMs
+  );
 }
 
 function projectPendingNormalAttackSpecialContinuationCandidates({

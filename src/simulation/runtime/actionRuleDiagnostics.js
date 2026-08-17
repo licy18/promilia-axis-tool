@@ -53,6 +53,7 @@ import {
 import {
   ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
   KIBO_SWITCH_EXIT_TAIL_UNRESOLVED,
+  createVerifiedRuntimeSwitchExitTailAssessment,
   isVerifiedSwitchExitTailPolicy,
 } from '../generation/verifiedSwitchExitTailPolicy';
 
@@ -124,7 +125,7 @@ export function createActionRuleDiagnostics({
       isFormalActionLegalityScenario(scenario)
     ),
     ...createSwitchFrameConflictDiagnostics(actions, scenario.time?.fps),
-    ...createSwitchExitTailDiagnostics(actions, scenario),
+    ...createSwitchExitTailDiagnostics(actions, scenario, actionResolutionById),
     ...createKiboAutoCastTriggerDiagnostics(scenario),
     ...createKiboAutoCastScheduleDiagnostics(scenario),
     ...createBackgroundActionDerivationDiagnostics(actions, scenario),
@@ -2149,14 +2150,26 @@ function createSwitchOccupancyDiagnostics(actions, fps = 60, strict = false) {
   return diagnostics;
 }
 
-function createSwitchExitTailDiagnostics(actions, scenario) {
+function createSwitchExitTailDiagnostics(
+  actions,
+  scenario,
+  actionResolutionById = null
+) {
   return (actions ?? []).flatMap(action => {
     const policy = action?.switchExitTailPolicy;
     if (policy == null) return [];
     const valid = isVerifiedSwitchExitTailPolicy(policy);
-    if (valid && policy.evidenceClosed === true) return [];
+    const resolution =
+      actionResolutionById?.get?.(action.id) ??
+      actionResolutionById?.get?.(String(action.id)) ??
+      null;
+    const runtimeAssessment = valid
+      ? createVerifiedRuntimeSwitchExitTailAssessment({ policy, resolution })
+      : null;
+    const effectivePolicy = runtimeAssessment ?? policy;
+    if (valid && effectivePolicy.evidenceClosed === true) return [];
     const code = valid
-      ? policy.rejectionCode ||
+      ? effectivePolicy.rejectionCode ||
         ACTION_RULE_CODES.SWITCH_EXIT_TAIL_POLICY_INVALID
       : ACTION_RULE_CODES.SWITCH_EXIT_TAIL_POLICY_INVALID;
     const status =
@@ -2176,22 +2189,26 @@ function createSwitchExitTailDiagnostics(actions, scenario) {
         actionIds: uniqueValues([action.id, policy.switchActionId]),
         actorId: action.actorId ?? null,
         timeMs: Number(action.startMs) || 0,
-        switchActionId: policy.switchActionId ?? null,
-        switchBoundaryFrame: policy.switchBoundaryFrame ?? null,
+        switchActionId: effectivePolicy.switchActionId ?? null,
+        switchBoundaryFrame: effectivePolicy.switchBoundaryFrame ?? null,
         reason: valid
-          ? policy.status
+          ? effectivePolicy.status
           : 'compiler-switch-exit-tail-policy-invalid',
-        sourceIdentity: policy.policyHash ?? null,
+        sourceIdentity:
+          runtimeAssessment?.assessmentHash ?? policy.policyHash ?? null,
         sourceSequencePath: action.sourceSequencePath ?? null,
         message: `${action.name ?? action.id} 在切换边界后的未物化 owner-bound 尾包缺少可验证继续结算来源，动作不执行`,
         source: {
-          sourceKind: 'azpr-client-static-switch-exit-tail-v1',
+          sourceKind:
+            runtimeAssessment?.sourceKind ??
+            'azpr-client-static-switch-exit-tail-v1',
           sourceStatus: 'switch-exit-tail-fail-closed',
           fieldPaths: [
             'action.switchExitTailPolicy',
             'action.sourceSequencePath',
           ],
         },
+        runtimeAssessment,
         appliedToSimulationResults: status === ACTION_RULE_STATUSES.VIOLATED,
       },
     ];

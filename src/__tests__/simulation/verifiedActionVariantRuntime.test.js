@@ -20,6 +20,7 @@ import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedActionVariantRuntime } from '../../simulation/mechanics/verifiedActionVariantRuntime';
 import { projectScenarioEffectiveActionTimeline } from '../../simulation/mechanics/actionEffectiveTimeline';
+import { attachVerifiedSwitchExitTailPolicies } from '../../simulation/generation/verifiedSwitchExitTailPolicy';
 import {
   ACTION_RULE_CODES,
   createActionRuleDiagnostics,
@@ -1274,6 +1275,62 @@ describe('verified action variant and special resource runtime', () => {
           sequenceIndex: 5,
         }),
       },
+    });
+  });
+
+  it('cancels only the unresolved Moyin A5 owner tail when switching out', () => {
+    const chain = createRuntimeContextNormalAttackChain({
+      ownerId: MOYIN_ID,
+      segmentCount: 5,
+    }).map((action, index) => ({
+      ...action,
+      sourceSequencePath: [index],
+    }));
+    const a5 = chain[4];
+    const switchAction = {
+      id: 'moyin-switch-after-a5',
+      type: 'switch',
+      actorId: a5.actorId,
+      targetActorId: 'actor-103002',
+      startMs: a5.startMs + frameTime(64),
+      sourceSequencePath: [chain.length],
+    };
+    const ruby = { id: 'actor-103002', characterId: RUBY_ID, name: '红宝石' };
+    const actions = attachVerifiedSwitchExitTailPolicies({
+      actions: [...chain, switchAction],
+      actors: [a5.actor, ruby],
+      team: {
+        slots: [
+          { slotId: 'moyin', actorId: a5.actorId },
+          { slotId: 'ruby', actorId: ruby.id },
+        ],
+      },
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: a5.actorId,
+          characterId: MOYIN_ID,
+        },
+      },
+      time: { fps: 60 },
+    });
+    const runtime = runVariantRuntime({
+      actors: [a5.actor, ruby],
+      actions,
+      durationMs: frameTime(1500),
+    });
+    const resolution = runtime.actionResolutionById.get(a5.id);
+
+    expect(runtime.executionBlocks).toEqual([]);
+    expect(resolution.hits.map(hit => hit.trigger.startFrame)).toEqual([
+      4, 8, 12, 16, 20, 47, 56, 61,
+    ]);
+    expect(resolution.switchExitTailSettlement).toMatchObject({
+      status: 'owner-bound-tail-cancelled-at-switch-boundary',
+      cancelledPacketCount: 2,
+      retainedHitCount: 8,
+    });
+    expect(runtime.summary).toMatchObject({
+      switchExitCancelledPacketCount: 2,
     });
   });
 

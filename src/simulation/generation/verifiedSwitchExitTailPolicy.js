@@ -12,6 +12,8 @@ import { hashCanonicalValue } from '../headless/canonicalSerialization';
 
 export const VERIFIED_SWITCH_EXIT_TAIL_POLICY_CONTRACT =
   'AzPrVerifiedSwitchExitTailPolicy';
+export const VERIFIED_RUNTIME_SWITCH_EXIT_TAIL_ASSESSMENT_CONTRACT =
+  'AzPrVerifiedRuntimeSwitchExitTailAssessment';
 export const KIBO_SWITCH_EXIT_TAIL_UNRESOLVED =
   'kibo-switch-exit-tail-order-unresolved';
 export const ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED =
@@ -25,10 +27,11 @@ const authoritativeSwitchExitTailPolicies = new WeakSet();
 
 /**
  * Compiler-owned projection of the static client switch-exit ruling.
- * Switching revokes new input/AI authority immediately, but does not emit a
- * blanket SkillStop. Only packets already settled/materialized before the
- * ordered boundary may survive. A future actor-bound packet remains open and
- * therefore blocks formal execution.
+ * Hero switch-exit forces the actor FSM from Skill to Idle; SkillState.OnLeave
+ * emits SkillStop and AliveSkillSystem interrupts the current SkillPlayer.
+ * Packets already settled/materialized before that boundary survive, while a
+ * known future actor-bound packet is cancelled. Unknown phase/order remains
+ * fail-closed. Pet switch-exit keeps its separate conservative contract.
  */
 export function attachVerifiedSwitchExitTailPolicies({
   actions = [],
@@ -87,6 +90,228 @@ export function createVerifiedSwitchExitTailPolicy({
   switchBoundarySourceSequencePath,
   switchToActorId = null,
 }) {
+  const projection = createSwitchExitTailProjection({
+    ownerKind,
+    actionId,
+    ownerActorId,
+    actionStartFrame,
+    actionDurationFrames,
+    actionSourceSequencePath,
+    mapping,
+    mechanicsPackage,
+    switchActionId,
+    switchBoundaryFrame,
+    switchBoundarySourceSequencePath,
+    switchToActorId,
+  });
+  return deepFreeze({
+    ...projection,
+    policyHash: hashCanonicalValue(projection),
+  });
+}
+
+/**
+ * Refines the compiler-owned boundary with the exact action form selected by
+ * the runtime preflight. The client separates ResourceMap (preload/catalog)
+ * from SkillPlayerData.skillTrackDatas (execution). A selected resource with
+ * no behavior trigger is therefore not a scheduled packet. It remains an
+ * action-mechanics coverage gap, but it cannot become an immortal exit tail.
+ *
+ * The refinement still fails closed for an applied effect without a trigger,
+ * for a future owner-bound hit/effect, and while an incomplete action crosses
+ * the switch boundary. Already launched projectiles and already injected
+ * effects retain the compiler policy's continuation semantics.
+ */
+export function createVerifiedRuntimeSwitchExitTailAssessment({
+  policy,
+  resolution,
+  mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage(),
+} = {}) {
+  if (
+    !isVerifiedSwitchExitTailPolicy(policy) ||
+    !resolution ||
+    resolution.ready !== true ||
+    resolution.applied !== true ||
+    !resolution.actionBinding ||
+    !resolution.controlBinding ||
+    String(resolution.packageHash ?? '') !==
+      String(policy.mechanicsPackageHash ?? '') ||
+    String(mechanicsPackage?.packageHash ?? '') !==
+      String(policy.mechanicsPackageHash ?? '')
+  ) {
+    return null;
+  }
+
+  const hits = [...(resolution.hits ?? [])];
+  const effects = (resolution.effects ?? []).filter(isSettlementEffectPacket);
+  const actionBinding = resolution.actionBinding;
+  const actionDurationFrames = firstNonNegativeInteger([
+    actionBinding.actualDurationFrames,
+    actionBinding.effectiveOccupancyFrames,
+    actionBinding.actionTiming?.occupancy?.durationFrames,
+    policy.actionDurationFrames,
+  ]);
+  if (actionDurationFrames == null) return null;
+  const runtimeMapping = {
+    identity: actionBinding.identity ?? policy.mappingIdentity,
+    controlSkillId: actionBinding.controlSkillId,
+    // Effect-value coverage and packet-timing coverage are separate. The
+    // runtime-selected form supplies the exact duration and concrete packet
+    // set; unresolved value semantics do not make the switch order unknown.
+    complete: true,
+    selectedHitIdentities: hits.map(hit => hit.hitIdentity),
+    selectedEffectIdentities: effects.map(effect => effect.effectIdentity),
+  };
+  const runtimeBinding = {
+    ...resolution.controlBinding,
+    applied: true,
+    hits,
+    effects,
+  };
+  const projection = createSwitchExitTailProjection({
+    ownerKind: policy.ownerKind,
+    actionId: policy.actionId,
+    ownerActorId: policy.ownerActorId,
+    actionStartFrame: policy.actionStartFrame,
+    actionDurationFrames,
+    actionSourceSequencePath: policy.actionSourceSequencePath,
+    mapping: runtimeMapping,
+    mechanicsPackage,
+    binding: runtimeBinding,
+    switchActionId: policy.switchActionId,
+    switchBoundaryFrame: policy.switchBoundaryFrame,
+    switchBoundarySourceSequencePath: policy.switchBoundarySourceSequencePath,
+    switchToActorId: policy.switchToActorId,
+  });
+  const assessmentProjection = {
+    ...projection,
+    contractName: VERIFIED_RUNTIME_SWITCH_EXIT_TAIL_ASSESSMENT_CONTRACT,
+    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v2',
+    compilerPolicyHash: policy.policyHash,
+    runtimeResolutionStatus: resolution.status ?? null,
+    runtimeActionBindingIdentity: actionBinding.identity ?? null,
+    runtimeControlSkillId: integerOrNull(actionBinding.controlSkillId),
+    runtimeSelectedHitCount: hits.length,
+    runtimeSelectedEffectCount: effects.length,
+    sourceEvidence: {
+      ...projection.sourceEvidence,
+      resourceCatalogExecutionBoundary:
+        'dump.cs:SkillControlConfig.skillResourceMaps(ResourceMap preload catalog)|SkillPlayer.Initialize(SkillControlData)|SkillPlayer.Update|SkillBehaviorBase.startFrame/Start/Update',
+      inactiveOwnerExecutionBoundary:
+        'dump.cs:FluentBehaviorSystem:IInactiveUpdate|AliveSkillSystem:IUpdate(no IInactiveUpdate)',
+      detachedProjectileLifetime:
+        'dump.cs:CreateBulletBehavior.Start|BulletEntity|BulletAliveSystem:IUpdate|BulletLogicSystem:IUpdate|BulletMoveSystem:IUpdate',
+    },
+  };
+  return deepFreeze({
+    ...assessmentProjection,
+    assessmentHash: hashCanonicalValue(assessmentProjection),
+  });
+}
+
+export function applyVerifiedSwitchExitTailSettlement({
+  policy,
+  resolution,
+  mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage(),
+} = {}) {
+  const assessment = createVerifiedRuntimeSwitchExitTailAssessment({
+    policy,
+    resolution,
+    mechanicsPackage,
+  });
+  if (!assessment?.evidenceClosed) return resolution;
+
+  const cancelledPackets = assessment.packetEvidence.filter(
+    packet => packet.disposition === 'future-owner-bound-packet-cancelled'
+  );
+  const cancelledHitIds = new Set(
+    cancelledPackets
+      .filter(packet => packet.packetKind === 'hit')
+      .map(packet => packet.packetIdentity)
+  );
+  const cancelledEffectIds = new Set(
+    cancelledPackets
+      .filter(packet => packet.packetKind === 'effect')
+      .map(packet => packet.packetIdentity)
+  );
+  const hits = (resolution.hits ?? []).filter(
+    hit => !cancelledHitIds.has(hit.hitIdentity)
+  );
+  const allHits = (resolution.allHits ?? resolution.hits ?? []).filter(
+    hit => !cancelledHitIds.has(hit.hitIdentity)
+  );
+  const effects = (resolution.effects ?? []).filter(
+    effect => !cancelledEffectIds.has(effect.effectIdentity)
+  );
+  const semanticEffects = (resolution.semanticEffects ?? []).filter(
+    effect =>
+      !(effect.rawEffectIdentities ?? []).some(identity =>
+        cancelledEffectIds.has(identity)
+      )
+  );
+  const settlementProjection = {
+    schemaVersion: 1,
+    contractName: 'AzPrVerifiedSwitchExitTailSettlement',
+    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v2',
+    status:
+      cancelledPackets.length > 0
+        ? 'owner-bound-tail-cancelled-at-switch-boundary'
+        : 'switch-exit-tail-settlement-closed',
+    assessmentHash: assessment.assessmentHash,
+    compilerPolicyHash: policy.policyHash,
+    cancelledPacketCount: cancelledPackets.length,
+    cancelledHitIdentities: [...cancelledHitIds].sort((left, right) =>
+      String(left).localeCompare(String(right), 'en')
+    ),
+    cancelledEffectIdentities: [...cancelledEffectIds].sort((left, right) =>
+      String(left).localeCompare(String(right), 'en')
+    ),
+    retainedHitCount: hits.length,
+    retainedEffectCount: effects.length,
+  };
+  return {
+    ...resolution,
+    hits,
+    allHits,
+    effects,
+    semanticEffects,
+    actionBinding: resolution.actionBinding
+      ? {
+          ...resolution.actionBinding,
+          selectedHitIdentities: (
+            resolution.actionBinding.selectedHitIdentities ?? []
+          ).filter(identity => !cancelledHitIds.has(identity)),
+          selectedEffectIdentities: (
+            resolution.actionBinding.selectedEffectIdentities ?? []
+          ).filter(identity => !cancelledEffectIds.has(identity)),
+          runtimeHitCount: hits.length,
+          runtimeEffectCount: effects.filter(
+            effect => effect.classification === 'applied'
+          ).length,
+        }
+      : resolution.actionBinding,
+    switchExitTailSettlement: deepFreeze({
+      ...settlementProjection,
+      settlementHash: hashCanonicalValue(settlementProjection),
+    }),
+  };
+}
+
+function createSwitchExitTailProjection({
+  ownerKind,
+  actionId,
+  ownerActorId,
+  actionStartFrame,
+  actionDurationFrames,
+  actionSourceSequencePath,
+  mapping,
+  mechanicsPackage,
+  binding: suppliedBinding = null,
+  switchActionId,
+  switchBoundaryFrame,
+  switchBoundarySourceSequencePath,
+  switchToActorId = null,
+}) {
   const normalizedOwnerKind = ownerKind === 'kibo' ? 'kibo' : 'actor';
   const unresolvedCode =
     normalizedOwnerKind === 'kibo'
@@ -101,11 +326,14 @@ export function createVerifiedSwitchExitTailPolicy({
     startFrame == null || boundaryFrame == null
       ? null
       : boundaryFrame - startFrame;
-  const binding = (mechanicsPackage?.controlBindings ?? []).find(
-    candidate =>
-      Number(candidate.controlSkillId) === Number(mapping?.controlSkillId)
-  );
+  const binding =
+    suppliedBinding ??
+    (mechanicsPackage?.controlBindings ?? []).find(
+      candidate =>
+        Number(candidate.controlSkillId) === Number(mapping?.controlSkillId)
+    );
   const packets = createSelectedPacketEvidence({
+    ownerKind: normalizedOwnerKind,
     mapping,
     binding,
     actionStartFrame: startFrame,
@@ -127,6 +355,9 @@ export function createVerifiedSwitchExitTailPolicy({
   const unresolvedPackets = packets.filter(
     packet => packet.disposition === 'future-owner-bound-packet-unresolved'
   );
+  const cancelledPackets = packets.filter(
+    packet => packet.disposition === 'future-owner-bound-packet-cancelled'
+  );
   let status = 'settled-before-switch-boundary';
   if (
     startFrame == null ||
@@ -140,6 +371,8 @@ export function createVerifiedSwitchExitTailPolicy({
     status = unresolvedCode;
   } else if (actionCrossesBoundary && !packetEvidenceReady) {
     status = unresolvedCode;
+  } else if (cancelledPackets.length > 0) {
+    status = 'owner-bound-tail-cancelled-at-switch-boundary';
   } else if (
     packets.some(packet => packet.disposition === 'detached-packet-retained')
   ) {
@@ -177,18 +410,19 @@ export function createVerifiedSwitchExitTailPolicy({
     packetEvidenceReady,
     packetEvidence: packets,
     sourceEvidence: {
+      clientBinarySha256:
+        'c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b',
       heroSwitchExit:
-        'dump.cs:SwitchExitBehavior.Initialize@0x13E4B70|FluentBehavior.OnUpdate@0x13CD9C0',
+        'GameAssembly.dll:SwitchExitBehavior.Initialize@0x1813E4B70 -> Fsm.ChangeState(Idle)@0x1813E4D3B',
+      heroSkillStop:
+        'GameAssembly.dll:Common.SkillState.Leave@0x181A24990 -> OnLeave@0x181A25260 -> Entity.Transmit(SkillStop=17)@0x181A24C54|AliveSkillSystem.OnTransmit(case 17) -> InterruptSkill@0x1813ECF90',
       kiboSwitchExit:
         'dump.cs:PetSwitchExitBehavior.Initialize@0x13DE530|OnStart@0x13DEF40|OnFinish@0x13DED70',
-      noBlanketInterrupt:
+      interruptDispatch:
         'AliveSkillSystem.OnTransmit:InterruptSkill only ForceSkillStart(14)|SkillStop(17)',
     },
   };
-  return deepFreeze({
-    ...projection,
-    policyHash: hashCanonicalValue(projection),
-  });
+  return projection;
 }
 
 export function projectVerifiedSwitchExitTailPolicy(value) {
@@ -295,6 +529,7 @@ function transitionFollowsAction(transition, action, fps) {
 }
 
 function createSelectedPacketEvidence({
+  ownerKind,
   mapping,
   binding,
   actionStartFrame,
@@ -314,7 +549,11 @@ function createSelectedPacketEvidence({
         trigger: hit.trigger ?? {},
       })),
     ...(binding.effects ?? [])
-      .filter(effect => selectedEffectIds.has(effect.effectIdentity))
+      .filter(
+        effect =>
+          selectedEffectIds.has(effect.effectIdentity) &&
+          isSettlementEffectPacket(effect)
+      )
       .map(effect => ({
         packetKind: 'effect',
         packetIdentity: effect.effectIdentity,
@@ -362,6 +601,16 @@ function createSelectedPacketEvidence({
         disposition = 'settled-before-switch';
       } else if (projectile && materializedBefore === true) {
         disposition = 'detached-packet-retained';
+      } else if (
+        ownerKind === 'actor' &&
+        settledBefore === false &&
+        (!projectile || materializedBefore === false)
+      ) {
+        // The client advances skill behaviors through AliveSkillSystem, which
+        // is not an IInactiveUpdate system. Once the owner switches out, a
+        // known future owner-bound behavior never materializes. It is
+        // deterministically cancelled, not an unresolved continuation.
+        disposition = 'future-owner-bound-packet-cancelled';
       }
       return {
         packetKind: packet.packetKind,
@@ -393,6 +642,15 @@ function createSelectedPacketEvidence({
           'en'
         )
     );
+}
+
+function isSettlementEffectPacket(effect) {
+  if (!effect || typeof effect !== 'object') return false;
+  // Client SkillControlConfig.skillResourceMaps is a preload/catalog surface.
+  // Execution comes from SkillPlayerData.skillTrackDatas and concrete
+  // SkillBehaviorBase instances. A triggerless non-applied catalog node is not
+  // a future packet. An applied node without a trigger remains fail-closed.
+  return effect.trigger != null || effect.classification === 'applied';
 }
 
 function eventPrecedesSwitch({
@@ -488,6 +746,14 @@ function integerOrNull(value) {
 function nonNegativeIntegerOrNull(value) {
   const number = integerOrNull(value);
   return number != null && number >= 0 ? number : null;
+}
+
+function firstNonNegativeInteger(values) {
+  for (const value of values ?? []) {
+    const normalized = nonNegativeIntegerOrNull(value);
+    if (normalized != null) return normalized;
+  }
+  return null;
 }
 
 function finiteNumber(value) {

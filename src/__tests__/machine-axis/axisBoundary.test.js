@@ -328,11 +328,15 @@ describe('Machine Axis external audit boundaries', () => {
             actionId: 'xunlang-signature',
             scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
           }),
+        ])
+      );
+      expect(validation.warnings).not.toEqual(
+        expect.arrayContaining([
           expect.objectContaining({
-            severity: 'warning',
-            code: 'machine-axis-action-conditions-unresolved',
             actionId: 'switch-to-xiaoyu--on-enter--actor-101010--star-carry',
-            unresolvedCodes: ['actor-switch-exit-tail-order-unresolved'],
+            unresolvedCodes: expect.arrayContaining([
+              'actor-switch-exit-tail-order-unresolved',
+            ]),
           }),
         ])
       );
