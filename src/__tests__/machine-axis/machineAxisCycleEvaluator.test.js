@@ -27,6 +27,102 @@ function createNormalAttackCycleEnvelope() {
   return envelope;
 }
 
+function createMoyinRuntimeContextCycleEnvelope() {
+  const envelope = createNormalAttackCycleEnvelope();
+  envelope.contract.scenario.durationFrames = 1_400;
+  envelope.contract.scenario.team[0] = {
+    ...envelope.contract.scenario.team[0],
+    characterId: 109001,
+    initialSp: 100,
+    loadout: {},
+  };
+  envelope.contract.scenario.initialRuntimeState = {
+    controlledActor: {
+      actorId: 'actor-109001',
+      characterId: 109001,
+    },
+    kiboEnergyBySlot: [],
+    specialResourcesByActor: [],
+  };
+  const normal = ({
+    id,
+    sequenceIndex,
+    frame,
+    groupId,
+    contextActionId = null,
+    chainIdentity = null,
+  }) => ({
+    id,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: 10900101,
+      actionKind: 'normal-attack',
+      attackInput: {
+        sequenceIndex,
+        groupId,
+        ...(contextActionId ? { contextActionId } : {}),
+        ...(chainIdentity ? { chainIdentity } : {}),
+      },
+      level: 1,
+    },
+    schedule: { mode: 'absolute', frame },
+  });
+  envelope.contract.actions = [
+    {
+      id: 'cycle-moyin-star',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10900112,
+        actionKind: 'star-skill',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 60 },
+    },
+    normal({
+      id: 'cycle-moyin-chase',
+      sequenceIndex: 1,
+      frame: 101,
+      groupId: 'cycle-moyin-chase',
+      contextActionId: 'cycle-moyin-star',
+    }),
+    normal({
+      id: 'cycle-moyin-a4',
+      sequenceIndex: 4,
+      frame: 134,
+      groupId: 'cycle-moyin-tail',
+      contextActionId: 'cycle-moyin-chase',
+      chainIdentity: 'moyin-normal-five-inputs',
+    }),
+    normal({
+      id: 'cycle-moyin-a5',
+      sequenceIndex: 5,
+      frame: 198,
+      groupId: 'cycle-moyin-tail',
+      contextActionId: 'cycle-moyin-a4',
+      chainIdentity: 'moyin-normal-five-inputs',
+    }),
+    ...[
+      [1, 276],
+      [2, 292],
+      [3, 327],
+      [4, 392],
+      [5, 456],
+    ].map(([sequenceIndex, frame]) =>
+      normal({
+        id: `cycle-moyin-ordinary-a${sequenceIndex}`,
+        sequenceIndex,
+        frame,
+        groupId: 'cycle-moyin-ordinary',
+        chainIdentity: 'moyin-normal-five-inputs',
+      })
+    ),
+  ];
+  envelope.loop = { startFrame: 60, endFrame: 781 };
+  return envelope;
+}
+
 function createResolvedCycleEnemyProfile(
   defense,
   {
@@ -493,6 +589,62 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       expect.objectContaining({
         code: 'machine-axis-normal-attack-input-display-mismatch',
         actionId: 'formal-standalone-a2',
+      })
+    );
+  });
+
+  it('replays a runtime-context chase and A4/A5 tail without losing normal-input authority', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createMoyinRuntimeContextCycleEnvelope(),
+      { allowUnverifiedRuntimeTiming: true }
+    );
+    const proof = report.normalAttackInputProof.samples[0].proof;
+
+    expect(proof.firstCycle).toMatchObject({
+      passed: true,
+      issues: [],
+      decisions: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'cycle-moyin-chase',
+          phase: expect.objectContaining({
+            sourceKind: 'verified-input-context-variant',
+            sourceActionId: 'cycle-moyin-star',
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+        expect.objectContaining({
+          actionId: 'cycle-moyin-a4',
+          phase: expect.objectContaining({
+            sourceActionId: 'cycle-moyin-chase',
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+      ]),
+    });
+    expect(proof.replay).toMatchObject({
+      passed: true,
+      issues: [],
+      decisions: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'cycle-2:cycle-moyin-chase',
+          phase: expect.objectContaining({
+            sourceKind: 'verified-input-context-variant',
+            sourceActionId: 'cycle-2:cycle-moyin-star',
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+        expect.objectContaining({
+          actionId: 'cycle-2:cycle-moyin-a4',
+          phase: expect.objectContaining({
+            sourceActionId: 'cycle-2:cycle-moyin-chase',
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+      ]),
+    });
+    expect(report.issues).not.toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-normal-attack-input-authority-rejected',
       })
     );
   });

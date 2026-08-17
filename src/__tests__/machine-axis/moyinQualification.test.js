@@ -5,6 +5,7 @@ import mechanicsPackage from '../../data/generated/verified-combat-mechanics-pac
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
+import { createSearchNormalAttackInputProof } from '../../machine-axis/machineAxisSearchState';
 import {
   createMachineAxisSearchGenerator,
   deriveNextStartFrameByActor,
@@ -443,6 +444,29 @@ describe('Moyin Machine Axis qualification', () => {
       attackInputChainIdentity: 'moyin-normal-five-inputs',
       attackSequenceIndex: 4,
     });
+    expect(
+      createSearchNormalAttackInputProof({ trace: replay.trace, fps: 60 })
+    ).toMatchObject({
+      passed: true,
+      issues: [],
+      decisions: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'moyin-entry-chase-follow-up',
+          phase: expect.objectContaining({
+            sourceKind: 'verified-input-context-variant',
+            sourceActionId: starCarryActionId,
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+        expect.objectContaining({
+          actionId: generated[0].action.id,
+          phase: expect.objectContaining({
+            sourceActionId: 'moyin-entry-chase-follow-up',
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+      ]),
+    });
   });
 
   it('corrects a displayed A1 to the unique star-skill chase form', () => {
@@ -556,6 +580,109 @@ describe('Moyin Machine Axis qualification', () => {
         status: 'matched',
         actual: { sequenceIndex: 4, controlSkillId: 10900104 },
       },
+    });
+  });
+
+  it('certifies the runtime-context chase and its A4/A5 continuation for formal search', () => {
+    const service = createMachineAxisService();
+    const starId = 'moyin-search-proof-star';
+    const chaseId = 'moyin-search-proof-chase';
+    const a4Id = 'moyin-search-proof-a4';
+    const a5Id = 'moyin-search-proof-a5';
+    const a4 = createNormal(a4Id, 4, 73, chaseId);
+    a4.intent.attackInput.chainIdentity = 'moyin-normal-five-inputs';
+    a4.intent.attackInput.groupId = 'moyin-search-proof-tail';
+    const a5 = createNormal(a5Id, 5, 137, a4Id);
+    a5.intent.attackInput.chainIdentity = 'moyin-normal-five-inputs';
+    a5.intent.attackInput.groupId = 'moyin-search-proof-tail';
+    const axis = createQualificationAxis({
+      id: 'moyin-runtime-context-search-proof-axis',
+      durationFrames: 500,
+      actions: [
+        createStar(starId, 0),
+        createNormal(chaseId, 1, 40, starId),
+        a4,
+        a5,
+      ],
+    });
+    axis.scenario.objectiveContract = createMachineAxisObjectiveContract(
+      'cycle-dps-no-toughness'
+    );
+    const prepared = service.prepareValidated(axis);
+
+    expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+    expect(prepared.actionLegalityProof).toMatchObject({
+      passed: true,
+      finalScoreEligible: true,
+    });
+    const proof = createSearchNormalAttackInputProof({
+      trace: prepared.run.trace,
+      fps: 60,
+    });
+    expect(proof).toMatchObject({
+      passed: true,
+      issues: [],
+      decisions: [
+        expect.objectContaining({
+          actionId: chaseId,
+          phase: expect.objectContaining({
+            phase: 'successor-window',
+            sourceKind: 'verified-input-context-variant',
+            sourceActionId: starId,
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+        expect.objectContaining({
+          actionId: a4Id,
+          phase: expect.objectContaining({ sourceActionId: chaseId }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+        expect.objectContaining({
+          actionId: a5Id,
+          phase: expect.objectContaining({ sourceActionId: a4Id }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+      ],
+    });
+
+    const forgedTrace = structuredClone(prepared.run.trace);
+    forgedTrace.variants.selections.find(
+      selection => selection.actionId === chaseId
+    ).edgeIdentity = 'forged-runtime-context-edge';
+    expect(
+      createSearchNormalAttackInputProof({ trace: forgedTrace, fps: 60 })
+    ).toMatchObject({
+      passed: false,
+      issues: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: chaseId,
+          reason: 'normal-attack-runtime-context-edge-unresolved',
+        }),
+      ]),
+    });
+
+    const rightOpenBoundaryTrace = structuredClone(prepared.run.trace);
+    const boundaryAction = rightOpenBoundaryTrace.actions.find(
+      action => action.id === chaseId
+    );
+    const boundarySelection = rightOpenBoundaryTrace.variants.selections.find(
+      selection => selection.actionId === chaseId
+    );
+    boundaryAction.startMs = (77 * 1000) / 60;
+    boundarySelection.contextualInputScheduling.inputOffsetFrame = 77;
+    expect(
+      createSearchNormalAttackInputProof({
+        trace: rightOpenBoundaryTrace,
+        fps: 60,
+      })
+    ).toMatchObject({
+      passed: false,
+      issues: expect.arrayContaining([
+        expect.objectContaining({
+          actionId: chaseId,
+          reason: 'normal-attack-runtime-context-window-mismatch',
+        }),
+      ]),
     });
   });
 

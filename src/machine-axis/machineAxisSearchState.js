@@ -221,6 +221,52 @@ export function createSearchNormalAttackInputProof({
       continue;
     }
     const accepted = acceptedByActorId.get(actorId) ?? null;
+    const authorityAction = adaptTraceActionForNormalAttackAuthority(
+      action,
+      selection
+    );
+    const authoritySelection =
+      adaptTraceSelectionForNormalAttackAuthority(selection);
+    const runtimeContextDecision = createRuntimeContextNormalAttackDecision({
+      action,
+      selection: authoritySelection,
+      mapping,
+      accepted,
+      actorId,
+      fps,
+    });
+    if (runtimeContextDecision) {
+      decisions.push({
+        actionId: String(action.id),
+        actorId,
+        phase: runtimeContextDecision.phase,
+        match: runtimeContextDecision.match,
+      });
+      if (runtimeContextDecision.match.accepted !== true) {
+        issues.push(
+          normalAttackInputIssue({
+            code: 'machine-axis-normal-attack-input-authority-rejected',
+            action,
+            message: `Normal-attack runtime context rejected: ${runtimeContextDecision.match.reason ?? 'unresolved'}`,
+            details: {
+              reason: runtimeContextDecision.match.reason ?? null,
+              phase: runtimeContextDecision.phase.phase ?? null,
+              expected: runtimeContextDecision.match.expected ?? null,
+              actual: runtimeContextDecision.match.actual ?? null,
+              edgeIdentity: runtimeContextDecision.match.edgeIdentity ?? null,
+            },
+          })
+        );
+        continue;
+      }
+      acceptedByActorId.set(actorId, {
+        action,
+        selection,
+        authorityAction,
+        authoritySelection,
+      });
+      continue;
+    }
     const phase = resolveVerifiedNormalAttackInputPhase({
       mapping,
       chain: resolveNormalAttackAuthorityChain({ mapping, accepted }),
@@ -239,12 +285,6 @@ export function createSearchNormalAttackInputProof({
           executedActionIds
         ),
     });
-    const authorityAction = adaptTraceActionForNormalAttackAuthority(
-      action,
-      selection
-    );
-    const authoritySelection =
-      adaptTraceSelectionForNormalAttackAuthority(selection);
     const match = matchVerifiedNormalAttackInput({
       action: authorityAction,
       selection: authoritySelection,
@@ -468,6 +508,203 @@ function adaptTraceSelectionForNormalAttackAuthority(selection) {
       selection?.executionControlSkillId ?? selection?.controlSkillId ?? null,
     selectedSubSkillIndex:
       selection?.selectedSubSkillIndex ?? selection?.subSkillIndex ?? null,
+  };
+}
+
+function createRuntimeContextNormalAttackDecision({
+  action,
+  selection,
+  mapping,
+  accepted,
+  actorId,
+  fps,
+}) {
+  if (selection?.sourceKind !== 'verified-input-context-variant') return null;
+
+  const reasons = [];
+  const actorCharacterId = parseActorCharacterId(actorId);
+  const acceptedActionId = textOrNull(accepted?.action?.id);
+  const acceptedActorId = textOrNull(accepted?.action?.actorId);
+  const contextActionId = textOrNull(selection?.contextActionId);
+  const edgeIdentity = textOrNull(selection?.edgeIdentity);
+  const actual = {
+    sequenceIndex: positiveIntegerOrNull(
+      selection?.attackChainSequenceIndex ??
+        selection?.attackSequenceIndex ??
+        action?.attackSequenceIndex
+    ),
+    controlSkillId: positiveIntegerOrNull(
+      selection?.executionControlSkillId ?? selection?.controlSkillId
+    ),
+    subSkillIndex: nonNegativeIntegerOrNull(
+      selection?.selectedSubSkillIndex ?? selection?.subSkillIndex
+    ),
+    groupId: textOrNull(selection?.attackGroupId ?? action?.attackGroupId),
+    chainIdentity: textOrNull(
+      selection?.attackInputChainIdentity ?? action?.attackInputChainIdentity
+    ),
+    contextActionId,
+  };
+  const predecessorControlSkillId = positiveIntegerOrNull(
+    accepted?.authoritySelection?.executionControlSkillId ??
+      accepted?.authoritySelection?.controlSkillId ??
+      accepted?.authorityAction?.controlSkillId ??
+      accepted?.action?.controlSkillId ??
+      accepted?.action?.skillId
+  );
+  const predecessorSubSkillIndex = nonNegativeIntegerOrNull(
+    accepted?.authoritySelection?.selectedSubSkillIndex ??
+      accepted?.authoritySelection?.subSkillIndex ??
+      accepted?.authorityAction?.subSkillIndex ??
+      accepted?.action?.subSkillIndex
+  );
+  const contextEdges = (
+    getVerifiedActionVariantGraph()?.contextEdges ?? []
+  ).filter(
+    edge =>
+      edge?.applied === true &&
+      edge?.relationType === 'input-context-derived' &&
+      edge?.inputCommand === 'normal-attack' &&
+      edgeIdentity != null &&
+      String(edge.edgeIdentity ?? '') === edgeIdentity
+  );
+  const edge = contextEdges.length === 1 ? contextEdges[0] : null;
+
+  if (!acceptedActionId || contextActionId !== acceptedActionId) {
+    reasons.push('normal-attack-runtime-context-predecessor-mismatch');
+  }
+  if (!acceptedActorId || acceptedActorId !== actorId) {
+    reasons.push('normal-attack-runtime-context-actor-mismatch');
+  }
+  if (!edge) {
+    reasons.push(
+      contextEdges.length > 1
+        ? 'normal-attack-runtime-context-edge-ambiguous'
+        : 'normal-attack-runtime-context-edge-unresolved'
+    );
+  }
+  if (edge) {
+    if (Number(edge.ownerId) !== Number(actorCharacterId)) {
+      reasons.push('normal-attack-runtime-context-owner-mismatch');
+    }
+    if (
+      Number(edge.sourceControlSkillId) !== Number(predecessorControlSkillId) ||
+      Number(edge.sourceSubSkillIndex) !== Number(predecessorSubSkillIndex)
+    ) {
+      reasons.push('normal-attack-runtime-context-source-mismatch');
+    }
+    if (
+      Number(edge.targetControlSkillId) !== Number(mapping?.sourceSkillId) ||
+      Number(edge.executionControlSkillId) !== Number(actual.controlSkillId) ||
+      Number(edge.targetSubSkillIndex) !== Number(actual.subSkillIndex)
+    ) {
+      reasons.push('normal-attack-runtime-context-target-mismatch');
+    }
+    if (
+      !textOrNull(selection?.sourceIdentity) ||
+      String(selection.sourceIdentity) !== String(edge.sourceIdentity ?? '')
+    ) {
+      reasons.push('normal-attack-runtime-context-source-identity-mismatch');
+    }
+  }
+  if (
+    actual.sequenceIndex == null ||
+    actual.controlSkillId == null ||
+    actual.subSkillIndex == null
+  ) {
+    reasons.push('normal-attack-runtime-context-selection-incomplete');
+  }
+
+  const scheduling = selection?.contextualInputScheduling ?? null;
+  const inputOffsetFrame = nonNegativeIntegerOrNull(
+    scheduling?.inputOffsetFrame
+  );
+  const relativeFrame =
+    accepted?.action?.startMs != null && action?.startMs != null
+      ? msToFrame(Number(action.startMs) - Number(accepted.action.startMs), fps)
+      : null;
+  const windowStartFrame = nonNegativeIntegerOrNull(
+    edge?.inputWindow?.startFrame
+  );
+  const windowEndFrame = positiveIntegerOrNull(edge?.inputWindow?.endFrame);
+  if (
+    scheduling?.applied !== true ||
+    scheduling?.status !== 'verified-context-input-scheduling-ready' ||
+    inputOffsetFrame == null ||
+    relativeFrame == null
+  ) {
+    reasons.push('normal-attack-runtime-context-scheduling-unresolved');
+  } else if (inputOffsetFrame !== relativeFrame) {
+    reasons.push('normal-attack-runtime-context-scheduling-mismatch');
+  }
+  if (
+    windowStartFrame == null ||
+    windowEndFrame == null ||
+    inputOffsetFrame == null ||
+    inputOffsetFrame < windowStartFrame ||
+    inputOffsetFrame >= windowEndFrame ||
+    Number(scheduling?.inputWindow?.startFrame) !== windowStartFrame ||
+    Number(scheduling?.inputWindow?.endFrame) !== windowEndFrame
+  ) {
+    reasons.push('normal-attack-runtime-context-window-mismatch');
+  }
+
+  const expected = {
+    formIdentity: createVerifiedNormalAttackStructuralForm({ mapping })
+      .formIdentity,
+    chainIdentity: actual.chainIdentity,
+    sequenceIndex: actual.sequenceIndex,
+    controlSkillId: positiveIntegerOrNull(edge?.executionControlSkillId),
+    subSkillIndex: nonNegativeIntegerOrNull(edge?.targetSubSkillIndex),
+    groupId: actual.groupId,
+    contextActionId: acceptedActionId,
+  };
+  const acceptedContext = reasons.length === 0;
+  const phase = {
+    schemaVersion: MACHINE_AXIS_SEARCH_STATE_SCHEMA_VERSION,
+    contractName: MACHINE_AXIS_SEARCH_STATE_CONTRACT,
+    status: acceptedContext
+      ? 'verified-normal-attack-runtime-context-selected'
+      : 'verified-normal-attack-runtime-context-rejected',
+    phase: acceptedContext
+      ? VERIFIED_NORMAL_ATTACK_INPUT_PHASES.SUCCESSOR_WINDOW
+      : VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+    actorId,
+    formIdentity: expected.formIdentity,
+    chainIdentity: actual.chainIdentity,
+    mappingIdentity: mapping?.mappingIdentity ?? null,
+    sourceSkillId: mapping?.sourceSkillId ?? null,
+    sourceKind: 'verified-input-context-variant',
+    sourceActionId: acceptedActionId,
+    sourceIdentity: edge?.sourceIdentity ?? selection?.sourceIdentity ?? null,
+    sourceGroupId:
+      accepted?.authoritySelection?.attackGroupId ??
+      accepted?.authorityAction?.attackGroupId ??
+      null,
+    edgeIdentity,
+    window: edge?.inputWindow ?? null,
+    relativeFrame,
+    expected,
+    reasons,
+  };
+  return {
+    phase,
+    match: {
+      schemaVersion: MACHINE_AXIS_SEARCH_STATE_SCHEMA_VERSION,
+      contractName: MACHINE_AXIS_SEARCH_STATE_CONTRACT,
+      status: acceptedContext ? 'selected' : 'blocked',
+      accepted: acceptedContext,
+      sourceKind: 'verified-input-context-variant',
+      formIdentity: expected.formIdentity,
+      chainIdentity: actual.chainIdentity,
+      sourceActionId: acceptedActionId,
+      sourceIdentity: phase.sourceIdentity,
+      edgeIdentity,
+      expected,
+      actual,
+      reason: reasons[0] ?? null,
+      reasons,
+    },
   };
 }
 
@@ -1611,6 +1848,10 @@ function finiteNumberOrNull(value) {
   if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function textOrNull(value) {
+  return typeof value === 'string' && value.length > 0 ? value : null;
 }
 
 function numberOrZero(value) {
