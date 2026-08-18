@@ -7,6 +7,7 @@ import {
 import {
   getInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionMapping,
+  getVerifiedCombatActionMappingByIdentity,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { hashCanonicalValue } from '../headless/canonicalSerialization';
 
@@ -23,6 +24,7 @@ const SETTLEMENT_ACTION_TYPES = new Set([
   ACTION_TYPES.SKILL,
   ACTION_TYPES.KIBO_EVENT,
 ]);
+const QUEUED_KIBO_FLUENT_ACTION_KINDS = new Set(['signature', 'break']);
 const authoritativeSwitchExitTailPolicies = new WeakSet();
 
 /**
@@ -30,8 +32,9 @@ const authoritativeSwitchExitTailPolicies = new WeakSet();
  * Hero switch-exit forces the actor FSM from Skill to Idle; SkillState.OnLeave
  * emits SkillStop and AliveSkillSystem interrupts the current SkillPlayer.
  * Packets already settled/materialized before that boundary survive, while a
- * known future actor-bound packet is cancelled. Unknown phase/order remains
- * fail-closed. Pet switch-exit keeps its separate conservative contract.
+ * known future actor-bound packet is cancelled. Kibo signature and joint
+ * strike behaviors finish before the queued pet/hero switch-exit behavior, so
+ * their known future packets survive. Unknown phase/order remains fail-closed.
  */
 export function attachVerifiedSwitchExitTailPolicies({
   actions = [],
@@ -145,6 +148,9 @@ export function createVerifiedRuntimeSwitchExitTailAssessment({
   const hits = [...(resolution.hits ?? [])];
   const effects = (resolution.effects ?? []).filter(isSettlementEffectPacket);
   const actionBinding = resolution.actionBinding;
+  const installedMapping = getVerifiedCombatActionMappingByIdentity(
+    policy.mappingIdentity
+  );
   const actionDurationFrames = firstNonNegativeInteger([
     actionBinding.actualDurationFrames,
     actionBinding.effectiveOccupancyFrames,
@@ -155,6 +161,7 @@ export function createVerifiedRuntimeSwitchExitTailAssessment({
   const runtimeMapping = {
     identity: actionBinding.identity ?? policy.mappingIdentity,
     controlSkillId: actionBinding.controlSkillId,
+    actionKind: installedMapping?.actionKind ?? null,
     // Effect-value coverage and packet-timing coverage are separate. The
     // runtime-selected form supplies the exact duration and concrete packet
     // set; unresolved value semantics do not make the switch order unknown.
@@ -186,7 +193,7 @@ export function createVerifiedRuntimeSwitchExitTailAssessment({
   const assessmentProjection = {
     ...projection,
     contractName: VERIFIED_RUNTIME_SWITCH_EXIT_TAIL_ASSESSMENT_CONTRACT,
-    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v2',
+    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v3',
     compilerPolicyHash: policy.policyHash,
     runtimeResolutionStatus: resolution.status ?? null,
     runtimeActionBindingIdentity: actionBinding.identity ?? null,
@@ -199,6 +206,10 @@ export function createVerifiedRuntimeSwitchExitTailAssessment({
         'dump.cs:SkillControlConfig.skillResourceMaps(ResourceMap preload catalog)|SkillPlayer.Initialize(SkillControlData)|SkillPlayer.Update|SkillBehaviorBase.startFrame/Start/Update',
       inactiveOwnerExecutionBoundary:
         'dump.cs:FluentBehaviorSystem:IInactiveUpdate|AliveSkillSystem:IUpdate(no IInactiveUpdate)',
+      kiboQueuedSwitchExitBoundary:
+        'GameAssembly.dll:PetFluentBehaviorSystem.OnSwitchExit@0x1813DBA80 -> FluentBehaviorSystem.AddBehavior@0x1813CC500 (no ClearBehaviors/InterruptBehaviors)|HeroFluentBehaviorSystem.OnSwitchExit@0x1813D13A0 -> AddBehavior@0x1813CC500',
+      kiboFluentCompletionBoundary:
+        'GameAssembly.dll:FluentBehaviorSystem.OnUpdateDeltaTime@0x1813CC900 -> current OnStart/OnUpdate/IsFinished/OnFinish -> Dequeue|CastPetUltimateAction.IsFinished@0x1813C40B0 waits for the pet skill and Interrupt@0x1813C4000 is the unused-on-switch SkillStop(17) path|PetUltimateBehavior.OnFinish@0x1813DF800 -> PetUltimateFinish(122)|JointStrikeSkillCastSkillAction.IsFinished@0x1819B67A0|JointStrikeSkillBehavior.OnFinish@0x1813D6220 -> PetJointStrikeFinish(123)',
       detachedProjectileLifetime:
         'dump.cs:CreateBulletBehavior.Start|BulletEntity|BulletAliveSystem:IUpdate|BulletLogicSystem:IUpdate|BulletMoveSystem:IUpdate',
     },
@@ -252,7 +263,7 @@ export function applyVerifiedSwitchExitTailSettlement({
   const settlementProjection = {
     schemaVersion: 1,
     contractName: 'AzPrVerifiedSwitchExitTailSettlement',
-    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v2',
+    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v3',
     status:
       cancelledPackets.length > 0
         ? 'owner-bound-tail-cancelled-at-switch-boundary'
@@ -337,6 +348,7 @@ function createSwitchExitTailProjection({
     mapping,
     binding,
     actionStartFrame: startFrame,
+    actionDurationFrames: durationFrames,
     actionSourceSequencePath: actionPath,
     switchBoundaryFrame: boundaryFrame,
     switchBoundarySourceSequencePath: switchPath,
@@ -374,6 +386,12 @@ function createSwitchExitTailProjection({
   } else if (cancelledPackets.length > 0) {
     status = 'owner-bound-tail-cancelled-at-switch-boundary';
   } else if (
+    packets.some(
+      packet => packet.disposition === 'queued-kibo-fluent-packet-retained'
+    )
+  ) {
+    status = 'queued-kibo-fluent-continuation-closed';
+  } else if (
     packets.some(packet => packet.disposition === 'detached-packet-retained')
   ) {
     status = 'detached-packet-continuation-closed';
@@ -389,7 +407,7 @@ function createSwitchExitTailProjection({
   const projection = {
     schemaVersion: 1,
     contractName: VERIFIED_SWITCH_EXIT_TAIL_POLICY_CONTRACT,
-    sourceKind: 'azpr-client-static-switch-exit-tail-v1',
+    sourceKind: 'azpr-client-static-switch-exit-tail-v2',
     ownerKind: normalizedOwnerKind,
     actionId: actionId == null ? null : String(actionId),
     ownerActorId: ownerActorId == null ? null : String(ownerActorId),
@@ -418,6 +436,10 @@ function createSwitchExitTailProjection({
         'GameAssembly.dll:Common.SkillState.Leave@0x181A24990 -> OnLeave@0x181A25260 -> Entity.Transmit(SkillStop=17)@0x181A24C54|AliveSkillSystem.OnTransmit(case 17) -> InterruptSkill@0x1813ECF90',
       kiboSwitchExit:
         'dump.cs:PetSwitchExitBehavior.Initialize@0x13DE530|OnStart@0x13DEF40|OnFinish@0x13DED70',
+      kiboQueuedSwitchExit:
+        'GameAssembly.dll:PetFluentBehaviorSystem.OnSwitchExit@0x1813DBA80 -> FluentBehaviorSystem.AddBehavior@0x1813CC500 (no ClearBehaviors/InterruptBehaviors)|HeroFluentBehaviorSystem.OnSwitchExit@0x1813D13A0 -> AddBehavior@0x1813CC500',
+      kiboFluentCompletion:
+        'GameAssembly.dll:FluentBehaviorSystem.OnUpdateDeltaTime@0x1813CC900 -> current OnStart/OnUpdate/IsFinished/OnFinish -> Dequeue|CastPetUltimateAction.IsFinished@0x1813C40B0 waits for the pet skill and Interrupt@0x1813C4000 is the unused-on-switch SkillStop(17) path|PetUltimateBehavior.OnFinish@0x1813DF800 -> PetUltimateFinish(122)|JointStrikeSkillCastSkillAction.IsFinished@0x1819B67A0|JointStrikeSkillBehavior.OnFinish@0x1813D6220 -> PetJointStrikeFinish(123)',
       interruptDispatch:
         'AliveSkillSystem.OnTransmit:InterruptSkill only ForceSkillStart(14)|SkillStop(17)',
     },
@@ -533,6 +555,7 @@ function createSelectedPacketEvidence({
   mapping,
   binding,
   actionStartFrame,
+  actionDurationFrames,
   actionSourceSequencePath,
   switchBoundaryFrame,
   switchBoundarySourceSequencePath,
@@ -580,6 +603,13 @@ function createSelectedPacketEvidence({
         actionStartFrame == null || materializationOffset == null
           ? null
           : actionStartFrame + materializationOffset;
+      const actionCompletionFrame =
+        actionStartFrame == null || actionDurationFrames == null
+          ? null
+          : actionStartFrame + actionDurationFrames;
+      const queuedKiboActivationFrame = projectile
+        ? materializationFrame
+        : settlementFrame;
       const settledBefore = eventPrecedesSwitch({
         frame: settlementFrame,
         actionStartFrame,
@@ -602,6 +632,20 @@ function createSelectedPacketEvidence({
       } else if (projectile && materializedBefore === true) {
         disposition = 'detached-packet-retained';
       } else if (
+        ownerKind === 'kibo' &&
+        QUEUED_KIBO_FLUENT_ACTION_KINDS.has(
+          String(mapping?.actionKind ?? '')
+        ) &&
+        queuedKiboActivationFrame != null &&
+        actionCompletionFrame != null &&
+        queuedKiboActivationFrame < actionCompletionFrame
+      ) {
+        // Kibo signature and joint-strike behaviors own the current fluent
+        // queue entry. Switch-exit is appended behind them and both fluent
+        // systems implement IInactiveUpdate, so the current behavior reaches
+        // OnFinish before the pet/hero exit behavior can start.
+        disposition = 'queued-kibo-fluent-packet-retained';
+      } else if (
         ownerKind === 'actor' &&
         settledBefore === false &&
         (!projectile || materializedBefore === false)
@@ -618,6 +662,7 @@ function createSelectedPacketEvidence({
         triggerKind: trigger.kind ?? 'timeline-direct',
         settlementFrame,
         materializationFrame,
+        actionCompletionFrame,
         settlementBoundaryOrder:
           settlementFrame === switchBoundaryFrame
             ? settlementFrame === actionStartFrame

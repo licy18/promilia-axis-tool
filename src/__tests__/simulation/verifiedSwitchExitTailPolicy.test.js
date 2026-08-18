@@ -12,13 +12,18 @@ import {
   isVerifiedSwitchExitTailPolicy,
 } from '../../simulation/generation/verifiedSwitchExitTailPolicy';
 
-function createMapping({ hits = ['hit'], effects = [] } = {}) {
+function createMapping({
+  hits = ['hit'],
+  effects = [],
+  actionKind = null,
+} = {}) {
   return {
     identity: 'fixture-mapping',
     controlSkillId: 100,
     complete: true,
     selectedHitIdentities: hits,
     selectedEffectIdentities: effects,
+    ...(actionKind ? { actionKind } : {}),
   };
 }
 
@@ -128,6 +133,139 @@ describe('verified switch-exit tail policy', () => {
         }),
       ],
     });
+  });
+
+  it.each(['signature', 'break'])(
+    'retains a future %s packet because switch-exit is queued behind the current fluent behavior',
+    actionKind => {
+      const policy = createPolicy({
+        ownerKind: 'kibo',
+        mapping: createMapping({ actionKind }),
+      });
+
+      expect(policy).toMatchObject({
+        ownerKind: 'kibo',
+        status: 'queued-kibo-fluent-continuation-closed',
+        evidenceClosed: true,
+        rejectionCode: null,
+        packetEvidence: [
+          expect.objectContaining({
+            packetIdentity: 'hit',
+            settlementFrame: 30,
+            disposition: 'queued-kibo-fluent-packet-retained',
+          }),
+        ],
+        sourceEvidence: expect.objectContaining({
+          kiboQueuedSwitchExit: expect.stringContaining(
+            'PetFluentBehaviorSystem.OnSwitchExit@0x1813DBA80'
+          ),
+          kiboFluentCompletion: expect.stringContaining(
+            'Interrupt@0x1813C4000'
+          ),
+        }),
+      });
+    }
+  );
+
+  it('retains a delayed in-scope kibo packet on the switch frame without requiring packet phase order', () => {
+    const policy = createPolicy({
+      ownerKind: 'kibo',
+      mapping: createMapping({ actionKind: 'signature' }),
+      mechanicsPackage: createPackage({
+        hits: [
+          {
+            hitIdentity: 'hit',
+            trigger: {
+              startFrame: 20,
+              sourceIdentity: 'queued-kibo-hit@switch-boundary',
+            },
+          },
+        ],
+      }),
+    });
+
+    expect(policy).toMatchObject({
+      status: 'queued-kibo-fluent-continuation-closed',
+      evidenceClosed: true,
+      packetEvidence: [
+        expect.objectContaining({
+          settlementBoundaryOrder: 'delayed-packet-order-unresolved',
+          disposition: 'queued-kibo-fluent-packet-retained',
+        }),
+      ],
+    });
+  });
+
+  it('keeps an in-scope kibo packet after fluent completion fail-closed', () => {
+    const policy = createPolicy({
+      ownerKind: 'kibo',
+      mapping: createMapping({ actionKind: 'signature' }),
+      mechanicsPackage: createPackage({
+        hits: [
+          {
+            hitIdentity: 'hit',
+            trigger: {
+              startFrame: 70,
+              sourceIdentity: 'post-fluent-completion-hit@70',
+            },
+          },
+        ],
+      }),
+    });
+
+    expect(policy).toMatchObject({
+      status: KIBO_SWITCH_EXIT_TAIL_UNRESOLVED,
+      evidenceClosed: false,
+      packetEvidence: [
+        expect.objectContaining({
+          actionCompletionFrame: 60,
+          disposition: 'future-owner-bound-packet-unresolved',
+        }),
+      ],
+    });
+  });
+
+  it('closes every current in-scope kibo mapping inside its fluent occupancy', () => {
+    const mappings = mechanicsPackage.actionMappings.filter(
+      mapping =>
+        mapping.ownerKind === 'kibo' &&
+        ['signature', 'break'].includes(mapping.actionKind)
+    );
+
+    expect(mappings.length).toBeGreaterThan(0);
+    for (const mapping of mappings) {
+      const durationFrames = mapping.actionTiming.occupancy.durationFrames;
+      const policy = createVerifiedSwitchExitTailPolicy({
+        ownerKind: 'kibo',
+        actionId: `action-${mapping.identity}`,
+        ownerActorId: 'actor-a',
+        actionStartFrame: 0,
+        actionDurationFrames: durationFrames,
+        actionSourceSequencePath: [0],
+        mapping,
+        mechanicsPackage,
+        switchActionId: 'switch-a-b',
+        switchBoundaryFrame: 1,
+        switchBoundarySourceSequencePath: [1],
+        switchToActorId: 'actor-b',
+      });
+
+      expect(policy.evidenceClosed, mapping.identity).toBe(true);
+      expect(policy.rejectionCode, mapping.identity).toBeNull();
+      for (const packet of policy.packetEvidence) {
+        expect(packet.actionCompletionFrame, packet.packetIdentity).toBe(
+          durationFrames
+        );
+        const activationFrame = String(packet.triggerKind).includes(
+          'projectile'
+        )
+          ? packet.materializationFrame
+          : packet.settlementFrame;
+        expect(activationFrame, packet.packetIdentity).toBeLessThan(
+          durationFrames
+        );
+      }
+    }
   });
 
   it('retains an effect materialized before exit without reactivating the old owner', () => {
@@ -633,7 +771,10 @@ describe('verified switch-exit tail policy', () => {
   });
 
   it('uses owner-specific stable blockers and grants authority only to compiler-attached policies', () => {
-    const kibo = createPolicy({ ownerKind: 'kibo' });
+    const kibo = createPolicy({
+      ownerKind: 'kibo',
+      mapping: createMapping({ actionKind: 'normal-attack' }),
+    });
     expect(kibo.status).toBe(KIBO_SWITCH_EXIT_TAIL_UNRESOLVED);
     expect(isVerifiedSwitchExitTailPolicy(kibo)).toBe(false);
 

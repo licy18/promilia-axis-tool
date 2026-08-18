@@ -1334,6 +1334,110 @@ describe('verified action variant and special resource runtime', () => {
     });
   });
 
+  it('retains the selected kibo signature tail while switch-exit waits behind the fluent behavior', () => {
+    const jade = {
+      id: 'actor-101010',
+      characterId: JADE_ID,
+      name: '涂山小玉',
+      loadout: { kiboId: 500001 },
+    };
+    const ruby = {
+      id: 'actor-103002',
+      characterId: RUBY_ID,
+      name: '红宝石',
+    };
+    const kiboSignature = {
+      id: 'kibo-500001-signature-before-switch',
+      type: 'kiboEvent',
+      actorId: jade.id,
+      actor: jade,
+      kiboId: 500001,
+      skillId: 50000102,
+      actionKind: 'signature',
+      eventType: 'signature',
+      startMs: 0,
+      durationMs: frameTime(85),
+      sourceSequencePath: [0],
+    };
+    const switchAction = {
+      id: 'switch-after-kibo-signature-start',
+      type: 'switch',
+      actorId: jade.id,
+      targetActorId: ruby.id,
+      startMs: frameTime(21),
+      durationMs: 0,
+      sourceSequencePath: [1],
+    };
+    const actions = attachVerifiedSwitchExitTailPolicies({
+      actions: [kiboSignature, switchAction],
+      actors: [jade, ruby],
+      team: {
+        slots: [
+          { slotId: 'jade', actorId: jade.id },
+          { slotId: 'ruby', actorId: ruby.id },
+        ],
+      },
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: jade.id,
+          characterId: JADE_ID,
+        },
+      },
+      time: { fps: 60 },
+    });
+    const runtime = runVariantRuntime({
+      actors: [jade, ruby],
+      actions,
+      durationMs: frameTime(120),
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: jade.id,
+          characterId: JADE_ID,
+        },
+      },
+    });
+    const resolution = runtime.actionResolutionById.get(kiboSignature.id);
+
+    expect(runtime.executionBlocks).toEqual([]);
+    expect(resolution.hits.map(hit => hit.trigger.startFrame)).toEqual([
+      20, 20, 20, 24, 24, 24, 27, 27, 27,
+    ]);
+    expect(resolution.switchExitTailSettlement).toMatchObject({
+      status: 'switch-exit-tail-settlement-closed',
+      cancelledPacketCount: 0,
+      retainedHitCount: 9,
+      retainedEffectCount: 1,
+    });
+    expect(runtime.summary).toMatchObject({
+      switchExitTailSettlementCount: 1,
+      switchExitCancelledPacketCount: 0,
+    });
+    const formalDiagnostics = createActionRuleDiagnostics({
+      scenario: {
+        formalActionLegality: true,
+        time: { durationMs: frameTime(120), fps: 60 },
+        actors: [jade, ruby],
+        team: {
+          slots: [
+            { slotId: 'jade', actorId: jade.id },
+            { slotId: 'ruby', actorId: ruby.id },
+          ],
+        },
+        actions,
+        initialRuntimeState: {
+          controlledActor: {
+            actorId: jade.id,
+            characterId: JADE_ID,
+          },
+        },
+      },
+      actionResolutionById: runtime.actionResolutionById,
+    });
+    expect(formalDiagnostics.diagnostics.map(item => item.code)).not.toContain(
+      'kibo-switch-exit-tail-order-unresolved'
+    );
+  });
+
   it('retains mapping-only Melania A4 as the source of the verified heavy-3 context', () => {
     const attacks = createRuntimeContextNormalAttackChain({
       ownerId: MELANIA_ID,

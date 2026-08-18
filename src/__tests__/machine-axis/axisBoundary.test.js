@@ -6,6 +6,7 @@ import {
   resolveMachineAxisSchedules,
   validateMachineAxisContract,
 } from '../../machine-axis/machineAxisContract';
+import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import {
   createActionEffectRuntimeInput,
@@ -340,6 +341,39 @@ describe('Machine Axis external audit boundaries', () => {
           }),
         ])
       );
+    }, 30_000);
+
+    it('keeps formal kibo signature packets after an accepted owner switch', () => {
+      const axis = cloneFixture();
+      const signature = structuredClone(
+        axis.actions.find(action => action.id === 'xunlang-signature')
+      );
+      axis.scenario.objectiveContract = createMachineAxisObjectiveContract(
+        'cycle-dps-no-toughness'
+      );
+      axis.scenario.target = structuredClone(
+        axis.scenario.objectiveContract.targetPolicy
+      );
+      axis.actions = [
+        signature,
+        {
+          id: 'switch-during-xunlang-signature',
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: { kind: 'switch', targetSlotId: 'slot-2' },
+          schedule: { mode: 'absolute', frame: 21 },
+        },
+      ];
+
+      const service = createMachineAxisService();
+      const prepared = service.prepareValidated(axis);
+      const run = service.simulate(axis);
+
+      expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+      expect(
+        run.trace.damage
+          .filter(event => event.actionId === signature.id)
+          .map(event => event.absoluteFrame)
+      ).toEqual([20, 20, 20, 24, 24, 24, 27, 27, 27]);
     }, 30_000);
   });
 

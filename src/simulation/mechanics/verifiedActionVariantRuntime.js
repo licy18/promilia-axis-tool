@@ -2443,7 +2443,9 @@ function isSwitchBindingWithinContextualOccupancy(action, binding) {
 
 function isPostSwitchOwnerBoundEvent({ scenario, action, timeMs }) {
   const policy = action?.switchExitTailPolicy;
-  if (!isVerifiedSwitchExitTailPolicy(policy)) return false;
+  if (!isVerifiedSwitchExitTailPolicy(policy) || policy.ownerKind !== 'actor') {
+    return false;
+  }
   const fps = Number(scenario?.time?.fps) || FRAME_RATE;
   const switchBoundaryTimeMs =
     (Number(policy.switchBoundaryFrame) * 1000) / fps;

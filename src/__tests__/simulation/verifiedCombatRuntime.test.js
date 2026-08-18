@@ -310,6 +310,17 @@ describe('verified combat mechanics runtime', () => {
       complete: true,
       actionBinding: { actionKind: 'active' },
     });
+    expect(resolutions[0].switchExitTailSettlement).toMatchObject({
+      status: 'owner-bound-tail-cancelled-at-switch-boundary',
+      cancelledPacketCount: 6,
+      retainedHitCount: 4,
+    });
+    expect(
+      resolutions[0].switchExitTailSettlement.cancelledHitIdentities
+    ).toHaveLength(3);
+    expect(
+      resolutions[0].switchExitTailSettlement.cancelledEffectIdentities
+    ).toHaveLength(3);
     expect(
       result.actionExecutionPlan.actions.find(
         action => action.actionId === 'verified-wind-kibo-active'
@@ -348,7 +359,7 @@ describe('verified combat mechanics runtime', () => {
       })
     );
     expect(damageTotals).toEqual({
-      'verified-han-star-skill': { hitCount: 7, hp: 1297, toughness: 910 },
+      'verified-han-star-skill': { hitCount: 4, hp: 532, toughness: 373 },
       'verified-muyin-charged': { hitCount: 3, hp: 1157, toughness: 1134 },
     });
     expect(
