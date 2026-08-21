@@ -70,12 +70,27 @@ Per-run report fields:
 - `metrics.resourceSurplus`: final SP per actor, final kibo energy per kibo, initial values from the contract, and deltas; plus `selfEnergyDelta`
 - `metrics.idle`: team and per-actor busy/idle time derived from executed action occupancy
 - `metrics.nonExecutableActions` with `skipReason`, `violationCodes`, `unresolvedCodes`; `unresolvedActionCount` for conditionally executed actions
+- `metrics.optimizationDiagnostics`: LLM-facing damage composition, element distribution, tuning/overlimit share, actor/kibo resource utilization, tuning-mark utilization/coverage, and bounded recommendations
 - `contributions.byActor` / `byAction` / `byHit` (hit rows keyed `actionId|hitIdentity`)
 - `hashes.input` / `data` / `trace` per run for reproducibility
 
 Sampled runs (`seeds` with one or more seeds) run each seed under `policy: sampled` and report `sampling.metrics` with `count`, `mean`, sample `variance`, `stdDev`, `min`, `max`, and `p5`/`p25`/`p50`/`p75`/`p95` quantiles. `expected` is the deterministic comparison default for pure-damage hits; forced `critical`/`non-critical`, and `expected` on hits with critical state effects, are rejected in favor of explicit seeded sampling unless an exact weighted-branch policy is proven.
 
 Batch failures are row-level: invalid contracts, sampled-policy misuse, and runtime errors are reported per run while the rest of the batch continues. The batch report is a single JSON document; `batch` does not accept `--format jsonl`.
+
+### Optimization diagnostics
+
+`simulate` publishes top-level `optimizationDiagnostics`; `batch` mirrors it under each run's `metrics`, while `cycle` limits it to the first half-open loop interval and `kill` limits it to the first lethal runtime cursor. The projection includes:
+
+- `damage.byActor/byAction/bySourceKind/byElement`: raw/effective HP damage, toughness damage, hit count, and share of total effective HP damage;
+- `damage.tuning`: overlimit damage/share, held-tuning damage/share, total tuning share, and DoT share;
+- `energy.actors/kibos`: scope-start value, applied recovery, spend, end value, utilization ratio, cap uptime, per-reason recovery/spend, and cap-hit count;
+- `energy.insufficientActions`: actions rejected for actor/kibo resource insufficiency;
+- `tuningMarks.profiles`: start/acquired/consumed/expired/end stacks, consumption ratio, expiry-waste ratio, time coverage, cap coverage, average/max stacks, and refresh-at-cap count;
+- `tuningMarks.overall`: any-mark coverage, average total stacks, overlimit damage/share, and overlimit damage per consumed stack;
+- `recommendations[]`: deterministic information/warning codes for high cap uptime, low resource utilization, resource-insufficient actions, high mark expiry waste, held-but-unconsumed marks, and low overlimit share after consumption.
+
+`utilizationRatio = spent / (scopeStart + appliedRecovery)`. It intentionally uses applied recovery, not a guessed theoretical maximum. `capUptimeRatio` is the separate waste-pressure signal. Mark coverage is time-weighted; equal stack counts with different decay timers remain a cycle-closure concern rather than being treated as equivalent.
 
 ## Search
 

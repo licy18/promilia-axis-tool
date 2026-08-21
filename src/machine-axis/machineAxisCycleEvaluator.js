@@ -20,6 +20,10 @@ import {
 import { createMachineAxisHealingStatistics } from './machineAxisHealingStatistics';
 import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 import {
+  aggregateMachineAxisOptimizationDiagnostics,
+  createMachineAxisOptimizationDiagnostics,
+} from './machineAxisOptimizationDiagnostics';
+import {
   MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
   createMachineAxisObjectiveContract,
   validateMachineAxisObjectiveContract,
@@ -1009,6 +1013,20 @@ function evaluateCycleSample({
       fps: firstContract.scenario.fps,
     }
   );
+  const optimizationDiagnostics = createMachineAxisOptimizationDiagnostics(
+    firstPrepared.run,
+    firstContract,
+    {
+      scopeKind: 'cycle-first-interval',
+      startTimeMs:
+        (Number(envelope.loop.startFrame) * 1000) /
+        Number(firstContract.scenario.fps),
+      endTimeMs:
+        (Number(envelope.loop.endFrame) * 1000) /
+        Number(firstContract.scenario.fps),
+      endExclusive: true,
+    }
+  );
   const commonRandomPlan =
     criticalPolicy === 'sampled'
       ? createCycleCommonRandomReplayPlan({
@@ -1204,6 +1222,7 @@ function evaluateCycleSample({
         },
         firstCycle: sampledFirstCycle,
         secondCycle,
+        optimizationDiagnostics,
         hashes:
           criticalPolicy === 'sampled'
             ? firstPrepared.run.hashes
@@ -1223,6 +1242,7 @@ function evaluateCycleSample({
     firstCycle:
       criticalPolicy === 'sampled' ? sampledFirstCycle : proofFirstCycle,
     secondCycle,
+    optimizationDiagnostics,
     replayProof,
     actionLegalityProof: {
       passed: true,
@@ -1734,6 +1754,9 @@ function createAcceptedReport({
       : { formalScorePolicy: settlementContract.formalScoring }),
     sampleStatistics,
     contributions: aggregate.contributions,
+    optimizationDiagnostics: aggregateMachineAxisOptimizationDiagnostics(
+      samples.map(sample => sample.optimizationDiagnostics)
+    ),
     actionLegalityProof:
       samples.length === 1
         ? samples[0].actionLegalityProof
@@ -1804,6 +1827,7 @@ function createAcceptedReport({
     metrics: value.metrics,
     sampleStatistics: value.sampleStatistics,
     contributions: value.contributions,
+    optimizationDiagnostics: value.optimizationDiagnostics,
     actionLegalityProof: value.actionLegalityProof,
     normalAttackInputProof: value.normalAttackInputProof,
     replayProof: value.replayProof,
@@ -1859,6 +1883,9 @@ function createRejectedReport({
               })),
             },
     normalAttackInputProof: createAggregateNormalAttackInputProof(samples),
+    optimizationDiagnostics: aggregateMachineAxisOptimizationDiagnostics(
+      samples.map(sample => sample.optimizationDiagnostics)
+    ),
     hashes: {
       input: null,
       data: null,
@@ -2139,6 +2166,7 @@ function projectSampleReport(sample) {
     replayProof: sample.replayProof ?? null,
     actionLegalityProof: sample.actionLegalityProof ?? null,
     normalAttackInputProof: sample.normalAttackInputProof ?? null,
+    optimizationDiagnostics: sample.optimizationDiagnostics ?? null,
     loopPlan: sample.loopPlan ?? null,
     evidence: sample.evidence ?? null,
   };
@@ -2717,9 +2745,7 @@ function normalizeChargeCooldownState(snapshot) {
         ...(row.missingChargeSourceActionIds ?? []),
       ].map(normalizeCycleLocalCooldownIdentity),
     }))
-    .filter(
-      row => row.sharedTimerRunning === true && row.remainingFrames > 0
-    )
+    .filter(row => row.sharedTimerRunning === true && row.remainingFrames > 0)
     .sort(compareCanonicalRows);
 }
 

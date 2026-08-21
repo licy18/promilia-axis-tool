@@ -68,6 +68,17 @@ describe('Machine Axis batch evaluator', () => {
       ).length
     );
     expect(row.metrics.nonExecutableActions).toEqual([]);
+    expect(row.metrics.optimizationDiagnostics).toMatchObject({
+      kind: 'azpr-machine-axis-optimization-diagnostics',
+      damage: {
+        byActor: expect.any(Array),
+        byAction: expect.any(Array),
+        bySourceKind: expect.any(Array),
+        byElement: expect.any(Array),
+      },
+      energy: { actors: expect.any(Array), kibos: expect.any(Array) },
+      tuningMarks: { profiles: expect.any(Array) },
+    });
 
     expect(row.metrics.burst).toMatchObject({
       windowMs: 10000,
@@ -202,6 +213,13 @@ describe('Machine Axis batch evaluator', () => {
     expect(row.sampling.metrics.effectiveHealing.count).toBe(3);
     expect(row.sampling.metrics.overhealing.count).toBe(3);
     expect(row.sampling.metrics.effectiveHps.count).toBe(3);
+    expect(row.optimizationDiagnostics).toMatchObject({
+      kind: 'azpr-machine-axis-optimization-diagnostics-aggregate',
+      sampleCount: 3,
+      damage: { byElement: expect.any(Array) },
+      energy: { actors: expect.any(Array), kibos: expect.any(Array) },
+      tuningMarks: { profiles: expect.any(Array) },
+    });
   }, 30_000);
 
   it('reports invalid envelopes and per-run validation failures', async () => {

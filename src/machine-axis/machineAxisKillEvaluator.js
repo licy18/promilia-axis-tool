@@ -12,6 +12,7 @@ import {
 import { validateMachineAxisObjectiveContract } from './machineAxisObjectiveContract';
 import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 import { createSearchNormalAttackInputProof } from './machineAxisSearchState';
+import { createMachineAxisOptimizationDiagnostics } from './machineAxisOptimizationDiagnostics';
 
 export const MACHINE_AXIS_KILL_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_KILL_CONTRACT_NAME = 'AzPrMachineAxisFastestKill';
@@ -272,6 +273,15 @@ export function createFastestKillProof(
     killCursor: lethal,
   });
   const diagnostics = createKillDiagnostics(run, { endEvent: lethal });
+  const optimizationDiagnostics = createMachineAxisOptimizationDiagnostics(
+    run,
+    contract,
+    {
+      scopeKind: 'fastest-kill-through-first-lethal',
+      endTimeMs: timeMs,
+      endCursor: lethal,
+    }
+  );
   const proof = {
     feasible: true,
     firstLethal: {
@@ -327,6 +337,7 @@ export function createFastestKillProof(
     actionLegalityProof,
     normalAttackInputProof,
     diagnostics,
+    optimizationDiagnostics,
     healing,
     hashes: {
       ...(run.hashes ?? {}),
@@ -347,6 +358,7 @@ export function createFastestKillProof(
     actionLegalityProof: report.actionLegalityProof,
     normalAttackInputProof: report.normalAttackInputProof,
     diagnostics: report.diagnostics,
+    optimizationDiagnostics: report.optimizationDiagnostics,
     healing: report.healing,
     runHashes: run.hashes ?? null,
   });
@@ -492,6 +504,9 @@ function createUnkilledReport({
   const settlementContract = getMachineAxisEnemySettlementContract();
   const settlementReadiness = getMachineAxisEnemySettlementFormalReadiness();
   const diagnostics = createKillDiagnostics(run);
+  const optimizationDiagnostics =
+    run.optimizationDiagnostics ??
+    createMachineAxisOptimizationDiagnostics(run, contract);
   const healing = createMachineAxisHealingStatistics(run.trace?.events ?? [], {
     durationMs: run.trace?.scenario?.durationMs ?? 0,
     fps: run.trace?.scenario?.frameRate ?? contract.scenario?.fps ?? 60,
@@ -525,8 +540,12 @@ function createUnkilledReport({
     actionLegalityProof,
     normalAttackInputProof,
     diagnostics,
+    optimizationDiagnostics,
     healing,
-    hashes: { ...(run.hashes ?? {}), kill: null },
+    hashes: {
+      ...(run.hashes ?? {}),
+      kill: null,
+    },
   };
   report.hashes.kill = hashCanonicalValue({
     objectiveContract,
@@ -542,6 +561,7 @@ function createUnkilledReport({
     actionLegalityProof: report.actionLegalityProof,
     normalAttackInputProof: report.normalAttackInputProof,
     diagnostics,
+    optimizationDiagnostics,
     healing,
     runHashes: run.hashes ?? null,
   });
@@ -574,8 +594,12 @@ function createRejectedKillReport(source, issues, hashes = null) {
     actionLegalityProof: source?.actionLegalityProof ?? null,
     normalAttackInputProof: source?.normalAttackInputProof ?? null,
     diagnostics: null,
+    optimizationDiagnostics: null,
     healing: null,
-    hashes: { ...(hashes ?? {}), kill: null },
+    hashes: {
+      ...(hashes ?? {}),
+      kill: null,
+    },
   };
 }
 

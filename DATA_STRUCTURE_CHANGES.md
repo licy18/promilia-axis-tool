@@ -27887,3 +27887,40 @@ capture-session-end
 Workbench production audit 对 toughness capture 强制检查 sequence 从 1 连续、frame/delta/thread 完整、hook invocation entry/exit 成对且无重复、同 packet/invocation 不跨线程、agent/host 数量一致、无未清栈与 agent diagnostic。缺失结束记录、丢包、重复 hook、线程漂移或帧号缺失均 fail closed。normalizer v3 移除非确定性生成时间、本机 PID、模块路径/基址和输入绝对路径，重复运行逐字节一致；结果按原始 bytes 绑定精确大小与 SHA-256。synthetic/self-test 只可验证工具，不可成为客户端证据。
 
 `runtime-capture:preflight` 仅核对 manifest、GameAssembly/dump/script 身份并枚举可附加进程，不启动或附加客户端。新输出将 `formalScoringPolicy` 与 `clientParityGate` 分开：前者绑定 `m12-enemy-settlement-runtime-v2` 且明确 preflight 不计算分数，后者保留四条 `leavesOpen`、112001 所需观察接口和最小 operator steps。已提交的 2026-08-09 blocked 报告中的旧 `formalReady=false/formalScore=null` 是政策变更前的 evidence-gate 快照，不能反向把 runtime-baseline 分数描述成已取得客户端 capture。
+
+## 461. Machine Axis optimization diagnostics projection
+
+Machine Axis run 新增只读派生结构 `AzPrMachineAxisOptimizationDiagnostics` v1。它不改变项目保存 schema、动作执行、伤害公式、cycle/kill 判分或现有 canonical input/data/trace hash；`simulate` 额外发布 `optimizationDiagnostics` 及其 hash，`batch/cycle/kill` 在各自评分窗口复用同一投影。
+
+```text
+optimizationDiagnostics
+  scope
+    kind / interval / startTimeMs / endTimeMs / endCursor
+  damage
+    totalRawDamage / totalEffectiveHpDamage / totalToughnessDamage / hitCount
+    byActor[] / byAction[] / bySourceKind[] / byElement[]
+    tuning
+      overlimitDamage / overlimitShare
+      heldTuningDamage / heldTuningShare
+      totalTuningDamage / totalTuningShare
+      damageOverTime / damageOverTimeShare
+  energy
+    overall
+    actors[] / kibos[]
+      startValue / recoveredAmount / spentAmount / endValue / maximum
+      utilizationRatio / endingFillRatio / capUptimeRatio
+      recoveryByReason[] / spendByReason[]
+    insufficientActions[]
+  tuningMarks
+    overall
+    profiles[]
+      start/acquired/consumed/expired/end/availableStacks
+      consumptionRatio / expiryWasteRatio
+      coverageRatio / capCoverageRatio / averageStacks / maxStacksObserved
+  recommendations[]
+  diagnosticsHash
+```
+
+Damage runtime/canonical projection 同步补充 `elementalType/sourceKiboId/passiveSkillId/battleEffectDot/kiboPassiveDerivedDot/tuningKind/tuningProfileKey/tuningMarkId/tuningMarkCount`，使元素分布、来源分类和超限占比不再依赖效果配置 ID 或字符串猜测。元素名称来自生成数据的 element catalog。
+
+能量利用率口径为 `spent / (scopeStart + appliedRecovery)`；由于满能状态下未发生的理论回复不进入 runtime event，本投影不伪造 overflow 数值，而独立输出 time-weighted `capUptimeRatio`。印记利用率同时保留消费率、自然衰减浪费率和时间覆盖率，避免把依赖持有收益但不消费的轴误判为零利用。Cycle 使用 `[loop.start, loop.end)`，kill 使用首个 lethal runtime cursor inclusive，保证诊断窗口与评分窗口一致。

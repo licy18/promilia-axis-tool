@@ -43,6 +43,53 @@ afterEach(() => {
 });
 
 describe('canonical headless combat core', () => {
+  it('projects damage-source fields required by optimization diagnostics', () => {
+    const trace = createCanonicalCombatTrace({
+      compilation: {
+        dataIdentity: { packageId: 'synthetic' },
+        scenario: {
+          time: { fps: 60 },
+          actors: [],
+          enemy: {},
+          actions: [],
+          combatScenario: {},
+        },
+      },
+      simulation: {
+        scenario: { durationMs: 1000 },
+        damageTimeline: [
+          {
+            timeMs: 500,
+            rawDamage: 123,
+            effectiveHpDamage: 123,
+            elementId: 7,
+            elementalType: 7,
+            tuningKind: 'overlimit-damage',
+            profileKey: 'thunder',
+            markId: 250,
+            markCount: 2,
+            sourceKiboId: 500296,
+            passiveSkillId: 50029661,
+            battleEffectDot: false,
+            kiboPassiveDerivedDot: true,
+          },
+        ],
+      },
+    });
+
+    expect(trace.damage[0]).toMatchObject({
+      tuningKind: 'overlimit-damage',
+      tuningProfileKey: 'thunder',
+      tuningMarkId: 250,
+      tuningMarkCount: 2,
+      elementalType: 7,
+      sourceKiboId: 500296,
+      passiveSkillId: 50029661,
+      battleEffectDot: false,
+      kiboPassiveDerivedDot: true,
+    });
+  });
+
   it('preserves applied and insufficient tuning judgments in canonical trace state', () => {
     const judgments = [
       {

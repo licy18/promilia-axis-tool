@@ -144,6 +144,14 @@ describe('Machine Axis fastest-kill proof', () => {
           code: 'machine-axis-enemy-settlement-client-parity-pending',
         }),
       ],
+      optimizationDiagnostics: {
+        damage: {
+          totalEffectiveHpDamage: 100,
+          byElement: expect.any(Array),
+        },
+        energy: { actors: expect.any(Array), kibos: expect.any(Array) },
+        tuningMarks: { profiles: expect.any(Array) },
+      },
     });
   });
 

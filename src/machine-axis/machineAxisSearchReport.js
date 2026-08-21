@@ -115,6 +115,7 @@ function createResultRow({
       idle: metrics.idle,
       nonExecutableActions: metrics.nonExecutableActions,
       unresolvedActionCount: metrics.unresolvedActionCount,
+      optimizationDiagnostics: metrics.optimizationDiagnostics ?? null,
     },
     contributions: entry.contributions ?? null,
     causalExplanation: {

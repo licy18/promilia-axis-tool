@@ -358,6 +358,18 @@ describe('Machine Axis service', () => {
       trace: expect.any(String),
       evaluation: expect.any(String),
     });
+    expect(run.optimizationDiagnostics).toMatchObject({
+      kind: 'azpr-machine-axis-optimization-diagnostics',
+      damage: {
+        totalEffectiveHpDamage: expect.any(Number),
+        byAction: expect.arrayContaining([
+          expect.objectContaining({ actionId: 'pangpang-plunging' }),
+        ]),
+        byElement: expect.any(Array),
+      },
+      energy: { actors: expect.any(Array), kibos: expect.any(Array) },
+      tuningMarks: { profiles: expect.any(Array) },
+    });
   }, 30_000);
 
   it('resolves Moyin left clicks to the unique continuation while preserving real recovery boundaries', () => {

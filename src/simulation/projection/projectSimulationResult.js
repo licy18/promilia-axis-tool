@@ -1540,15 +1540,24 @@ export function projectSimulationResult({
     deathTriggered: event.payload.deathTriggered === true,
     deathState: event.payload.deathState ?? null,
     pairIdentity:
-      event.payload.pairIdentity ?? event.payload.jointAttackPairIdentity ?? null,
+      event.payload.pairIdentity ??
+      event.payload.jointAttackPairIdentity ??
+      null,
     jointAttackPairIdentity: event.payload.jointAttackPairIdentity ?? null,
     jointAttackCalculatedToughnessDamage:
       event.payload.jointAttackCalculatedToughnessDamage ?? null,
     jointAttackAnchorFrame: event.payload.jointAttackAnchorFrame === true,
-    jointAttackKiboAnchorHit:
-      event.payload.jointAttackKiboAnchorHit === true,
+    jointAttackKiboAnchorHit: event.payload.jointAttackKiboAnchorHit === true,
     mappingIdentity: event.payload.mappingIdentity ?? null,
     kiboResolutionIdentity: event.payload.kiboResolutionIdentity ?? null,
+    sourceKiboId: event.payload.sourceKiboId ?? null,
+    passiveSkillId: event.payload.passiveSkillId ?? null,
+    battleEffectDot: event.payload.battleEffectDot === true,
+    kiboPassiveDerivedDot: event.payload.kiboPassiveDerivedDot === true,
+    tuningKind: event.payload.tuningKind ?? null,
+    profileKey: event.payload.profileKey ?? null,
+    markId: event.payload.markId ?? null,
+    markCount: event.payload.markCount ?? null,
     anchorHitIdentity: event.payload.anchorHitIdentity ?? null,
     anchorHitIdentities: Array.isArray(event.payload.anchorHitIdentities)
       ? [...event.payload.anchorHitIdentities]
@@ -1573,6 +1582,7 @@ export function projectSimulationResult({
     hitIndex: event.hitIndex ?? event.payload.hitIndex ?? null,
     hitSkillId: event.hitSkillId ?? null,
     elementId: event.payload.elementId ?? null,
+    elementalType: event.payload.elementalType ?? null,
     sourceSequencePath: Array.isArray(event.sourceSequencePath)
       ? [...event.sourceSequencePath]
       : null,

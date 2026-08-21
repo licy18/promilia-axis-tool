@@ -3,6 +3,10 @@ import { getInstalledVerifiedCombatMechanicsPackage } from '../data/verifiedComb
 import { createMachineAxisHealingStatistics } from './machineAxisHealingStatistics';
 import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 import {
+  aggregateMachineAxisOptimizationDiagnostics,
+  createMachineAxisOptimizationDiagnostics,
+} from './machineAxisOptimizationDiagnostics';
+import {
   MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
   MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
   createMachineAxisObjectiveContract,
@@ -385,6 +389,9 @@ async function executeRun(run, index, overrideOptions, simulate) {
         errors: sample.errors,
       })),
       sampling: buildSamplingAggregates(okSamples),
+      optimizationDiagnostics: aggregateMachineAxisOptimizationDiagnostics(
+        okSamples.map(sample => sample.metrics?.optimizationDiagnostics)
+      ),
       contributions: aggregateSampleContributions(okSamples),
       actionLegalityProof: aggregateBatchActionLegalityProof(samples),
       executionMs: Date.now() - startedAt,
@@ -571,6 +578,9 @@ export function createRunMetrics(run, contract = {}, options = {}) {
     durationMs,
     fps: run.trace?.scenario?.frameRate ?? contract.scenario?.fps ?? 60,
   });
+  const optimizationDiagnostics =
+    run.optimizationDiagnostics ??
+    createMachineAxisOptimizationDiagnostics(run, contract);
   return {
     hpDamage,
     dps: durationMs > 0 ? hpDamage / (durationMs / 1000) : 0,
@@ -587,6 +597,7 @@ export function createRunMetrics(run, contract = {}, options = {}) {
     idle,
     nonExecutableActions,
     unresolvedActionCount: countUnresolvedActions(run),
+    optimizationDiagnostics,
   };
 }
 

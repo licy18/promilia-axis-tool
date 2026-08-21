@@ -39,6 +39,7 @@ import {
   MACHINE_AXIS_CYCLE_SCHEMA_VERSION,
 } from './machineAxisCycleEvaluator';
 import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
+import { aggregateMachineAxisOptimizationDiagnostics } from './machineAxisOptimizationDiagnostics';
 
 export const MACHINE_AXIS_SEARCH_ENGINE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_ENGINE_CONTRACT = 'AzPrMachineAxisSearch';
@@ -972,6 +973,9 @@ function aggregateSearchMetrics(rows) {
       ),
     },
     unresolvedActionCount: mean(row => row.unresolvedActionCount),
+    optimizationDiagnostics: aggregateMachineAxisOptimizationDiagnostics(
+      rows.map(row => row.optimizationDiagnostics)
+    ),
   };
 }
 
@@ -1079,6 +1083,7 @@ function createEmptyMetrics() {
     idle: null,
     nonExecutableActions: [],
     unresolvedActionCount: 0,
+    optimizationDiagnostics: null,
   };
 }
 

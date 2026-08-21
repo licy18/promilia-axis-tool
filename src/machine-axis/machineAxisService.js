@@ -57,6 +57,7 @@ import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/veri
 import { createMachineAxisBatchEvaluator } from './machineAxisBatchEvaluator';
 import { createMachineAxisCycleEvaluator } from './machineAxisCycleEvaluator';
 import { createMachineAxisKillEvaluator } from './machineAxisKillEvaluator';
+import { createMachineAxisOptimizationDiagnostics } from './machineAxisOptimizationDiagnostics';
 import {
   createMachineAxisSearchEngine,
   normalizeSearchOptions,
@@ -269,6 +270,10 @@ export function createMachineAxisService({
   function simulate(machineAxis, options = {}) {
     const { compilation, run, actionLegalityProof, validation } =
       simulateCanonical(machineAxis, options);
+    const optimizationDiagnostics = createMachineAxisOptimizationDiagnostics(
+      run,
+      compilation.contract
+    );
     return {
       schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
       contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
@@ -277,6 +282,7 @@ export function createMachineAxisService({
       actionResolutions: compilation.actionResolutions,
       trace: run.trace,
       evaluation: run.evaluation,
+      optimizationDiagnostics,
       hashes: run.hashes,
       inputHash: run.inputHash,
       dataHash: run.dataHash,
@@ -3047,8 +3053,16 @@ function createMachineAxisComparison(left, right) {
     schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
     kind: 'azpr-machine-axis-comparison',
-    left: { hashes: left.hashes, evaluation: left.evaluation },
-    right: { hashes: right.hashes, evaluation: right.evaluation },
+    left: {
+      hashes: left.hashes,
+      evaluation: left.evaluation,
+      optimizationDiagnostics: left.optimizationDiagnostics ?? null,
+    },
+    right: {
+      hashes: right.hashes,
+      evaluation: right.evaluation,
+      optimizationDiagnostics: right.optimizationDiagnostics ?? null,
+    },
     delta: subtractNumericRecords(
       right.evaluation.totals,
       left.evaluation.totals

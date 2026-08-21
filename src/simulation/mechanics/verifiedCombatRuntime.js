@@ -4851,6 +4851,7 @@ function applyKiboPassiveDerivedDotDescriptor({ descriptor, state }) {
     sourceKiboId: schedule.sourceKiboId ?? null,
     sourceActorId: schedule.sourceActorId ?? null,
     elementId: dot?.sourceElementId ?? null,
+    elementalType: dot?.damage?.elementalType ?? null,
     pathId: dot?.sourcePathId ?? null,
     damageType: dot?.damage?.damageType ?? null,
     tickIndex: descriptor.tickIndex,
@@ -5642,6 +5643,7 @@ function applyTuningCombatDescriptor({
         markId: tuningEvent.profile.markId,
         markCount: tuningEvent.markCount,
         elementId: template.elementConfigId,
+        elementalType: template.elementalType,
         attack: source.attack,
         mastery: source.mastery,
         dynamicPropertyTrace: {
@@ -6089,6 +6091,7 @@ function applyHitDescriptor({
         enemyProfileSourceIdentity: enemyProfile.sourceIdentity,
         controlSkillId: resolution.actionBinding.controlSkillId,
         elementId: hit.elementId,
+        elementalType: hit.damage.elementalType,
         pathId: hit.pathId,
         attack: source.attack,
         attackSource: source.sourceIdentity,

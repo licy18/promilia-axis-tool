@@ -917,6 +917,7 @@ function projectDamageEvent(event = {}) {
     hitIndex: event.hitIndex ?? null,
     hitSkillId: event.hitSkillId ?? null,
     elementId: event.elementId ?? null,
+    elementalType: event.elementalType ?? null,
     sourceSequencePath: Array.isArray(event.sourceSequencePath)
       ? [...event.sourceSequencePath]
       : null,
@@ -939,6 +940,14 @@ function projectDamageEvent(event = {}) {
     jointAttackKiboAnchorHit: event.jointAttackKiboAnchorHit === true,
     mappingIdentity: event.mappingIdentity ?? null,
     kiboResolutionIdentity: event.kiboResolutionIdentity ?? null,
+    sourceKiboId: event.sourceKiboId ?? null,
+    passiveSkillId: event.passiveSkillId ?? null,
+    battleEffectDot: event.battleEffectDot === true,
+    kiboPassiveDerivedDot: event.kiboPassiveDerivedDot === true,
+    tuningKind: event.tuningKind ?? null,
+    tuningProfileKey: event.profileKey ?? null,
+    tuningMarkId: event.markId ?? null,
+    tuningMarkCount: event.markCount ?? null,
     anchorHitIdentity: event.anchorHitIdentity ?? null,
     ...(Array.isArray(event.anchorHitIdentities)
       ? { anchorHitIdentities: [...event.anchorHitIdentities] }

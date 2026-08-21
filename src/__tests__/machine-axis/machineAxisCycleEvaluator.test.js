@@ -1022,6 +1022,11 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       valid: true,
       status: 'closed',
       loop: { startFrame: 0, endFrame: 230 },
+      optimizationDiagnostics: {
+        damage: { byElement: expect.any(Array) },
+        energy: { actors: expect.any(Array), kibos: expect.any(Array) },
+        tuningMarks: { profiles: expect.any(Array) },
+      },
     });
     expect(report.formalScore).not.toBeNull();
   }, 30_000);
