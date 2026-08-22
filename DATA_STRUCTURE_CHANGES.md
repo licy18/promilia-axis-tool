@@ -27924,3 +27924,9 @@ optimizationDiagnostics
 Damage runtime/canonical projection 同步补充 `elementalType/sourceKiboId/passiveSkillId/battleEffectDot/kiboPassiveDerivedDot/tuningKind/tuningProfileKey/tuningMarkId/tuningMarkCount`，使元素分布、来源分类和超限占比不再依赖效果配置 ID 或字符串猜测。元素名称来自生成数据的 element catalog。
 
 能量利用率口径为 `spent / (scopeStart + appliedRecovery)`；由于满能状态下未发生的理论回复不进入 runtime event，本投影不伪造 overflow 数值，而独立输出 time-weighted `capUptimeRatio`。印记利用率同时保留消费率、自然衰减浪费率和时间覆盖率，避免把依赖持有收益但不消费的轴误判为零利用。Cycle 使用 `[loop.start, loop.end)`，kill 使用首个 lethal runtime cursor inclusive，保证诊断窗口与评分窗口一致。
+
+## 462. Cycle normal-input closure by semantic replay
+
+Cycle 的无限可持续性仍要求角色/奇波 SP、生命、CD/充能、效果、印记、特殊资源、敌人状态、护盾与 pending event 等持久状态闭合；这些维度不能仅凭两轮暂时可执行而省略，否则满资源起步但每轮净亏的轴可能在后续循环耗尽。
+
+普通攻击输入相位不再作为独立的静态边界同一性条件。`idle` 与末段 `reopen-window` 可能都把循环首个左击唯一解析为同一 A1；按 phase label、来源和窗口剩余帧直接判不闭合会在真实 replay 前错误拒绝稳定轴。现在由 doubled semantic replay 负责普通攻击闭合：第二循环必须完整可执行，normal-input authority proof 必须通过，每个 replay action 必须解析为与第一循环相同的 executable form，且连续两轮伤害稳定。A5 reopen→A1 因而可在 reopen 左边界直接闭环；A1→跨边界 A2 之类形态漂移仍以 `machine-axis-cycle-action-form-not-closed` fail closed。

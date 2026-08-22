@@ -9,7 +9,6 @@ import {
   validateMachineAxisContract,
 } from './machineAxisContract';
 import {
-  createSearchAttackChainProjection,
   createSearchNormalAttackInputProof,
   createSearchStateSnapshot,
 } from './machineAxisSearchState';
@@ -670,11 +669,15 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
     endSnapshot.tuningMarks
   );
   issues.push(...tuningMarkComparison.issues);
+  // Normal-attack phases are intentionally not an exact boundary dimension.
+  // A terminal reopen phase and idle can both resolve the next loop input to
+  // the same opener. The doubled semantic replay below proves every input is
+  // legal and resolves to the same executable form; hashing transient phase
+  // labels here would reject a stable infinite loop before that proof runs.
   const stateDimensions = [
     ['cooldowns', normalizeCooldownState],
     ['chargeCooldowns', normalizeChargeCooldownState],
     ['effects', normalizeEffectState],
-    ['attackChains', normalizeAttackChainState],
     ['kiboPassiveRuntime', normalizeKiboPassiveRuntimeState],
     ['targetStates', normalizeTargetState],
     ['specialStates', normalizeSpecialState],
@@ -956,33 +959,6 @@ function evaluateCycleSample({
         actionLegalityProof: firstActionLegality,
       }
     );
-  }
-  const normalAttackBoundaryClosure = compareCycleBoundaryStates(
-    {
-      attackChains: createSearchAttackChainProjection({
-        trace: firstPrepared.run?.trace ?? {},
-        currentFrame: Number(envelope.loop.startFrame),
-        fps: Number(firstContract.scenario?.fps) || 60,
-        excludeActionsAtCurrentFrame: true,
-      }),
-    },
-    {
-      attackChains: createSearchAttackChainProjection({
-        trace: firstPrepared.run?.trace ?? {},
-        currentFrame: Number(envelope.loop.endFrame),
-        fps: Number(firstContract.scenario?.fps) || 60,
-        excludeActionsAtCurrentFrame: true,
-      }),
-    }
-  );
-  if (!normalAttackBoundaryClosure.closed) {
-    return rejectedSample(seed, normalAttackBoundaryClosure.issues, {
-      normalAttackInputProof: {
-        passed: false,
-        firstCycle: firstNormalAttackInputProof,
-        boundaryClosure: normalAttackBoundaryClosure,
-      },
-    });
   }
   const stateCriticalIssues = guardCriticalStateEffectPolicy({
     policy: criticalPolicy,
@@ -2822,61 +2798,6 @@ function normalizeEffectState(snapshot) {
       modifiers: normalizeEffectModifiers(row.modifiers),
     }))
     .filter(row => row.remainingFrames > 0)
-    .sort(compareCanonicalRows);
-}
-
-function normalizeAttackChainState(snapshot) {
-  const currentFrame = Number(snapshot.currentFrame) || 0;
-  return (snapshot.attackChains ?? [])
-    .map(row => ({
-      actorId: row.actorId ?? null,
-      authorityContractHash: row.authorityContractHash ?? null,
-      authorityPhase: row.authorityPhase ?? null,
-      authoritySourceKind: row.authoritySourceKind ?? null,
-      authorityStatus: row.authorityStatus ?? null,
-      formIdentity: row.formIdentity ?? null,
-      mappingIdentity: row.mappingIdentity ?? null,
-      chainIdentity: row.chainIdentity ?? null,
-      groupId: normalizeCycleLocalCooldownIdentity(row.groupId),
-      sequenceIndex: integerOrNull(row.sequenceIndex),
-      sequenceTotal: integerOrNull(row.sequenceTotal),
-      nextSequenceIndex: integerOrNull(row.nextSequenceIndex),
-      status: row.status ?? null,
-      continuityStatus: row.continuityStatus ?? null,
-      continuityActionId: normalizeCycleLocalCooldownIdentity(
-        row.continuityActionId
-      ),
-      continuityEdgeIdentity: normalizeCycleLocalCooldownIdentity(
-        row.continuityEdgeIdentity
-      ),
-      predecessorAcceptedIdentity: normalizeCycleLocalCooldownIdentity(
-        row.predecessorAcceptedIdentity
-      ),
-      publicActionId: row.publicActionId ?? null,
-      linkWindowStatus: row.linkWindowStatus ?? null,
-      opensInFrames:
-        row.linkWindowStartFrame == null
-          ? null
-          : Math.max(0, Number(row.linkWindowStartFrame) - currentFrame),
-      remainingFrames:
-        row.linkWindowEndFrame == null
-          ? null
-          : Math.max(0, Number(row.linkWindowEndFrame) - currentFrame),
-      linkWindowSourceIdentity: row.linkWindowSourceIdentity ?? null,
-      recoveryRemainingFrames:
-        row.recoveryEndFrame == null
-          ? null
-          : Math.max(0, Number(row.recoveryEndFrame) - currentFrame),
-      expectedInput: row.expectedInput ?? null,
-      reasons: [...(row.reasons ?? [])].sort(),
-    }))
-    .filter(
-      row =>
-        row.actorId &&
-        row.authorityContractHash &&
-        row.authorityStatus &&
-        row.formIdentity
-    )
     .sort(compareCanonicalRows);
 }
 

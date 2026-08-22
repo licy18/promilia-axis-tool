@@ -123,6 +123,46 @@ function createMoyinRuntimeContextCycleEnvelope() {
   return envelope;
 }
 
+function createMoyinA5ReopenCycleEnvelope() {
+  const envelope = createNormalAttackCycleEnvelope();
+  envelope.contract.scenario.durationFrames = 900;
+  envelope.contract.scenario.team[0] = {
+    ...envelope.contract.scenario.team[0],
+    characterId: 109001,
+    initialSp: 100,
+    loadout: {},
+  };
+  envelope.contract.scenario.initialRuntimeState = {
+    controlledActor: {
+      actorId: 'actor-109001',
+      characterId: 109001,
+    },
+    kiboEnergyBySlot: [],
+    specialResourcesByActor: [],
+  };
+  const frames = [60, 76, 111, 176, 240];
+  envelope.contract.actions = frames.map((frame, index) => ({
+    id: `cycle-moyin-a${index + 1}`,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: 10900101,
+      actionKind: 'normal-attack',
+      attackInput: {
+        sequenceIndex: index + 1,
+        groupId: 'cycle-moyin-five-inputs',
+        ...(index > 0 ? { contextActionId: `cycle-moyin-a${index}` } : {}),
+        chainIdentity: 'moyin-normal-five-inputs',
+      },
+      level: 1,
+    },
+    schedule: { mode: 'absolute', frame },
+  }));
+  // A5 occupies [240,318); at 318F its verified reopen window accepts A1.
+  envelope.loop = { startFrame: 60, endFrame: 318 };
+  return envelope;
+}
+
 function createResolvedCycleEnemyProfile(
   defense,
   {
@@ -649,6 +689,54 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
+  it('accepts the next-cycle A1 at the exact Moyin A5 reopen boundary', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createMoyinA5ReopenCycleEnvelope(),
+      { allowUnverifiedRuntimeTiming: true }
+    );
+
+    expect(
+      report,
+      JSON.stringify(
+        {
+          issues: report.issues,
+          replayProof: report.replayProof,
+          normalAttackInputProof: report.normalAttackInputProof,
+        },
+        null,
+        2
+      )
+    ).toMatchObject({
+      valid: true,
+      status: 'closed',
+      replayProof: {
+        stable: true,
+        secondExecution: {
+          runnable: true,
+          variantPairs: expect.arrayContaining([
+            expect.objectContaining({
+              sourceActionId: 'cycle-moyin-a1',
+              replayActionId: 'cycle-2:cycle-moyin-a1',
+              equivalent: true,
+            }),
+          ]),
+        },
+      },
+    });
+    expect(
+      report.normalAttackInputProof.samples[0].proof.replay.decisions
+    ).toContainEqual(
+      expect.objectContaining({
+        actionId: 'cycle-2:cycle-moyin-a1',
+        phase: expect.objectContaining({
+          phase: 'reopen-window',
+          expected: expect.objectContaining({ sequenceIndex: 1 }),
+        }),
+        match: expect.objectContaining({ accepted: true }),
+      })
+    );
+  }, 30_000);
+
   it('accepts Misa projectile mechanics before rejecting only an unclosed def-down cycle state', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.scenario.team[0] = {
@@ -880,7 +968,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     }
   });
 
-  it('rejects normal-chain phase drift and normalizes replay-local predecessor identities', () => {
+  it('leaves transient normal-chain phase identity to semantic replay', () => {
     const createBoundary = ({ currentFrame, cycle, remainingFrames = 20 }) => ({
       currentFrame,
       activeActorId: 'actor-1',
@@ -932,26 +1020,16 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       remainingFrames: 19,
     });
     expect(compareCycleBoundaryStates(first, drifted)).toMatchObject({
-      closed: false,
-      issues: [
-        expect.objectContaining({
-          code: 'machine-axis-cycle-state-not-closed',
-          dimension: 'attackChains',
-        }),
-      ],
+      closed: true,
+      issues: [],
     });
 
     expect(
-      compareCycleBoundaryStates({ ...first, attackChains: [] }, replay).issues
-    ).toContainEqual(
-      expect.objectContaining({
-        code: 'machine-axis-cycle-state-not-closed',
-        dimension: 'attackChains',
-      })
-    );
+      compareCycleBoundaryStates({ ...first, attackChains: [] }, replay)
+    ).toMatchObject({ closed: true, issues: [] });
   });
 
-  it('rejects a single A1 [0,18) loop before cycle scoring', () => {
+  it('rejects a single A1 [0,18) loop when the second input resolves to A2', () => {
     const envelope = structuredClone(cycleFixture);
     envelope.contract = structuredClone(giseleFixture);
     envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
@@ -970,7 +1048,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         schedule: { mode: 'absolute', frame: 0, offsetFrames: 0 },
       },
     ];
-    envelope.contract.scenario.durationFrames = 36;
+    envelope.contract.scenario.durationFrames = 100;
     envelope.contract.scenario.initialRuntimeState.controlledActor = {
       actorId: 'actor-112001',
       characterId: 112001,
@@ -985,8 +1063,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-cycle-state-not-closed',
-        dimension: 'attackChains',
+        code: 'machine-axis-cycle-action-form-not-closed',
       })
     );
   }, 30_000);
