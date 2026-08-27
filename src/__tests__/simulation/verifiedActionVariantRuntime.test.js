@@ -20,7 +20,11 @@ import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedActionVariantRuntime } from '../../simulation/mechanics/verifiedActionVariantRuntime';
 import { projectScenarioEffectiveActionTimeline } from '../../simulation/mechanics/actionEffectiveTimeline';
-import { attachVerifiedSwitchExitTailPolicies } from '../../simulation/generation/verifiedSwitchExitTailPolicy';
+import {
+  ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
+  attachVerifiedSwitchExitTailPolicies,
+  createVerifiedRuntimeSwitchExitTailAssessment,
+} from '../../simulation/generation/verifiedSwitchExitTailPolicy';
 import {
   ACTION_RULE_CODES,
   createActionRuleDiagnostics,
@@ -1528,6 +1532,107 @@ describe('verified action variant and special resource runtime', () => {
       });
     }
   );
+
+  it('retains every Miti full-charge orb pulse after the projectile has materialized', () => {
+    const { runtime, resolution, assessment, scenario } =
+      runMitiFullChargeWithSwitch(100);
+    const strongOrbHits = resolution.hits.filter(
+      hit =>
+        hit.trigger?.sourceBindingIdentity ===
+        'miti-full-charge-strong-orb-twelve-pulses'
+    );
+    const strongOrbEvidence = assessment.packetEvidence.filter(packet =>
+      strongOrbHits.some(hit => hit.hitIdentity === packet.packetIdentity)
+    );
+    const baseProjectile = resolution.hits.find(hit =>
+      String(hit.trigger?.kind ?? '').includes('projectile')
+    );
+    const unresolvedFrameEffects = resolution.effects.filter(effect =>
+      String(effect.effectIdentity).includes('unresolved-frame')
+    );
+
+    expect(baseProjectile?.trigger).toMatchObject({
+      launchFrame: 70,
+      impactFrame: 70,
+    });
+    expect(unresolvedFrameEffects).toHaveLength(11);
+    expect(unresolvedFrameEffects.every(effect => effect.trigger == null)).toBe(
+      true
+    );
+    expect(strongOrbHits).toHaveLength(12);
+    expect(strongOrbHits.map(hit => hit.trigger.startFrame)).toEqual([
+      70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180,
+    ]);
+    expect(strongOrbEvidence).toHaveLength(12);
+    expect(strongOrbEvidence).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          materializationFrame: 70,
+          materializationKind: 'landed-hit-spawned-projectile',
+          disposition: 'detached-packet-retained',
+        }),
+      ])
+    );
+    expect(
+      strongOrbEvidence
+        .filter(packet => packet.settlementFrame >= 100)
+        .every(packet => packet.disposition === 'detached-packet-retained')
+    ).toBe(true);
+    expect(resolution.switchExitTailSettlement).toMatchObject({
+      status: 'switch-exit-tail-settlement-closed',
+      cancelledPacketCount: 0,
+    });
+    const formalDiagnostics = createActionRuleDiagnostics({
+      scenario: { ...scenario, formalActionLegality: true },
+      actionResolutionById: runtime.actionResolutionById,
+    });
+    expect(formalDiagnostics.diagnostics.map(item => item.code)).not.toContain(
+      ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED
+    );
+  });
+
+  it('cancels Miti full-charge release packets when switching before projectile materialization', () => {
+    const { resolution } = runMitiFullChargeWithSwitch(69);
+
+    expect(resolution.switchExitTailSettlement).toMatchObject({
+      status: 'owner-bound-tail-cancelled-at-switch-boundary',
+      cancelledPacketCount: 42,
+    });
+    expect(
+      resolution.switchExitTailSettlement.cancelledHitIdentities
+    ).toHaveLength(39);
+    expect(
+      resolution.switchExitTailSettlement.cancelledEffectIdentities
+    ).toHaveLength(3);
+    expect(
+      resolution.hits.filter(hit => hit.chargingReleaseFrameOffset === 67)
+    ).toEqual([]);
+  });
+
+  it('fails Miti full-charge switch order closed on the exact projectile materialization frame', () => {
+    const { runtime, resolution, assessment, scenario } =
+      runMitiFullChargeWithSwitch(70);
+
+    expect(resolution.switchExitTailSettlement).toBeUndefined();
+    expect(assessment).toMatchObject({
+      status: ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
+      evidenceClosed: false,
+      packetEvidence: expect.arrayContaining([
+        expect.objectContaining({
+          materializationFrame: 70,
+          materializationBoundaryOrder: 'delayed-packet-order-unresolved',
+          disposition: 'future-owner-bound-packet-unresolved',
+        }),
+      ]),
+    });
+    const formalDiagnostics = createActionRuleDiagnostics({
+      scenario: { ...scenario, formalActionLegality: true },
+      actionResolutionById: runtime.actionResolutionById,
+    });
+    expect(formalDiagnostics.diagnostics.map(item => item.code)).toContain(
+      ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED
+    );
+  });
 
   it('fails Miti Charging closed at the right-open 209F boundary', () => {
     const charged = createActorAction({
@@ -4034,6 +4139,72 @@ function runVariantRuntime({
       })),
     },
   });
+}
+
+function runMitiFullChargeWithSwitch(switchFrame) {
+  const charged = createActorAction({
+    id: `miti-full-charge-before-switch-${switchFrame}`,
+    characterId: MITI_ID,
+    skillId: 10800301,
+    actionKind: 'charged-attack',
+    actionVariantIndex: 1,
+    variantInputSelection: { mode: 'release', inputFrame: 67 },
+  });
+  charged.sourceSequencePath = [0];
+  const ruby = {
+    id: `actor-${RUBY_ID}`,
+    characterId: RUBY_ID,
+    name: '红宝石',
+  };
+  const switchAction = {
+    id: `miti-switch-at-${switchFrame}`,
+    type: 'switch',
+    actorId: charged.actorId,
+    targetActorId: ruby.id,
+    startMs: frameTime(switchFrame),
+    durationMs: 0,
+    sourceSequencePath: [1],
+  };
+  const initialRuntimeState = {
+    controlledActor: {
+      actorId: charged.actorId,
+      characterId: MITI_ID,
+    },
+  };
+  const actors = [charged.actor, ruby];
+  const team = {
+    slots: [
+      { slotId: 'miti', actorId: charged.actorId },
+      { slotId: 'ruby', actorId: ruby.id },
+    ],
+  };
+  const actions = attachVerifiedSwitchExitTailPolicies({
+    actions: [charged, switchAction],
+    actors,
+    team,
+    initialRuntimeState,
+    time: { fps: 60 },
+  });
+  const scenario = {
+    time: { durationMs: frameTime(240), fps: 60 },
+    actors,
+    team,
+    actions,
+    initialRuntimeState,
+  };
+  const runtime = runVariantRuntime({
+    actors,
+    actions,
+    durationMs: scenario.time.durationMs,
+    initialRuntimeState,
+  });
+  const resolution = runtime.actionResolutionById.get(charged.id);
+  const assessment = createVerifiedRuntimeSwitchExitTailAssessment({
+    policy: actions[0].switchExitTailPolicy,
+    resolution,
+    mechanicsPackage,
+  });
+  return { runtime, resolution, assessment, scenario };
 }
 
 function createJadeBurstInitialState({

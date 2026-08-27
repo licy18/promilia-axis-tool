@@ -27930,3 +27930,9 @@ Damage runtime/canonical projection 同步补充 `elementalType/sourceKiboId/pas
 Cycle 的无限可持续性仍要求角色/奇波 SP、生命、CD/充能、效果、印记、特殊资源、敌人状态、护盾与 pending event 等持久状态闭合；这些维度不能仅凭两轮暂时可执行而省略，否则满资源起步但每轮净亏的轴可能在后续循环耗尽。
 
 普通攻击输入相位不再作为独立的静态边界同一性条件。`idle` 与末段 `reopen-window` 可能都把循环首个左击唯一解析为同一 A1；按 phase label、来源和窗口剩余帧直接判不闭合会在真实 replay 前错误拒绝稳定轴。现在由 doubled semantic replay 负责普通攻击闭合：第二循环必须完整可执行，normal-input authority proof 必须通过，每个 replay action 必须解析为与第一循环相同的 executable form，且连续两轮伤害稳定。A5 reopen→A1 因而可在 reopen 左边界直接闭环；A1→跨边界 A2 之类形态漂移仍以 `machine-axis-cycle-action-form-not-closed` fail closed。
+
+## 463. Switch-exit projectile materialization lineage
+
+`AzPrVerifiedSwitchExitTailPolicy` 的 packet evidence 新增 `referenceKind / materializationKind / materializationSourceIdentity / materializationSourceBindingIdentity`。脱手尾包只接受两种确定性来源：带明确 `launchFrame/materializationFrame` 的 projectile，或 `referenceKind=bulletElements` 且绑定单一已应用 `landed-hit-cardinality` 触发帧的生成弹体；普通 `bulletElements`、未知多帧触发或缺失谱系仍 fail closed。
+
+组合蓄力释放现在同步平移 `frame/startFrame/launchFrame/materializationFrame/impactFrame/endFrame` 及嵌套 activation condition，并保持原本无 trigger 的 catalog/effect graph 节点为无 trigger，避免把预载或未应用节点伪造成 owner-bound 时间线事件。切人早于弹体物化时取消后续包，晚于物化时保留完整脱手生命周期，恰好同帧且没有 phase/source-order 证据时继续返回 `actor-switch-exit-tail-order-unresolved`。该变化不修改项目保存 schema，但会改变 switch-tail policy/runtime assessment/settlement hash，旧 search authority 必须失效并重建。

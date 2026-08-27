@@ -193,7 +193,7 @@ export function createVerifiedRuntimeSwitchExitTailAssessment({
   const assessmentProjection = {
     ...projection,
     contractName: VERIFIED_RUNTIME_SWITCH_EXIT_TAIL_ASSESSMENT_CONTRACT,
-    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v3',
+    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v4',
     compilerPolicyHash: policy.policyHash,
     runtimeResolutionStatus: resolution.status ?? null,
     runtimeActionBindingIdentity: actionBinding.identity ?? null,
@@ -212,6 +212,8 @@ export function createVerifiedRuntimeSwitchExitTailAssessment({
         'GameAssembly.dll:FluentBehaviorSystem.OnUpdateDeltaTime@0x1813CC900 -> current OnStart/OnUpdate/IsFinished/OnFinish -> Dequeue|CastPetUltimateAction.IsFinished@0x1813C40B0 waits for the pet skill and Interrupt@0x1813C4000 is the unused-on-switch SkillStop(17) path|PetUltimateBehavior.OnFinish@0x1813DF800 -> PetUltimateFinish(122)|JointStrikeSkillCastSkillAction.IsFinished@0x1819B67A0|JointStrikeSkillBehavior.OnFinish@0x1813D6220 -> PetJointStrikeFinish(123)',
       detachedProjectileLifetime:
         'dump.cs:CreateBulletBehavior.Start|BulletEntity|BulletAliveSystem:IUpdate|BulletLogicSystem:IUpdate|BulletMoveSystem:IUpdate',
+      landedHitProjectileMaterialization:
+        'verified action hit:referenceKind=bulletElements|hitActivation.kind=landed-hit-cardinality|single verified trigger frame',
     },
   };
   return deepFreeze({
@@ -263,7 +265,7 @@ export function applyVerifiedSwitchExitTailSettlement({
   const settlementProjection = {
     schemaVersion: 1,
     contractName: 'AzPrVerifiedSwitchExitTailSettlement',
-    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v3',
+    sourceKind: 'azpr-client-static-switch-exit-tail-runtime-v4',
     status:
       cancelledPackets.length > 0
         ? 'owner-bound-tail-cancelled-at-switch-boundary'
@@ -407,7 +409,7 @@ function createSwitchExitTailProjection({
   const projection = {
     schemaVersion: 1,
     contractName: VERIFIED_SWITCH_EXIT_TAIL_POLICY_CONTRACT,
-    sourceKind: 'azpr-client-static-switch-exit-tail-v2',
+    sourceKind: 'azpr-client-static-switch-exit-tail-v3',
     ownerKind: normalizedOwnerKind,
     actionId: actionId == null ? null : String(actionId),
     ownerActorId: ownerActorId == null ? null : String(ownerActorId),
@@ -442,6 +444,8 @@ function createSwitchExitTailProjection({
         'GameAssembly.dll:FluentBehaviorSystem.OnUpdateDeltaTime@0x1813CC900 -> current OnStart/OnUpdate/IsFinished/OnFinish -> Dequeue|CastPetUltimateAction.IsFinished@0x1813C40B0 waits for the pet skill and Interrupt@0x1813C4000 is the unused-on-switch SkillStop(17) path|PetUltimateBehavior.OnFinish@0x1813DF800 -> PetUltimateFinish(122)|JointStrikeSkillCastSkillAction.IsFinished@0x1819B67A0|JointStrikeSkillBehavior.OnFinish@0x1813D6220 -> PetJointStrikeFinish(123)',
       interruptDispatch:
         'AliveSkillSystem.OnTransmit:InterruptSkill only ForceSkillStart(14)|SkillStop(17)',
+      landedHitProjectileMaterialization:
+        'verified action hit:referenceKind=bulletElements|hitActivation.kind=landed-hit-cardinality|single verified trigger frame',
     },
   };
   return projection;
@@ -570,6 +574,8 @@ function createSelectedPacketEvidence({
         packetKind: 'hit',
         packetIdentity: hit.hitIdentity,
         trigger: hit.trigger ?? {},
+        referenceKind: hit.referenceKind ?? null,
+        hitActivation: hit.hitActivation ?? hit.trigger?.hitActivation ?? null,
       })),
     ...(binding.effects ?? [])
       .filter(
@@ -589,12 +595,9 @@ function createSelectedPacketEvidence({
       const settlementOffset = finiteNumber(
         trigger.impactFrame ?? trigger.startFrame ?? trigger.frame
       );
-      const projectile = String(trigger.kind ?? '').includes('projectile');
-      const materializationOffset = finiteNumber(
-        projectile
-          ? (trigger.launchFrame ?? trigger.startFrame)
-          : trigger.startFrame
-      );
+      const materialization = resolvePacketMaterialization(packet);
+      const projectile = materialization.detachedProjectile;
+      const materializationOffset = materialization.offset;
       const settlementFrame =
         actionStartFrame == null || settlementOffset == null
           ? null
@@ -659,9 +662,14 @@ function createSelectedPacketEvidence({
       return {
         packetKind: packet.packetKind,
         packetIdentity: packet.packetIdentity,
+        referenceKind: packet.referenceKind ?? null,
         triggerKind: trigger.kind ?? 'timeline-direct',
         settlementFrame,
         materializationFrame,
+        materializationKind: materialization.kind,
+        materializationSourceIdentity: materialization.sourceIdentity,
+        materializationSourceBindingIdentity:
+          materialization.sourceBindingIdentity,
         actionCompletionFrame,
         settlementBoundaryOrder:
           settlementFrame === switchBoundaryFrame
@@ -687,6 +695,63 @@ function createSelectedPacketEvidence({
           'en'
         )
     );
+}
+
+function resolvePacketMaterialization(packet) {
+  const trigger = packet?.trigger ?? {};
+  if (String(trigger.kind ?? '').includes('projectile')) {
+    return {
+      detachedProjectile: true,
+      offset: finiteNumber(
+        trigger.materializationFrame ??
+          trigger.launchFrame ??
+          trigger.startFrame
+      ),
+      kind: 'projectile-launch',
+      sourceIdentity: trigger.sourceIdentity ?? null,
+      sourceBindingIdentity: trigger.sourceBindingIdentity ?? null,
+    };
+  }
+
+  const activation = packet?.hitActivation;
+  if (
+    packet?.packetKind === 'hit' &&
+    packet?.referenceKind === 'bulletElements' &&
+    activation?.applied === true &&
+    activation?.kind === 'landed-hit-cardinality'
+  ) {
+    const activationFrames = [
+      ...(Array.isArray(activation.triggerFrames)
+        ? activation.triggerFrames
+        : []),
+      ...(activation.triggerFrame == null ? [] : [activation.triggerFrame]),
+    ]
+      .map(finiteNumber)
+      .filter(frame => frame != null);
+    const uniqueActivationFrames = [...new Set(activationFrames)];
+    return {
+      detachedProjectile: true,
+      offset:
+        uniqueActivationFrames.length === 1 ? uniqueActivationFrames[0] : null,
+      kind:
+        uniqueActivationFrames.length === 1
+          ? 'landed-hit-spawned-projectile'
+          : 'landed-hit-spawned-projectile-frame-unresolved',
+      sourceIdentity: activation.sourceIdentity ?? null,
+      sourceBindingIdentity: activation.sourceBindingIdentity ?? null,
+    };
+  }
+
+  return {
+    detachedProjectile: false,
+    offset: finiteNumber(trigger.startFrame),
+    kind:
+      packet?.packetKind === 'effect'
+        ? 'effect-application'
+        : 'owner-bound-timeline-packet',
+    sourceIdentity: trigger.sourceIdentity ?? null,
+    sourceBindingIdentity: trigger.sourceBindingIdentity ?? null,
+  };
 }
 
 function isSettlementEffectPacket(effect) {

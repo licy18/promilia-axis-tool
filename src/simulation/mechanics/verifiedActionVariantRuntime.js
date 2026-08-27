@@ -4419,7 +4419,7 @@ function isVerifiedChargingReleaseSourceWrapperResolution({
 }
 
 function shiftChargingReleaseRecord(record, frameOffset, bindingIdentity) {
-  const trigger = record?.trigger ?? {};
+  const trigger = record?.trigger;
   const shift = value =>
     Number.isFinite(Number(value)) ? Number(value) + frameOffset : value;
   const shiftFrameCondition = condition =>
@@ -4439,18 +4439,29 @@ function shiftChargingReleaseRecord(record, frameOffset, bindingIdentity) {
       : condition;
   return {
     ...record,
-    trigger: {
-      ...trigger,
-      startFrame: shift(trigger.startFrame),
-      impactFrame: shift(trigger.impactFrame),
-      endFrame: shift(trigger.endFrame),
-      sourceIdentity: [
-        trigger.sourceIdentity,
-        `charging-release:${bindingIdentity}:offset=${frameOffset}`,
-      ]
-        .filter(Boolean)
-        .join('|'),
-    },
+    trigger:
+      trigger && typeof trigger === 'object'
+        ? {
+            ...trigger,
+            frame: shift(trigger.frame),
+            startFrame: shift(trigger.startFrame),
+            launchFrame: shift(trigger.launchFrame),
+            materializationFrame: shift(trigger.materializationFrame),
+            impactFrame: shift(trigger.impactFrame),
+            endFrame: shift(trigger.endFrame),
+            hitActivation: shiftFrameCondition(trigger.hitActivation),
+            landedHitActivationCondition: shiftFrameCondition(
+              trigger.landedHitActivationCondition
+            ),
+            runtimeCondition: shiftFrameCondition(trigger.runtimeCondition),
+            sourceIdentity: [
+              trigger.sourceIdentity,
+              `charging-release:${bindingIdentity}:offset=${frameOffset}`,
+            ]
+              .filter(Boolean)
+              .join('|'),
+          }
+        : trigger,
     hitActivation: shiftFrameCondition(record.hitActivation),
     landedHitActivationCondition: shiftFrameCondition(
       record.landedHitActivationCondition

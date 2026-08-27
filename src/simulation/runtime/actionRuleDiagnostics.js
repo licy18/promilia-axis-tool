@@ -2201,7 +2201,7 @@ function createSwitchExitTailDiagnostics(
         source: {
           sourceKind:
             runtimeAssessment?.sourceKind ??
-            'azpr-client-static-switch-exit-tail-v2',
+            'azpr-client-static-switch-exit-tail-v3',
           sourceStatus: 'switch-exit-tail-fail-closed',
           fieldPaths: [
             'action.switchExitTailPolicy',

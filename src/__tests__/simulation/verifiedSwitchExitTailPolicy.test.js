@@ -135,6 +135,169 @@ describe('verified switch-exit tail policy', () => {
     });
   });
 
+  it('retains a bullet spawned by a landed hit before actor exit', () => {
+    const policy = createPolicy({
+      mapping: createMapping({ hits: ['spawned-orb-pulse'] }),
+      mechanicsPackage: createPackage({
+        hits: [
+          {
+            hitIdentity: 'spawned-orb-pulse',
+            referenceKind: 'bulletElements',
+            trigger: {
+              startFrame: 30,
+              sourceIdentity: 'spawned-orb-pulse@30',
+            },
+            hitActivation: {
+              kind: 'landed-hit-cardinality',
+              triggerFrames: [10],
+              sourceBindingIdentity: 'base-arrow',
+              sourceIdentity: 'base-arrow-landed@10',
+              applied: true,
+            },
+          },
+        ],
+      }),
+    });
+
+    expect(policy).toMatchObject({
+      status: 'detached-packet-continuation-closed',
+      evidenceClosed: true,
+      packetEvidence: [
+        expect.objectContaining({
+          packetIdentity: 'spawned-orb-pulse',
+          referenceKind: 'bulletElements',
+          materializationFrame: 10,
+          materializationKind: 'landed-hit-spawned-projectile',
+          materializationSourceBindingIdentity: 'base-arrow',
+          settlementFrame: 30,
+          disposition: 'detached-packet-retained',
+        }),
+      ],
+    });
+  });
+
+  it('does not detach a bulletElements hit without explicit projectile materialization lineage', () => {
+    const policy = createPolicy({
+      mapping: createMapping({ hits: ['unbound-bullet-element-hit'] }),
+      mechanicsPackage: createPackage({
+        hits: [
+          {
+            hitIdentity: 'unbound-bullet-element-hit',
+            referenceKind: 'bulletElements',
+            trigger: { startFrame: 30 },
+          },
+        ],
+      }),
+    });
+
+    expect(policy).toMatchObject({
+      status: 'owner-bound-tail-cancelled-at-switch-boundary',
+      evidenceClosed: true,
+      packetEvidence: [
+        expect.objectContaining({
+          materializationKind: 'owner-bound-timeline-packet',
+          disposition: 'future-owner-bound-packet-cancelled',
+        }),
+      ],
+    });
+  });
+
+  it('fails closed when a spawned projectile has more than one possible materialization frame', () => {
+    const policy = createPolicy({
+      mapping: createMapping({ hits: ['ambiguous-spawned-projectile'] }),
+      mechanicsPackage: createPackage({
+        hits: [
+          {
+            hitIdentity: 'ambiguous-spawned-projectile',
+            referenceKind: 'bulletElements',
+            trigger: { startFrame: 30 },
+            hitActivation: {
+              kind: 'landed-hit-cardinality',
+              triggerFrames: [10, 12],
+              applied: true,
+            },
+          },
+        ],
+      }),
+    });
+
+    expect(policy).toMatchObject({
+      status: ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
+      evidenceClosed: false,
+      packetEvidence: [
+        expect.objectContaining({
+          materializationFrame: null,
+          materializationKind: 'landed-hit-spawned-projectile-frame-unresolved',
+          disposition: 'future-owner-bound-packet-unresolved',
+        }),
+      ],
+    });
+  });
+
+  it('cancels a landed-hit spawned bullet when actor exit precedes its materialization', () => {
+    const policy = createPolicy({
+      boundaryFrame: 5,
+      mapping: createMapping({ hits: ['future-spawned-orb-pulse'] }),
+      mechanicsPackage: createPackage({
+        hits: [
+          {
+            hitIdentity: 'future-spawned-orb-pulse',
+            referenceKind: 'bulletElements',
+            trigger: { startFrame: 30 },
+            hitActivation: {
+              kind: 'landed-hit-cardinality',
+              triggerFrames: [10],
+              applied: true,
+            },
+          },
+        ],
+      }),
+    });
+
+    expect(policy).toMatchObject({
+      status: 'owner-bound-tail-cancelled-at-switch-boundary',
+      evidenceClosed: true,
+      packetEvidence: [
+        expect.objectContaining({
+          materializationFrame: 10,
+          disposition: 'future-owner-bound-packet-cancelled',
+        }),
+      ],
+    });
+  });
+
+  it('fails closed when landed-hit projectile materialization shares the actor switch frame', () => {
+    const policy = createPolicy({
+      boundaryFrame: 10,
+      mapping: createMapping({ hits: ['same-frame-spawned-orb-pulse'] }),
+      mechanicsPackage: createPackage({
+        hits: [
+          {
+            hitIdentity: 'same-frame-spawned-orb-pulse',
+            referenceKind: 'bulletElements',
+            trigger: { startFrame: 30 },
+            hitActivation: {
+              kind: 'landed-hit-cardinality',
+              triggerFrames: [10],
+              applied: true,
+            },
+          },
+        ],
+      }),
+    });
+
+    expect(policy).toMatchObject({
+      status: ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
+      evidenceClosed: false,
+      packetEvidence: [
+        expect.objectContaining({
+          materializationBoundaryOrder: 'delayed-packet-order-unresolved',
+          disposition: 'future-owner-bound-packet-unresolved',
+        }),
+      ],
+    });
+  });
+
   it.each(['signature', 'break'])(
     'retains a future %s packet because switch-exit is queued behind the current fluent behavior',
     actionKind => {
