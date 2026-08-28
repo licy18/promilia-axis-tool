@@ -1221,6 +1221,110 @@ describe('verified tuning mark runtime', () => {
     );
   });
 
+  it('fans a slot-minus-one cooldown recovery out to every active actor cooldown', () => {
+    const result = simulateVerifiedProject({
+      durationMs: 9_500,
+      initialSpByCharacterId: { 109001: 100 },
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'moyin-secondary-cooldown',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900121,
+          actionKind: 'perfect-parry',
+          actionVariantIndex: 3,
+          startMs: 0,
+          durationMs: 666.666667,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-fanout-star-1',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 2_500,
+          durationMs: 1_000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-fanout-star-2',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 3_500,
+          durationMs: 1_000,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-fanout-ultimate',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900113,
+          actionVariantIndex: 0,
+          startMs: 4_500,
+          durationMs: 3_600,
+        }),
+        createWorkbenchActionDraft({
+          id: 'moyin-fanout-star-3',
+          type: 'skill',
+          actorCharacterId: 109001,
+          skillId: 10900112,
+          actionVariantIndex: 0,
+          startMs: 8_500,
+          durationMs: 1_000,
+        }),
+      ],
+    });
+    expect(
+      result.actionRuleDiagnostics.readinessTimeline.actions.find(
+        row => row.actionId === 'moyin-fanout-star-3'
+      )
+    ).toMatchObject({ status: 'ready', executable: true });
+    expect(
+      result.actionRuleDiagnostics.readinessTimeline.actions.find(
+        row => row.actionId === 'moyin-secondary-cooldown'
+      )
+    ).toMatchObject({
+      status: 'ready',
+      executable: true,
+      cooldown: { cooldownMs: 7_000 },
+    });
+    const transactions = (
+      result.actionRuleDiagnostics.cooldownReductionTransactions ?? []
+    ).filter(
+      transaction => transaction.sourceActionId === 'moyin-fanout-ultimate'
+    );
+    expect(
+      transactions.map(transaction => ({
+        targetSkillId: transaction.targetSkillId,
+        targetOrdinal: transaction.targetOrdinal,
+        targetCount: transaction.targetCount,
+        candidateSkillIds: transaction.candidateSkillIds,
+        status: transaction.status,
+        targetResolutionStatus: transaction.targetResolutionStatus,
+        appliedToSimulationResults: transaction.appliedToSimulationResults,
+      }))
+    ).toEqual([
+      {
+        targetSkillId: 10900112,
+        targetOrdinal: 0,
+        targetCount: 2,
+        candidateSkillIds: [10900112, 10900121],
+        status: 'cooldown-reduction-transaction-applied',
+        targetResolutionStatus: 'all-active-cooldowns-at-effect-time-resolved',
+        appliedToSimulationResults: true,
+      },
+      {
+        targetSkillId: 10900121,
+        targetOrdinal: 1,
+        targetCount: 2,
+        candidateSkillIds: [10900112, 10900121],
+        status: 'cooldown-reduction-transaction-applied',
+        targetResolutionStatus: 'all-active-cooldowns-at-effect-time-resolved',
+        appliedToSimulationResults: true,
+      },
+    ]);
+  });
+
   it('does not bank a slot-minus-one cooldown reset when no target is cooling down', () => {
     const result = simulateVerifiedProject({
       durationMs: 8_000,

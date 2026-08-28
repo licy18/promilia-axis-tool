@@ -1249,6 +1249,66 @@ describe('Moyin Machine Axis qualification', () => {
     expect(result.hashes).toEqual(replay.hashes);
   });
 
+  it('fans the ultimate reset across an entry skill cooldown in deterministic formal replays', () => {
+    const createContract = () => {
+      const contract = createQualificationAxis({
+        id: 'moyin-slot-minus-one-formal-fanout',
+        durationFrames: 800,
+        actions: [
+          createSwitch('fanout-entry-switch', 0, 'slot-2', 'slot-1'),
+          createStar('fanout-star-1', 150),
+          createStar('fanout-star-2', 210),
+          createUltimate('fanout-ultimate', 270),
+          createStar('fanout-star-3', 506),
+        ],
+      });
+      contract.scenario.initialRuntimeState.controlledActor = {
+        actorId: 'actor-101010',
+        characterId: 101010,
+      };
+      contract.scenario.objectiveContract = createMachineAxisObjectiveContract(
+        'cycle-dps-no-toughness'
+      );
+      return contract;
+    };
+    const service = createMachineAxisService();
+    const contract = createContract();
+    const validation = service.validate(contract);
+    expect(validation.valid, JSON.stringify(validation.issues)).toBe(true);
+
+    const warmup = service.simulate(contract);
+    const measured = service.simulate(createContract());
+    for (const result of [warmup, measured]) {
+      const readinessById = new Map(
+        result.trace.readiness.actions.map(row => [row.actionId, row])
+      );
+      expect(readinessById.get('fanout-star-3')).toMatchObject({
+        status: 'ready',
+        executable: true,
+      });
+      const transactions = result.trace.readiness.cooldownReductionTransactions
+        .filter(row => row.sourceActionId === 'fanout-ultimate')
+        .map(row => ({
+          targetSkillId: row.targetSkillId,
+          status: row.status,
+          appliedToSimulationResults: row.appliedToSimulationResults,
+        }));
+      expect(transactions).toEqual([
+        {
+          targetSkillId: 10900112,
+          status: 'cooldown-reduction-transaction-applied',
+          appliedToSimulationResults: true,
+        },
+        {
+          targetSkillId: 10900121,
+          status: 'cooldown-reduction-transaction-applied',
+          appliedToSimulationResults: true,
+        },
+      ]);
+    }
+    expect(warmup.hashes).toEqual(measured.hashes);
+  });
+
   it('rejects the third pre-ultimate charge, does not bank an idle reset, and honors the natural boundary', () => {
     const service = createMachineAxisService();
     const depleted = service.validate(

@@ -2837,12 +2837,12 @@ function settleCooldownReductionTransactions({
     isCooldownReductionTransactionDue(pending[0], throughTimeMs, boundaryAction)
   ) {
     const transaction = pending.shift();
-    const result = applyCooldownReductionTransaction({
+    const results = applyCooldownReductionTransaction({
       transaction,
       cooldownStateBySkillOwner,
       cooldownWindows,
     });
-    settled.push(result);
+    settled.push(...results);
   }
 }
 
@@ -2872,10 +2872,9 @@ function applyCooldownReductionTransaction({
     timeMs: transaction.timeMs,
   });
   const runtimeOwnerIdentity = `actor:${String(transaction.sourceActorId)}`;
-  // 产品契约（当前实现）：冷却缩减作用于施放者自己的活跃技能冷却，
-  // slot=-1 时要求恰好一个冷却中技能，否则标 ambiguous 不应用。
-  // 与"在场友方单位"描述（500368 等奇波大招）的差异：
-  // 多目标/友方广播的冷却缩减尚未实现，待数据确认后扩展。
+  // 客户端 SpElement.SetCoolDown：slot >= 0 通过 GetSkillBySlot 解析单个技能；
+  // slot < 0 则遍历施放者的 skills，并对每个 InCD 技能应用同一恢复量。
+  // source skill 在当前时序下不属于效果发生时的既有目标冷却，继续排除。
   let candidates = [...cooldownStateBySkillOwner.values()].filter(
     state =>
       state.ownerKind === 'actor' &&
@@ -2888,38 +2887,75 @@ function applyCooldownReductionTransaction({
       state => Number(state.skillSlot) === Number(transaction.slot)
     );
   }
-  if (candidates.length !== 1) {
-    return {
-      ...transaction,
-      status:
-        candidates.length === 0
-          ? 'cooldown-reduction-transaction-consumed-no-active-target'
-          : 'cooldown-reduction-transaction-consumed-ambiguous-target',
-      targetResolutionStatus:
-        candidates.length === 0
-          ? 'no-active-cooldown-at-effect-time'
-          : 'multiple-active-cooldowns-at-effect-time',
-      candidateSkillIds: candidates.map(state => state.skillId),
-      appliedToSimulationResults: false,
-      consumed: true,
-    };
+  candidates.sort(compareCooldownReductionCandidateStates);
+  if (candidates.length === 0) {
+    return [
+      {
+        ...transaction,
+        status: 'cooldown-reduction-transaction-consumed-no-active-target',
+        targetResolutionStatus: 'no-active-cooldown-at-effect-time',
+        candidateSkillIds: [],
+        appliedToSimulationResults: false,
+        consumed: true,
+      },
+    ];
+  }
+  if (transaction.slot !== -1 && candidates.length !== 1) {
+    return [
+      {
+        ...transaction,
+        status: 'cooldown-reduction-transaction-consumed-ambiguous-target',
+        targetResolutionStatus:
+          'multiple-slot-matched-cooldowns-at-effect-time',
+        candidateSkillIds: candidates.map(state => state.skillId),
+        appliedToSimulationResults: false,
+        consumed: true,
+      },
+    ];
   }
   if (transaction.cdRecoveryType !== 0 && transaction.cdRecoveryType !== 1) {
-    return {
-      ...transaction,
-      status: 'cooldown-reduction-transaction-consumed-unsupported-mode',
-      targetResolutionStatus: 'cooldown-recovery-mode-not-fixed',
-      targetSkillId: candidates[0].skillId,
-      appliedToSimulationResults: false,
-      consumed: true,
-    };
+    return [
+      {
+        ...transaction,
+        status: 'cooldown-reduction-transaction-consumed-unsupported-mode',
+        targetResolutionStatus: 'cooldown-recovery-mode-not-fixed',
+        candidateSkillIds: candidates.map(state => state.skillId),
+        appliedToSimulationResults: false,
+        consumed: true,
+      },
+    ];
   }
-  const state = candidates[0];
+  const candidateSkillIds = candidates.map(state => state.skillId);
+  return candidates.map((state, targetOrdinal) =>
+    applyCooldownReductionTransactionToState({
+      state,
+      transaction: {
+        ...transaction,
+        candidateSkillIds,
+        targetCount: candidates.length,
+        targetOrdinal,
+      },
+      cooldownWindows,
+      targetResolutionStatus:
+        candidates.length === 1
+          ? null
+          : 'all-active-cooldowns-at-effect-time-resolved',
+    })
+  );
+}
+
+function applyCooldownReductionTransactionToState({
+  state,
+  transaction,
+  cooldownWindows,
+  targetResolutionStatus,
+}) {
   if (state.cooldownType === 'charge') {
     return applySharedChargeCooldownReduction({
       state,
       transaction,
       cooldownWindows,
+      targetResolutionStatus,
     });
   }
   const targetCharge = state.charges
@@ -2978,7 +3014,8 @@ function applyCooldownReductionTransaction({
   const result = {
     ...transaction,
     status: 'cooldown-reduction-transaction-applied',
-    targetResolutionStatus: 'single-active-cooldown-resolved',
+    targetResolutionStatus:
+      targetResolutionStatus ?? 'single-active-cooldown-resolved',
     targetSkillId: state.skillId,
     targetCooldownIdentity: state.cooldownIdentity,
     targetChargeIndex: targetCharge.chargeIndex,
@@ -2995,6 +3032,17 @@ function applyCooldownReductionTransaction({
   state.lastCooldownReductionTransactionId = transaction.eventIdentity;
   state.cooldownReductionTransactions.push(result);
   return result;
+}
+
+function compareCooldownReductionCandidateStates(left, right) {
+  return (
+    Number(left.skillId) - Number(right.skillId) ||
+    String(left.cooldownIdentity).localeCompare(
+      String(right.cooldownIdentity),
+      'en'
+    ) ||
+    String(left.key).localeCompare(String(right.key), 'en')
+  );
 }
 
 function clampActionLevel(value) {
@@ -3017,6 +3065,7 @@ function applySharedChargeCooldownReduction({
   state,
   transaction,
   cooldownWindows,
+  targetResolutionStatus = null,
 }) {
   const beforeChargeCount = state.currentChargeCount;
   const beforeCoolTimeMs = state.coolTimeMs;
@@ -3092,7 +3141,8 @@ function applySharedChargeCooldownReduction({
   const result = {
     ...transaction,
     status: 'cooldown-reduction-transaction-applied',
-    targetResolutionStatus: 'single-active-shared-charge-timer-resolved',
+    targetResolutionStatus:
+      targetResolutionStatus ?? 'single-active-shared-charge-timer-resolved',
     targetSkillId: state.skillId,
     targetCooldownIdentity: state.cooldownIdentity,
     targetChargeIndex: null,
