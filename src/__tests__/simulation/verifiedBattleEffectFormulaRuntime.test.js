@@ -49,6 +49,20 @@ describe('verified Battle effect formula registry', () => {
       reason: null,
     });
     expect(dynamicExtra.evaluatedValue).toBeCloseTo(93.8, 3);
+    const generatedPropertyShape = evaluateVerifiedBattleEffectFormula({
+      effect: {
+        ...createEffect({
+          a: 720600,
+          baseFunctionId: 3,
+          formulaIdentity: 'battle-effect-formula:50023101:540073',
+        }),
+        propertyChange: { bucket: 'dynamicExtra' },
+      },
+    });
+    expect(generatedPropertyShape.value).toBeCloseTo(72.06, 3);
+    expect(generatedPropertyShape.value).toBe(
+      generatedPropertyShape.evaluatedValue
+    );
     expect(dynamicExtra.trace).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

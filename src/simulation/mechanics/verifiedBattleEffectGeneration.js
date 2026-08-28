@@ -49,6 +49,7 @@ export function evaluateVerifiedBattleEffectConditions({
   resolution,
   targetKind = null,
   targetId = null,
+  targetElementId = null,
   elementTagLayers = null,
   elementIdsHeld = null,
   stackElementLayers = null,
@@ -58,6 +59,41 @@ export function evaluateVerifiedBattleEffectConditions({
   }
   for (const condition of conditions) {
     const conditionType = Number(condition.conditionType);
+    if (conditionType === 1) {
+      if (targetElementId == null || targetElementId === '') {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-entity-element-target-unresolved',
+        };
+      }
+      const elementId = Number(targetElementId);
+      const allowedElementMask = Number(condition.entityElementalType);
+      if (
+        targetKind !== EFFECT_TARGET_KINDS.ACTOR ||
+        !Number.isInteger(elementId) ||
+        elementId < 0 ||
+        elementId > 9
+      ) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-entity-element-target-unresolved',
+        };
+      }
+      if (
+        !Number.isInteger(allowedElementMask) ||
+        allowedElementMask <= 0 ||
+        (allowedElementMask & (1 << elementId)) === 0
+      ) {
+        return {
+          matched: false,
+          reason:
+            'verified-effect-property-condition-entity-element-not-matched',
+        };
+      }
+      continue;
+    }
     if (conditionType === 2) {
       if (Number(action.controlSkillId) !== Number(condition.skillId)) {
         return {
@@ -252,17 +288,18 @@ export function createVerifiedBattleEffectGeneration({
           !isConsumedBySemanticEffect(effect, semanticEffects, semanticPathIds)
       ),
     ];
-    // 预扫"元素限定 pack"（如 500025"给雷属性角色注入调谐提升"）：这类
-    // pack 的元素条件只有 name 文本、无结构化字段，无法在 runtime 判定
-    // 目标元素。其子效果若仍按 pack 的 team-actors 目标全量展开，会给
-    // 非限定元素角色错误施加（500025 的 540072 调谐强度 360300 全队）。
-    // fail-closed：记录这些 pack 的 pathId，子效果若直接挂在限定 pack 下
-    // 则阻止进入 calculator（评分不得使用未验证的元素过滤）。
-    const elementLimitedPackPathIds = new Set(
+    // 旧包中只有名称提示元素限定、却没有结构化条件的 pack 继续
+    // fail-closed。新生成包会把客户端 CheckSelfElementalType 条件投影为
+    // conditionType=1，并由子效果继承；这类 pack 不再进入阻断集合。
+    const unresolvedElementLimitedPackPathIds = new Set(
       mergedEffects
         .filter(
           effect =>
-            effect.kind === 'pack' && /(角色|元素|属性)/.test(effect.name ?? '')
+            effect.kind === 'pack' &&
+            /(角色|元素|属性)/.test(effect.name ?? '') &&
+            !(effect.activationConditions ?? []).some(
+              condition => Number(condition.conditionType) === 1
+            )
         )
         .map(effect => String(effect.pathId ?? ''))
         .filter(Boolean)
@@ -378,11 +415,10 @@ export function createVerifiedBattleEffectGeneration({
         continue;
       }
       if (effect.kind === 'inject' || effect.kind === 'pack') {
-        // pack 的元素限定（如 500025"对雷属性角色注入调谐提升"）尚无
-        // 结构化字段，子效果按 team-actors 全量展开，记录 known-gap。
+        // 只有缺少结构化条件的旧元素限定 pack 才记录 known-gap。
         if (
           effect.kind === 'pack' &&
-          /(角色|元素|属性)/.test(effect.name ?? '')
+          unresolvedElementLimitedPackPathIds.has(String(effect.pathId ?? ''))
         ) {
           knownGaps.push({
             actionId: action.id,
@@ -398,10 +434,10 @@ export function createVerifiedBattleEffectGeneration({
       // pathId）：元素过滤无法结构化，阻止施加，避免非限定角色被污染。
       // 这是 fail-closed——宁可缺失也不得用未验证的元素条件评分。
       if (
-        elementLimitedPackPathIds.size > 0 &&
+        unresolvedElementLimitedPackPathIds.size > 0 &&
         Array.isArray(effect.relationPath) &&
         effect.relationPath.some(edge =>
-          elementLimitedPackPathIds.has(
+          unresolvedElementLimitedPackPathIds.has(
             String(edge.from ?? '').replace(/^element:/, '')
           )
         )
@@ -439,147 +475,193 @@ export function createVerifiedBattleEffectGeneration({
         unresolved.push(createUnresolvedEffect(action, effect));
         continue;
       }
-      const targets = resolveEffectTargets({
-        action,
-        effect,
-        scenario,
-        timeMs: resolveEffectTimeMs(action, effect, resolution),
-        controlledActorTimeline,
-      });
       const timeMs = resolveEffectTimeMs(action, effect, resolution);
+      const occurrenceTimes = resolveRepeatedEffectTimes({
+        timeMs,
+        effect,
+        resolution,
+      });
       const formulaResult = resolveEffectValue(action, effect, resolution);
       const value = formulaResult.value;
-      if (targets.length === 0 || timeMs == null || value == null) {
+      const initialTargets =
+        occurrenceTimes.length > 0
+          ? resolveEffectTargets({
+              action,
+              effect,
+              scenario,
+              timeMs: occurrenceTimes[0],
+              controlledActorTimeline,
+            })
+          : [];
+      if (
+        initialTargets.length === 0 ||
+        occurrenceTimes.length === 0 ||
+        value == null
+      ) {
         unresolved.push(
           createUnresolvedEffect(action, effect, [
-            targets.length === 0 ? 'generated-effect-target-unresolved' : null,
-            timeMs == null ? 'generated-effect-time-unresolved' : null,
+            initialTargets.length === 0
+              ? 'generated-effect-target-unresolved'
+              : null,
+            occurrenceTimes.length === 0
+              ? 'generated-effect-time-unresolved'
+              : null,
             value == null ? 'generated-effect-value-unresolved' : null,
             formulaResult.reason,
           ])
         );
         continue;
       }
-      for (const [targetSequenceIndex, target] of targets.entries()) {
-        const conditionResult = evaluateVerifiedBattleEffectConditions({
-          conditions: effect.activationConditions,
-          action,
-          resolution,
-          targetKind: target.kind,
-          targetId: target.id,
-          elementTagLayers,
-          elementIdsHeld,
-          stackElementLayers,
-        });
-        if (!conditionResult.matched) {
-          continue;
-        }
-        if (effect.propertyChange) {
-          effectCommands.push(
-            createPropertyEffectCommand({
-              action,
-              effect,
-              target,
-              timeMs,
-              value,
-              formulaResult,
-              resolution,
-              targetSequenceIndex,
-            })
-          );
-          registerTargetElementTags({
-            target,
-            effect,
-            elementTagLayers,
-            elementIdsHeld,
-          });
-          continue;
-        }
-        if (effect.directSp) {
-          directSpEvents.push(
-            createDirectEvent({
-              kind: 'direct-sp',
-              action,
-              effect,
-              target,
-              timeMs,
-              value,
-              formulaResult,
-              resolution,
-              targetSequenceIndex,
-            })
-          );
-          registerTargetElementTags({
-            target,
-            effect,
-            elementTagLayers,
-            elementIdsHeld,
-          });
-          continue;
-        }
-        if (effect.heal) {
-          directHpEvents.push(
-            createDirectEvent({
-              kind: 'direct-heal',
-              action,
-              effect,
-              target,
-              timeMs,
-              value,
-              formulaResult,
-              resolution,
-              targetSequenceIndex,
-            })
-          );
-          registerTargetElementTags({
-            target,
-            effect,
-            elementTagLayers,
-            elementIdsHeld,
-          });
-          continue;
-        }
-        if (effect.shield) {
-          shieldEvents.push(
-            createDirectEvent({
-              kind: 'direct-shield',
-              action,
-              effect,
-              target,
-              timeMs,
-              value,
-              formulaResult,
-              resolution,
-              targetSequenceIndex,
-            })
-          );
-          continue;
-        }
-        if (effect.cooldownReduction) {
-          const cooldownReductionEvent = createDirectEvent({
-            kind: 'direct-cooldown-reduction',
+      const repeating = occurrenceTimes.length > 1;
+      for (const [
+        triggerOccurrenceIndex,
+        occurrenceTimeMs,
+      ] of occurrenceTimes.entries()) {
+        const targets =
+          triggerOccurrenceIndex === 0
+            ? initialTargets
+            : resolveEffectTargets({
+                action,
+                effect,
+                scenario,
+                timeMs: occurrenceTimeMs,
+                controlledActorTimeline,
+              });
+        for (const [targetSequenceIndex, target] of targets.entries()) {
+          const conditionResult = evaluateVerifiedBattleEffectConditions({
+            conditions: effect.activationConditions,
             action,
-            effect,
-            target,
-            timeMs,
-            value,
-            formulaResult,
             resolution,
-            targetSequenceIndex,
+            targetKind: target.kind,
+            targetId: target.id,
+            targetElementId: resolveEffectTargetElementId({
+              scenario,
+              target,
+            }),
+            elementTagLayers,
+            elementIdsHeld,
+            stackElementLayers,
           });
-          // evidence-only：实际冷却结算由 actionRuleDiagnostics 按
-          // resolution.effects 独立执行（含百分比按剩余时间计算），
-          // 这里的事件仅作可见性记录，不声称已被本路径 calculator 消费。
-          cooldownReductionEvent.appliedToCalculators = false;
-          cooldownReductionEvent.applied = false;
-          cooldownReductionEvents.push(cooldownReductionEvent);
-          continue;
+          if (!conditionResult.matched) {
+            continue;
+          }
+          if (effect.propertyChange) {
+            effectCommands.push(
+              createPropertyEffectCommand({
+                action,
+                effect,
+                target,
+                timeMs: occurrenceTimeMs,
+                value,
+                formulaResult,
+                resolution,
+                targetSequenceIndex,
+                triggerOccurrenceIndex,
+                repeating,
+              })
+            );
+            registerTargetElementTags({
+              target,
+              effect,
+              elementTagLayers,
+              elementIdsHeld,
+            });
+            continue;
+          }
+          if (effect.directSp) {
+            directSpEvents.push(
+              createDirectEvent({
+                kind: 'direct-sp',
+                action,
+                effect,
+                target,
+                timeMs: occurrenceTimeMs,
+                value,
+                formulaResult,
+                resolution,
+                targetSequenceIndex,
+                triggerOccurrenceIndex,
+                repeating,
+              })
+            );
+            registerTargetElementTags({
+              target,
+              effect,
+              elementTagLayers,
+              elementIdsHeld,
+            });
+            continue;
+          }
+          if (effect.heal) {
+            directHpEvents.push(
+              createDirectEvent({
+                kind: 'direct-heal',
+                action,
+                effect,
+                target,
+                timeMs: occurrenceTimeMs,
+                value,
+                formulaResult,
+                resolution,
+                targetSequenceIndex,
+                triggerOccurrenceIndex,
+                repeating,
+              })
+            );
+            registerTargetElementTags({
+              target,
+              effect,
+              elementTagLayers,
+              elementIdsHeld,
+            });
+            continue;
+          }
+          if (effect.shield) {
+            shieldEvents.push(
+              createDirectEvent({
+                kind: 'direct-shield',
+                action,
+                effect,
+                target,
+                timeMs: occurrenceTimeMs,
+                value,
+                formulaResult,
+                resolution,
+                targetSequenceIndex,
+                triggerOccurrenceIndex,
+                repeating,
+              })
+            );
+            continue;
+          }
+          if (effect.cooldownReduction) {
+            const cooldownReductionEvent = createDirectEvent({
+              kind: 'direct-cooldown-reduction',
+              action,
+              effect,
+              target,
+              timeMs: occurrenceTimeMs,
+              value,
+              formulaResult,
+              resolution,
+              targetSequenceIndex,
+              triggerOccurrenceIndex,
+              repeating,
+            });
+            // evidence-only：实际冷却结算由 actionRuleDiagnostics 按
+            // resolution.effects 独立执行（含百分比按剩余时间计算），
+            // 这里的事件仅作可见性记录，不声称已被本路径 calculator 消费。
+            cooldownReductionEvent.appliedToCalculators = false;
+            cooldownReductionEvent.applied = false;
+            cooldownReductionEvents.push(cooldownReductionEvent);
+            continue;
+          }
+          unresolved.push(
+            createUnresolvedEffect(action, effect, [
+              'generated-effect-runtime-kind-unresolved',
+            ])
+          );
         }
-        unresolved.push(
-          createUnresolvedEffect(action, effect, [
-            'generated-effect-runtime-kind-unresolved',
-          ])
-        );
       }
     }
   }
@@ -622,6 +704,15 @@ export function createVerifiedBattleEffectGeneration({
     },
     applied: true,
   };
+}
+
+function resolveEffectTargetElementId({ scenario, target }) {
+  if (target?.kind !== EFFECT_TARGET_KINDS.ACTOR) return null;
+  return (
+    (scenario?.actors ?? []).find(
+      actor => String(actor.id) === String(target.id)
+    )?.elementId ?? null
+  );
 }
 
 function isConsumedBySemanticEffect(effect, semanticEffects, semanticPathIds) {
@@ -741,13 +832,19 @@ function createPropertyEffectCommand({
   value,
   formulaResult,
   resolution,
+  triggerOccurrenceIndex = 0,
+  repeating = false,
 }) {
   const effectIdentity = resolveEffectIdentity(effect);
-  const triggerSequencePath = resolveStrictSameFrameEffectSequencePath({
+  const baseTriggerSequencePath = resolveStrictSameFrameEffectSequencePath({
     action,
     effect,
     resolution,
   });
+  const triggerSequencePath =
+    repeating && Array.isArray(baseTriggerSequencePath)
+      ? [...baseTriggerSequencePath, triggerOccurrenceIndex]
+      : baseTriggerSequencePath;
   const effectDisplay = createBattlePropertyEffectDisplayLabel({
     sourceText: effect.displayLabel ?? effect.name,
     effectKind: effect.kind,
@@ -756,7 +853,10 @@ function createPropertyEffectCommand({
     targetKind: effect.target?.kind,
   });
   return {
-    id: `verified-effect|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
+    id: [
+      `verified-effect|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
+      ...(repeating ? [`occurrence:${triggerOccurrenceIndex}`] : []),
+    ].join('|'),
     sourceActionId: action.id,
     sourceActionName: action.name,
     sourceActorId: action.actorId,
@@ -841,6 +941,12 @@ function createPropertyEffectCommand({
     ],
     appliedToCalculators: true,
     generatedVerified: true,
+    ...(repeating
+      ? {
+          triggerOccurrenceIndex,
+          triggerIntervalMs: Number(effect.trigger?.intervalMs),
+        }
+      : {}),
   };
 }
 
@@ -888,13 +994,17 @@ function createDirectEvent({
   formulaResult,
   resolution,
   targetSequenceIndex,
+  triggerOccurrenceIndex = 0,
+  repeating = false,
 }) {
   const effectIdentity = resolveEffectIdentity(effect);
   const sourceSequencePath = createVerifiedEffectSourceSequencePath({
     action,
     effect,
     phase: 'settlement',
-    localSequenceSuffix: [targetSequenceIndex],
+    localSequenceSuffix: repeating
+      ? [triggerOccurrenceIndex, targetSequenceIndex]
+      : [targetSequenceIndex],
   });
   const sourceSequenceReady = Array.isArray(sourceSequencePath);
   return {
@@ -903,7 +1013,10 @@ function createDirectEvent({
     status: sourceSequenceReady
       ? 'verified-battle-direct-effect-ready'
       : 'verified-battle-direct-effect-source-sequence-unresolved',
-    eventIdentity: `${kind}|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
+    eventIdentity: [
+      `${kind}|${action.id}|${effectIdentity}|${target.kind}:${target.id}`,
+      ...(repeating ? [`occurrence:${triggerOccurrenceIndex}`] : []),
+    ].join('|'),
     kind,
     timeMs,
     action,
@@ -922,6 +1035,7 @@ function createDirectEvent({
       contractName: VERIFIED_EFFECT_SOURCE_SEQUENCE_CONTRACT_NAME,
       phase: 'settlement',
       targetSequenceIndex,
+      ...(repeating ? { triggerOccurrenceIndex } : {}),
       effectSourceOrder: effect.sourceOrder ?? null,
       sourceIdentity:
         effect.sourceOrder?.sourceIdentity ?? effect.sourceIdentity ?? null,
@@ -932,6 +1046,12 @@ function createDirectEvent({
       : ['verified-direct-effect-source-sequence-unresolved'],
     appliedToCalculators: sourceSequenceReady,
     applied: sourceSequenceReady,
+    ...(repeating
+      ? {
+          triggerOccurrenceIndex,
+          triggerIntervalMs: Number(effect.trigger?.intervalMs),
+        }
+      : {}),
   };
 }
 
@@ -993,6 +1113,36 @@ function resolveEffectTimeMs(action, effect, resolution) {
     return null;
   }
   return roundValue(Number(action.startMs) + (startFrame * 1000) / frameRate);
+}
+
+function resolveRepeatedEffectTimes({ timeMs, effect, resolution }) {
+  if (timeMs == null) return [];
+  const intervalMs = Number(effect.trigger?.intervalMs);
+  const frameCount = Number(effect.trigger?.frameCount);
+  const frameRate = Number(resolution.controlBinding?.frameRate ?? 60);
+  if (
+    !Number.isInteger(intervalMs) ||
+    intervalMs <= 0 ||
+    !Number.isInteger(frameCount) ||
+    frameCount < 0 ||
+    !(frameRate > 0)
+  ) {
+    return [timeMs];
+  }
+  const frameDurationMs = 1000 / frameRate;
+  const windowDurationMs = (frameCount * 1000) / frameRate;
+  if (intervalMs < frameDurationMs || intervalMs > windowDurationMs) {
+    return [timeMs];
+  }
+  const times = [];
+  for (
+    let offsetMs = 0;
+    offsetMs <= windowDurationMs + 1e-6;
+    offsetMs += intervalMs
+  ) {
+    times.push(roundValue(timeMs + offsetMs));
+  }
+  return times;
 }
 
 function resolveEffectValue(action, effect, resolution) {

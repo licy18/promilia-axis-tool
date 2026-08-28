@@ -124,9 +124,7 @@ export function evaluateVerifiedBattleEffectFormula({
     };
   }
   if (contract.family === 'source-tuning-ratio-with-common-ratio') {
-    const sourceTuning = finiteNumberOrNull(
-      sourceActor?.stats?.tuningStrength
-    );
+    const sourceTuning = finiteNumberOrNull(sourceActor?.stats?.tuningStrength);
     if (sourceTuning == null) {
       return {
         ...contract,
@@ -170,8 +168,7 @@ export function evaluateVerifiedBattleEffectFormula({
       sourceRawA: a,
       evaluatedValue: qToNumber(resultRaw),
       evaluatedRaw: resultRaw.toString(),
-      sourceIdentity:
-        effect.sourceIdentity ?? effect.sourceIdentities ?? null,
+      sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
       reason: null,
     };
   }
@@ -224,8 +221,7 @@ export function evaluateVerifiedBattleEffectFormula({
       sourceRawA: a,
       evaluatedValue: qToNumber(resultRaw),
       evaluatedRaw: resultRaw.toString(),
-      sourceIdentity:
-        effect.sourceIdentity ?? effect.sourceIdentities ?? null,
+      sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
       reason: null,
     };
   }
@@ -279,8 +275,7 @@ export function evaluateVerifiedBattleEffectFormula({
       sourceMaximumHp,
       evaluatedValue: qToNumber(resultRaw),
       evaluatedRaw: resultRaw.toString(),
-      sourceIdentity:
-        effect.sourceIdentity ?? effect.sourceIdentities ?? null,
+      sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
       reason: null,
     };
   }
@@ -307,8 +302,7 @@ export function evaluateVerifiedBattleEffectFormula({
   const trace = [
     {
       step:
-        contract.family ===
-        'basis-point-property-a-with-common-ratio'
+        contract.family === 'basis-point-property-a-with-common-ratio'
           ? 'base-function-3-a-per-10000'
           : contract.family === 'literal-a-direct'
             ? 'base-function-11-a'
@@ -344,7 +338,12 @@ export function evaluateVerifiedBattleEffectFormula({
 }
 
 function resolveEffectPropertyBucket(effect) {
-  return effect?.property?.bucket ?? effect?.bucket ?? null;
+  return (
+    effect?.propertyChange?.bucket ??
+    effect?.property?.bucket ??
+    effect?.bucket ??
+    null
+  );
 }
 
 function qFromSourceBasisPoints(value) {

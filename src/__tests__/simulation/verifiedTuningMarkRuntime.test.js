@@ -2068,7 +2068,8 @@ function simulateVerifiedProject({
   initialRuntimeState = null,
   initialSpByCharacterId = {},
   targetPolicy = null,
-}) {  const teamSlots = createDefaultWorkbenchTeamSlots();
+}) {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
   const actorConfigs = createDefaultWorkbenchActorConfigs(
     DEFAULT_WORKBENCH_SELECTION
   ).map(config => ({
@@ -2209,4 +2210,103 @@ describe('kibo ultimate percentage cooldown reduction', () => {
       id: `actor-${MOYIN_ID}`,
     });
   });
+
+  it.each([
+    {
+      name: '乐乐蛙',
+      kiboId: 500369,
+      skillId: 50036901,
+      durationMs: 8000,
+      triggerFrames: [34, 94, 154, 214, 274, 334, 426],
+    },
+    {
+      name: '音霸蛙',
+      kiboId: 500370,
+      skillId: 50037001,
+      durationMs: 7000,
+      triggerFrames: [14, 74, 134, 194, 254, 336],
+    },
+  ])(
+    'expands $name periodic cooldown reduction through its final packet',
+    ({ kiboId, skillId, durationMs, triggerFrames }) => {
+      const teamSlots = createDefaultWorkbenchTeamSlots();
+      const actorConfigs = createDefaultWorkbenchActorConfigs(
+        DEFAULT_WORKBENCH_SELECTION
+      ).map(config => ({
+        ...config,
+        initialSp: Number(config.characterId) === MOYIN_ID ? 100 : 0,
+        loadout:
+          Number(config.characterId) === MOYIN_ID
+            ? { ...config.loadout, kiboId }
+            : config.loadout,
+      }));
+      const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+        durationMs: 12_000,
+        teamSlots,
+        actorConfigs,
+        actions: [
+          createWorkbenchActionDraft({
+            id: `moyin-star-cd-${kiboId}`,
+            type: 'skill',
+            actorCharacterId: MOYIN_ID,
+            skillId: MOYIN_STAR_SKILL_ID,
+            actionVariantIndex: 0,
+            startMs: 0,
+            durationMs: 1000,
+          }),
+          createWorkbenchActionDraft({
+            id: `kibo-${kiboId}-ult`,
+            type: 'kiboEvent',
+            actorCharacterId: MOYIN_ID,
+            skillId,
+            kiboId,
+            actionVariantIndex: 0,
+            startMs: 2000,
+            durationMs,
+            eventType: 'signature',
+          }),
+        ],
+        initialRuntimeState: {
+          controlledActor: {
+            actorId: `actor-${MOYIN_ID}`,
+            characterId: MOYIN_ID,
+          },
+          kiboEnergyBySlot: [
+            {
+              slotId: 'team-slot-1',
+              kiboId,
+              currentValue: 100,
+              maxValue: 100,
+            },
+          ],
+        },
+        mechanicsProfileSelection:
+          createVerifiedWorkbenchMechanicsProfileSelection(),
+      });
+      const result = simulateScenario(
+        compileProject(project, getWorkbenchGameData())
+      );
+      const transactions = (
+        result.actionRuleDiagnostics?.cooldownReductionTransactions ?? []
+      ).filter(transaction => Number(transaction.sourceSkillId) === skillId);
+
+      expect(transactions.map(transaction => transaction.triggerFrame)).toEqual(
+        triggerFrames
+      );
+      expect(
+        transactions.filter(
+          transaction => transaction.triggerIntervalMs === 1000
+        )
+      ).toHaveLength(triggerFrames.length - 1);
+      expect(transactions).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            status: 'cooldown-reduction-transaction-applied',
+            cdRecoveryType: 1,
+            appliedToSimulationResults: true,
+          }),
+        ])
+      );
+    }
+  );
 });

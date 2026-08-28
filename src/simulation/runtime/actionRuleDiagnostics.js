@@ -2724,47 +2724,94 @@ function enqueueAcceptedCooldownReductionTransactions({
     ) {
       continue;
     }
-    const triggerFrame = Number(effect.trigger?.startFrame);
-    if (!Number.isInteger(triggerFrame) || triggerFrame < 0) continue;
-    const sourceSequencePath = createVerifiedEffectSourceSequencePath({
-      action,
-      effect,
-      phase: 'settlement',
-      localSequenceSuffix: [effectIndex],
-    }) ?? [Number(actionOrderIndex), 20, effectIndex];
-    pending.push({
-      schemaVersion: 1,
-      sourceKind: 'azpr-cooldown-reduction-transaction',
-      status: 'cooldown-reduction-transaction-pending',
-      eventIdentity: `cooldown-reduction|${action.id}|${effect.effectIdentity ?? effect.elementId}|${effectIndex}`,
-      timeMs: resolveActionFrameTimeMs(action, triggerFrame, frameRate),
-      sourceActionId: action.id,
-      sourceActionName: action.name ?? action.id,
-      sourceActorId: action.actorId,
-      sourceSkillId: Number(action.skillId),
-      sourceEffectIdentity: effect.effectIdentity ?? null,
-      sourceElementId: Number(effect.elementId),
-      triggerFrame,
+    const triggerFrames = resolveCooldownReductionTriggerFrames({
+      trigger: effect.trigger,
       frameRate,
-      recoverType: 3,
-      slot: Number(reduction.slot),
-      cdRecoveryType: Number(reduction.cdRecoveryType),
-      rawValue,
-      // 固定毫秒模式（cdRecoveryType=0）才预计算 reductionMs；
-      // 百分比模式（cdRecoveryType=1）的目标剩余冷却在 apply 时才确定，
-      // 这里不填，避免 canonical 输出出现 -430 → 430000ms 的虚假固定值。
-      reductionMs:
-        Number(reduction.cdRecoveryType) === 1 ? null : -rawValue * 1000,
-      sourceSequencePath,
-      sourceSequenceStatus: Array.isArray(sourceSequencePath)
-        ? 'verified-cooldown-reduction-source-sequence-ready'
-        : 'verified-cooldown-reduction-source-sequence-unresolved',
-      sourceIdentity: effect.sourceIdentity ?? null,
-      appliedToSimulationResults: false,
-      consumed: false,
     });
+    const repeating = triggerFrames.length > 1;
+    for (const [
+      triggerOccurrenceIndex,
+      triggerFrame,
+    ] of triggerFrames.entries()) {
+      const localSequenceSuffix = repeating
+        ? [effectIndex, triggerOccurrenceIndex]
+        : [effectIndex];
+      const sourceSequencePath = createVerifiedEffectSourceSequencePath({
+        action,
+        effect,
+        phase: 'settlement',
+        localSequenceSuffix,
+      }) ?? [Number(actionOrderIndex), 20, ...localSequenceSuffix];
+      pending.push({
+        schemaVersion: 1,
+        sourceKind: 'azpr-cooldown-reduction-transaction',
+        status: 'cooldown-reduction-transaction-pending',
+        eventIdentity: [
+          `cooldown-reduction|${action.id}|${effect.effectIdentity ?? effect.elementId}|${effectIndex}`,
+          ...(repeating ? [triggerOccurrenceIndex] : []),
+        ].join('|'),
+        timeMs: resolveActionFrameTimeMs(action, triggerFrame, frameRate),
+        sourceActionId: action.id,
+        sourceActionName: action.name ?? action.id,
+        sourceActorId: action.actorId,
+        sourceSkillId: Number(action.skillId),
+        sourceEffectIdentity: effect.effectIdentity ?? null,
+        sourceElementId: Number(effect.elementId),
+        triggerFrame,
+        ...(repeating
+          ? {
+              triggerBaseFrame: Number(effect.trigger?.startFrame),
+              triggerFrameCount: Number(effect.trigger?.frameCount),
+              triggerIntervalMs: Number(effect.trigger?.intervalMs),
+              triggerOccurrenceIndex,
+            }
+          : {}),
+        frameRate,
+        recoverType: 3,
+        slot: Number(reduction.slot),
+        cdRecoveryType: Number(reduction.cdRecoveryType),
+        rawValue,
+        // 固定毫秒模式（cdRecoveryType=0）才预计算 reductionMs；
+        // 百分比模式（cdRecoveryType=1）的目标剩余冷却在 apply 时才确定，
+        // 这里不填，避免 canonical 输出出现 -430 → 430000ms 的虚假固定值。
+        reductionMs:
+          Number(reduction.cdRecoveryType) === 1 ? null : -rawValue * 1000,
+        sourceSequencePath,
+        sourceSequenceStatus: Array.isArray(sourceSequencePath)
+          ? 'verified-cooldown-reduction-source-sequence-ready'
+          : 'verified-cooldown-reduction-source-sequence-unresolved',
+        sourceIdentity: effect.sourceIdentity ?? null,
+        appliedToSimulationResults: false,
+        consumed: false,
+      });
+    }
   }
   pending.sort(compareCooldownReductionTransactions);
+}
+
+function resolveCooldownReductionTriggerFrames({ trigger, frameRate }) {
+  const startFrame = Number(trigger?.startFrame);
+  if (!Number.isInteger(startFrame) || startFrame < 0) return [];
+  const frameCount = Number(trigger?.frameCount);
+  const intervalMs = Number(trigger?.intervalMs);
+  if (
+    !Number.isInteger(frameCount) ||
+    frameCount < 0 ||
+    !Number.isInteger(intervalMs) ||
+    intervalMs <= 0
+  ) {
+    return [startFrame];
+  }
+  const intervalFrames = (intervalMs * frameRate) / 1000;
+  if (!Number.isInteger(intervalFrames) || intervalFrames <= 0) {
+    return [startFrame];
+  }
+  const endFrame = startFrame + frameCount;
+  const frames = [];
+  for (let frame = startFrame; frame <= endFrame; frame += intervalFrames) {
+    frames.push(frame);
+  }
+  return frames;
 }
 
 function resolveActionFrameTimeMs(action, relativeFrame, frameRate) {

@@ -895,29 +895,29 @@ export async function createVerifiedCombatMechanicsBuild({
   const characterCombatVerificationGoldens = [];
   for (const recipe of recipes) {
     for (const scenarioRecipe of recipe.verificationGoldenScenarios ?? []) {
-        const goldenRuntime = await createCharacterCombatGoldenRuntime({
-          repositoryRoot: REPO_ROOT,
-          mechanicsPackage: packageValue,
-          recipe: {
-            ...recipe,
-            goldenScenario: scenarioRecipe,
-          },
-        });
-        if (goldenRuntime.validation?.passed !== true) {
-          throw new Error(
-            `character combat verification golden failed: ${recipe.ownerId}/${scenarioRecipe.scenarioIdentity}`
-          );
-        }
-        characterCombatVerificationGoldens.push({
-          ownerId: Number(recipe.ownerId),
-          fileName: String(
-            scenarioRecipe.outputFileName ??
-              `${scenarioRecipe.scenarioIdentity}.json`
-          )
-            .replace(/[^a-z0-9._-]+/gi, '-')
-            .replace(/^-+|-+$/g, ''),
-          goldenRuntime,
-        });
+      const goldenRuntime = await createCharacterCombatGoldenRuntime({
+        repositoryRoot: REPO_ROOT,
+        mechanicsPackage: packageValue,
+        recipe: {
+          ...recipe,
+          goldenScenario: scenarioRecipe,
+        },
+      });
+      if (goldenRuntime.validation?.passed !== true) {
+        throw new Error(
+          `character combat verification golden failed: ${recipe.ownerId}/${scenarioRecipe.scenarioIdentity}`
+        );
+      }
+      characterCombatVerificationGoldens.push({
+        ownerId: Number(recipe.ownerId),
+        fileName: String(
+          scenarioRecipe.outputFileName ??
+            `${scenarioRecipe.scenarioIdentity}.json`
+        )
+          .replace(/[^a-z0-9._-]+/gi, '-')
+          .replace(/^-+|-+$/g, ''),
+        goldenRuntime,
+      });
     }
   }
   if (!xiaoyuActionOccupancyAudit || !xiaoyuHiddenInputAudit) {
@@ -4747,6 +4747,7 @@ function collectBehaviorTriggers(
           subSkillIndexesByBehavior.get(String(behaviorPathId)) ?? null,
         startFrame: integerOrNull(value.startFrame),
         frameCount: integerOrNull(value.frameCount),
+        intervalMs: nonNegativeIntegerOrNull(value.interval),
         behaviorIndex: integerOrNull(value.behaviorIndex),
         timelineGroupIndex: integerOrNull(value.timelineGroupIndex),
         targetCode: target.code,
@@ -4915,6 +4916,7 @@ function collectSemanticBehaviorTriggers(
           subSkillIndexesByBehavior.get(String(behaviorPathId)) ?? null,
         startFrame: integerOrNull(value.startFrame),
         frameCount: integerOrNull(value.frameCount),
+        intervalMs: nonNegativeIntegerOrNull(value.interval),
         behaviorIndex: integerOrNull(value.behaviorIndex),
         timelineGroupIndex: integerOrNull(value.timelineGroupIndex),
         target: target,
@@ -4928,7 +4930,7 @@ function collectSemanticBehaviorTriggers(
       dedupeBy(
         entries,
         entry =>
-          `${entry.behaviorPathId}|${entry.startFrame}|${entry.target.sourceField}|${entry.target.code}|${(entry.subSkillIndexes ?? []).join(',')}`
+          `${entry.behaviorPathId}|${entry.startFrame}|${entry.frameCount}|${entry.intervalMs}|${entry.target.sourceField}|${entry.target.code}|${(entry.subSkillIndexes ?? []).join(',')}`
       ),
     ])
   );
@@ -6178,6 +6180,8 @@ function createBattleEffectGraphNode({
     presenceSpChildValue,
     tuningMechanicsCatalog,
   });
+  const normalElementActivationConditions =
+    parseNormalElementActivationConditions(tree);
   const rawSourceName = tree.elementName ?? tree.m_Name ?? record.name ?? null;
   const sourceName = createEffectSourceDisplayLabel({
     sourceText: rawSourceName,
@@ -6198,6 +6202,7 @@ function createBattleEffectGraphNode({
     activationConditions: dedupeBy(
       [
         ...(classification.activationConditions ?? []),
+        ...normalElementActivationConditions,
         ...(layerActivation ? [layerActivation] : []),
       ],
       condition => JSON.stringify(condition)
@@ -6358,6 +6363,45 @@ function createBattleEffectGraphNode({
     status: `verified-battle-effect-node-${classification.status}`,
     applied: classification.status === 'applied',
   };
+}
+
+// `EElementNormalFixedConditionType.CheckSelfElementalType=10` is used by
+// team-wide Kibo packs to keep their child property effect on actors of the
+// advertised element only. `conditionParam2` is the bitmask from
+// `EEntityElementalType` (None=1 ... Thunder=128 ... Dark=512, All=1023).
+// The numeric condition id is overloaded by other trigger families, so only
+// accept the normal AND form when every condition is this verified bitmask
+// shape; all other forms remain fail-closed.
+function parseNormalElementActivationConditions(tree = {}) {
+  const rawConditions = Array.isArray(tree.triggerConditionList)
+    ? tree.triggerConditionList
+    : [];
+  if (
+    integerOrNull(tree.triggerConditionType) !== 0 ||
+    rawConditions.length === 0
+  ) {
+    return [];
+  }
+  const conditions = rawConditions.map(condition => {
+    const conditionType = integerOrNull(condition?.conditionParam1);
+    const entityElementalType = integerOrNull(condition?.conditionParam2);
+    if (
+      conditionType !== 10 ||
+      entityElementalType == null ||
+      entityElementalType <= 0 ||
+      (entityElementalType & ~1023) !== 0
+    ) {
+      return null;
+    }
+    return {
+      conditionType: 1,
+      conditionTypeName: 'EntityElementType',
+      entityElementalType,
+      sourceConditionType: 10,
+      sourceConditionTypeName: 'CheckSelfElementalType',
+    };
+  });
+  return conditions.every(Boolean) ? conditions : [];
 }
 
 function createFormulaParameterContract(paramsByLevel) {
@@ -6815,6 +6859,10 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
           node,
           trigger,
           triggerIndex,
+          frameRate:
+            positiveNumberOrNull(
+              control.value.skillControlData?.framePerSecond
+            ) ?? 60,
         })
       )
     );
@@ -6843,6 +6891,7 @@ function createControlRuntimeEffectBinding({
   node,
   trigger,
   triggerIndex,
+  frameRate,
 }) {
   const relationPath = resolveEffectGraphRelationPath(root, node.nodeIdentity);
   const ancestorNodes = relationPath
@@ -6850,6 +6899,22 @@ function createControlRuntimeEffectBinding({
       root.nodes.find(candidate => candidate.nodeIdentity === edge.from)
     )
     .filter(Boolean);
+  const activationConditions = dedupeBy(
+    [
+      ...ancestorNodes.flatMap(candidate =>
+        (candidate.activationConditions ?? []).filter(
+          condition => Number(condition.sourceConditionType) === 10
+        )
+      ),
+      ...(node.activationConditions ?? []),
+    ],
+    condition => JSON.stringify(condition)
+  );
+  const publishedTrigger = createPublishedBehaviorTrigger(trigger, {
+    includeInterval:
+      (node.directSp?.recoverType === 3 || node.kind === 'property-change') &&
+      isRepeatingBehaviorTrigger(trigger, frameRate),
+  });
   const tuningBinding = resolveTuningEffectBindingContract({
     root,
     node,
@@ -7019,8 +7084,8 @@ function createControlRuntimeEffectBinding({
     kind: node.kind,
     depth: node.depth,
     relationPath,
-    trigger,
-    activationConditions: node.activationConditions ?? [],
+    trigger: publishedTrigger,
+    activationConditions,
     propertyConditionStatus: node.propertyConditionStatus ?? null,
     sourceOrder: createBattleEffectSourceOrder({
       root,
@@ -7146,6 +7211,34 @@ function createBattleEffectSourceOrder({ root, node, trigger, triggerIndex }) {
       trigger?.sourceIdentity ?? 'trigger-unresolved',
     ].join('|'),
   };
+}
+
+function createPublishedBehaviorTrigger(
+  trigger,
+  { includeInterval = false } = {}
+) {
+  if (!trigger) return trigger;
+  const { intervalMs, ...baseTrigger } = trigger;
+  return includeInterval && Number.isInteger(intervalMs)
+    ? { ...baseTrigger, intervalMs }
+    : baseTrigger;
+}
+
+function isRepeatingBehaviorTrigger(trigger, frameRate) {
+  const frameCount = Number(trigger?.frameCount);
+  const intervalMs = Number(trigger?.intervalMs);
+  const resolvedFrameRate = Number(frameRate);
+  if (
+    !Number.isInteger(frameCount) ||
+    frameCount < 0 ||
+    !Number.isInteger(intervalMs) ||
+    intervalMs <= 0 ||
+    !(resolvedFrameRate > 0)
+  ) {
+    return false;
+  }
+  const intervalFrames = (intervalMs * resolvedFrameRate) / 1000;
+  return intervalFrames >= 1 && intervalFrames <= frameCount;
 }
 
 function resolveTuningEffectBindingContract({
@@ -9416,7 +9509,7 @@ function createControlRuntimeHits(control) {
         formula: element.formula,
         damage: element.damage,
         energy: element.energy,
-        trigger: element.trigger,
+        trigger: createPublishedBehaviorTrigger(element.trigger),
         sourceEvidenceStatus: element.sourceEvidenceStatus,
         scenarioRuntimeStatus: element.scenarioRuntimeStatus,
         conditionalGroupIdentity:
@@ -9851,6 +9944,15 @@ function createSemanticEffectCandidate({
     rawEffects,
     node.elementId
   );
+  const periodicRawTrigger = rawEffects.find(effect =>
+    Number.isInteger(effect.trigger?.intervalMs)
+  )?.trigger;
+  const semanticTrigger = periodicRawTrigger
+    ? {
+        ...trigger,
+        intervalMs: periodicRawTrigger.intervalMs,
+      }
+    : trigger;
   const verifiedTuningRuntimeBinding =
     resolveVerifiedTuningFormulaRuntimeBinding(node, rootRawEffects);
   const formulaRuntime = createSemanticFormulaRuntimeContract(node, {
@@ -9861,7 +9963,7 @@ function createSemanticEffectCandidate({
     role,
     node,
     rawEffects,
-    trigger,
+    trigger: semanticTrigger,
     target,
     formulaRuntime,
   });
@@ -9885,8 +9987,10 @@ function createSemanticEffectCandidate({
     rawEffects.find(
       effect =>
         effect.hitSettlementOrder != null &&
-        effect.sourceOrder?.contractName === 'AzPrVerifiedEffectSourceSequence' &&
-        effect.sourceOrder?.status === 'verified-battle-effect-source-order-ready'
+        effect.sourceOrder?.contractName ===
+          'AzPrVerifiedEffectSourceSequence' &&
+        effect.sourceOrder?.status ===
+          'verified-battle-effect-source-order-ready'
     ) ??
     // 回血/护盾/回能等非 hit 效果没有 hitSettlementOrder，但仍有合法的
     // sourceOrder——缺失时 semantic 效果 sourceOrder=null → 直接效果
@@ -9894,8 +9998,10 @@ function createSemanticEffectCandidate({
     // （107002 大招全体回血即因此静默丢失）。
     rawEffects.find(
       effect =>
-        effect.sourceOrder?.contractName === 'AzPrVerifiedEffectSourceSequence' &&
-        effect.sourceOrder?.status === 'verified-battle-effect-source-order-ready'
+        effect.sourceOrder?.contractName ===
+          'AzPrVerifiedEffectSourceSequence' &&
+        effect.sourceOrder?.status ===
+          'verified-battle-effect-source-order-ready'
     );
   const runtimeBoundEffect = rawEffects.find(
     effect =>
@@ -9928,7 +10034,7 @@ function createSemanticEffectCandidate({
       ].includes(edge.relation)
     ),
     relationPath,
-    trigger,
+    trigger: semanticTrigger,
     sourceOrder: settlementOrderedEffect?.sourceOrder ?? null,
     hitSettlementOrder: settlementOrderedEffect?.hitSettlementOrder ?? null,
     hitGate: runtimeBoundEffect?.hitGate ?? null,
@@ -15063,7 +15169,7 @@ function injectStackOverLimitElementFactor(source) {
   const insertion = [
     '  if (Number(input.attackerElementUp ?? 0) !== 0) {',
     '    const element = calculateElementFactor(input);',
-    "    raw = applyFactor(raw, BigInt(element.raw), 'element', trace);",
+    '    raw = applyFactor(raw, BigInt(element.raw), \'element\', trace);',
     '  }',
     marker,
   ].join('\n');

@@ -30,6 +30,9 @@ import {
 const OWNER_CHARACTER_ID = 101007;
 const FIRE_KIBO_ID = 500039;
 const FIRE_KIBO_SKILL_ID = 50003901;
+const THUNDER_CHARACTER_ID = 109001;
+const IRONMANE_KIBO_ID = 500231;
+const IRONMANE_KIBO_SKILL_ID = 50023101;
 
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -193,6 +196,42 @@ describe('verified Battle effect generation', () => {
     });
     expect(
       evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 1, entityElementalType: 128 }],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-109001',
+        targetElementId: 7,
+      })
+    ).toEqual({ matched: true, reason: null });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 1, entityElementalType: 128 }],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-107002',
+        targetElementId: 4,
+      })
+    ).toMatchObject({
+      matched: false,
+      reason: 'verified-effect-property-condition-entity-element-not-matched',
+    });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
+        conditions: [{ conditionType: 1, entityElementalType: 128 }],
+        action,
+        resolution,
+        targetKind: 'actor',
+        targetId: 'actor-unknown',
+      })
+    ).toMatchObject({
+      matched: false,
+      reason:
+        'verified-effect-property-condition-entity-element-target-unresolved',
+    });
+    expect(
+      evaluateVerifiedBattleEffectConditions({
         conditions: [
           { conditionType: 6, layerElementId: 750, minLayerCount: 1 },
         ],
@@ -214,6 +253,197 @@ describe('verified Battle effect generation', () => {
       })
     ).toEqual({ matched: true, reason: null });
   });
+
+  it('projects all verified Kibo element-limited packs and inherits the filter to their children', () => {
+    const expectedMasksByPackElementId = new Map([
+      [500025018, 128],
+      [500052042, 8],
+      [500053037, 8],
+      [500186004, 64],
+      [500187005, 64],
+      [500231005, 128],
+      [500322012, 4],
+      [500323017, 4],
+      [500324006, 4],
+      [500469085, 8],
+      [500470036, 8],
+    ]);
+    const packs =
+      verifiedCombatMechanicsPackage.battleEffectCatalog.nodes.filter(
+        node =>
+          node.kind === 'pack' &&
+          expectedMasksByPackElementId.has(Number(node.elementId))
+      );
+    expect(packs).toHaveLength(expectedMasksByPackElementId.size);
+    for (const pack of packs) {
+      expect(pack.activationConditions).toContainEqual(
+        expect.objectContaining({
+          conditionType: 1,
+          entityElementalType: expectedMasksByPackElementId.get(
+            Number(pack.elementId)
+          ),
+          sourceConditionType: 10,
+          sourceConditionTypeName: 'CheckSelfElementalType',
+        })
+      );
+      const childEffects = verifiedCombatMechanicsPackage.controlBindings
+        .flatMap(binding => binding.effects ?? [])
+        .filter(effect =>
+          (effect.relationPath ?? []).some(
+            edge => edge.from === `element:${pack.pathId}`
+          )
+        );
+      expect(childEffects.length).toBeGreaterThan(0);
+      expect(childEffects).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            activationConditions: expect.arrayContaining([
+              expect.objectContaining({
+                conditionType: 1,
+                entityElementalType: expectedMasksByPackElementId.get(
+                  Number(pack.elementId)
+                ),
+              }),
+            ]),
+          }),
+        ])
+      );
+    }
+  });
+
+  it('applies Ironmane tuning strength only to Thunder actors', () => {
+    const scenario = createIronmaneScenario();
+    const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+    const actionExecutionPlan = createActionExecutionPlan({
+      scenario,
+      actionRuleDiagnostics,
+    });
+    const generation = createVerifiedBattleEffectGeneration({
+      scenario,
+      actionExecutionPlan,
+      mechanicsPackage: verifiedCombatMechanicsPackage,
+    });
+    const tuningStrengthCommands = generation.effectCommands.filter(command =>
+      command.modifiers?.some(
+        modifier =>
+          modifier.kind === 'battle-property' && modifier.attributeId === 229
+      )
+    );
+
+    expect(tuningStrengthCommands).toHaveLength(1);
+    expect(tuningStrengthCommands[0]).toMatchObject({
+      sourceActionId: 'ironmane-signature',
+      targetKind: 'actor',
+      targetId: `actor-${THUNDER_CHARACTER_ID}`,
+      timeMs: 500,
+      durationMs: 16000,
+      modifiers: [
+        expect.objectContaining({
+          attributeId: 229,
+          bucket: 'dynamicExtra',
+        }),
+      ],
+    });
+    expect(Number(tuningStrengthCommands[0].modifiers[0].valueRaw)).toBeCloseTo(
+      72.06,
+      3
+    );
+    expect(generation.knownGaps).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'ironmane-signature',
+          reason: expect.stringMatching(/pack-element-filter|element-limited/),
+        }),
+      ])
+    );
+  });
+
+  it.each([
+    {
+      name: '雾粘蛙',
+      kiboId: 500095,
+      skillId: 50009501,
+      intervalMs: 200,
+      occurrenceCount: 5,
+    },
+    {
+      name: '雾球蛙',
+      kiboId: 500096,
+      skillId: 50009601,
+      intervalMs: 270,
+      occurrenceCount: 11,
+    },
+    {
+      name: '嘻哈蝠',
+      kiboId: 500180,
+      skillId: 50018001,
+      intervalMs: 150,
+      occurrenceCount: 8,
+    },
+  ])(
+    'refreshes $name resistance reduction at every verified interval',
+    ({ kiboId, skillId, intervalMs, occurrenceCount }) => {
+      const scenario = createPeriodicPropertyKiboScenario({
+        kiboId,
+        skillId,
+      });
+      const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
+      const actionExecutionPlan = createActionExecutionPlan({
+        scenario,
+        actionRuleDiagnostics,
+      });
+      const generation = createVerifiedBattleEffectGeneration({
+        scenario,
+        actionExecutionPlan,
+        mechanicsPackage: verifiedCombatMechanicsPackage,
+      });
+      const commands = generation.effectCommands.filter(command =>
+        command.modifiers?.some(
+          modifier =>
+            modifier.kind === 'battle-property' && modifier.attributeId === 70
+        )
+      );
+
+      expect(commands).toHaveLength(occurrenceCount);
+      expect(new Set(commands.map(command => command.id)).size).toBe(
+        occurrenceCount
+      );
+      expect(commands.map(command => command.triggerOccurrenceIndex)).toEqual(
+        Array.from({ length: occurrenceCount }, (_, index) => index)
+      );
+      expect(commands).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            targetKind: 'enemy',
+            triggerIntervalMs: intervalMs,
+            durationMs: 16000,
+          }),
+        ])
+      );
+
+      const timeline = createEffectRuntimeTimeline({
+        scenario,
+        actionExecutionPlan,
+        generatedCommands: commands,
+      });
+      const firstTimeMs = commands[0].timeMs;
+      const lastTimeMs = commands.at(-1).timeMs;
+      expect(
+        resolveActiveEffectsAt(timeline, firstTimeMs + 16001, {
+          targetKind: 'enemy',
+          targetId: scenario.enemy.id,
+          calculatorOnly: true,
+        })
+      ).toHaveLength(1);
+      expect(
+        resolveActiveEffectsAt(timeline, lastTimeMs + 16001, {
+          targetKind: 'enemy',
+          targetId: scenario.enemy.id,
+          calculatorOnly: true,
+        })
+      ).toHaveLength(0);
+    }
+  );
 
   it('generates a real kibo property lifecycle and changes later verified hits', () => {
     const scenario = createFireKiboScenario();
@@ -824,6 +1054,110 @@ function createFireKiboScenario() {
         {
           slotId: 'team-slot-3',
           kiboId: FIRE_KIBO_ID,
+          currentValue: 100,
+          maxValue: 100,
+        },
+      ],
+    },
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return compileProject(project, getWorkbenchGameData());
+}
+
+function createIronmaneScenario() {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const actorConfigs = createDefaultWorkbenchActorConfigs(
+    DEFAULT_WORKBENCH_SELECTION
+  ).map(config =>
+    Number(config.characterId) === THUNDER_CHARACTER_ID
+      ? {
+          ...config,
+          loadout: {
+            ...config.loadout,
+            kiboId: IRONMANE_KIBO_ID,
+          },
+        }
+      : config
+  );
+  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+    durationMs: 5000,
+    teamSlots,
+    actorConfigs,
+    actions: [
+      createWorkbenchActionDraft({
+        id: 'ironmane-signature',
+        type: 'kiboEvent',
+        actorCharacterId: THUNDER_CHARACTER_ID,
+        skillId: IRONMANE_KIBO_SKILL_ID,
+        kiboId: IRONMANE_KIBO_ID,
+        actionVariantIndex: 0,
+        startMs: 0,
+        durationMs: 3250,
+        eventType: 'signature',
+      }),
+    ],
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${THUNDER_CHARACTER_ID}`,
+        characterId: THUNDER_CHARACTER_ID,
+      },
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-1',
+          kiboId: IRONMANE_KIBO_ID,
+          currentValue: 100,
+          maxValue: 100,
+        },
+      ],
+    },
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
+  });
+  return compileProject(project, getWorkbenchGameData());
+}
+
+function createPeriodicPropertyKiboScenario({ kiboId, skillId }) {
+  const teamSlots = createDefaultWorkbenchTeamSlots();
+  const actorConfigs = createDefaultWorkbenchActorConfigs(
+    DEFAULT_WORKBENCH_SELECTION
+  ).map(config =>
+    Number(config.characterId) === THUNDER_CHARACTER_ID
+      ? {
+          ...config,
+          loadout: {
+            ...config.loadout,
+            kiboId,
+          },
+        }
+      : config
+  );
+  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+    durationMs: 22000,
+    teamSlots,
+    actorConfigs,
+    actions: [
+      createWorkbenchActionDraft({
+        id: `periodic-property-${kiboId}`,
+        type: 'kiboEvent',
+        actorCharacterId: THUNDER_CHARACTER_ID,
+        skillId,
+        kiboId,
+        actionVariantIndex: 0,
+        startMs: 0,
+        durationMs: 5000,
+        eventType: 'signature',
+      }),
+    ],
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${THUNDER_CHARACTER_ID}`,
+        characterId: THUNDER_CHARACTER_ID,
+      },
+      kiboEnergyBySlot: [
+        {
+          slotId: 'team-slot-1',
+          kiboId,
           currentValue: 100,
           maxValue: 100,
         },
