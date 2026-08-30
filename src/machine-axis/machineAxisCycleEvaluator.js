@@ -591,7 +591,11 @@ export function collectCycleDamageContributions(
   };
 }
 
-export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
+export function compareCycleBoundaryStates(
+  startSnapshot,
+  endSnapshot,
+  { actionIdentityById = null } = {}
+) {
   if (!isRecord(startSnapshot) || !isRecord(endSnapshot)) {
     throw new TypeError('Cycle boundary snapshots are required');
   }
@@ -727,8 +731,8 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
       // boundary starts partially cooled and ends fully cooled). Exact
       // equality is not required; only the ability to replay without a
       // tighter cooldown budget.
-      const startRows = normalize(startSnapshot);
-      const endRows = normalize(endSnapshot);
+      const startRows = normalize(startSnapshot, { actionIdentityById });
+      const endRows = normalize(endSnapshot, { actionIdentityById });
       const cooldownIdentity = row =>
         row.bindingKey != null
           ? `soul-trigger:${row.bindingKey}|${row.intervalMs ?? ''}|${row.sourceIdentityHash ?? ''}`
@@ -803,8 +807,8 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
       }
       continue;
     }
-    const startValue = normalize(startSnapshot);
-    const endValue = normalize(endSnapshot);
+    const startValue = normalize(startSnapshot, { actionIdentityById });
+    const endValue = normalize(endSnapshot, { actionIdentityById });
     const equal =
       hashCanonicalValue(startValue) === hashCanonicalValue(endValue);
     stateDiffs.push({ dimension, equal, start: startValue, end: endValue });
@@ -837,9 +841,22 @@ export function createCycleReplayStabilityProof({
   damageStabilityMode = 'exact-consecutive-cycle-damage',
   tolerance = VALUE_TOLERANCE,
 } = {}) {
+  const secondClosureIssues = secondClosure?.issues ?? [];
+  // start -> firstEnd is the formal boundary proof because both snapshots
+  // have one complete semantic cycle of lookahead in the doubled replay.
+  // secondEnd is the terminal replay horizon: pending expiries that a third
+  // cycle would consume or refresh are still useful diagnostics, but they are
+  // not an asymmetric reason to reject an otherwise closed loop. Other state
+  // regressions at secondEnd remain blocking as an extra safety check.
+  const terminalHorizonIssues = secondClosureIssues.filter(
+    issue => issue?.path === 'state.pendingEvents'
+  );
+  const secondClosureBlockingIssues = secondClosureIssues.filter(
+    issue => issue?.path !== 'state.pendingEvents'
+  );
   const issues = [
     ...(firstClosure?.issues ?? []),
-    ...(secondClosure?.issues ?? []),
+    ...secondClosureBlockingIssues,
     ...(secondExecution?.issues ?? []),
   ];
   const firstHpDamage = finiteNumberOrNull(firstCycle?.hpDamage) ?? 0;
@@ -868,6 +885,8 @@ export function createCycleReplayStabilityProof({
   return {
     stable: deduped.length === 0,
     issues: deduped,
+    closurePolicy: 'start-to-first-end-semantic-state-v1',
+    secondClosureRequired: false,
     damageStabilityMode,
     randomDamageVariation: {
       independentlySampledCycleDamageMayDiffer:
@@ -877,6 +896,14 @@ export function createCycleReplayStabilityProof({
     damageStable: Math.abs(firstHpDamage - secondHpDamage) <= tolerance,
     firstClosure: firstClosure ?? null,
     secondClosure: secondClosure ?? null,
+    secondClosureDiagnostic: {
+      diagnosticOnly: true,
+      terminalHorizonLimited: true,
+      closed: secondClosure?.closed === true,
+      ignoredIssueCount: terminalHorizonIssues.length,
+      issues: terminalHorizonIssues,
+      blockingIssues: secondClosureBlockingIssues,
+    },
     secondExecution: secondExecution ?? null,
     cycles: [
       {
@@ -1089,6 +1116,11 @@ function evaluateCycleSample({
     replayPrepared.run,
     replayPrepared.compilation.actionResolutions
   );
+  const cyclePhaseActions = createCyclePhaseActionIdentityMap({
+    actionResolutions: replayPrepared.compilation.actionResolutions,
+    loop: envelope.loop,
+    durationFrames: loopPlan.durationFrames,
+  });
   const secondEndFrame = envelope.loop.endFrame + loopPlan.durationFrames;
   let startSnapshot;
   let firstEndSnapshot;
@@ -1158,11 +1190,13 @@ function evaluateCycleSample({
   );
   const firstClosure = compareCycleBoundaryStates(
     startSnapshot,
-    firstEndSnapshot
+    firstEndSnapshot,
+    cyclePhaseActions
   );
   const secondClosure = compareCycleBoundaryStates(
     firstEndSnapshot,
-    secondEndSnapshot
+    secondEndSnapshot,
+    cyclePhaseActions
   );
   const secondExecution = createSecondCycleExecutionProof({
     trace: replayPrepared.run.trace,
@@ -1251,7 +1285,132 @@ function evaluateCycleSample({
       warmupActionIds: loopPlan.warmupActionIds,
       replayHorizonFrame: loopPlan.replayHorizonFrame,
       commonRandomRollCount: commonRandomPlan?.rollCount ?? 0,
+      cyclePhaseActionIdentity: cyclePhaseActions.proof,
     },
+  };
+}
+
+export function createCyclePhaseActionIdentityMap({
+  actionResolutions = [],
+  loop = null,
+  durationFrames = null,
+} = {}) {
+  const startFrame = integerOrNull(loop?.startFrame);
+  const requestedDuration = integerOrNull(durationFrames);
+  const resolvedDuration =
+    requestedDuration != null && requestedDuration > 0
+      ? requestedDuration
+      : startFrame == null || integerOrNull(loop?.endFrame) == null
+        ? null
+        : integerOrNull(loop.endFrame) - startFrame;
+  const actionIdentityById = new Map();
+  if (startFrame == null || !(resolvedDuration > 0)) {
+    return {
+      actionIdentityById,
+      proof: {
+        policy: 'cycle-phase-semantic-action-bijection-v1',
+        mappedActionCount: 0,
+        mappedPhaseCount: 0,
+        ambiguousPhaseCount: 0,
+      },
+    };
+  }
+
+  const groups = new Map();
+  for (const resolution of actionResolutions ?? []) {
+    const actionId = textOrNull(resolution?.actionId);
+    const actionStartFrame = integerOrNull(resolution?.startFrame);
+    if (!actionId || actionStartFrame == null) continue;
+    const phaseFrame = positiveModulo(
+      actionStartFrame - startFrame,
+      resolvedDuration
+    );
+    const cycleIndex = Math.floor(
+      (actionStartFrame - startFrame) / resolvedDuration
+    );
+    const semanticHash = hashCanonicalValue(
+      createCycleActionSemanticSignature(resolution)
+    );
+    const groupKey = `${phaseFrame}|${semanticHash}`;
+    const group = groups.get(groupKey) ?? {
+      phaseFrame,
+      semanticHash,
+      rows: [],
+    };
+    group.rows.push({ actionId, cycleIndex });
+    groups.set(groupKey, group);
+  }
+
+  let mappedPhaseCount = 0;
+  let ambiguousPhaseCount = 0;
+  for (const group of groups.values()) {
+    const byCycle = new Map();
+    for (const row of group.rows) {
+      const bucket = byCycle.get(row.cycleIndex) ?? [];
+      bucket.push(row);
+      byCycle.set(row.cycleIndex, bucket);
+    }
+    const ambiguous = [...byCycle.values()].some(bucket => bucket.length !== 1);
+    const loopRepresentativeCount = byCycle.get(0)?.length ?? 0;
+    if (ambiguous || loopRepresentativeCount !== 1 || group.rows.length < 2) {
+      if (ambiguous) ambiguousPhaseCount += 1;
+      continue;
+    }
+    const canonicalIdentity = `cycle-phase:${group.phaseFrame}:${group.semanticHash}`;
+    for (const row of group.rows) {
+      actionIdentityById.set(row.actionId, canonicalIdentity);
+    }
+    mappedPhaseCount += 1;
+  }
+
+  return {
+    actionIdentityById,
+    proof: {
+      policy: 'cycle-phase-semantic-action-bijection-v1',
+      mappedActionCount: actionIdentityById.size,
+      mappedPhaseCount,
+      ambiguousPhaseCount,
+    },
+  };
+}
+
+function createCycleActionSemanticSignature(resolution) {
+  const actualNormalInput = resolution?.normalAttackInputResolution?.actual;
+  return {
+    intentKind: resolution?.intentKind ?? null,
+    ownerKind: resolution?.ownerKind ?? null,
+    ownerSlotId: resolution?.ownerSlotId ?? null,
+    ownerId: resolution?.ownerId ?? null,
+    sourceSlotId: resolution?.sourceSlotId ?? null,
+    targetSlotId: resolution?.targetSlotId ?? null,
+    targetCharacterId: resolution?.targetCharacterId ?? null,
+    kiboId: resolution?.kiboId ?? null,
+    publicActionId: resolution?.publicActionId ?? null,
+    actionKind: resolution?.actionKind ?? null,
+    publicVariantIndex: integerOrNull(resolution?.publicVariantIndex),
+    level: integerOrNull(resolution?.level),
+    durationFrames: integerOrNull(resolution?.durationFrames),
+    mappingIdentity: resolution?.mappingIdentity ?? null,
+    sourceEvidenceStatus: resolution?.sourceEvidenceStatus ?? null,
+    scenarioRuntimeStatus: resolution?.scenarioRuntimeStatus ?? null,
+    resolvedControlSkillId: integerOrNull(resolution?.resolvedControlSkillId),
+    resolvedSubSkillIndex: integerOrNull(resolution?.resolvedSubSkillIndex),
+    variantResolutionStatus: resolution?.variantResolutionStatus ?? null,
+    semanticVariant: resolution?.semanticVariant ?? null,
+    availableHitIdentities: [
+      ...(resolution?.availableHitIdentities ?? []),
+    ].sort(),
+    actualNormalInput: actualNormalInput
+      ? {
+          sequenceIndex: integerOrNull(actualNormalInput.sequenceIndex),
+          controlSkillId: integerOrNull(actualNormalInput.controlSkillId),
+          subSkillIndex: integerOrNull(actualNormalInput.subSkillIndex),
+          chainIdentity: actualNormalInput.chainIdentity ?? null,
+          semanticName: actualNormalInput.semanticName ?? null,
+          sourceKind: actualNormalInput.sourceKind ?? null,
+          sourceIdentity: actualNormalInput.sourceIdentity ?? null,
+        }
+      : null,
   };
 }
 
@@ -2696,7 +2855,10 @@ function normalizeCooldownState(snapshot) {
     .sort(compareCanonicalRows);
 }
 
-function normalizeChargeCooldownState(snapshot) {
+function normalizeChargeCooldownState(
+  snapshot,
+  { actionIdentityById = null } = {}
+) {
   return (snapshot.chargeCooldowns ?? [])
     .map(row => ({
       runtimeOwnerIdentity: row.runtimeOwnerIdentity ?? null,
@@ -2712,14 +2874,16 @@ function normalizeChargeCooldownState(snapshot) {
           : 0,
       sharedTimerRunning: row.sharedTimerRunning === true,
       lastSettlementIdentity: normalizeCycleLocalCooldownIdentity(
-        row.lastSettlementIdentity
+        row.lastSettlementIdentity,
+        actionIdentityById
       ),
       lastCooldownReductionTransactionId: normalizeCycleLocalCooldownIdentity(
-        row.lastCooldownReductionTransactionId
+        row.lastCooldownReductionTransactionId,
+        actionIdentityById
       ),
       missingChargeSourceActionIds: [
         ...(row.missingChargeSourceActionIds ?? []),
-      ].map(normalizeCycleLocalCooldownIdentity),
+      ].map(value => normalizeCycleActionReference(value, actionIdentityById)),
     }))
     .filter(row => row.sharedTimerRunning === true && row.remainingFrames > 0)
     .sort(compareCanonicalRows);
@@ -2778,15 +2942,42 @@ function projectChargeCooldownStateToBoundary({ row, elapsedMs }) {
   };
 }
 
-function normalizeCycleLocalCooldownIdentity(value) {
-  return value == null ? null : String(value).replace(/cycle-\d+:/g, '');
+function normalizeCycleLocalCooldownIdentity(value, actionIdentityById = null) {
+  if (value == null) return null;
+  return String(value)
+    .split('|')
+    .map(token => normalizeCycleActionReference(token, actionIdentityById))
+    .join('|');
 }
 
-function normalizeEffectState(snapshot) {
+function normalizeCycleActionReference(value, actionIdentityById = null) {
+  if (value == null) return null;
+  const identity = String(value);
+  const mapped = actionIdentityById?.get?.(identity);
+  if (mapped) return mapped;
+  return identity.replace(/^cycle-\d+:/, '');
+}
+
+function normalizeCycleActionScopedIdentity(value, actionIdentityById = null) {
+  if (value == null) return null;
+  const identity = String(value);
+  const sourceMarker = '|source:';
+  const sourceIndex = identity.lastIndexOf(sourceMarker);
+  if (sourceIndex < 0) {
+    return normalizeCycleActionReference(identity, actionIdentityById);
+  }
+  const sourceActionId = identity.slice(sourceIndex + sourceMarker.length);
+  return `${identity.slice(0, sourceIndex + sourceMarker.length)}${normalizeCycleActionReference(sourceActionId, actionIdentityById)}`;
+}
+
+function normalizeEffectState(snapshot, { actionIdentityById = null } = {}) {
   const timeMs = Number(snapshot.timeMs) || 0;
   return (snapshot.effects ?? [])
     .map(row => ({
-      effectId: row.effectId ?? null,
+      effectId: normalizeCycleActionScopedIdentity(
+        row.effectId,
+        actionIdentityById
+      ),
       ownerId: row.ownerId ?? null,
       targetKind: row.targetKind ?? null,
       targetId: row.targetId ?? null,
@@ -2975,12 +3166,19 @@ function normalizeShieldState(snapshot) {
   return rows.sort(compareCanonicalRows);
 }
 
-function normalizePendingState(snapshot) {
+function normalizePendingState(snapshot, { actionIdentityById = null } = {}) {
   const currentFrame = Number(snapshot.currentFrame) || 0;
   return (snapshot.pendingEvents ?? [])
     .map(row => ({
       kind: row.kind ?? null,
-      identity: row.identity ?? null,
+      actionIdentity: normalizeCycleActionReference(
+        row.actionId,
+        actionIdentityById
+      ),
+      identity: normalizeCycleActionScopedIdentity(
+        row.identity,
+        actionIdentityById
+      ),
       phase: row.phase ?? null,
       relativeFrame: Math.max(0, Number(row.frame) - currentFrame),
     }))
@@ -3103,6 +3301,11 @@ function integerOrNull(value) {
   if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) ? number : null;
+}
+
+function positiveModulo(value, divisor) {
+  const remainder = Number(value) % Number(divisor);
+  return remainder < 0 ? remainder + Number(divisor) : remainder;
 }
 
 function textOrNull(value) {

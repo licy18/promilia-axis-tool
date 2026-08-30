@@ -6,6 +6,7 @@ import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombat
 import {
   collectCycleDamageContributions,
   compareCycleBoundaryStates,
+  createCyclePhaseActionIdentityMap,
   createCycleReplayStabilityProof,
   validateMachineAxisCycleEnvelope,
 } from '../../machine-axis/machineAxisCycleEvaluator';
@@ -1519,6 +1520,134 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         createBoundary({ actionId: 'different-star-cast' })
       ).closed
     ).toBe(false);
+
+    const previousCycle = createBoundary({
+      actionId: 'l1-moyin-star-2',
+      ultimateId: 'w0-moyin-ultimate',
+    });
+    const currentCycle = createBoundary({
+      actionId: 'l2-moyin-star-2',
+      ultimateId: 'l1-moyin-ultimate',
+    });
+    const actionIdentityById = new Map([
+      ['l1-moyin-star-2', 'cycle-phase:star-2'],
+      ['l2-moyin-star-2', 'cycle-phase:star-2'],
+      ['w0-moyin-ultimate', 'cycle-phase:ultimate'],
+      ['l1-moyin-ultimate', 'cycle-phase:ultimate'],
+    ]);
+    expect(
+      compareCycleBoundaryStates(previousCycle, currentCycle, {
+        actionIdentityById,
+      })
+    ).toMatchObject({
+      closed: true,
+      stateDiffs: expect.arrayContaining([
+        expect.objectContaining({
+          dimension: 'chargeCooldowns',
+          equal: true,
+        }),
+      ]),
+    });
+  });
+
+  it('derives a strict cycle-phase action bijection from relative frame and resolved semantics', () => {
+    const createResolution = (
+      actionId,
+      startFrame,
+      publicActionId = 10900112
+    ) => ({
+      actionId,
+      startFrame,
+      intentKind: 'public-action',
+      ownerKind: 'actor',
+      ownerSlotId: 'm12c-slot:109001',
+      ownerId: 109001,
+      publicActionId,
+      actionKind: 'star-skill',
+      publicVariantIndex: 0,
+      level: 1,
+      durationFrames: 60,
+      mappingIdentity: `actor|109001|${publicActionId}|0|${publicActionId}|star-skill`,
+      resolvedControlSkillId: publicActionId,
+      resolvedSubSkillIndex: 0,
+      variantResolutionStatus: 'verified-action-variant-selection-ready',
+      availableHitIdentities: [`${publicActionId}|hit`],
+    });
+    const result = createCyclePhaseActionIdentityMap({
+      loop: { startFrame: 100, endFrame: 160 },
+      durationFrames: 60,
+      actionResolutions: [
+        createResolution('warmup-star', 90),
+        createResolution('loop-star', 150),
+        createResolution('replay-star', 210),
+        createResolution('different-star', 210, 10900113),
+      ],
+    });
+
+    expect(result.proof).toMatchObject({
+      policy: 'cycle-phase-semantic-action-bijection-v1',
+      mappedActionCount: 3,
+      mappedPhaseCount: 1,
+      ambiguousPhaseCount: 0,
+    });
+    expect(result.actionIdentityById.get('warmup-star')).toBe(
+      result.actionIdentityById.get('loop-star')
+    );
+    expect(result.actionIdentityById.get('loop-star')).toBe(
+      result.actionIdentityById.get('replay-star')
+    );
+    expect(result.actionIdentityById.has('different-star')).toBe(false);
+  });
+
+  it('normalizes action-scoped effects and delayed events only through the proven phase map', () => {
+    const createBoundary = actionId => ({
+      activeActorId: 'actor-108003',
+      currentFrame: 100,
+      actors: [],
+      kibos: [],
+      tuningMarks: [],
+      specialResources: [],
+      cooldowns: [],
+      chargeCooldowns: [],
+      effects: [
+        {
+          effectId: `battle-element:108003143|source:${actionId}`,
+          targetKind: 'actor',
+          targetId: 'actor-109001',
+          stacks: 1,
+          remainingFrames: 120,
+          sourceIdentityHash: 'same-mechanism-source',
+          modifiers: [],
+        },
+      ],
+      pendingEvents: [
+        {
+          kind: 'effect',
+          actionId,
+          identity: `battle-element:108003143|source:${actionId}`,
+          frame: 220,
+        },
+      ],
+    });
+    const actionIdentityById = new Map([
+      ['l1-miti-star', 'cycle-phase:miti-star'],
+      ['l2-miti-star', 'cycle-phase:miti-star'],
+    ]);
+
+    expect(
+      compareCycleBoundaryStates(
+        createBoundary('l1-miti-star'),
+        createBoundary('l2-miti-star'),
+        { actionIdentityById }
+      )
+    ).toMatchObject({ closed: true });
+    expect(
+      compareCycleBoundaryStates(
+        createBoundary('l1-miti-star'),
+        createBoundary('different-miti-star'),
+        { actionIdentityById }
+      ).closed
+    ).toBe(false);
   });
 
   it('compares Kibo passive internal cooldowns by relative remaining time', () => {
@@ -1789,6 +1918,59 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         secondHpDamage: 100,
       })
     );
+  });
+
+  it('keeps terminal second-end closure diagnostic when the first boundary is closed', () => {
+    const terminalPendingIssue = {
+      code: 'machine-axis-cycle-state-not-closed',
+      path: 'state.pendingEvents',
+      message: 'terminal replay horizon has no following cycle',
+    };
+    const proof = createCycleReplayStabilityProof({
+      firstCycle: { hpDamage: 100, combatHitCount: 2 },
+      secondCycle: { hpDamage: 100, combatHitCount: 2 },
+      firstClosure: { closed: true, issues: [] },
+      secondClosure: { closed: false, issues: [terminalPendingIssue] },
+      secondExecution: { runnable: true, issues: [] },
+    });
+
+    expect(proof).toMatchObject({
+      stable: true,
+      issues: [],
+      closurePolicy: 'start-to-first-end-semantic-state-v1',
+      secondClosureRequired: false,
+      secondClosureDiagnostic: {
+        diagnosticOnly: true,
+        terminalHorizonLimited: true,
+        closed: false,
+        ignoredIssueCount: 1,
+        issues: [terminalPendingIssue],
+        blockingIssues: [],
+      },
+    });
+  });
+
+  it('keeps non-terminal second-cycle state regressions blocking', () => {
+    const cooldownRegression = {
+      code: 'machine-axis-cycle-state-not-closed',
+      path: 'state.chargeCooldowns',
+      message: 'charge cooldown regressed in the second cycle',
+    };
+    const proof = createCycleReplayStabilityProof({
+      firstCycle: { hpDamage: 100, combatHitCount: 2 },
+      secondCycle: { hpDamage: 100, combatHitCount: 2 },
+      firstClosure: { closed: true, issues: [] },
+      secondClosure: { closed: false, issues: [cooldownRegression] },
+      secondExecution: { runnable: true, issues: [] },
+    });
+
+    expect(proof.stable).toBe(false);
+    expect(proof.issues).toContainEqual(cooldownRegression);
+    expect(proof.secondClosureDiagnostic).toMatchObject({
+      ignoredIssueCount: 0,
+      issues: [],
+      blockingIssues: [cooldownRegression],
+    });
   });
 
   it('rejects a real one-time warmup Buff that expires before the next cycle', () => {
