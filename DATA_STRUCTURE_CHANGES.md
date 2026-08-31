@@ -27925,11 +27925,26 @@ Damage runtime/canonical projection 同步补充 `elementalType/sourceKiboId/pas
 
 能量利用率口径为 `spent / (scopeStart + appliedRecovery)`；由于满能状态下未发生的理论回复不进入 runtime event，本投影不伪造 overflow 数值，而独立输出 time-weighted `capUptimeRatio`。印记利用率同时保留消费率、自然衰减浪费率和时间覆盖率，避免把依赖持有收益但不消费的轴误判为零利用。Cycle 使用 `[loop.start, loop.end)`，kill 使用首个 lethal runtime cursor inclusive，保证诊断窗口与评分窗口一致。
 
-## 462. Cycle normal-input closure by semantic replay
+## 462. Cycle eventual-periodic operation and metric closure
 
-Cycle 的无限可持续性仍要求角色/奇波 SP、生命、CD/充能、效果、印记、特殊资源、敌人状态、护盾与 pending event 等持久状态闭合；这些维度不能仅凭两轮暂时可执行而省略，否则满资源起步但每轮净亏的轴可能在后续循环耗尽。
+Cycle 输入仍是显式半开区间 `[startFrame,endFrame)`，但边界不再被解释为“每圈 Buff、DoT、韧性和伤害必须完全相等”的人工干净相位。`machineAxisCycleEvaluator` 将同一输入按固定相对帧自适应重放 4/8/12 圈，最多允许 32 圈；动作可跨输入区间边界，只要后续重复调度没有真实 occupancy/readiness 冲突。
 
-普通攻击输入相位不再作为独立的静态边界同一性条件。`idle` 与末段 `reopen-window` 可能都把循环首个左击唯一解析为同一 A1；按 phase label、来源和窗口剩余帧直接判不闭合会在真实 replay 前错误拒绝稳定轴。现在由 doubled semantic replay 负责普通攻击闭合：第二循环必须完整可执行，normal-input authority proof 必须通过，每个 replay action 必须解析为与第一循环相同的 executable form，且连续两轮伤害稳定。A5 reopen→A1 因而可在 reopen 左边界直接闭环；A1→跨边界 A2 之类形态漂移仍以 `machine-axis-cycle-action-form-not-closed` fail closed。
+输出新增 `stabilization`，每个 seed 记录：
+
+```text
+policy = eventual-periodic-operation-and-metrics-v1
+replayCount
+operationPeriod
+resourcePeriod
+metricPeriod
+scoreStatePeriod
+```
+
+`operationPeriod` 要求所有重复输入实际执行且解析为同一 public/control/subskill/normal-input form；`resourcePeriod` 独立检查角色 SP、奇波能量和特殊资源在稳定周期中不净亏；`metricPeriod` 记录自动剔除的 `transientCycleCount`、周期圈数、逐相位伤害及平均伤害；`scoreStatePeriod` 对会影响后续结算的语义状态做周期确认，避免仅凭连续几个相同数字忽略延迟事件。任一动作在第 N 圈因 CD、SP、占用、普攻链或形态变化失效都会 fail closed。
+
+正式 `metrics.loopHpDamage`、`cycleDps`、贡献与 `optimizationDiagnostics` 改为稳定周期的每圈平均值。伤害/治疗/命中/回能/印记等可加量除以周期圈数；伤害占比、能量利用率、印记消费率/覆盖率等比例保留由完整稳定周期总量计算的加权结果，不对逐圈百分比做算术平均。`observedCycles[]` 保留全部探测圈，`steadyCycle` 保存正式每圈平均，旧 `firstCycle/secondCycle` 继续作为稳定期代表圈兼容诊断消费者。
+
+普通攻击 phase label 仍不单独充当边界门；`idle` 与 `reopen-window` 只要在所有稳定圈把同一左击解析为相同实际形态即可。A1→跨边界解析成 A2 或后续圈 cooldown/resource 失败继续拒绝。一次性暖机 Buff 只计入 `observedCycles` transient，不再抬高正式循环分数；双圈交替伤害按完整周期平均。
 
 ## 463. Switch-exit projectile materialization lineage
 

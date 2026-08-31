@@ -21,7 +21,12 @@ import { createMachineAxisActionLegalityProof } from './machineAxisActionLegalit
 import {
   aggregateMachineAxisOptimizationDiagnostics,
   createMachineAxisOptimizationDiagnostics,
+  normalizeMachineAxisOptimizationDiagnosticsPerCycle,
 } from './machineAxisOptimizationDiagnostics';
+import {
+  MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+  findEventualPeriodicSequenceCandidates,
+} from './machineAxisCyclePeriod';
 import {
   MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
   createMachineAxisObjectiveContract,
@@ -51,6 +56,11 @@ const SUPPORTED_CRITICAL_POLICIES = new Set([
 const VALUE_TOLERANCE = 1e-8;
 const TUNING_MARK_FRAME_TOLERANCE = 1;
 const CYCLE_SAMPLE_QUANTILES = [0.05, 0.25, 0.5, 0.75, 0.95];
+const DEFAULT_MAX_REPLAY_CYCLES = 12;
+const DEFAULT_MAX_PERIOD_CYCLES = 4;
+const DEFAULT_MINIMUM_PERIOD_REPEATS = 3;
+const MIN_REPLAY_CYCLES = 4;
+const MAX_REPLAY_CYCLES = 32;
 
 export function normalizeMachineAxisCycleEnvelope(value = {}) {
   const source = isRecord(value) ? value : {};
@@ -74,6 +84,15 @@ export function normalizeMachineAxisCycleEnvelope(value = {}) {
         textOrNull(options.objective) ?? MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
       criticalPolicy: textOrNull(options.criticalPolicy) ?? 'expected',
       seeds: normalizeSeeds(options.seeds),
+      maxReplayCycles:
+        positiveIntegerOrNull(options.maxReplayCycles) ??
+        DEFAULT_MAX_REPLAY_CYCLES,
+      maxPeriodCycles:
+        positiveIntegerOrNull(options.maxPeriodCycles) ??
+        DEFAULT_MAX_PERIOD_CYCLES,
+      minimumPeriodRepeats:
+        positiveIntegerOrNull(options.minimumPeriodRepeats) ??
+        DEFAULT_MINIMUM_PERIOD_REPEATS,
     },
     metadata: isRecord(source.metadata) ? structuredClone(source.metadata) : {},
   };
@@ -233,7 +252,16 @@ export function validateMachineAxisCycleEnvelope(value = {}) {
   }
   if (isRecord(source.options)) {
     for (const key of Object.keys(source.options)) {
-      if (!['objective', 'criticalPolicy', 'seeds'].includes(key)) {
+      if (
+        ![
+          'objective',
+          'criticalPolicy',
+          'seeds',
+          'maxReplayCycles',
+          'maxPeriodCycles',
+          'minimumPeriodRepeats',
+        ].includes(key)
+      ) {
         issues.push(
           cycleIssue(
             'machine-axis-cycle-additional-property',
@@ -242,6 +270,53 @@ export function validateMachineAxisCycleEnvelope(value = {}) {
           )
         );
       }
+    }
+    validateCyclePeriodOption({
+      issues,
+      options: source.options,
+      key: 'maxReplayCycles',
+      minimum: MIN_REPLAY_CYCLES,
+      maximum: MAX_REPLAY_CYCLES,
+      fallback: DEFAULT_MAX_REPLAY_CYCLES,
+    });
+    validateCyclePeriodOption({
+      issues,
+      options: source.options,
+      key: 'maxPeriodCycles',
+      minimum: 1,
+      maximum: 8,
+      fallback: DEFAULT_MAX_PERIOD_CYCLES,
+    });
+    validateCyclePeriodOption({
+      issues,
+      options: source.options,
+      key: 'minimumPeriodRepeats',
+      minimum: 2,
+      maximum: 4,
+      fallback: DEFAULT_MINIMUM_PERIOD_REPEATS,
+    });
+    const maxReplayCycles =
+      positiveIntegerOrNull(source.options.maxReplayCycles) ??
+      DEFAULT_MAX_REPLAY_CYCLES;
+    const maxPeriodCycles =
+      positiveIntegerOrNull(source.options.maxPeriodCycles) ??
+      DEFAULT_MAX_PERIOD_CYCLES;
+    const minimumPeriodRepeats =
+      positiveIntegerOrNull(source.options.minimumPeriodRepeats) ??
+      DEFAULT_MINIMUM_PERIOD_REPEATS;
+    if (maxReplayCycles < maxPeriodCycles * minimumPeriodRepeats) {
+      issues.push(
+        cycleIssue(
+          'machine-axis-cycle-period-budget-insufficient',
+          'options.maxReplayCycles',
+          'maxReplayCycles must cover maxPeriodCycles × minimumPeriodRepeats',
+          {
+            maxReplayCycles,
+            maxPeriodCycles,
+            minimumPeriodRepeats,
+          }
+        )
+      );
     }
     if (
       source.options.seeds != null &&
@@ -922,6 +997,369 @@ export function createCycleReplayStabilityProof({
   };
 }
 
+export function createCycleMetricSignature(cycle = {}) {
+  const contributionRows = key =>
+    (cycle[key] ?? []).map(row => ({
+      identity: row.identity ?? null,
+      hpDamage: roundMetric(row.hpDamage),
+      combatHitCount: Number(row.combatHitCount) || 0,
+    }));
+  return {
+    hpDamage: roundMetric(cycle.hpDamage),
+    combatHitCount: Number(cycle.combatHitCount) || 0,
+    healing: {
+      requestedHealing: roundMetric(cycle.healing?.requestedHealing),
+      effectiveHealing: roundMetric(cycle.healing?.effectiveHealing),
+      overhealing: roundMetric(cycle.healing?.overhealing),
+      settlementCount: Number(cycle.healing?.settlementCount) || 0,
+    },
+    byActor: contributionRows('byActor'),
+    byAction: contributionRows('byAction'),
+    byHit: contributionRows('byHit'),
+    enemySettlement: (cycle.enemySettlementPackets ?? []).map(packet => ({
+      actionId: packet.actionId ?? null,
+      actorId: packet.actorId ?? null,
+      hitIdentity: packet.hitIdentity ?? null,
+      effectiveHpDamage: roundMetric(packet.effectiveHpDamage),
+      toughnessDamage: roundMetric(packet.toughnessDamage),
+      inBreakForHpDamage: packet.inBreakForHpDamage === true,
+      hpDamageMultiplier: roundMetric(packet.hpDamageMultiplier),
+      breakTriggered: packet.breakTriggered === true,
+    })),
+    enemyStateTransitions: (cycle.enemyStateTransitions ?? []).map(event => ({
+      stateEventKind: event.stateEventKind ?? null,
+      toughnessDamage: roundMetric(event.toughnessDamage),
+      weaknessResult: event.weaknessResult ?? null,
+    })),
+  };
+}
+
+export function createCycleBoundarySemanticProjection(
+  snapshot,
+  { actionIdentityById = null, mode = 'score' } = {}
+) {
+  if (!isRecord(snapshot)) {
+    throw new TypeError('Cycle boundary snapshot is required');
+  }
+  const stripSourceHash = rows =>
+    rows.map(row => {
+      const value = { ...row };
+      delete value.sourceIdentityHash;
+      return value;
+    });
+  const resources = {
+    actors: (snapshot.actors ?? []).map(row => ({
+      actorId: row.actorId ?? null,
+      max: roundMetric(row.max),
+    })),
+    kibos: (snapshot.kibos ?? []).map(row => ({
+      actorId: row.actorId ?? null,
+      kiboId: row.kiboId ?? null,
+      max: roundMetric(row.max),
+    })),
+    specialResources: (snapshot.specialResources ?? []).map(row => ({
+      actorId: row.actorId ?? null,
+      resourceIdentity: row.resourceIdentity ?? null,
+      currentValue: roundMetric(row.currentValue),
+      maxValue: roundMetric(row.maxValue),
+      activeStates: (row.activeStates ?? []).map(state => ({
+        stateElementId: state.stateElementId ?? state.elementId ?? null,
+        remainingFrames: integerOrNull(state.remainingFrames),
+      })),
+    })),
+  };
+  const execution = {
+    activeActorId: snapshot.activeActorId ?? null,
+    resources,
+    cooldowns: normalizeCooldownState(snapshot),
+    chargeCooldowns: normalizeChargeCooldownState(snapshot, {
+      actionIdentityById,
+    }).map(row => {
+      const value = { ...row };
+      delete value.lastCooldownReductionTransactionId;
+      return value;
+    }),
+    soulTriggerIntervals: stripSourceHash(
+      normalizeSoulTriggerIntervalState(snapshot)
+    ),
+    soulTriggerCounters: stripSourceHash(
+      normalizeSoulTriggerCounterState(snapshot)
+    ),
+    soulPeriodicRoots: stripSourceHash(
+      normalizeSoulPeriodicRootState(snapshot)
+    ),
+    kiboPassiveRuntime: stripSourceHash(
+      normalizeKiboPassiveRuntimeState(snapshot)
+    ),
+    actorVitals: structuredClone(snapshot.actorVitals ?? []),
+    kiboVitals: structuredClone(snapshot.kiboVitals ?? []),
+    pendingReadinessEvents: normalizePendingState(snapshot, {
+      actionIdentityById,
+    }).filter(row =>
+      [
+        'special-resource',
+        'variant-resource',
+        'variant-state',
+        'cooldown-reduction',
+      ].includes(row.kind)
+    ),
+  };
+  if (mode === 'execution') return execution;
+  return {
+    ...execution,
+    tuningMarks: (snapshot.tuningMarks ?? [])
+      .map(normalizeTuningMarkLifecycleRow)
+      .sort(compareCanonicalRows),
+    effects: stripSourceHash(
+      normalizeEffectState(snapshot, { actionIdentityById })
+    ),
+    targetStates: normalizeTargetState(snapshot).map(row => ({
+      ...row,
+      layers: row.layers.map(layer => {
+        const value = { ...layer };
+        delete value.sourceIdentityHash;
+        return value;
+      }),
+    })),
+    specialStates: stripSourceHash(normalizeSpecialState(snapshot)),
+    enemy: normalizeEnemyBoundaryState(snapshot),
+    shields: normalizeShieldState(snapshot),
+    pendingEvents: normalizePendingState(snapshot, { actionIdentityById }),
+  };
+}
+
+function createBoundaryResourcePeriodProof({ snapshots, candidate }) {
+  const boundaryCycleIndexes = Array.from(
+    { length: candidate.minimumRepeats + 1 },
+    (_, repeatIndex) =>
+      candidate.transientCycleCount + candidate.periodCycles * repeatIndex
+  );
+  const comparisons = [];
+  const issues = [];
+  for (let index = 0; index < boundaryCycleIndexes.length - 1; index += 1) {
+    const startCycleIndex = boundaryCycleIndexes[index];
+    const endCycleIndex = boundaryCycleIndexes[index + 1];
+    const start = snapshots.get(startCycleIndex);
+    const end = snapshots.get(endCycleIndex);
+    const dimensions = [
+      {
+        dimension: 'actor-sp',
+        startRows: start?.actors,
+        endRows: end?.actors,
+        identity: row => `actor:${stripActorPrefix(row.actorId)}:sp`,
+        value: row => row.sp,
+      },
+      {
+        dimension: 'kibo-energy',
+        startRows: start?.kibos,
+        endRows: end?.kibos,
+        identity: row =>
+          `kibo:${String(row.actorId ?? '')}:${String(row.kiboId ?? '')}:sp`,
+        value: row => row.energy,
+      },
+      {
+        dimension: 'special-resource',
+        startRows: start?.specialResources,
+        endRows: end?.specialResources,
+        identity: row => String(row.resourceIdentity ?? ''),
+        value: row => row.currentValue,
+      },
+    ];
+    for (const dimension of dimensions) {
+      const startValues = new Map(
+        (dimension.startRows ?? []).map(row => [
+          dimension.identity(row),
+          finiteNumberOrNull(dimension.value(row)) ?? 0,
+        ])
+      );
+      const endValues = new Map(
+        (dimension.endRows ?? []).map(row => [
+          dimension.identity(row),
+          finiteNumberOrNull(dimension.value(row)) ?? 0,
+        ])
+      );
+      for (const resourceIdentity of new Set([
+        ...startValues.keys(),
+        ...endValues.keys(),
+      ])) {
+        if (!resourceIdentity) continue;
+        const startValue = startValues.get(resourceIdentity) ?? 0;
+        const endValue = endValues.get(resourceIdentity) ?? 0;
+        const delta = roundMetric(endValue - startValue);
+        const sustainable = endValue + VALUE_TOLERANCE >= startValue;
+        const row = {
+          startCycleIndex,
+          endCycleIndex,
+          dimension: dimension.dimension,
+          resourceIdentity,
+          startValue,
+          endValue,
+          delta,
+          sustainable,
+        };
+        comparisons.push(row);
+        if (!sustainable) {
+          issues.push(
+            cycleIssue(
+              'machine-axis-cycle-resource-deficit',
+              `state.resources.${resourceIdentity}`,
+              `Stable period consumes non-renewed resource ${resourceIdentity}`,
+              row
+            )
+          );
+        }
+      }
+    }
+  }
+  return {
+    policy: 'eventual-periodic-resource-sustainability-v1',
+    closed: issues.length === 0,
+    boundaryCycleIndexes,
+    comparisons,
+    issues,
+  };
+}
+
+function findIndependentOperationPeriod({
+  snapshotAt,
+  snapshots,
+  replayCount,
+  maxPeriodCycles,
+  minimumRepeats,
+  cyclePhaseActions,
+}) {
+  const rows = Array.from({ length: replayCount + 1 }, (_, cycleIndex) => {
+    const projection = createCycleBoundarySemanticProjection(
+      snapshotAt(cycleIndex),
+      {
+        actionIdentityById: cyclePhaseActions.actionIdentityById,
+        mode: 'execution',
+      }
+    );
+    return {
+      cycleIndex,
+      projection,
+      hash: hashCanonicalValue(projection),
+    };
+  });
+  const candidates = [];
+  for (
+    let transientCycleCount = 0;
+    transientCycleCount <= replayCount;
+    transientCycleCount += 1
+  ) {
+    for (
+      let periodCycles = 1;
+      periodCycles <= maxPeriodCycles;
+      periodCycles += 1
+    ) {
+      if (transientCycleCount + periodCycles * minimumRepeats > replayCount) {
+        continue;
+      }
+      const hashes = Array.from(
+        { length: minimumRepeats + 1 },
+        (_, repeatIndex) =>
+          rows[transientCycleCount + periodCycles * repeatIndex].hash
+      );
+      if (!hashes.every(hash => hash === hashes[0])) continue;
+      candidates.push({
+        policy: MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+        transientCycleCount,
+        periodCycles,
+        minimumRepeats,
+      });
+    }
+  }
+  const proofs = candidates
+    .sort(
+      (left, right) =>
+        left.transientCycleCount - right.transientCycleCount ||
+        left.periodCycles - right.periodCycles
+    )
+    .map(candidate => ({
+      metricPeriod: null,
+      operationPeriod: createBoundaryPeriodProof({
+        snapshots,
+        candidate,
+        cyclePhaseActions,
+        mode: 'execution',
+      }),
+      resourcePeriod: createBoundaryResourcePeriodProof({
+        snapshots,
+        candidate,
+      }),
+      scoreStatePeriod: null,
+    }));
+  const sustainableProof =
+    proofs.find(
+      proof =>
+        proof.operationPeriod.closed === true &&
+        proof.resourcePeriod.closed === true
+    ) ?? null;
+  return {
+    proofs: sustainableProof ? [sustainableProof] : proofs.slice(0, 1),
+    sustainableProof,
+  };
+}
+
+function createBoundaryPeriodProof({
+  snapshots,
+  candidate,
+  cyclePhaseActions,
+  mode,
+}) {
+  const indexes = Array.from(
+    { length: candidate.minimumRepeats + 1 },
+    (_, repeatIndex) =>
+      candidate.transientCycleCount + candidate.periodCycles * repeatIndex
+  );
+  const rows = indexes.map(index => {
+    const projection = createCycleBoundarySemanticProjection(
+      snapshots.get(index),
+      {
+        actionIdentityById: cyclePhaseActions.actionIdentityById,
+        mode,
+      }
+    );
+    return {
+      cycleIndex: index,
+      projection,
+      hash: hashCanonicalValue(projection),
+    };
+  });
+  const closed = rows.every(row => row.hash === rows[0]?.hash);
+  return {
+    policy:
+      mode === 'execution'
+        ? 'eventual-periodic-operation-state-v1'
+        : 'eventual-periodic-score-state-v1',
+    closed,
+    transientCycleCount: candidate.transientCycleCount,
+    periodCycles: candidate.periodCycles,
+    confirmedPeriods: candidate.minimumRepeats,
+    boundaryCycleIndexes: indexes,
+    boundaryHashes: rows.map(row => row.hash),
+    differences:
+      closed || rows.length < 2
+        ? []
+        : rows.slice(1).map(row => ({
+            cycleIndex: row.cycleIndex,
+            expectedHash: rows[0].hash,
+            actualHash: row.hash,
+            dimensions: [
+              ...new Set([
+                ...Object.keys(rows[0].projection ?? {}),
+                ...Object.keys(row.projection ?? {}),
+              ]),
+            ].filter(
+              key =>
+                hashCanonicalValue(rows[0].projection?.[key] ?? null) !==
+                hashCanonicalValue(row.projection?.[key] ?? null)
+            ),
+          })),
+  };
+}
+
 function evaluateCycleSample({
   envelope,
   criticalPolicy,
@@ -996,40 +1434,107 @@ function evaluateCycleSample({
   if (stateCriticalIssues.length > 0) {
     return rejectedSample(seed, stateCriticalIssues);
   }
+  const replayCounts = createAdaptiveReplayCounts(
+    envelope.options.maxReplayCycles
+  );
+  let lastAttempt = null;
+  for (const replayCount of replayCounts) {
+    const attempt = evaluateEventualCycleReplay({
+      envelope,
+      criticalPolicy,
+      firstContract,
+      firstPrepared,
+      firstActionLegality,
+      firstNormalAttackInputProof,
+      objectiveContract,
+      prepareRun,
+      simulateBoundary,
+      runtimeOptions,
+      replayCount,
+    });
+    lastAttempt = attempt;
+    if (attempt.status === 'rejected') {
+      return rejectedSample(seed, attempt.issues, attempt.details);
+    }
+    if (attempt.status === 'closed') {
+      return { ...attempt.sample, seed };
+    }
+  }
+
+  const operationClosed =
+    lastAttempt?.candidateProofs?.some(
+      proof =>
+        proof.operationPeriod?.closed === true &&
+        proof.resourcePeriod?.closed === true
+    ) === true;
+  const resourceIssues = dedupeIssues(
+    (lastAttempt?.candidateProofs ?? [])
+      .filter(proof => proof.operationPeriod?.closed === true)
+      .flatMap(proof => proof.resourcePeriod?.issues ?? [])
+  );
+  if (!operationClosed && resourceIssues.length > 0) {
+    return rejectedSample(seed, resourceIssues, {
+      ...(lastAttempt?.details ?? {}),
+      replayProof: {
+        stable: false,
+        issues: resourceIssues,
+        closurePolicy: MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+        operationClosed: false,
+        candidateProofs: lastAttempt?.candidateProofs ?? [],
+        cycles: lastAttempt?.observedCycles ?? [],
+      },
+    });
+  }
+  const issue = cycleIssue(
+    operationClosed
+      ? 'machine-axis-cycle-metrics-period-unresolved'
+      : 'machine-axis-cycle-operation-period-unresolved',
+    operationClosed ? 'replayProof.metrics' : 'replayProof.operation',
+    operationClosed
+      ? 'Repeated inputs remain executable, but no formally recurring score state was found within the bounded replay horizon'
+      : 'No recurring execution state was found within the bounded replay horizon',
+    {
+      maxReplayCycles: envelope.options.maxReplayCycles,
+      maxPeriodCycles: envelope.options.maxPeriodCycles,
+      minimumPeriodRepeats: envelope.options.minimumPeriodRepeats,
+      candidateProofs: lastAttempt?.candidateProofs ?? [],
+    }
+  );
+  return rejectedSample(seed, [issue], {
+    ...(lastAttempt?.details ?? {}),
+    replayProof: {
+      stable: false,
+      issues: [issue],
+      closurePolicy: MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+      operationClosed,
+      candidateProofs: lastAttempt?.candidateProofs ?? [],
+      cycles: lastAttempt?.observedCycles ?? [],
+    },
+  });
+}
+
+function evaluateEventualCycleReplay({
+  envelope,
+  criticalPolicy,
+  firstContract,
+  firstPrepared,
+  firstActionLegality,
+  firstNormalAttackInputProof,
+  objectiveContract,
+  prepareRun,
+  simulateBoundary,
+  runtimeOptions,
+  replayCount,
+}) {
   const loopPlan = createLoopReplayPlan({
     contract: firstContract,
     actionResolutions: firstPrepared.compilation.actionResolutions,
     loop: envelope.loop,
+    replayCount,
   });
-  if (!loopPlan.valid) return rejectedSample(seed, loopPlan.issues);
-
-  const sampledFirstCycle = attachCycleHealing(
-    collectCycleDamageContributions(firstPrepared.run.trace.damage, {
-      startFrame: envelope.loop.startFrame,
-      endFrame: envelope.loop.endFrame,
-      fps: firstContract.scenario.fps,
-    }),
-    firstPrepared.run,
-    {
-      startFrame: envelope.loop.startFrame,
-      endFrame: envelope.loop.endFrame,
-      fps: firstContract.scenario.fps,
-    }
-  );
-  const optimizationDiagnostics = createMachineAxisOptimizationDiagnostics(
-    firstPrepared.run,
-    firstContract,
-    {
-      scopeKind: 'cycle-first-interval',
-      startTimeMs:
-        (Number(envelope.loop.startFrame) * 1000) /
-        Number(firstContract.scenario.fps),
-      endTimeMs:
-        (Number(envelope.loop.endFrame) * 1000) /
-        Number(firstContract.scenario.fps),
-      endExclusive: true,
-    }
-  );
+  if (!loopPlan.valid) {
+    return { status: 'rejected', issues: loopPlan.issues, details: {} };
+  }
   const commonRandomPlan =
     criticalPolicy === 'sampled'
       ? createCycleCommonRandomReplayPlan({
@@ -1040,50 +1545,83 @@ function evaluateCycleSample({
         })
       : null;
   if (commonRandomPlan && !commonRandomPlan.valid) {
-    return rejectedSample(seed, commonRandomPlan.issues);
+    return {
+      status: 'rejected',
+      issues: commonRandomPlan.issues,
+      details: {},
+    };
   }
   const replayContract = commonRandomPlan?.contract ?? loopPlan.contract;
-
   let replayPrepared;
   try {
     replayPrepared = prepareRun(replayContract, runtimeOptions);
   } catch (error) {
     const causes = normalizeErrorIssues(error);
-    const replayProof =
+    const replayActionLegality =
       error?.actionLegalityProof ??
       createMachineAxisActionLegalityProof(null, {
         objectiveId: objectiveContract?.objectiveId ?? null,
         preflightIssues: causes,
       });
-    return rejectedSample(
-      seed,
-      [
+    return {
+      status: 'rejected',
+      issues: [
         cycleIssue(
           'machine-axis-cycle-second-replay-not-runnable',
-          'replayProof.secondCycle',
-          'The doubled semantic loop failed canonical compilation or simulation',
-          { causes }
+          'replayProof.repeatedCycles',
+          `The ${replayCount}-cycle semantic replay failed canonical compilation or simulation`,
+          { replayCount, causes }
         ),
       ],
-      {
+      details: {
         actionLegalityProof: {
           passed: false,
           firstCycle: firstActionLegality,
-          replay: replayProof.passed === true ? null : replayProof,
+          replay:
+            replayActionLegality.passed === true ? null : replayActionLegality,
         },
-      }
-    );
+      },
+    };
   }
   if (replayPrepared.valid !== true) {
-    return rejectedSample(seed, [
-      cycleIssue(
-        'machine-axis-cycle-second-replay-not-runnable',
-        'replayProof.secondCycle',
-        'The doubled semantic loop contains non-executable actions',
-        { causes: replayPrepared.issues ?? [] }
-      ),
-    ]);
+    const failedReplayNormalAttackInputProof = replayPrepared.run
+      ? createSearchNormalAttackInputProof({
+          trace: replayPrepared.run.trace ?? {},
+          fps: Number(replayContract.scenario?.fps) || 60,
+        })
+      : null;
+    const failedReplayActionLegality = createMachineAxisActionLegalityProof(
+      replayPrepared.run ?? null,
+      {
+        objectiveId: objectiveContract?.objectiveId ?? null,
+        preflightIssues: replayPrepared.issues ?? [],
+      }
+    );
+    return {
+      status: 'rejected',
+      issues: [
+        cycleIssue(
+          'machine-axis-cycle-second-replay-not-runnable',
+          'replayProof.repeatedCycles',
+          `The ${replayCount}-cycle semantic replay contains non-executable actions`,
+          { replayCount, causes: replayPrepared.issues ?? [] }
+        ),
+      ],
+      details: {
+        actionLegalityProof: {
+          passed: false,
+          firstCycle: firstActionLegality,
+          replay: failedReplayActionLegality,
+        },
+        normalAttackInputProof: {
+          passed: false,
+          firstCycle: firstNormalAttackInputProof,
+          replay: failedReplayNormalAttackInputProof,
+        },
+      },
+    };
   }
+
   const replayNormalAttackInputProof = createSearchNormalAttackInputProof({
     trace: replayPrepared.run?.trace ?? {},
     fps: Number(replayContract.scenario?.fps) || 60,
@@ -1096,20 +1634,37 @@ function evaluateCycleSample({
     replayActionLegality.passed !== true ||
     replayActionLegality.finalScoreEligible !== true
   ) {
-    return rejectedSample(
-      seed,
-      [
+    return {
+      status: 'rejected',
+      issues: [
         ...(replayActionLegality.issues ?? []),
         ...(replayActionLegality.scoreExclusions ?? []),
       ],
-      {
+      details: {
         actionLegalityProof: {
           passed: false,
           firstCycle: firstActionLegality,
           replay: replayActionLegality,
         },
-      }
-    );
+      },
+    };
+  }
+  const normalAttackInputIssues = [
+    ...(firstNormalAttackInputProof.issues ?? []),
+    ...(replayNormalAttackInputProof.issues ?? []),
+  ];
+  if (normalAttackInputIssues.length > 0) {
+    return {
+      status: 'rejected',
+      issues: normalAttackInputIssues,
+      details: {
+        normalAttackInputProof: {
+          passed: false,
+          firstCycle: firstNormalAttackInputProof,
+          replay: replayNormalAttackInputProof,
+        },
+      },
+    };
   }
 
   const replayRun = attachActionResolutions(
@@ -1121,139 +1676,49 @@ function evaluateCycleSample({
     loop: envelope.loop,
     durationFrames: loopPlan.durationFrames,
   });
-  const secondEndFrame = envelope.loop.endFrame + loopPlan.durationFrames;
-  let startSnapshot;
-  let firstEndSnapshot;
-  let secondEndSnapshot;
-  try {
-    startSnapshot = createBoundarySnapshot({
-      frame: envelope.loop.startFrame,
-      prepared: replayPrepared,
-      replayRun,
-      replayContract,
-      simulateBoundary,
-      runtimeOptions,
-    });
-    firstEndSnapshot = createBoundarySnapshot({
-      frame: envelope.loop.endFrame,
-      prepared: replayPrepared,
-      replayRun,
-      replayContract,
-      simulateBoundary,
-      runtimeOptions,
-    });
-    secondEndSnapshot = createBoundarySnapshot({
-      frame: secondEndFrame,
-      prepared: replayPrepared,
-      replayRun,
-      replayContract,
-      simulateBoundary,
-      runtimeOptions,
-    });
-  } catch (error) {
-    return rejectedSample(seed, [
-      cycleIssue(
-        'machine-axis-cycle-boundary-replay-failed',
-        'stateClosure',
-        'Unable to reconstruct a canonical cycle boundary state',
-        { causes: normalizeErrorIssues(error) }
-      ),
-    ]);
-  }
-  const proofFirstCycle = attachCycleHealing(
-    collectCycleDamageContributions(replayPrepared.run.trace.damage, {
-      startFrame: envelope.loop.startFrame,
-      endFrame: envelope.loop.endFrame,
-      fps: firstContract.scenario.fps,
-    }),
-    replayPrepared.run,
-    {
-      startFrame: envelope.loop.startFrame,
-      endFrame: envelope.loop.endFrame,
-      fps: firstContract.scenario.fps,
-    }
-  );
-  const secondCycle = attachCycleHealing(
-    collectCycleDamageContributions(replayPrepared.run.trace.damage, {
-      startFrame: envelope.loop.endFrame,
-      endFrame: secondEndFrame,
-      fps: firstContract.scenario.fps,
-      actionIdMap: loopPlan.secondToSourceActionId,
-    }),
-    replayPrepared.run,
-    {
-      startFrame: envelope.loop.endFrame,
-      endFrame: secondEndFrame,
-      fps: firstContract.scenario.fps,
-      actionIdMap: loopPlan.secondToSourceActionId,
-    }
-  );
-  const firstClosure = compareCycleBoundaryStates(
-    startSnapshot,
-    firstEndSnapshot,
-    cyclePhaseActions
-  );
-  const secondClosure = compareCycleBoundaryStates(
-    firstEndSnapshot,
-    secondEndSnapshot,
-    cyclePhaseActions
-  );
-  const secondExecution = createSecondCycleExecutionProof({
+  const executionProof = createRepeatedCycleExecutionProof({
     trace: replayPrepared.run.trace,
-    secondActionIds: loopPlan.secondActionIds,
-    secondToSourceActionId: loopPlan.secondToSourceActionId,
+    actionIdsByCycle: loopPlan.actionIdsByCycle,
+    actionIdToSourceActionId: loopPlan.actionIdToSourceActionId,
     actionResolutions: replayPrepared.compilation.actionResolutions,
   });
-  const replayProof = createCycleReplayStabilityProof({
-    firstCycle: proofFirstCycle,
-    secondCycle,
-    firstClosure,
-    secondClosure,
-    secondExecution,
-    damageStabilityMode:
-      criticalPolicy === 'sampled'
-        ? 'cycle-local-common-random-numbers'
-        : 'exact-consecutive-cycle-damage',
-  });
-  const normalAttackInputIssues = [
-    ...(firstNormalAttackInputProof.issues ?? []),
-    ...(replayNormalAttackInputProof.issues ?? []),
-  ];
-  if (!replayProof.stable || normalAttackInputIssues.length > 0)
-    return rejectedSample(
-      seed,
-      [...replayProof.issues, ...normalAttackInputIssues],
-      {
-        replayProof,
-        normalAttackInputProof: {
-          passed: normalAttackInputIssues.length === 0,
-          firstCycle: firstNormalAttackInputProof,
-          replay: replayNormalAttackInputProof,
+  if (!executionProof.runnable) {
+    return {
+      status: 'rejected',
+      issues: executionProof.issues,
+      details: {
+        replayProof: {
+          stable: false,
+          issues: executionProof.issues,
+          closurePolicy: MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+          executionProof,
         },
-        firstCycle: sampledFirstCycle,
-        secondCycle,
-        optimizationDiagnostics,
-        hashes:
-          criticalPolicy === 'sampled'
-            ? firstPrepared.run.hashes
-            : replayPrepared.run.hashes,
-        proofHashes: replayPrepared.run.hashes,
-      }
-    );
-  return {
-    valid: true,
-    status: 'closed',
-    seed,
+      },
+    };
+  }
+
+  const observedCycles = createObservedCycleRows({
+    replayRun: replayPrepared.run,
+    loop: envelope.loop,
+    durationFrames: loopPlan.durationFrames,
+    replayCount,
+    fps: firstContract.scenario.fps,
+    actionIdMap: loopPlan.actionIdToSourceActionId,
+  });
+  const metricCandidates = findEventualPeriodicSequenceCandidates(
+    observedCycles,
+    {
+      minimumRepeats: envelope.options.minimumPeriodRepeats,
+      maxPeriodCycles: envelope.options.maxPeriodCycles,
+      signature: cycle => hashCanonicalValue(createCycleMetricSignature(cycle)),
+    }
+  );
+  const sharedDetails = {
     hashes:
       criticalPolicy === 'sampled'
         ? firstPrepared.run.hashes
         : replayPrepared.run.hashes,
     proofHashes: replayPrepared.run.hashes,
-    firstCycle:
-      criticalPolicy === 'sampled' ? sampledFirstCycle : proofFirstCycle,
-    secondCycle,
-    optimizationDiagnostics,
-    replayProof,
     actionLegalityProof: {
       passed: true,
       firstCycle: firstActionLegality,
@@ -1264,28 +1729,359 @@ function evaluateCycleSample({
       firstCycle: firstNormalAttackInputProof,
       replay: replayNormalAttackInputProof,
     },
-    state: {
-      start: startSnapshot,
-      firstEnd: firstEndSnapshot,
-      secondEnd: secondEndSnapshot,
-    },
-    evidence: {
-      firstCycle: {
-        classification: firstPrepared.classification ?? null,
-        warnings: firstPrepared.warnings ?? [],
+  };
+  const snapshots = new Map();
+  const snapshotAt = cycleIndex => {
+    if (snapshots.has(cycleIndex)) return snapshots.get(cycleIndex);
+    const frame =
+      Number(envelope.loop.startFrame) +
+      loopPlan.durationFrames * Number(cycleIndex);
+    const snapshot = createBoundarySnapshot({
+      frame,
+      prepared: replayPrepared,
+      replayRun,
+      replayContract,
+      simulateBoundary,
+      runtimeOptions,
+    });
+    snapshots.set(cycleIndex, snapshot);
+    return snapshot;
+  };
+  if (metricCandidates.length === 0) {
+    if (replayCount >= envelope.options.maxReplayCycles) {
+      try {
+        const independentOperation = findIndependentOperationPeriod({
+          snapshotAt,
+          snapshots,
+          replayCount,
+          maxPeriodCycles: envelope.options.maxPeriodCycles,
+          minimumRepeats: envelope.options.minimumPeriodRepeats,
+          cyclePhaseActions,
+        });
+        return {
+          status: 'continue',
+          observedCycles,
+          candidateProofs: independentOperation.proofs,
+          details: sharedDetails,
+        };
+      } catch (error) {
+        return {
+          status: 'rejected',
+          issues: [
+            cycleIssue(
+              'machine-axis-cycle-boundary-replay-failed',
+              'stateClosure',
+              'Unable to inspect bounded operation periodicity',
+              { causes: normalizeErrorIssues(error) }
+            ),
+          ],
+          details: sharedDetails,
+        };
+      }
+    }
+    return {
+      status: 'continue',
+      observedCycles,
+      candidateProofs: [],
+      details: sharedDetails,
+    };
+  }
+
+  const candidateProofs = [];
+  for (const candidate of metricCandidates) {
+    const boundaryIndexes = Array.from(
+      { length: candidate.minimumRepeats + 1 },
+      (_, repeatIndex) =>
+        candidate.transientCycleCount + candidate.periodCycles * repeatIndex
+    );
+    try {
+      for (const boundaryIndex of boundaryIndexes) snapshotAt(boundaryIndex);
+    } catch (error) {
+      return {
+        status: 'rejected',
+        issues: [
+          cycleIssue(
+            'machine-axis-cycle-boundary-replay-failed',
+            'stateClosure',
+            'Unable to reconstruct an eventual-periodic cycle boundary state',
+            { causes: normalizeErrorIssues(error), boundaryIndexes }
+          ),
+        ],
+        details: sharedDetails,
+      };
+    }
+    const operationPeriod = createBoundaryPeriodProof({
+      snapshots,
+      candidate,
+      cyclePhaseActions,
+      mode: 'execution',
+    });
+    const scoreStatePeriod = createBoundaryPeriodProof({
+      snapshots,
+      candidate,
+      cyclePhaseActions,
+      mode: 'score',
+    });
+    const resourcePeriod = createBoundaryResourcePeriodProof({
+      snapshots,
+      candidate,
+    });
+    const metricPeriod = projectMetricPeriodCandidate(candidate);
+    const candidateProof = {
+      metricPeriod,
+      operationPeriod,
+      resourcePeriod,
+      scoreStatePeriod,
+    };
+    candidateProofs.push(candidateProof);
+    if (
+      !operationPeriod.closed ||
+      !resourcePeriod.closed ||
+      !scoreStatePeriod.closed
+    ) {
+      continue;
+    }
+
+    const stableStartCycle = candidate.transientCycleCount;
+    const periodCycles = candidate.periodCycles;
+    const stableStartFrame =
+      Number(envelope.loop.startFrame) +
+      loopPlan.durationFrames * stableStartCycle;
+    const stableEndFrame =
+      stableStartFrame + loopPlan.durationFrames * periodCycles;
+    const periodDamage = attachCycleHealing(
+      collectCycleDamageContributions(replayPrepared.run.trace.damage, {
+        startFrame: stableStartFrame,
+        endFrame: stableEndFrame,
+        fps: firstContract.scenario.fps,
+        actionIdMap: loopPlan.actionIdToSourceActionId,
+      }),
+      replayPrepared.run,
+      {
+        startFrame: stableStartFrame,
+        endFrame: stableEndFrame,
+        fps: firstContract.scenario.fps,
+      }
+    );
+    const steadyCycle = normalizeCycleDamagePerCycle(
+      periodDamage,
+      periodCycles
+    );
+    const periodDiagnostics = createMachineAxisOptimizationDiagnostics(
+      replayPrepared.run,
+      replayContract,
+      {
+        scopeKind: 'cycle-stable-period',
+        startTimeMs:
+          (stableStartFrame * 1000) / Number(firstContract.scenario.fps),
+        endTimeMs: (stableEndFrame * 1000) / Number(firstContract.scenario.fps),
+        endExclusive: true,
+        actionIdMap: loopPlan.actionIdToSourceActionId,
+      }
+    );
+    const optimizationDiagnostics =
+      normalizeMachineAxisOptimizationDiagnosticsPerCycle(
+        periodDiagnostics,
+        periodCycles
+      );
+    const stableSnapshots = boundaryIndexes.map(index => snapshots.get(index));
+    const firstClosure = compareCycleBoundaryStates(
+      stableSnapshots[0],
+      stableSnapshots[1],
+      cyclePhaseActions
+    );
+    const secondClosure = compareCycleBoundaryStates(
+      stableSnapshots[1],
+      stableSnapshots[2],
+      cyclePhaseActions
+    );
+    const replayProof = {
+      stable: true,
+      issues: [],
+      closurePolicy: MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+      damageStabilityMode:
+        criticalPolicy === 'sampled'
+          ? 'eventual-periodic-cycle-local-common-random-numbers'
+          : 'eventual-periodic-deterministic-metrics',
+      damageStable: true,
+      operationPeriod,
+      resourcePeriod,
+      metricPeriod,
+      scoreStatePeriod,
+      executionProof,
+      secondExecution: executionProof,
+      firstClosureDiagnostic: firstClosure,
+      secondClosureDiagnostic: secondClosure,
+      cycles: observedCycles.map((cycle, cycleIndex) => ({
+        index: cycleIndex + 1,
+        hpDamage: cycle.hpDamage,
+        combatHitCount: cycle.combatHitCount,
+        runnable: executionProof.cycleProofs[cycleIndex]?.runnable === true,
+        transient: cycleIndex < stableStartCycle,
+        stablePhase:
+          cycleIndex < stableStartCycle
+            ? null
+            : (cycleIndex - stableStartCycle) % periodCycles,
+      })),
+    };
+    return {
+      status: 'closed',
+      sample: {
+        valid: true,
+        status: 'closed',
+        hashes: sharedDetails.hashes,
+        proofHashes: sharedDetails.proofHashes,
+        firstCycle: observedCycles[stableStartCycle],
+        secondCycle:
+          observedCycles[stableStartCycle + 1] ??
+          observedCycles[stableStartCycle],
+        steadyCycle,
+        observedCycles,
+        optimizationDiagnostics,
+        replayProof,
+        actionLegalityProof: sharedDetails.actionLegalityProof,
+        normalAttackInputProof: sharedDetails.normalAttackInputProof,
+        state: {
+          start: stableSnapshots[0],
+          firstEnd: stableSnapshots[1],
+          secondEnd: stableSnapshots[2],
+          boundaries: boundaryIndexes.map((cycleIndex, index) => ({
+            cycleIndex,
+            snapshot: stableSnapshots[index],
+          })),
+        },
+        evidence: {
+          firstCycle: {
+            classification: firstPrepared.classification ?? null,
+            warnings: firstPrepared.warnings ?? [],
+          },
+          replay: {
+            classification: replayPrepared.classification ?? null,
+            warnings: replayPrepared.warnings ?? [],
+          },
+        },
+        loopPlan: {
+          sourceActionIds: loopPlan.sourceActionIds,
+          secondActionIds: [...loopPlan.secondActionIds],
+          warmupActionIds: loopPlan.warmupActionIds,
+          replayCount,
+          replayHorizonFrame: loopPlan.replayHorizonFrame,
+          commonRandomRollCount: commonRandomPlan?.rollCount ?? 0,
+          cyclePhaseActionIdentity: cyclePhaseActions.proof,
+        },
       },
-      replay: {
-        classification: replayPrepared.classification ?? null,
-        warnings: replayPrepared.warnings ?? [],
-      },
-    },
-    loopPlan: {
-      sourceActionIds: loopPlan.sourceActionIds,
-      secondActionIds: [...loopPlan.secondActionIds],
-      warmupActionIds: loopPlan.warmupActionIds,
-      replayHorizonFrame: loopPlan.replayHorizonFrame,
-      commonRandomRollCount: commonRandomPlan?.rollCount ?? 0,
-      cyclePhaseActionIdentity: cyclePhaseActions.proof,
+    };
+  }
+  if (replayCount >= envelope.options.maxReplayCycles) {
+    try {
+      const independentOperation = findIndependentOperationPeriod({
+        snapshotAt,
+        snapshots,
+        replayCount,
+        maxPeriodCycles: envelope.options.maxPeriodCycles,
+        minimumRepeats: envelope.options.minimumPeriodRepeats,
+        cyclePhaseActions,
+      });
+      candidateProofs.push(...independentOperation.proofs);
+    } catch (error) {
+      return {
+        status: 'rejected',
+        issues: [
+          cycleIssue(
+            'machine-axis-cycle-boundary-replay-failed',
+            'stateClosure',
+            'Unable to inspect bounded operation periodicity',
+            { causes: normalizeErrorIssues(error) }
+          ),
+        ],
+        details: sharedDetails,
+      };
+    }
+  }
+  return {
+    status: 'continue',
+    observedCycles,
+    candidateProofs,
+    details: sharedDetails,
+  };
+}
+
+function createAdaptiveReplayCounts(maxReplayCycles) {
+  const maximum = Math.max(
+    MIN_REPLAY_CYCLES,
+    Math.min(MAX_REPLAY_CYCLES, Number(maxReplayCycles) || 0)
+  );
+  return [...new Set([4, 8, maximum].filter(value => value <= maximum))].sort(
+    (left, right) => left - right
+  );
+}
+
+function createObservedCycleRows({
+  replayRun,
+  loop,
+  durationFrames,
+  replayCount,
+  fps,
+  actionIdMap,
+}) {
+  return Array.from({ length: replayCount }, (_, cycleIndex) => {
+    const startFrame = Number(loop.startFrame) + durationFrames * cycleIndex;
+    const endFrame = startFrame + durationFrames;
+    return {
+      cycleIndex,
+      ...attachCycleHealing(
+        collectCycleDamageContributions(replayRun.trace.damage, {
+          startFrame,
+          endFrame,
+          fps,
+          actionIdMap,
+        }),
+        replayRun,
+        { startFrame, endFrame, fps }
+      ),
+    };
+  });
+}
+
+function projectMetricPeriodCandidate(candidate) {
+  return {
+    policy: MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+    stable: true,
+    transientCycleCount: candidate.transientCycleCount,
+    stableCycleCount: candidate.stableCycleCount,
+    periodCycles: candidate.periodCycles,
+    repeatedCycleCount: candidate.repeatedCycleCount,
+    minimumRepeats: candidate.minimumRepeats,
+    periodHpDamage: candidate.periodValues.map(cycle => cycle.hpDamage),
+    averageHpDamage: roundMetric(
+      mean(candidate.periodValues.map(cycle => cycle.hpDamage))
+    ),
+  };
+}
+
+export function normalizeCycleDamagePerCycle(damage, cycleCount) {
+  const divisor = Math.max(1, Number(cycleCount) || 1);
+  const scale = value => roundMetric((Number(value) || 0) / divisor);
+  const scaleRows = rows =>
+    (rows ?? []).map(row => ({
+      ...row,
+      hpDamage: scale(row.hpDamage),
+      combatHitCount: scale(row.combatHitCount),
+    }));
+  return {
+    ...damage,
+    periodCycleCount: divisor,
+    hpDamage: scale(damage.hpDamage),
+    combatHitCount: scale(damage.combatHitCount),
+    byActor: scaleRows(damage.byActor),
+    byAction: scaleRows(damage.byAction),
+    byHit: scaleRows(damage.byHit),
+    healing: {
+      ...damage.healing,
+      requestedHealing: scale(damage.healing?.requestedHealing),
+      effectiveHealing: scale(damage.healing?.effectiveHealing),
+      overhealing: scale(damage.healing?.overhealing),
+      settlementCount: scale(damage.healing?.settlementCount),
     },
   };
 }
@@ -1414,7 +2210,12 @@ function createCycleActionSemanticSignature(resolution) {
   };
 }
 
-function createLoopReplayPlan({ contract, actionResolutions, loop }) {
+function createLoopReplayPlan({
+  contract,
+  actionResolutions,
+  loop,
+  replayCount = 2,
+}) {
   const issues = [];
   const resolutionById = new Map(
     (actionResolutions ?? []).map(resolution => [
@@ -1425,6 +2226,10 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
   const startFrame = Number(loop.startFrame);
   const endFrame = Number(loop.endFrame);
   const durationFrames = endFrame - startFrame;
+  const normalizedReplayCount = Math.max(
+    2,
+    Math.min(MAX_REPLAY_CYCLES, Number(replayCount) || 2)
+  );
   const warmupActions = [];
   const loopActions = [];
   for (const action of contract.actions ?? []) {
@@ -1445,30 +2250,10 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
     const actionEnd = actionStart + duration;
     if (actionStart < startFrame) {
       warmupActions.push(action);
-      if (actionEnd > startFrame) {
-        issues.push(
-          cycleIssue(
-            'machine-axis-cycle-action-crosses-loop-start',
-            `actions.${String(action.id)}`,
-            `Warmup action crosses loop start: ${action.id}`,
-            { actionId: action.id, actionStart, actionEnd, startFrame }
-          )
-        );
-      }
       continue;
     }
     if (actionStart >= endFrame) continue;
     loopActions.push({ action, actionStart, actionEnd });
-    if (actionEnd > endFrame) {
-      issues.push(
-        cycleIssue(
-          'machine-axis-cycle-action-crosses-loop-end',
-          `actions.${String(action.id)}`,
-          `Cycle action occupancy crosses loop end: ${action.id}`,
-          { actionId: action.id, actionStart, actionEnd, endFrame }
-        )
-      );
-    }
   }
   if (loopActions.length === 0) {
     issues.push(
@@ -1483,65 +2268,89 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
   const existingIds = new Set(
     (contract.actions ?? []).map(action => String(action.id))
   );
-  const secondToSourceActionId = new Map();
-  const sourceToSecondActionId = new Map();
-  const secondActions = loopActions.map(({ action, actionStart }, index) => {
-    const secondId = createUniqueCycleActionId(action.id, existingIds, index);
-    existingIds.add(secondId);
-    secondToSourceActionId.set(secondId, String(action.id));
-    sourceToSecondActionId.set(String(action.id), secondId);
-    const clone = structuredClone(action);
-    clone.id = secondId;
-    clone.schedule = {
-      mode: 'absolute',
-      frame: actionStart + durationFrames,
-      offsetFrames: 0,
-      actionId: null,
-    };
-    if (
-      clone.intent?.actionKind === 'charged-attack' &&
-      clone.intent?.physicalInput
-    ) {
-      // The replayed charge has a different predecessor and absolute frame.
-      // Let the charged-input proof derive release -> repress -> prehold from
-      // that canonical replay context instead of copying first-cycle frames.
-      delete clone.intent.physicalInput;
-    }
-    if (clone.intent?.attackInput?.groupId) {
-      clone.intent.attackInput.groupId = `${clone.intent.attackInput.groupId}:cycle-2`;
-    }
-    clone.note = [clone.note, `cycle replay of ${action.id}`]
-      .filter(Boolean)
-      .join(' | ');
-    return clone;
-  });
-  for (const clone of secondActions) {
-    const contextActionId = clone.intent?.attackInput?.contextActionId;
-    const replayContextActionId = sourceToSecondActionId.get(
-      String(contextActionId ?? '')
-    );
-    if (replayContextActionId) {
-      clone.intent.attackInput.contextActionId = replayContextActionId;
-    }
+  const actionIdToSourceActionId = new Map();
+  const actionIdsByCycle = [];
+  const actionsByCycle = [];
+  const sourceActions = loopActions.map(entry => entry.action);
+  const sourceActionIds = sourceActions.map(action => String(action.id));
+  for (const actionId of sourceActionIds) {
+    actionIdToSourceActionId.set(actionId, actionId);
   }
-  const firstActions = [
-    ...warmupActions,
-    ...loopActions.map(entry => entry.action),
-  ];
+  actionsByCycle.push(sourceActions);
+  actionIdsByCycle.push(new Set(sourceActionIds));
+
+  for (
+    let cycleIndex = 1;
+    cycleIndex < normalizedReplayCount;
+    cycleIndex += 1
+  ) {
+    const sourceToReplayActionId = new Map();
+    const cycleActions = loopActions.map(({ action, actionStart }, index) => {
+      const replayId = createUniqueCycleActionId(
+        action.id,
+        existingIds,
+        index,
+        cycleIndex + 1
+      );
+      existingIds.add(replayId);
+      actionIdToSourceActionId.set(replayId, String(action.id));
+      sourceToReplayActionId.set(String(action.id), replayId);
+      const clone = structuredClone(action);
+      clone.id = replayId;
+      clone.schedule = {
+        mode: 'absolute',
+        frame: actionStart + durationFrames * cycleIndex,
+        offsetFrames: 0,
+        actionId: null,
+      };
+      if (
+        clone.intent?.actionKind === 'charged-attack' &&
+        clone.intent?.physicalInput
+      ) {
+        // Every replayed charge has a different predecessor and absolute
+        // frame. Re-derive release -> repress -> prehold from that cycle's
+        // canonical runtime context.
+        delete clone.intent.physicalInput;
+      }
+      if (clone.intent?.attackInput?.groupId) {
+        clone.intent.attackInput.groupId = `${clone.intent.attackInput.groupId}:cycle-${cycleIndex + 1}`;
+      }
+      clone.note = [
+        clone.note,
+        `cycle ${cycleIndex + 1} replay of ${action.id}`,
+      ]
+        .filter(Boolean)
+        .join(' | ');
+      return clone;
+    });
+    for (const clone of cycleActions) {
+      const contextActionId = clone.intent?.attackInput?.contextActionId;
+      const replayContextActionId = sourceToReplayActionId.get(
+        String(contextActionId ?? '')
+      );
+      if (replayContextActionId) {
+        clone.intent.attackInput.contextActionId = replayContextActionId;
+      }
+    }
+    actionsByCycle.push(cycleActions);
+    actionIdsByCycle.push(
+      new Set(cycleActions.map(action => String(action.id)))
+    );
+  }
   const replayContract = structuredClone(contract);
   const replayHorizonFrame = Math.max(
     Number(contract.scenario.durationFrames) || 0,
-    endFrame + durationFrames
+    endFrame + durationFrames * (normalizedReplayCount - 1)
   );
   replayContract.scenario.durationFrames = replayHorizonFrame;
-  replayContract.actions = [...firstActions, ...secondActions];
+  replayContract.actions = [...warmupActions, ...actionsByCycle.flat()];
   replayContract.metadata = {
     ...(replayContract.metadata ?? {}),
     cycleReplay: {
       interval: '[start,end)',
       startFrame,
       endFrame,
-      replayCount: 2,
+      replayCount: normalizedReplayCount,
     },
   };
   return {
@@ -1550,9 +2359,18 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
     contract: replayContract,
     durationFrames,
     warmupActionIds: warmupActions.map(action => action.id),
-    sourceActionIds: loopActions.map(entry => entry.action.id),
-    secondActionIds: new Set(secondActions.map(action => action.id)),
-    secondToSourceActionId,
+    sourceActionIds,
+    replayCount: normalizedReplayCount,
+    actionsByCycle,
+    actionIdsByCycle,
+    actionIdToSourceActionId,
+    secondActionIds: actionIdsByCycle[1] ?? new Set(),
+    secondToSourceActionId: new Map(
+      [...(actionIdsByCycle[1] ?? [])].map(actionId => [
+        actionId,
+        actionIdToSourceActionId.get(actionId),
+      ])
+    ),
     replayHorizonFrame,
   };
 }
@@ -1624,7 +2442,7 @@ function createCycleCommonRandomReplayPlan({
   let rollCount = 0;
   contract.actions = (contract.actions ?? []).map(action => {
     const sourceActionId =
-      loopPlan.secondToSourceActionId.get(String(action.id)) ??
+      loopPlan.actionIdToSourceActionId.get(String(action.id)) ??
       String(action.id);
     const rolls = rollsByActionId.get(sourceActionId);
     if (!rolls?.size) return action;
@@ -1696,10 +2514,10 @@ function finalizeBoundarySnapshot(snapshot, boundaryFrame, actionResolutions) {
   return snapshot;
 }
 
-function createSecondCycleExecutionProof({
+function createRepeatedCycleExecutionProof({
   trace,
-  secondActionIds,
-  secondToSourceActionId,
+  actionIdsByCycle,
+  actionIdToSourceActionId,
   actionResolutions,
 }) {
   const byId = new Map(
@@ -1713,65 +2531,96 @@ function createSecondCycleExecutionProof({
   );
   const issues = [];
   const variantPairs = [];
-  for (const actionId of secondActionIds ?? []) {
-    const entry = byId.get(String(actionId));
-    if (!entry || entry.execute === false) {
-      issues.push(
-        cycleIssue(
-          'machine-axis-cycle-second-action-not-executable',
-          `executionPlan.${actionId}`,
-          `Second-cycle action is not executable: ${actionId}`,
-          {
-            actionId,
-            status: entry?.status ?? 'missing',
-            skipReason: entry?.skipReason ?? null,
-          }
-        )
+  const cycleProofs = [];
+  for (
+    let cycleIndex = 0;
+    cycleIndex < (actionIdsByCycle?.length ?? 0);
+    cycleIndex += 1
+  ) {
+    const cycleIssues = [];
+    const cyclePairs = [];
+    for (const actionId of actionIdsByCycle[cycleIndex] ?? []) {
+      const entry = byId.get(String(actionId));
+      if (!entry || entry.execute === false) {
+        cycleIssues.push(
+          cycleIssue(
+            'machine-axis-cycle-second-action-not-executable',
+            `executionPlan.${actionId}`,
+            `Cycle ${cycleIndex + 1} action is not executable: ${actionId}`,
+            {
+              actionId,
+              cycleIndex,
+              status: entry?.status ?? 'missing',
+              skipReason: entry?.skipReason ?? null,
+            }
+          )
+        );
+      } else if (entry.status === 'scheduled-with-unresolved-conditions') {
+        cycleIssues.push(
+          cycleIssue(
+            'machine-axis-cycle-second-action-unresolved',
+            `executionPlan.${actionId}`,
+            `Cycle ${cycleIndex + 1} action still has unresolved conditions: ${actionId}`,
+            {
+              actionId,
+              cycleIndex,
+              unresolvedCodes: entry.unresolvedCodes ?? [],
+            }
+          )
+        );
+      }
+      const sourceActionId =
+        actionIdToSourceActionId?.get?.(String(actionId)) ?? String(actionId);
+      const sourceVariant = projectResolvedActionForm(
+        resolutionById.get(String(sourceActionId))
       );
-    } else if (entry.status === 'scheduled-with-unresolved-conditions') {
-      issues.push(
-        cycleIssue(
-          'machine-axis-cycle-second-action-unresolved',
-          `executionPlan.${actionId}`,
-          `Second-cycle action still has unresolved conditions: ${actionId}`,
-          { actionId, unresolvedCodes: entry.unresolvedCodes ?? [] }
-        )
+      const replayVariant = projectResolvedActionForm(
+        resolutionById.get(String(actionId))
       );
+      const equivalent =
+        sourceActionId != null &&
+        hashCanonicalValue(sourceVariant) === hashCanonicalValue(replayVariant);
+      const pair = {
+        cycleIndex,
+        sourceActionId: sourceActionId ?? null,
+        replayActionId: actionId,
+        equivalent,
+        sourceVariant,
+        replayVariant,
+      };
+      cyclePairs.push(pair);
+      variantPairs.push(pair);
+      if (!equivalent) {
+        cycleIssues.push(
+          cycleIssue(
+            'machine-axis-cycle-action-form-not-closed',
+            `executionPlan.${actionId}`,
+            `Cycle ${cycleIndex + 1} action resolves to a different executable form: ${actionId}`,
+            {
+              actionId,
+              cycleIndex,
+              sourceActionId: sourceActionId ?? null,
+              sourceVariant,
+              replayVariant,
+            }
+          )
+        );
+      }
     }
-    const sourceActionId = secondToSourceActionId?.get?.(String(actionId));
-    const sourceVariant = projectResolvedActionForm(
-      resolutionById.get(String(sourceActionId ?? ''))
-    );
-    const replayVariant = projectResolvedActionForm(
-      resolutionById.get(String(actionId))
-    );
-    const equivalent =
-      sourceActionId != null &&
-      hashCanonicalValue(sourceVariant) === hashCanonicalValue(replayVariant);
-    variantPairs.push({
-      sourceActionId: sourceActionId ?? null,
-      replayActionId: actionId,
-      equivalent,
-      sourceVariant,
-      replayVariant,
+    issues.push(...cycleIssues);
+    cycleProofs.push({
+      cycleIndex,
+      runnable: cycleIssues.length === 0,
+      issues: cycleIssues,
+      variantPairs: cyclePairs,
     });
-    if (!equivalent) {
-      issues.push(
-        cycleIssue(
-          'machine-axis-cycle-action-form-not-closed',
-          `executionPlan.${actionId}`,
-          `Second-cycle action resolves to a different executable form: ${actionId}`,
-          {
-            actionId,
-            sourceActionId: sourceActionId ?? null,
-            sourceVariant,
-            replayVariant,
-          }
-        )
-      );
-    }
   }
-  return { runnable: issues.length === 0, issues, variantPairs };
+  return {
+    runnable: issues.length === 0,
+    issues,
+    variantPairs,
+    cycleProofs,
+  };
 }
 
 function projectResolvedActionForm(value) {
@@ -1854,6 +2703,20 @@ function createAcceptedReport({
       endFrame: envelope.loop.startFrame,
       durationFrames: envelope.loop.startFrame,
       actionIds: samples[0]?.loopPlan?.warmupActionIds ?? [],
+    },
+    stabilization: {
+      policy: MACHINE_AXIS_EVENTUAL_PERIOD_POLICY,
+      maxReplayCycles: envelope.options.maxReplayCycles,
+      maxPeriodCycles: envelope.options.maxPeriodCycles,
+      minimumPeriodRepeats: envelope.options.minimumPeriodRepeats,
+      samples: samples.map(sample => ({
+        seed: sample.seed ?? null,
+        replayCount: sample.loopPlan?.replayCount ?? null,
+        operationPeriod: sample.replayProof?.operationPeriod ?? null,
+        resourcePeriod: sample.replayProof?.resourcePeriod ?? null,
+        metricPeriod: sample.replayProof?.metricPeriod ?? null,
+        scoreStatePeriod: sample.replayProof?.scoreStatePeriod ?? null,
+      })),
     },
     loop: {
       interval: '[start,end)',
@@ -2044,9 +2907,11 @@ function createCycleAssumptions(objectiveContract) {
 }
 
 function aggregateSamples(samples) {
-  const hpDamage = mean(samples.map(sample => sample.firstCycle.hpDamage));
+  const hpDamage = mean(
+    samples.map(sample => sampleCycleMetric(sample).hpDamage)
+  );
   const combatHitCount = mean(
-    samples.map(sample => sample.firstCycle.combatHitCount)
+    samples.map(sample => sampleCycleMetric(sample).combatHitCount)
   );
   const roundedHpDamage = roundMetric(hpDamage);
   const contributions = {
@@ -2071,19 +2936,35 @@ function aggregateSamples(samples) {
   }
   const healing = {
     requestedHealing: roundMetric(
-      mean(samples.map(sample => sample.firstCycle.healing?.requestedHealing))
+      mean(
+        samples.map(
+          sample => sampleCycleMetric(sample).healing?.requestedHealing
+        )
+      )
     ),
     effectiveHealing: roundMetric(
-      mean(samples.map(sample => sample.firstCycle.healing?.effectiveHealing))
+      mean(
+        samples.map(
+          sample => sampleCycleMetric(sample).healing?.effectiveHealing
+        )
+      )
     ),
     overhealing: roundMetric(
-      mean(samples.map(sample => sample.firstCycle.healing?.overhealing))
+      mean(
+        samples.map(sample => sampleCycleMetric(sample).healing?.overhealing)
+      )
     ),
     effectiveHps: roundMetric(
-      mean(samples.map(sample => sample.firstCycle.healing?.effectiveHps))
+      mean(
+        samples.map(sample => sampleCycleMetric(sample).healing?.effectiveHps)
+      )
     ),
     settlementCount: roundMetric(
-      mean(samples.map(sample => sample.firstCycle.healing?.settlementCount))
+      mean(
+        samples.map(
+          sample => sampleCycleMetric(sample).healing?.settlementCount
+        )
+      )
     ),
   };
   return {
@@ -2096,12 +2977,12 @@ function aggregateSamples(samples) {
 
 function createCycleSampleStatistics({ samples, durationSeconds, aggregate }) {
   const loopHpDamage = describeCycleSampleValues(
-    samples.map(sample => Number(sample.firstCycle?.hpDamage) || 0)
+    samples.map(sample => Number(sampleCycleMetric(sample)?.hpDamage) || 0)
   );
   const cycleDps = describeCycleSampleValues(
     samples.map(
       sample =>
-        (Number(sample.firstCycle?.hpDamage) || 0) /
+        (Number(sampleCycleMetric(sample)?.hpDamage) || 0) /
         Math.max(VALUE_TOLERANCE, durationSeconds)
     )
   );
@@ -2148,16 +3029,24 @@ function createCycleSampleStatistics({ samples, durationSeconds, aggregate }) {
     cycleDps,
     healing: {
       requestedHealing: describeCycleSampleValues(
-        samples.map(sample => sample.firstCycle.healing?.requestedHealing ?? 0)
+        samples.map(
+          sample => sampleCycleMetric(sample).healing?.requestedHealing ?? 0
+        )
       ),
       effectiveHealing: describeCycleSampleValues(
-        samples.map(sample => sample.firstCycle.healing?.effectiveHealing ?? 0)
+        samples.map(
+          sample => sampleCycleMetric(sample).healing?.effectiveHealing ?? 0
+        )
       ),
       overhealing: describeCycleSampleValues(
-        samples.map(sample => sample.firstCycle.healing?.overhealing ?? 0)
+        samples.map(
+          sample => sampleCycleMetric(sample).healing?.overhealing ?? 0
+        )
       ),
       effectiveHps: describeCycleSampleValues(
-        samples.map(sample => sample.firstCycle.healing?.effectiveHps ?? 0)
+        samples.map(
+          sample => sampleCycleMetric(sample).healing?.effectiveHps ?? 0
+        )
       ),
     },
     contributionConservation,
@@ -2216,7 +3105,7 @@ function calculateCycleQuantile(sorted, quantile) {
 function aggregateContributionDimension(samples, key) {
   const byIdentity = new Map();
   for (const sample of samples) {
-    for (const row of sample.firstCycle[key] ?? []) {
+    for (const row of sampleCycleMetric(sample)[key] ?? []) {
       const identity = String(row.identity ?? 'unattributed');
       const aggregate = byIdentity.get(identity) ?? {
         ...row,
@@ -2243,7 +3132,7 @@ function aggregateContributionDimension(samples, key) {
 function aggregateHealingContributionDimension(samples, key) {
   const byIdentity = new Map();
   for (const sample of samples) {
-    for (const row of sample.firstCycle.healing?.[key] ?? []) {
+    for (const row of sampleCycleMetric(sample).healing?.[key] ?? []) {
       const identity = String(row.identity ?? 'unattributed');
       const aggregate = byIdentity.get(identity) ?? {
         ...row,
@@ -2278,6 +3167,10 @@ function aggregateHealingContributionDimension(samples, key) {
     .sort((left, right) => left.identity.localeCompare(right.identity, 'en'));
 }
 
+function sampleCycleMetric(sample) {
+  return sample?.steadyCycle ?? sample?.firstCycle ?? {};
+}
+
 function attachCycleHealing(damage, run, options) {
   return {
     ...damage,
@@ -2298,11 +3191,14 @@ function projectSampleReport(sample) {
     proofHashes: sample.proofHashes ?? null,
     firstCycle: sample.firstCycle ?? null,
     secondCycle: sample.secondCycle ?? null,
+    steadyCycle: sample.steadyCycle ?? null,
+    observedCycles: sample.observedCycles ?? [],
     replayProof: sample.replayProof ?? null,
     actionLegalityProof: sample.actionLegalityProof ?? null,
     normalAttackInputProof: sample.normalAttackInputProof ?? null,
     optimizationDiagnostics: sample.optimizationDiagnostics ?? null,
     loopPlan: sample.loopPlan ?? null,
+    state: sample.state ?? null,
     evidence: sample.evidence ?? null,
   };
 }
@@ -3215,8 +4111,13 @@ function finalizeContributions(map) {
     .sort((left, right) => left.identity.localeCompare(right.identity, 'en'));
 }
 
-function createUniqueCycleActionId(sourceId, existingIds, index) {
-  const base = `cycle-2:${String(sourceId)}`;
+function createUniqueCycleActionId(
+  sourceId,
+  existingIds,
+  index,
+  cycleNumber = 2
+) {
+  const base = `cycle-${cycleNumber}:${String(sourceId)}`;
   if (!existingIds.has(base)) return base;
   let suffix = index + 1;
   while (existingIds.has(`${base}:${suffix}`)) suffix += 1;
@@ -3271,6 +4172,28 @@ function normalizeSeeds(value) {
     .filter(seed => seed != null && seed.length > 0);
 }
 
+function validateCyclePeriodOption({
+  issues,
+  options,
+  key,
+  minimum,
+  maximum,
+  fallback,
+}) {
+  if (options?.[key] == null) return;
+  const value = positiveIntegerOrNull(options[key]);
+  if (value == null || value < minimum || value > maximum) {
+    issues.push(
+      cycleIssue(
+        'machine-axis-cycle-period-option-invalid',
+        `options.${key}`,
+        `${key} must be an integer in [${minimum}, ${maximum}]`,
+        { key, value: options[key], minimum, maximum, fallback }
+      )
+    );
+  }
+}
+
 function mean(values) {
   if (!values.length) return 0;
   return (
@@ -3301,6 +4224,11 @@ function integerOrNull(value) {
   if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) ? number : null;
+}
+
+function positiveIntegerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : null;
 }
 
 function positiveModulo(value, divisor) {

@@ -578,6 +578,28 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
   });
 
+  it('validates the bounded eventual-period search budget', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.options = {
+      criticalPolicy: 'expected',
+      maxReplayCycles: 8,
+      maxPeriodCycles: 4,
+      minimumPeriodRepeats: 3,
+    };
+
+    expect(validateMachineAxisCycleEnvelope(envelope)).toMatchObject({
+      valid: false,
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-cycle-period-budget-insufficient',
+          maxReplayCycles: 8,
+          maxPeriodCycles: 4,
+          minimumPeriodRepeats: 3,
+        }),
+      ],
+    });
+  });
+
   it('resolves a standalone displayed A2 to the only executable normal form before cycle scoring', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
@@ -634,13 +656,14 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
-  it('replays a runtime-context chase and A4/A5 tail without losing normal-input authority', () => {
+  it('keeps runtime-context chase authority evidence before a later repeated-cycle cooldown failure', () => {
     const report = createMachineAxisService().evaluateCycle(
       createMoyinRuntimeContextCycleEnvelope(),
       { allowUnverifiedRuntimeTiming: true }
     );
     const proof = report.normalAttackInputProof.samples[0].proof;
 
+    expect(report.valid).toBe(false);
     expect(proof.firstCycle).toMatchObject({
       passed: true,
       issues: [],
@@ -662,30 +685,13 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         }),
       ]),
     });
-    expect(proof.replay).toMatchObject({
-      passed: true,
-      issues: [],
-      decisions: expect.arrayContaining([
-        expect.objectContaining({
-          actionId: 'cycle-2:cycle-moyin-chase',
-          phase: expect.objectContaining({
-            sourceKind: 'verified-input-context-variant',
-            sourceActionId: 'cycle-2:cycle-moyin-star',
-          }),
-          match: expect.objectContaining({ accepted: true }),
-        }),
-        expect.objectContaining({
-          actionId: 'cycle-2:cycle-moyin-a4',
-          phase: expect.objectContaining({
-            sourceActionId: 'cycle-2:cycle-moyin-chase',
-          }),
-          match: expect.objectContaining({ accepted: true }),
-        }),
-      ]),
-    });
-    expect(report.issues).not.toContainEqual(
+    expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-normal-attack-input-authority-rejected',
+        code: 'machine-axis-cycle-second-replay-not-runnable',
+        replayCount: 8,
+        causes: expect.arrayContaining([
+          expect.objectContaining({ code: 'skill-cooldown-active' }),
+        ]),
       })
     );
   });
@@ -738,7 +744,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   }, 30_000);
 
-  it('accepts Misa projectile mechanics before rejecting only an unclosed def-down cycle state', () => {
+  it('accepts Misa projectile mechanics after the def-down state reaches a steady period', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.scenario.team[0] = {
       ...envelope.contract.scenario.team[0],
@@ -774,26 +780,15 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       allowUnverifiedRuntimeTiming: true,
     });
     expect(report).toMatchObject({
-      valid: false,
-      status: 'rejected',
-      actionLegalityProof: null,
+      valid: true,
+      status: 'closed',
+      actionLegalityProof: { passed: true },
       normalAttackInputProof: { passed: true },
+      stabilization: {
+        policy: 'eventual-periodic-operation-and-metrics-v1',
+      },
     });
-    expect(report.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'machine-axis-cycle-state-not-closed',
-          dimension: 'effects',
-        }),
-        expect.objectContaining({
-          code: 'machine-axis-cycle-state-not-closed',
-          dimension: 'targetStates',
-        }),
-        expect.objectContaining({
-          code: 'machine-axis-cycle-damage-not-stable',
-        }),
-      ])
-    );
+    expect(report.issues).toEqual([]);
     expect(report.issues.map(issue => issue.code)).not.toContain(
       'machine-axis-damage-skipped'
     );
@@ -1064,7 +1059,12 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-cycle-action-form-not-closed',
+        code: 'machine-axis-cycle-second-replay-not-runnable',
+        causes: expect.arrayContaining([
+          expect.objectContaining({
+            code: 'machine-axis-action-not-executable',
+          }),
+        ]),
       })
     );
   }, 30_000);
@@ -1880,7 +1880,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
-  it('rejects a legal sourced Ruby enhanced continuation on ammo deficit', () => {
+  it('separates a sustainable Ruby continuation from unresolved periodic metrics', () => {
     installRubyProfileOverlay();
     const report = createMachineAxisService().evaluateCycle(
       createRubyAmmoDeficitEnvelope()
@@ -1890,10 +1890,15 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.status).toBe('rejected');
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-cycle-resource-deficit',
-        resourceIdentity: 'actor:103002:element:103002047',
-        startValue: 12,
-        endValue: 11,
+        code: 'machine-axis-cycle-metrics-period-unresolved',
+        maxReplayCycles: 12,
+        candidateProofs: [
+          expect.objectContaining({
+            operationPeriod: expect.objectContaining({ closed: true }),
+            resourcePeriod: expect.objectContaining({ closed: true }),
+            metricPeriod: null,
+          }),
+        ],
       })
     );
     expect(report.issues).not.toContainEqual(
@@ -1901,7 +1906,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   }, 30_000);
 
-  it('rejects a one-time warmup benefit when the second cycle damage falls', () => {
+  it('keeps the legacy consecutive-damage helper strict', () => {
     const proof = createCycleReplayStabilityProof({
       firstCycle: { hpDamage: 120, combatHitCount: 2 },
       secondCycle: { hpDamage: 100, combatHitCount: 2 },
@@ -1973,23 +1978,31 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
   });
 
-  it('rejects a real one-time warmup Buff that expires before the next cycle', () => {
+  it('drops a real one-time warmup Buff and scores the eventual stable period', () => {
     const report = createMachineAxisService().evaluateCycle(
       createOneTimeWarmupBuffEnvelope()
     );
-
-    expect(report.valid).toBe(false);
-    expect(report.status).toBe('rejected');
-    expect(report.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: expect.stringMatching(
-            /^machine-axis-cycle-(?:state-not-closed|damage-not-stable)$/
-          ),
-        }),
-      ])
+    expect(report.valid).toBe(true);
+    expect(report.status).toBe('closed');
+    expect(report.formalScore).not.toBeNull();
+    expect(report.stabilization).toMatchObject({
+      policy: 'eventual-periodic-operation-and-metrics-v1',
+      samples: [
+        {
+          metricPeriod: {
+            transientCycleCount: expect.any(Number),
+            periodCycles: 1,
+          },
+        },
+      ],
+    });
+    expect(
+      report.stabilization.samples[0].metricPeriod.transientCycleCount
+    ).toBeGreaterThan(0);
+    expect(report.samples[0].observedCycles[0].hpDamage).toBeGreaterThan(
+      report.metrics.loopHpDamage
     );
-  }, 30_000);
+  }, 120_000);
 
   it('rejects a real second replay that is still on cooldown', () => {
     const report = createMachineAxisService().evaluateCycle(
@@ -2042,7 +2055,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       8
     );
     expect(report.replayProof.stable).toBe(true);
-    expect(report.replayProof.cycles).toHaveLength(2);
+    expect(report.replayProof.cycles.length).toBeGreaterThanOrEqual(4);
     expect(report.replayProof.cycles[1].runnable).toBe(true);
     expect(
       report.replayProof.secondExecution.variantPairs.every(
@@ -2063,7 +2076,9 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     ).toBe(true);
     expect(report.samples[0].firstCycle.enemyStateTransitions).toEqual([]);
     expect(report.samples[0].loopPlan.replayHorizonFrame).toBe(
-      cycleFixture.contract.scenario.durationFrames
+      report.loop.endFrame +
+        (report.samples[0].loopPlan.replayCount - 1) *
+          report.loop.durationFrames
     );
     expect(report.warmup.actionIds).toEqual(['warmup-wait']);
     expect(
@@ -2347,12 +2362,13 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       report.samples.every(
         sample =>
           sample.replayProof.damageStabilityMode ===
-            'cycle-local-common-random-numbers' && sample.replayProof.stable
+            'eventual-periodic-cycle-local-common-random-numbers' &&
+          sample.replayProof.stable
       )
     ).toBe(true);
   }, 120_000);
 
-  it('does not let sampled common-random proof hide a one-time warmup state leak', () => {
+  it('uses sampled common-random proof after excluding a one-time warmup state', () => {
     const envelope = createOneTimeWarmupBuffEnvelope();
     envelope.options = {
       criticalPolicy: 'sampled',
@@ -2361,16 +2377,13 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
 
     const report = createMachineAxisService().evaluateCycle(envelope);
 
-    expect(report.valid).toBe(false);
-    expect(report.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: expect.stringMatching(
-            /^machine-axis-cycle-(?:state-not-closed|damage-not-stable)$/
-          ),
-        }),
-      ])
-    );
+    expect(report.valid).toBe(true);
+    expect(report.issues).toEqual([]);
+    expect(
+      report.stabilization.samples.every(
+        sample => sample.metricPeriod.transientCycleCount > 0
+      )
+    ).toBe(true);
   }, 60_000);
 
   it('keeps infinite-HP damage and contributions independent from finite initial HP', () => {

@@ -25,8 +25,9 @@ export function createMachineAxisOptimizationDiagnostics(
 ) {
   const trace = run?.trace ?? {};
   const scope = normalizeDiagnosticScope(trace, options);
-  const damage = createDamageDiagnostics(trace, scope);
-  const energy = createEnergyDiagnostics(trace, contract, scope);
+  const actionIdMap = options.actionIdMap ?? null;
+  const damage = createDamageDiagnostics(trace, scope, actionIdMap);
+  const energy = createEnergyDiagnostics(trace, contract, scope, actionIdMap);
   const tuningMarks = createTuningMarkDiagnostics(
     trace,
     contract,
@@ -101,7 +102,133 @@ export function aggregateMachineAxisOptimizationDiagnostics(samples = []) {
   };
 }
 
-function createDamageDiagnostics(trace, scope) {
+export function normalizeMachineAxisOptimizationDiagnosticsPerCycle(
+  diagnostics,
+  cycleCount
+) {
+  if (!diagnostics) return null;
+  const divisor = Number(cycleCount);
+  if (!Number.isInteger(divisor) || divisor < 1) {
+    throw new RangeError('Periodic diagnostics cycleCount must be positive');
+  }
+  if (divisor === 1) return diagnostics;
+
+  const scale = value => roundMetric(number(value) / divisor);
+  const scaleReasonRows = rows =>
+    (rows ?? []).map(row => ({ ...row, value: scale(row.value) }));
+  const scaleDamageRows = rows =>
+    (rows ?? []).map(row => ({
+      ...row,
+      hitCount: scale(row.hitCount),
+      rawDamage: scale(row.rawDamage),
+      effectiveHpDamage: scale(row.effectiveHpDamage),
+      toughnessDamage: scale(row.toughnessDamage),
+    }));
+  const scaleResourceRows = rows =>
+    (rows ?? []).map(row => ({
+      ...row,
+      recoveredAmount: scale(row.recoveredAmount),
+      spentAmount: scale(row.spentAmount),
+      netChange: scale(row.netChange),
+      capUptimeMs: scale(row.capUptimeMs),
+      capHitCount: scale(row.capHitCount),
+      recoveryEventCount: scale(row.recoveryEventCount),
+      spendEventCount: scale(row.spendEventCount),
+      recoveryByReason: scaleReasonRows(row.recoveryByReason),
+      spendByReason: scaleReasonRows(row.spendByReason),
+    }));
+  const scaleTuningProfiles = rows =>
+    (rows ?? []).map(row => ({
+      ...row,
+      acquiredStacks: scale(row.acquiredStacks),
+      consumedStacks: scale(row.consumedStacks),
+      expiredStacks: scale(row.expiredStacks),
+      availableStacks: scale(row.availableStacks),
+      coverageMs: scale(row.coverageMs),
+      capCoverageMs: scale(row.capCoverageMs),
+      acquisitionEventCount: scale(row.acquisitionEventCount),
+      consumeEventCount: scale(row.consumeEventCount),
+      expireEventCount: scale(row.expireEventCount),
+      refreshAtCapCount: scale(row.refreshAtCapCount),
+    }));
+
+  const periodScope = structuredClone(diagnostics.scope ?? null);
+  const durationMs = Math.max(
+    0,
+    number(periodScope?.endTimeMs) - number(periodScope?.startTimeMs)
+  );
+  const projection = {
+    schemaVersion: diagnostics.schemaVersion,
+    kind: diagnostics.kind,
+    scope: {
+      ...(periodScope ?? {}),
+      kind: 'stable-period-per-cycle-average',
+      durationMs: roundMetric(durationMs / divisor),
+      periodCycleCount: divisor,
+      periodScope,
+    },
+    damage: {
+      ...diagnostics.damage,
+      totalRawDamage: scale(diagnostics.damage?.totalRawDamage),
+      totalEffectiveHpDamage: scale(diagnostics.damage?.totalEffectiveHpDamage),
+      totalToughnessDamage: scale(diagnostics.damage?.totalToughnessDamage),
+      hitCount: scale(diagnostics.damage?.hitCount),
+      byActor: scaleDamageRows(diagnostics.damage?.byActor),
+      byAction: scaleDamageRows(diagnostics.damage?.byAction),
+      bySourceKind: scaleDamageRows(diagnostics.damage?.bySourceKind),
+      byElement: scaleDamageRows(diagnostics.damage?.byElement),
+      tuning: {
+        ...diagnostics.damage?.tuning,
+        overlimitDamage: scale(diagnostics.damage?.tuning?.overlimitDamage),
+        heldTuningDamage: scale(diagnostics.damage?.tuning?.heldTuningDamage),
+        totalTuningDamage: scale(diagnostics.damage?.tuning?.totalTuningDamage),
+        damageOverTime: scale(diagnostics.damage?.tuning?.damageOverTime),
+      },
+    },
+    energy: {
+      ...diagnostics.energy,
+      overall: {
+        ...diagnostics.energy?.overall,
+        recoveredAmount: scale(diagnostics.energy?.overall?.recoveredAmount),
+        spentAmount: scale(diagnostics.energy?.overall?.spentAmount),
+        insufficientActionCount: scale(
+          diagnostics.energy?.overall?.insufficientActionCount
+        ),
+      },
+      actors: scaleResourceRows(diagnostics.energy?.actors),
+      kibos: scaleResourceRows(diagnostics.energy?.kibos),
+    },
+    tuningMarks: {
+      ...diagnostics.tuningMarks,
+      overall: {
+        ...diagnostics.tuningMarks?.overall,
+        availableStacks: scale(
+          diagnostics.tuningMarks?.overall?.availableStacks
+        ),
+        acquiredStacks: scale(diagnostics.tuningMarks?.overall?.acquiredStacks),
+        consumedStacks: scale(diagnostics.tuningMarks?.overall?.consumedStacks),
+        expiredStacks: scale(diagnostics.tuningMarks?.overall?.expiredStacks),
+        refreshAtCapCount: scale(
+          diagnostics.tuningMarks?.overall?.refreshAtCapCount
+        ),
+        anyMarkCoverageMs: scale(
+          diagnostics.tuningMarks?.overall?.anyMarkCoverageMs
+        ),
+        overlimitDamage: scale(
+          diagnostics.tuningMarks?.overall?.overlimitDamage
+        ),
+      },
+      profiles: scaleTuningProfiles(diagnostics.tuningMarks?.profiles),
+    },
+  };
+  projection.recommendations = createOptimizationRecommendations(projection);
+  return {
+    ...projection,
+    diagnosticsHash: hashCanonicalValue(projection),
+  };
+}
+
+function createDamageDiagnostics(trace, scope, actionIdMap = null) {
   const actionById = new Map(
     (trace.actions ?? []).map(action => [String(action.id), action])
   );
@@ -125,11 +252,11 @@ function createDamageDiagnostics(trace, scope) {
   const byAction = createDamageRows({
     events,
     totalEffectiveHpDamage,
-    identity: event => String(event.actionId ?? 'unattributed'),
+    identity: event => mapActionId(event.actionId, actionIdMap),
     metadata: event => {
       const action = actionById.get(String(event.actionId));
       return {
-        actionId: event.actionId ?? null,
+        actionId: mapActionId(event.actionId, actionIdMap),
         actorId: event.actorId ?? action?.actorId ?? null,
         actionName: action?.name ?? null,
         actionKind: action?.actionKind ?? null,
@@ -250,7 +377,7 @@ function classifyDamageSource(event, action) {
   return action?.type === 'skill' ? 'actor-action' : 'unattributed';
 }
 
-function createEnergyDiagnostics(trace, contract, scope) {
+function createEnergyDiagnostics(trace, contract, scope, actionIdMap = null) {
   const initial = trace.state?.initial ?? {};
   const actors = createResourceRows({
     resourceKind: 'actor-sp',
@@ -293,7 +420,7 @@ function createEnergyDiagnostics(trace, contract, scope) {
         isExecutionEntryInScope(action, scope) &&
         String(action.skipReason ?? '').includes('resource-insufficient')
     )
-    .map(action => String(action.actionId));
+    .map(action => mapActionId(action.actionId, actionIdMap));
   return {
     overall: {
       startValue: roundMetric(sum(all.map(row => row.startValue))),
@@ -849,6 +976,11 @@ function numericMapRows(map) {
         right.value - left.value ||
         left.reason.localeCompare(right.reason, 'en')
     );
+}
+
+function mapActionId(value, actionIdMap) {
+  const actionId = String(value ?? 'unattributed');
+  return actionIdMap?.get?.(actionId) ?? actionId;
 }
 
 function addNumeric(map, key, value) {

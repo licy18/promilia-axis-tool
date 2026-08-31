@@ -2239,3 +2239,11 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - CLI：`node scripts/run-ai-guided-search.mjs --contract <json> [--guidance|--guidance-file <json>] [--options <json>] [--feedback-output <path>]`（npm：`search:ai-guided`），示例见 `work/m12-c/guidance.sample.json`、`work/m12-c/feedback.sample.json`。
 - 外层（队伍/装配 build 池）尚未实现：feedback `outer.implemented=false`，外层字段只校验、不消费；M12-C1 实现时必须消费同一 guidance 合同。
 - 通用 Agent skill：`skills/azpr-m12c-ai-guided-search/`（已同步安装到 `~/.codex/skills/azpr-m12c-ai-guided-search`），含 SKILL.md、`references/protocol.md` 与 examples；`quick_validate.py` 通过。
+
+### M12-C 循环评分最终周期语义（2026-08-31）
+
+- `AzPrMachineAxisCycleDps` 不再要求排轴者把 `[startFrame,endFrame)` 人工旋转到单圈 Buff/DoT/韧性完全相等的边界。固定输入自动按 4→8→12 圈扩展，识别并剔除 transient/warmup；合同可显式设置 `maxReplayCycles/maxPeriodCycles/minimumPeriodRepeats`，且预算必须覆盖最大周期的确认次数。
+- 正式闭合拆为四层：相同输入始终可执行且 actual form 相同；SP/奇波能量/特殊资源不净亏；逐圈伤害与贡献进入最终周期；完整 score state 在同一周期复现。只有四层同时成立才输出 `status=closed/formalScore`，有限圈暂时可执行或仅数值看似稳定均不能晋升。
+- `steadyCycle` 是稳定周期总量除以周期圈数后的正式每圈值；`observedCycles[]` 保留暖机与各周期相位。一次性 Buff 可存在于 transient，但不进入分数；周期 `2/3` 交替时每圈伤害为 `2.5`。伤害来源、元素、超限、能量利用率、印记消费/覆盖等诊断使用相同窗口，比例由周期总分子/总分母计算。
+- 多圈 replay 发现旧两圈样例中的真实远期反例：一条末音星鸣→追击轴到第 7 圈出现 `skill-cooldown-active` 并连带普攻链失配，现正确 fail closed。一次性韩大招暖机用例则自动在后续稳定伤害周期闭合。
+- 本项改变 tracked 生产评分语义和 cycle hash；旧 search authority、旧 cycle result 与查询库的 `cycle-boundary-runtime` source binding 均需在提交后失效并重新建立/审核。它不改变数据库内容，也不构成客户端实测或 `clientParityReady` 声明。

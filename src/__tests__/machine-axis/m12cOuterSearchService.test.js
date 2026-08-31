@@ -261,7 +261,9 @@ describe('M12-C outer search integration', () => {
     expect(report.failures).toEqual([
       expect.objectContaining({
         stage: 'inner-search-empty',
-        issues: expect.arrayContaining(['machine-axis-cycle-state-not-closed']),
+        issues: expect.arrayContaining([
+          'machine-axis-cycle-action-form-not-closed',
+        ]),
       }),
     ]);
     expect(report.failures[0].issues).not.toContain(
