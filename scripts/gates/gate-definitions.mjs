@@ -904,7 +904,7 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'search-core-authority',
-    version: 2,
+    version: 3,
     order: 515,
     kind: 'search-authority',
     description:
@@ -916,6 +916,9 @@ export const GATE_DEFINITIONS = deepFreeze([
       ...FORMAL_DETERMINISM_TEST_FILES,
       'reports/m10/**/golden-trace.json',
       'scripts/search-core-authority-verify.mjs',
+      'src/domain/verifiedChargedInputAuthority.js',
+      'src/data/verifiedChargedInputAuthorityData.js',
+      'src/data/generated/verified-combat-mechanics-layer-hashes.json',
       ...packageAndTestConfig,
     ],
     smartTriggers: [],

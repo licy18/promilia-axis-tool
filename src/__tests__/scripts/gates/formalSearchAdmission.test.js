@@ -10,6 +10,7 @@ import {
   loadFormalSearchAdmissionEvidence,
 } from '../../../../scripts/gates/formal-search-admission.mjs';
 import { getGateDefinition } from '../../../../scripts/gates/gate-definitions.mjs';
+import { createSearchRuntimeAuthorityIdentity } from '../../../../scripts/search-core-authority-verify.mjs';
 
 let currentEvidence;
 
@@ -50,6 +51,57 @@ beforeAll(async () => {
 });
 
 describe('formal search admission', () => {
+  it('publishes every runtime authority hash required by a search consumer', () => {
+    const result = createSearchRuntimeAuthorityIdentity({
+      normalAttackInputAuthority: { contractHash: 'a'.repeat(16) },
+      chargedInputAuthority: { authorityHash: 'b'.repeat(64) },
+      layerHashes: {
+        packageId: 'azpr-test',
+        packageVersion: 16,
+        packageHash: 'c'.repeat(64),
+        mechanismHash: 'd'.repeat(64),
+        dataVersionHash: 'e'.repeat(64),
+      },
+    });
+
+    expect(result).toEqual({
+      valid: true,
+      issues: [],
+      value: {
+        schemaVersion: 1,
+        contractName: 'AzPrSearchRuntimeAuthorityIdentity',
+        normalAttackInputAuthorityHash: 'a'.repeat(16),
+        chargedInputAuthorityHash: 'b'.repeat(64),
+        packageId: 'azpr-test',
+        packageVersion: 16,
+        packageHash: 'c'.repeat(64),
+        mechanismHash: 'd'.repeat(64),
+        dataVersionHash: 'e'.repeat(64),
+      },
+    });
+  });
+
+  it('fails closed when any search runtime authority identity is absent', () => {
+    const result = createSearchRuntimeAuthorityIdentity({
+      normalAttackInputAuthority: { contractHash: 'a'.repeat(16) },
+      chargedInputAuthority: {},
+      layerHashes: {
+        packageId: 'azpr-test',
+        packageVersion: 16,
+        packageHash: 'c'.repeat(64),
+        mechanismHash: 'd'.repeat(64),
+      },
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        'runtime-authority-charged-input-hash-invalid',
+        'runtime-authority-data-version-hash-invalid',
+      ])
+    );
+  });
+
   it('loads the scope policy through native Node ESM', () => {
     const moduleUrl = pathToFileURL(
       resolve('src/domain/kiboAxisActionScopePolicy.js')

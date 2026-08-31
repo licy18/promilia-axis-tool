@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { mkdir, rename, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -28,6 +28,7 @@ import {
   loadFormalSearchAdmissionEvidence,
   validateFormalSearchAdmissionRecord,
 } from './gates/formal-search-admission.mjs';
+import { getVerifiedChargedInputAuthorityDescriptor } from '../src/domain/verifiedChargedInputAuthority.js';
 
 const execFileAsync = promisify(execFile);
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -165,6 +166,56 @@ export async function runSearchCoreAuthorityVerification({
     });
   }
   const admissionValidation = validateFormalSearchAdmissionRecord(admission);
+  let runtimeAuthority;
+  try {
+    const layerHashes = JSON.parse(
+      await readFile(
+        path.join(
+          root,
+          'src',
+          'data',
+          'generated',
+          'verified-combat-mechanics-layer-hashes.json'
+        ),
+        'utf8'
+      )
+    );
+    const runtimeAuthorityResult = createSearchRuntimeAuthorityIdentity({
+      normalAttackInputAuthority: evidence.normalAttackInputAuthority,
+      chargedInputAuthority: getVerifiedChargedInputAuthorityDescriptor(),
+      layerHashes,
+    });
+    if (!runtimeAuthorityResult.valid) {
+      return completeFailure({
+        root,
+        reportPath,
+        stdout,
+        authorityPending,
+        snapshot,
+        preflight,
+        stageResults,
+        admission,
+        stage: 'runtime-authority',
+        issues: runtimeAuthorityResult.issues,
+      });
+    }
+    runtimeAuthority = runtimeAuthorityResult.value;
+  } catch (error) {
+    return completeFailure({
+      root,
+      reportPath,
+      stdout,
+      authorityPending,
+      snapshot,
+      preflight,
+      stageResults,
+      admission,
+      stage: 'runtime-authority',
+      issues: [
+        `runtime-authority-load-failed:${normalizeErrorIdentity(error)}`,
+      ],
+    });
+  }
   const postflight = await inspectRepositoryAuthority(root);
   const postflightStable =
     postflight.valid &&
@@ -202,6 +253,7 @@ export async function runSearchCoreAuthorityVerification({
       requiredGates: [...SEARCH_CORE_GATE_NAMES],
       formalSearchAdmission: admission,
       productRelease: admission.productRelease,
+      runtimeAuthority,
       smartCacheAuthority: snapshot.authority,
     },
     details: {
@@ -210,7 +262,7 @@ export async function runSearchCoreAuthorityVerification({
     },
   });
   const report = finalizeReport({
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: 'azpr-search-core-authority',
     gate: 'search-core-authority',
     status: 'pass',
@@ -227,6 +279,7 @@ export async function runSearchCoreAuthorityVerification({
     recordId: record.recordId,
     gates: proof.gates,
     databaseContentHash: evidence.databaseContentHash,
+    runtimeAuthority,
     headlessCharacterScope: evidence.headlessCharacterScope,
     kiboAxisActionScope: evidence.kiboAxisActionScope,
     formalSearchAdmission: admission,
@@ -237,6 +290,47 @@ export async function runSearchCoreAuthorityVerification({
     `\nSearch core authority: PASS (executed)\nDescriptor: ${reportPath}\nDescriptor SHA-256: ${report.descriptorSha256}\n`
   );
   return { status: 'pass', exitCode: 0, report, reportPath };
+}
+
+export function createSearchRuntimeAuthorityIdentity({
+  normalAttackInputAuthority = null,
+  chargedInputAuthority = null,
+  layerHashes = null,
+} = {}) {
+  const value = {
+    schemaVersion: 1,
+    contractName: 'AzPrSearchRuntimeAuthorityIdentity',
+    normalAttackInputAuthorityHash:
+      normalAttackInputAuthority?.contractHash ?? null,
+    chargedInputAuthorityHash: chargedInputAuthority?.authorityHash ?? null,
+    packageId: layerHashes?.packageId ?? null,
+    packageVersion: layerHashes?.packageVersion ?? null,
+    packageHash: layerHashes?.packageHash ?? null,
+    mechanismHash: layerHashes?.mechanismHash ?? null,
+    dataVersionHash: layerHashes?.dataVersionHash ?? null,
+  };
+  const issues = [];
+  if (!/^[a-f0-9]{16}$/u.test(value.normalAttackInputAuthorityHash ?? '')) {
+    issues.push('runtime-authority-normal-input-hash-invalid');
+  }
+  if (!/^[a-f0-9]{64}$/u.test(value.chargedInputAuthorityHash ?? '')) {
+    issues.push('runtime-authority-charged-input-hash-invalid');
+  }
+  if (!value.packageId || !Number.isInteger(value.packageVersion)) {
+    issues.push('runtime-authority-package-identity-invalid');
+  }
+  for (const [key, issue] of [
+    ['packageHash', 'runtime-authority-package-hash-invalid'],
+    ['mechanismHash', 'runtime-authority-mechanism-hash-invalid'],
+    ['dataVersionHash', 'runtime-authority-data-version-hash-invalid'],
+  ]) {
+    if (!/^[a-f0-9]{64}$/u.test(value[key] ?? '')) issues.push(issue);
+  }
+  return {
+    valid: issues.length === 0,
+    issues,
+    value,
+  };
 }
 
 function createSearchCoreProof({ snapshot, stageResults }) {
@@ -340,7 +434,7 @@ function createFailureReport({
   recordId = null,
 }) {
   return finalizeReport({
-    schemaVersion: 1,
+    schemaVersion: 2,
     kind: 'azpr-search-core-authority',
     gate: 'search-core-authority',
     status: 'fail',
