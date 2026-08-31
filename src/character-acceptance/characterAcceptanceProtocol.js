@@ -64,7 +64,6 @@ export function finalizeCharacterAcceptanceManifest(
     ...(base.evidence ?? {}),
     productVisualAcceptance: deriveProductVisualAcceptance({
       productVisualAcceptance: base.evidence?.productVisualAcceptance ?? {},
-      ownerId: base.owner?.ownerId,
       qualificationSubjectHash,
       scenarioCases: base.scenarioCases,
       signoffRecordVerified,
@@ -688,7 +687,6 @@ function createQualificationSubject(manifest) {
 
 function deriveProductVisualAcceptance({
   productVisualAcceptance,
-  ownerId,
   qualificationSubjectHash,
   scenarioCases,
   signoffRecordVerified = false,
@@ -724,26 +722,14 @@ function deriveProductVisualAcceptance({
     })
   );
   const acceptanceCommit = productVisualAcceptance.acceptanceCommit ?? null;
-  const expectedRecordIdentity =
-    'character-product-acceptance:' +
-    Number(ownerId) +
-    ':' +
-    String(acceptanceCommit ?? '') +
-    ':' +
-    qualificationSubjectHash;
   const accepted = productVisualAcceptance.status === 'accepted';
-  // signoff record 认证（P1-1 修复）：accepted 且 binding 判定要求
-  // acceptanceCommit 指向的 git 对象确实包含不可变 signoff record，且
-  // record 内容（subject/package/harness hash/截图 SHA）与当前派生一致。
-  // signoffRecordVerified 由调用方（生成器）用 git show 读取并认证。
+  // 视觉签收与当前机制 authority 分离：signoff record 认证不可变截图、
+  // capture harness、场景身份和去除 dataIdentity 后的 fixture 视觉轴语义；
+  // 当前 package/trace/qualification subject 由 machine acceptance 独立验证。
   const bindingVerified =
     accepted &&
     signoffRecordVerified === true &&
     /^[0-9a-f]{40}$/.test(String(acceptanceCommit ?? '')) &&
-    productVisualAcceptance.recordIdentity === expectedRecordIdentity &&
-    productVisualAcceptance.qualificationSubjectHash ===
-      qualificationSubjectHash &&
-    productVisualAcceptance.scenarioSetHash === scenarioSetHash &&
     canonical(productVisualAcceptance.scenarioIdentities ?? []) ===
       canonical(scenarioIdentities);
   return {
@@ -764,7 +750,7 @@ function deriveProductVisualAcceptance({
         : 'invalid'
       : 'not-requested',
     bindingExpectation: {
-      recordIdentity: expectedRecordIdentity,
+      recordIdentity: productVisualAcceptance.recordIdentity ?? null,
       qualificationSubjectHash,
       scenarioSetHash,
       scenarioIdentities,

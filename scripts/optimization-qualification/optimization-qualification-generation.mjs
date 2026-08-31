@@ -72,7 +72,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     'cd455e6cab217c5898e35e290b7d7e9d65b42a20bd0f71250a90377dfb93badd',
   verifiedMechanics:
-    'df8336d51170bd6c6f4402f788006b96f1f7a10d863f1886819c8b8e2d9cf3ee',
+    '9ca54d858dde6f6cc425c09cb6859d772cf11367ef12a3953fb33bde9ff46901',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
@@ -1154,9 +1154,7 @@ function createQualificationManifests({
         ),
         maturityState:
           acceptanceEntries.length === sourceIds.length
-            ? acceptanceEntries.every(
-                entry => entry.optimizationReady === true
-              )
+            ? acceptanceEntries.every(entry => entry.optimizationReady === true)
               ? 'optimization-ready'
               : 'runtime-integrated'
             : 'extracted',
@@ -1216,9 +1214,11 @@ function createQualificationManifests({
           blockers.length === 0
             ? 'optimization-ready'
             : maturity?.actions &&
-                Object.values(maturity.actions).every(action => action?.runnable)
-            ? 'runtime-integrated'
-            : 'extracted',
+                Object.values(maturity.actions).every(
+                  action => action?.runnable
+                )
+              ? 'runtime-integrated'
+              : 'extracted',
         blockers,
         evidence: {
           kiboId: kibo.kiboId,
@@ -1672,7 +1672,9 @@ function createCultivationCatalog({
           item => item.scenarioReachability === 'unreachable-action-disabled'
         ).length,
         unreachableActionDisabledIds: publicSoulEssences
-          .filter(item => item.scenarioReachability === 'unreachable-action-disabled')
+          .filter(
+            item => item.scenarioReachability === 'unreachable-action-disabled'
+          )
           .map(item => item.soulEssenceId),
       },
     },
@@ -2105,7 +2107,8 @@ function collectTriggerSkillTags(node, out = []) {
   return out;
 }
 
-function projectSoulEssenceRosterRecord(item, profile) {  return {
+function projectSoulEssenceRosterRecord(item, profile) {
+  return {
     soulEssenceId: Number(item.id),
     name: item.name,
     rarity: item.rarity ?? null,

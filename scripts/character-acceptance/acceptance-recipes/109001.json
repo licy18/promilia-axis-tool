@@ -7,9 +7,7 @@
     "recordIdentity": "character-product-acceptance:109001:365df3685b9b16a06ec57da452f05618915b2d11:7b296ee673083095",
     "qualificationSubjectHash": "7b296ee673083095",
     "scenarioSetHash": "d9da1baebed0c611",
-    "scenarioIdentities": [
-      "m11-d-109001-visual-acceptance"
-    ],
+    "scenarioIdentities": ["m11-d-109001-visual-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
@@ -42,11 +40,23 @@
   },
   "ownerId": 109001,
   "fixturePath": "fixtures/character-acceptance/109001-visual.json",
-  "goldenReports": [
-    "reports/m10/109001/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/109001/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10900162,
   "additionalScenarios": [
+    {
+      "fixturePath": "fixtures/character-acceptance/109001-limit-window-109.json",
+      "skipCriticalMatrix": true,
+      "skipThunderLifecycle": true,
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "actionId": "limit-window-offset-109",
+          "controlSkillId": 10900143,
+          "subSkillIndex": 0,
+          "semanticName": "入场技追击"
+        }
+      ]
+    },
     {
       "fixturePath": "fixtures/character-acceptance/109001-window-39.json",
       "skipCriticalMatrix": true,

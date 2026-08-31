@@ -322,6 +322,9 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
     headlessAssumptionContracts:
       compilation.dataIdentity.headlessAssumptionContracts ?? [],
     actions: (effectiveScenario.actions ?? []).map(projectTraceAction),
+    cinematicTimeScale: projectCinematicTimeScaleRuntime(
+      simulation.cinematicTimeScaleRuntime
+    ),
     executionPlan: projectExecutionPlan(simulation.actionExecutionPlan),
     readiness: projectReadinessTimeline(simulation.actionReadinessTimeline),
     events: (simulation.eventLog ?? []).map(projectRuntimeEvent),
@@ -405,6 +408,49 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
     diagnostics: projectDiagnostics(simulation),
   };
   return canonicalizeValue(trace);
+}
+
+function projectCinematicTimeScaleRuntime(runtime) {
+  if (!runtime) return null;
+  return {
+    schemaVersion: runtime.schemaVersion ?? null,
+    contractName: runtime.contractName ?? null,
+    status: runtime.status ?? null,
+    wallClockPolicy: runtime.wallClockPolicy ?? null,
+    scoreClockPolicy: runtime.scoreClockPolicy ?? null,
+    dungeonTimerPolicy: runtime.dungeonTimerPolicy ?? null,
+    actorClockPolicy: runtime.actorClockPolicy ?? null,
+    enemyClockPolicy: runtime.enemyClockPolicy ?? null,
+    actionOccupancyPolicy: runtime.actionOccupancyPolicy ?? null,
+    disabledByRuntimeMode: runtime.disabledByRuntimeMode === true,
+    windows: (runtime.windows ?? []).map(window => ({
+      actionId: window.actionId ?? null,
+      actorId: window.actorId ?? null,
+      skillId: window.skillId ?? null,
+      actionKind: window.actionKind ?? null,
+      startMs: window.startMs ?? null,
+      endMs: window.endMs ?? null,
+      durationMs: window.durationMs ?? null,
+      scaleMode: window.scaleMode ?? null,
+      campTypeFilter: window.campTypeFilter ?? null,
+      entityTypeFilter: window.entityTypeFilter ?? null,
+      affectsEnemyMonsterClock: window.affectsEnemyMonsterClock === true,
+      affectsPlayerHeroClock: window.affectsPlayerHeroClock === true,
+      sourceIdentity: window.sourceIdentity ?? null,
+    })),
+    enemyPauseWindows: (runtime.enemyPauseWindows ?? []).map(window => ({
+      startMs: window.startMs ?? null,
+      endMs: window.endMs ?? null,
+      durationMs: window.durationMs ?? null,
+      sourceActionIds: window.sourceActionIds ?? [],
+      sourceSkillIds: window.sourceSkillIds ?? [],
+      sourceIdentities: window.sourceIdentities ?? [],
+    })),
+    unresolved: runtime.unresolved ?? [],
+    complete: runtime.complete === true,
+    applied: runtime.applied === true,
+    summary: runtime.summary ?? null,
+  };
 }
 
 function projectTraceAction(action) {

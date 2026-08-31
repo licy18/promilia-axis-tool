@@ -183,7 +183,9 @@ describe('verified combat project replay consistency', () => {
         ])
       )
     ).toEqual({
-      'verified-replay-han-star': 8,
+      // 10100312 has seven native hits plus one tuning packet, but the switch
+      // at 1600ms cancels the three still-owner-bound tail hits.
+      'verified-replay-han-star': 5,
       'verified-replay-pangpang-combo': 2,
       'verified-replay-muyin-charged': 3,
       'verified-replay-wind-kibo': 0,

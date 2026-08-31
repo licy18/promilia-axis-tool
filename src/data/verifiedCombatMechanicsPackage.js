@@ -1052,6 +1052,16 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     issues.push('action-bindings-missing');
   }
   if (
+    value?.cinematicTimeScaleContract?.status !==
+      'client-cinematic-time-scale-contract-ready' ||
+    value?.cinematicTimeScaleContract?.clockPolicy?.scoreClock !==
+      'wall-time-continues' ||
+    value?.cinematicTimeScaleContract?.clockPolicy?.enemyClock !==
+      'pause-during-filtered-zero-scale-window'
+  ) {
+    issues.push('cinematic-time-scale-contract-invalid');
+  }
+  if (
     !Array.isArray(value?.actionMappings) ||
     value.actionMappings.length !== value?.summary?.candidateActionCount ||
     value.actionMappings.some(
@@ -1062,6 +1072,23 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     )
   ) {
     issues.push('action-mappings-invalid');
+  }
+  if (
+    (value?.actionMappings ?? [])
+      .filter(
+        mapping =>
+          mapping.ownerKind === 'actor' && mapping.actionKind === 'ultimate'
+      )
+      .some(
+        mapping =>
+          !['applied', 'unresolved'].includes(
+            mapping.cinematicTimeScale?.status
+          ) ||
+          (mapping.cinematicTimeScale?.status === 'applied' &&
+            !(mapping.cinematicTimeScale?.windows?.length > 0))
+      )
+  ) {
+    issues.push('cinematic-time-scale-action-bindings-invalid');
   }
   if (!Array.isArray(value?.controlBindings)) {
     issues.push('control-bindings-missing');

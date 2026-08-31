@@ -210,6 +210,47 @@ describe('verified target-state runtime', () => {
     ).toBe(true);
   });
 
+  it('extends enemy target-state expiry across a cinematic enemy-clock pause only', () => {
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 15000 },
+        actors: [
+          {
+            id: 'actor-1',
+            characterId: 424242,
+            name: 'Synthetic Owner',
+          },
+        ],
+        enemy: { id: 'enemy-1', name: 'Synthetic Enemy' },
+        actions: [createAction('gain', 0)],
+      },
+      actionResolutionById: new Map([
+        [
+          'gain',
+          createResolution({
+            controlSkillId: 424201,
+            hits: [createHit(9001, 5)],
+          }),
+        ],
+      ]),
+      mechanicsPackage: createMechanicsPackage(),
+      cinematicTimeScaleRuntime: {
+        enemyPauseWindows: [{ startMs: 1000, endMs: 3000 }],
+      },
+    });
+
+    expect(
+      result.events.find(event => event.payload.operation === 'expire')
+    ).toMatchObject({
+      timeMs: 12083.333333,
+      payload: {
+        stateIdentity: 'enemy:synthetic-firework',
+        beforeValue: 1,
+        afterValue: 0,
+      },
+    });
+  });
+
   it('keeps same-frame independent layers addressable and accepts both controlled-actor target aliases', () => {
     const actionResolutionById = new Map([
       [

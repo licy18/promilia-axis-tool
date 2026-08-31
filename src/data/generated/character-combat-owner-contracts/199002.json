@@ -6941,6 +6941,115 @@
             "verified-zero": 30
           }
         },
+        "cinematicTimeScale": {
+          "schemaVersion": 1,
+          "kind": "azpr-client-cinematic-time-scale-binding",
+          "status": "applied",
+          "sourceKind": "azpr-client-cull-entity-time-scale-evidence",
+          "clockPolicy": {
+            "scoreClock": "wall-time-continues",
+            "dungeonTimer": "unity-time-continues-without-pause-world",
+            "actorClock": "client-camp-and-entity-filtered",
+            "enemyClock": "pause-during-filtered-zero-scale-window",
+            "actionOccupancy": "unchanged"
+          },
+          "runtimeRestrictions": {
+            "multiplayerOnline": "disabled",
+            "kiboBattle": "disabled"
+          },
+          "windows": [
+            {
+              "startFrame": 0,
+              "endFrame": 101,
+              "durationFrames": 101,
+              "frameRate": 60,
+              "durationMs": 1683.333333,
+              "timeScalePriority": 0,
+              "timeScalePriorityName": "UltimateSkill",
+              "campTypeFilter": 2,
+              "campTypeFilterName": "Monster",
+              "entityTypeFilter": 252230,
+              "entityTypeFilterNames": [
+                "Hero",
+                "KiBoBoss",
+                "Item",
+                "Summon",
+                "Pet",
+                "Unknown4096",
+                "Monster",
+                "GM",
+                "BigWorldPet",
+                "Independent"
+              ],
+              "ignoreCameraTimeScale": false,
+              "ignoreSelfTimeScale": false,
+              "scaleMode": "paused",
+              "curveKeys": [
+                {
+                  "timeRaw": 0,
+                  "valueRaw": 0,
+                  "time": 0,
+                  "value": 0
+                },
+                {
+                  "timeRaw": 65536,
+                  "valueRaw": 0,
+                  "time": 1,
+                  "value": 0
+                }
+              ],
+              "curveWrapMode": 2,
+              "affectsEnemyMonsterClock": true,
+              "affectsPlayerHeroClock": false,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-3115647780579240623__-3115647780579240623.json#CullEntityTimeScaleData"
+            },
+            {
+              "startFrame": 0,
+              "endFrame": 101,
+              "durationFrames": 101,
+              "frameRate": 60,
+              "durationMs": 1683.333333,
+              "timeScalePriority": 0,
+              "timeScalePriorityName": "UltimateSkill",
+              "campTypeFilter": 4,
+              "campTypeFilterName": "Player",
+              "entityTypeFilter": 64,
+              "entityTypeFilterNames": [
+                "Item"
+              ],
+              "ignoreCameraTimeScale": false,
+              "ignoreSelfTimeScale": false,
+              "scaleMode": "paused",
+              "curveKeys": [
+                {
+                  "timeRaw": 0,
+                  "valueRaw": 0,
+                  "time": 0,
+                  "value": 0
+                },
+                {
+                  "timeRaw": 65536,
+                  "valueRaw": 0,
+                  "time": 1,
+                  "value": 0
+                }
+              ],
+              "curveWrapMode": 2,
+              "affectsEnemyMonsterClock": false,
+              "affectsPlayerHeroClock": false,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_8830988656045135185__8830988656045135185.json#CullEntityTimeScaleData"
+            }
+          ],
+          "summary": {
+            "windowCount": 2,
+            "pausedWindowCount": 2,
+            "enemyMonsterClockWindowCount": 1,
+            "playerHeroClockWindowCount": 0
+          },
+          "sourceIdentity": "TC GameAssembly.dll#CullEntityTimeScaleBehavior.Start/Update/End|dump.cs#CullEntityTimeScaleData",
+          "reasons": [],
+          "applied": true
+        },
         "mechanicsClassification": "applied",
         "actionTiming": {
           "schemaVersion": 1,
@@ -91041,7 +91150,7 @@
       "sourceIdentity": "NewTable/hero.rows[id=199002].propertyId=199002|NewTable/unit_property.rows[id=199002].baseAttributeId=199002|NewTable/template_value.rows[id=199002].baseAttribute|src/data/generated/characters.json#items[id=199002]|NewTable/hero.rows[id=199002]|NewTable/template_value.rows[id=199002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199002340.asset/MonoBehaviour/ast_199002340__-4047543422981142373.json#elementConfigId=199002340|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=1956071209993179589|skill_control_19900212.asset#199002112@16F|skill_control_19900212.asset#199002112@16F|skill_control_19900212.asset#map0.element199002340@16F|ast_199002340.asset#tags[1001];time=20000->199002341.attr1+600|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199002344.asset/MonoBehaviour/ast_199002344__-3433029951648199025.json#elementConfigId=199002344|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=1956071209993179589|skill_control_19900212.asset#199002112@16F|skill_control_19900212.asset#199002112@16F|skill_control_19900212.asset#map0.element199002344@16F|ast_199002344.asset#time=20000->199002345.attr3-500,199002346.attr4-500|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/MonoBehaviour_-2228059081001781129__-2228059081001781129.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-2416099260478318640|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/MonoBehaviour_-2228059081001781129__-2228059081001781129.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-7779467090647236434|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/MonoBehaviour_-2228059081001781129__-2228059081001781129.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-8110218846358589784|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/MonoBehaviour_-2228059081001781129__-2228059081001781129.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=1638294552884431725|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/MonoBehaviour_-2228059081001781129__-2228059081001781129.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=4713613491810106684|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[16]|battle-element-assets.jsonl#path_id=-8125310485002205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[12]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[29]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[12]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[20]|battle-element-assets.jsonl#path_id=-7971530825700303086|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[32]|battle-element-assets.jsonl#path_id=-8555577344516787750|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[32]|battle-element-assets.jsonl#path_id=2771922491407305440|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/MonoBehaviour_-1202975419862149807__-1202975419862149807.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillResourceMaps[0].elements[16]|battle-element-assets.jsonl#path_id=4344804893602023502|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=-8125310485002205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[23]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[14]|battle-element-assets.jsonl#path_id=-7971530825700303086|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[26]|battle-element-assets.jsonl#path_id=-8555577344516787750|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[26]|battle-element-assets.jsonl#path_id=2771922491407305440|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/MonoBehaviour_-1773181642068698567__-1773181642068698567.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=4344804893602023502|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900227.asset/MonoBehaviour/MonoBehaviour_3614467945530961198__3614467945530961198.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900227.asset/MonoBehaviour/skill_control_19900227__9012285578792220206.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-4485609026958480304"
     }
   },
-  "contractHash": "226ab1852b7a966a61f70f99898c2c78f088c0dcaedc7add3fd7e4f778cba2db",
+  "contractHash": "f412f2f1f860b2573386fa3f924fe226953121026362275cfd50c5848225f634",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 5,

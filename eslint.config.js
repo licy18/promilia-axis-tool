@@ -2,7 +2,7 @@ export default [
   {
     files: ['**/*.{js,jsx,cjs,mjs}'],
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 'latest',
       sourceType: 'module',
     },
     rules: {

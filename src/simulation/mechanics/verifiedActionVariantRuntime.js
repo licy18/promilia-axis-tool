@@ -20,6 +20,7 @@ import {
   EFFECT_TARGET_KINDS,
 } from '../../domain/projectSchema';
 import { applyVerifiedTargetStateRuntime } from './verifiedTargetStateRuntime';
+import { createCinematicTimeScaleRuntime } from './cinematicTimeScaleRuntime';
 import {
   compareActionSourceSequence,
   getActionSourceSequencePath,
@@ -58,6 +59,18 @@ export function createVerifiedActionVariantRuntime({
       'verified-special-resource-catalog-not-installed'
     );
   }
+  const cinematicTimeScaleRuntime = createCinematicTimeScaleRuntime({
+    scenario,
+    actionExecutionPlan,
+  });
+  const cinematicTimeScaleUnresolvedByActionId = new Map(
+    (cinematicTimeScaleRuntime.unresolved ?? []).map(entry => [
+      entry.actionId,
+      entry,
+    ])
+  );
+  const requireCompleteCinematicTimeScaleEvidence =
+    isFormalCinematicTimeScaleScenario(scenario);
 
   const executionByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
@@ -1131,6 +1144,28 @@ export function createVerifiedActionVariantRuntime({
     const actionTimeMs = Number(action.startMs) || 0;
     flushPending(actionTimeMs);
     removeExpiredSwitchWindows(activeSwitchWindows, actionTimeMs);
+    const cinematicTimeScaleUnresolved =
+      cinematicTimeScaleUnresolvedByActionId.get(action.id);
+    if (
+      cinematicTimeScaleUnresolved &&
+      requireCompleteCinematicTimeScaleEvidence
+    ) {
+      const block = createCinematicTimeScaleExecutionBlock({
+        action,
+        unresolved: cinematicTimeScaleUnresolved,
+      });
+      executionBlocks.push(block);
+      actionResolutionById.set(action.id, {
+        ...resolveVerifiedCombatActionMechanics(action, {
+          combatScenario: scenario.combatScenario,
+        }),
+        ready: false,
+        applied: false,
+        status: block.reason,
+        reasons: block.reasons,
+      });
+      continue;
+    }
     if (action.type === ACTION_TYPES.SWITCH) {
       for (const [actorId, companion] of companionStateByActorId) {
         if (
@@ -2295,6 +2330,7 @@ export function createVerifiedActionVariantRuntime({
     actionResolutionById,
     mechanicsPackage,
     controlledActorTimeline,
+    cinematicTimeScaleRuntime,
   });
   effectCommands.push(...targetStateRuntime.effectCommands);
   for (const event of companionEvents) {
@@ -2344,6 +2380,7 @@ export function createVerifiedActionVariantRuntime({
     normalAttackSpecialContinuationCandidates:
       projectedNormalAttackSpecialContinuationCandidates,
     directSpEvents: targetStateRuntime.directSpEvents,
+    cinematicTimeScaleRuntime,
     targetStateRuntime,
     activeSwitchWindows: switchWindowHistory,
     eventLog: [
@@ -2400,6 +2437,10 @@ export function createVerifiedActionVariantRuntime({
       targetStateEventCount: targetStateRuntime.events.length,
       conditionalHitGroupCount: targetStateRuntime.groupResults.length,
       directSpEventCount: targetStateRuntime.directSpEvents.length,
+      cinematicTimeScaleWindowCount:
+        cinematicTimeScaleRuntime.summary.actionWindowCount,
+      enemyCinematicPauseWindowCount:
+        cinematicTimeScaleRuntime.summary.enemyPauseWindowCount,
       executionBlockCount: executionBlocks.length,
       switchExitTailSettlementCount: [...actionResolutionById.values()].filter(
         resolution => resolution.switchExitTailSettlement != null
@@ -4770,6 +4811,32 @@ function createCompanionEvent({
       appliedToActionVariantRuntime: true,
     },
   };
+}
+
+function createCinematicTimeScaleExecutionBlock({ action, unresolved }) {
+  return {
+    ...createActionSourceSequenceFields(action),
+    code: 'CINEMATIC_TIME_SCALE_UNRESOLVED',
+    status: 'unresolved',
+    reason: 'cinematic-time-scale-unresolved',
+    reasons: unresolved.reasons ?? ['cinematic-time-scale-unresolved'],
+    sourceKind: 'azpr-client-cinematic-time-scale-runtime',
+    sourceIdentity: null,
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    timeMs: action.startMs,
+    skillId: action.skillId ?? null,
+  };
+}
+
+function isFormalCinematicTimeScaleScenario(scenario) {
+  return (
+    scenario?.combatScenario?.objectiveContract?.classification === 'primary' ||
+    scenario?.objectiveContract?.classification === 'primary' ||
+    scenario?.combatScenario?.optimizationQualification?.mode === 'formal' ||
+    scenario?.optimizationQualification?.mode === 'formal'
+  );
 }
 
 function createResourceExecutionBlock({

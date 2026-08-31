@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "d47224a508190af8b8d1f8d74056c7b0b87f24b1f2cdec8c72a6e3916c65e7eb",
+    "verifiedMechanicsPackageHash": "01400e59a5966428f40df9fd02d957b1de85e0cfcab6aaf2f9dc9b6550917615",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -441,12 +441,7 @@
   ],
   "metadata": {
     "purpose": "M11-B API/CLI/Workbench canonical parity fixture",
-    "participants": [
-      "101007",
-      "101010",
-      "103002",
-      "kibo:500001"
-    ],
+    "participants": ["101007", "101010", "103002", "kibo:500001"],
     "resourceProof": "ruby-enhanced-e1-intent consumes actor:103002:element:103002047 from 6 to 5"
   }
 }

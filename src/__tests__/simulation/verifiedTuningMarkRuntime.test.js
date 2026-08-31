@@ -17,6 +17,7 @@ import {
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createVerifiedTuningMarkGeneration } from '../../simulation/mechanics/verifiedTuningMarkGeneration';
+import { NORMAL_ATTACK_INPUT_RESOLUTION_MODE } from '../../domain/normalAttackInputResolution';
 
 const PANGPANG_ID = 101007;
 const PANGPANG_NORMAL_SKILL_ID = 10100701;
@@ -1038,7 +1039,13 @@ describe('verified tuning mark runtime', () => {
           durationMs: 500,
           contextActionId: 'moyin-star-for-chase',
           attackInputExpansionMode: 'single-input',
-          attackInputChainSelectionSource: 'user-explicit',
+          attackInputChainSelectionSource: 'runtime-projected',
+          attackInputIntent: {
+            kind: 'public-normal-attack',
+            selectionMode: 'runtime-context',
+            normalFormResolution: NORMAL_ATTACK_INPUT_RESOLUTION_MODE,
+            sourceSkillId: 10900101,
+          },
           attackInput: {
             identity:
               'actor|109001|10900101|0|10900101|normal-attack|attack-input-1',

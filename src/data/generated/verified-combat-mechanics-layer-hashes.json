@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "kind": "azpr-verified-mechanics-layer-hashes",
   "packageId": "azpr-tc-2026-07-18",
-  "packageVersion": 15,
-  "packageHash": "07a8deea340f1d59b68a6aceb7e3f04aed161abf57437acd4c1294c00c059d5c",
-  "mechanismHash": "ea05092a791eecd2bd23bc22426d5c69b93ea8d7be09772b4cb503cf345d30e2",
-  "dataVersionHash": "d1dcbdb0914cb70c5abcfb152818aaca3dc191ec1799bf33267e23e4991be4e0",
+  "packageVersion": 16,
+  "packageHash": "01400e59a5966428f40df9fd02d957b1de85e0cfcab6aaf2f9dc9b6550917615",
+  "mechanismHash": "093ed543697e1f7758a44626225eeb629fb2a43b0bf3bdab80252f502de08703",
+  "dataVersionHash": "78d4c2c2eae5fb9992bbae04a94756089300374d29f3ad88a239ae10c34d7e29",
   "projection": {
     "mechanismTopKeys": [
       "schemaVersion",
@@ -25,6 +25,7 @@
       "battleEffectCatalog",
       "tuningMechanicsCatalog",
       "specialResourceCatalog",
+      "cinematicTimeScaleContract",
       "characterCombatProductBoundaries"
     ],
     "dataTopKeys": [

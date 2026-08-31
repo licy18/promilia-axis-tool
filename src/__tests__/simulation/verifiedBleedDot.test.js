@@ -84,12 +84,13 @@ function createBleedScenario({ startMs = 0, durationMs = 25000 } = {}) {
         characterId: OWNER_CHARACTER_ID,
       },
     },
-    mechanicsProfileSelection: createVerifiedWorkbenchMechanicsProfileSelection(),
+    mechanicsProfileSelection:
+      createVerifiedWorkbenchMechanicsProfileSelection(),
   });
   return compileProject(project, getWorkbenchGameData());
 }
 
-function runBleedScenario(scenario) {
+function runBleedScenario(scenario, { cinematicTimeScaleRuntime = null } = {}) {
   const actionRuleDiagnostics = createActionRuleDiagnostics({ scenario });
   const actionExecutionPlan = createActionExecutionPlan({
     scenario,
@@ -117,6 +118,9 @@ function runBleedScenario(scenario) {
     controlledActorTimeline,
     effectTimeline,
     effectGeneration: generation,
+    actionVariantRuntime: cinematicTimeScaleRuntime
+      ? { cinematicTimeScaleRuntime }
+      : null,
     runtimeMode: 'full',
   });
   return { scenario, generation, runtime };
@@ -153,9 +157,11 @@ describe('500360 血噬暗影 流血 DoT（派生管线 + runtime 结算）', ()
     });
     expect(node.formula.valueByLevel[1]).not.toBe(0);
     // 根叠层：500360301 combineNumber=3（最大 3 层）
-    const rootNode = verifiedCombatMechanicsPackage.battleEffectCatalog.nodes.find(
-      candidate => String(candidate.elementId) === String(BLEED_ROOT_ELEMENT_ID)
-    );
+    const rootNode =
+      verifiedCombatMechanicsPackage.battleEffectCatalog.nodes.find(
+        candidate =>
+          String(candidate.elementId) === String(BLEED_ROOT_ELEMENT_ID)
+      );
     expect(rootNode.lifecycle.combineNumber).toBe(3);
   });
 
@@ -215,6 +221,40 @@ describe('500360 血噬暗影 流血 DoT（派生管线 + runtime 结算）', ()
     expect(damages.size).toBe(1);
     // ignoreDamageEvent 标记
     expect(dotEvents[0].payload.ignoreDamageEvent).toBe(true);
+  });
+
+  it('runtime：末音大招只暂停敌方流血时钟，不缩短场景墙钟或 DoT 有效 tick 数', () => {
+    const { scenario, runtime } = runBleedScenario(
+      createBleedScenario({ durationMs: 30000 }),
+      {
+        cinematicTimeScaleRuntime: {
+          scoreClockPolicy: 'wall-time-includes-cinematic-window',
+          actionOccupancyPolicy: 'unchanged',
+          enemyPauseWindows: [
+            {
+              startMs: 5000,
+              endMs: 7083.333333,
+              durationMs: 2083.333333,
+            },
+          ],
+          summary: {
+            enemyPauseWindowCount: 1,
+            enemyPausedDurationMs: 2083.333333,
+          },
+        },
+      }
+    );
+    const dotEvents = (runtime.damageEvents ?? []).filter(
+      event => event.payload?.battleEffectDot === true
+    );
+    expect(scenario.time.durationMs).toBe(30000);
+    expect(dotEvents).toHaveLength(20);
+    const frames = dotEvents.map(event => event.absoluteFrame);
+    expect(frames[1] - frames[0]).toBe(60);
+    expect(frames[2] - frames[1]).toBe(185);
+    expect(
+      frames.slice(3).every((frame, index) => frame - frames[index + 2] === 60)
+    ).toBe(true);
   });
 
   it('runtime：3 角色轮切（同奇波各自放招）聚合叠层，层数=累计施加数（cap 3），伤害=层数×首个施加者系数', () => {

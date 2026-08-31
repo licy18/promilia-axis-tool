@@ -61,6 +61,7 @@ export const MECHANISM_TOP_KEYS = Object.freeze([
   'battleEffectCatalog',
   'tuningMechanicsCatalog',
   'specialResourceCatalog',
+  'cinematicTimeScaleContract',
   'characterCombatProductBoundaries',
 ]);
 
@@ -234,6 +235,7 @@ const DATA_CONTAINER_FIELDS = Object.freeze({
     'effectDimensionSummary',
     'actionTiming',
     'actionScheduling',
+    'cinematicTimeScale',
     'attackInputSegments',
     'attackInputSourceSegments',
     'publicActionExecutionForms',

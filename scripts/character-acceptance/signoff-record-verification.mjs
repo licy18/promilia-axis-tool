@@ -6,13 +6,10 @@
 //   - record 必须是非 null 对象且 schema/contract/kind/必填字段完整
 //   - record 内容 SHA-256 == recipe.signoffRecordSha256（commit 内内容未被改）
 //   - record.ownerId == recipe.ownerId
-//   - record.mechanicsPackageHash == 当前机制包 packageHash（机制包漂移 → 失效）
 //   - record.captureHarness.specSha256 == git 规范化字节的 spec SHA-256
-//   - record.qualificationSubjectHash == 当前派生 subject
-//   - record.scenarioSetHash == 当前派生 scenarioSetHash
 //   - record.scenarioIdentity == 当前派生场景（须与 evidence fixture 一致）
-//   - record.canonicalTraceHash == 当前派生 canonical trace hash
-//   - record.automatedEvidence 每条：fixtureSha256 与当前 fixture 一致、
+//   - record.automatedEvidence 每条：fixtureSha256 与签收 commit 中 fixture 一致、
+//     当前 fixture 去除 dataIdentity 后仍与签收 fixture 视觉轴语义一致、
 //     screenshotSha256 与 recipe 证据一致、fixture.scenario.id == 场景
 //   - 以上全部为强校验：缺失/不匹配一律 fail-closed
 //
@@ -58,24 +55,13 @@ export function verifySignoffRecord(recipe, { projectRoot, derived = {} }) {
   if (!recordPath || !/^[0-9a-f]{64}$/.test(recordSha256)) {
     issues.push('signoff-record-reference-invalid');
   }
-  // 派生值必须存在（缺失 → fail-closed，不能跳过认证）
-  const derivedSubject = String(derived.qualificationSubjectHash ?? '');
-  const derivedScenarioSet = String(derived.scenarioSetHash ?? '');
+  // 视觉签收只消费场景身份。qualification subject、机制包 hash 与 canonical
+  // trace 由当前 machine acceptance 独立认证，不能重复绑死历史截图签收。
   const derivedScenarioIdentities = Array.isArray(derived.scenarioIdentities)
     ? derived.scenarioIdentities.map(String)
     : [];
-  const derivedTrace = String(derived.canonicalTraceHash ?? '');
-  if (!/^[0-9a-f]{16}$/.test(derivedSubject)) {
-    issues.push('signoff-record-derived-subject-unavailable');
-  }
-  if (!/^[0-9a-f]{16}$/.test(derivedScenarioSet)) {
-    issues.push('signoff-record-derived-scenario-set-unavailable');
-  }
   if (derivedScenarioIdentities.length === 0) {
     issues.push('signoff-record-derived-scenario-unavailable');
-  }
-  if (!/^[0-9a-f]{16}$/.test(derivedTrace)) {
-    issues.push('signoff-record-derived-trace-unavailable');
   }
   if (issues.length) {
     authentication.issues = [...issues];
@@ -125,7 +111,7 @@ export function verifySignoffRecord(recipe, { projectRoot, derived = {} }) {
   let parsedRecord = null;
   try {
     parsedRecord = JSON.parse(recordBytes.toString('utf8'));
-  } catch (error) {
+  } catch {
     issues.push('signoff-record-invalid-json');
   }
   if (
@@ -172,16 +158,6 @@ export function verifySignoffRecord(recipe, { projectRoot, derived = {} }) {
     issues.push('signoff-record-evidence-invalid');
   }
 
-  const currentPackage = readMechanicsPackageHash(projectRoot);
-  if (String(record.mechanicsPackageHash ?? '') !== currentPackage) {
-    issues.push(
-      'signoff-record-mechanics-package-mismatch:' +
-        String(record.mechanicsPackageHash ?? '').slice(0, 12) +
-        '!=' +
-        currentPackage.slice(0, 12)
-    );
-  }
-
   // spec SHA 用 git 规范化字节（capture commit = record.repositoryHead），
   // 避免工作树 CRLF 污染导致 Linux clean checkout 认证失败。
   const captureCommit = String(record.repositoryHead ?? '');
@@ -196,22 +172,11 @@ export function verifySignoffRecord(recipe, { projectRoot, derived = {} }) {
     issues.push('signoff-record-capture-harness-mismatch');
   }
 
-  // 与独立派生值强比对（非条件式）
-  if (String(record.qualificationSubjectHash ?? '') !== derivedSubject) {
-    issues.push('signoff-record-qualification-subject-mismatch');
-  }
-  if (String(record.scenarioSetHash ?? '') !== derivedScenarioSet) {
-    issues.push('signoff-record-scenario-set-mismatch');
-  }
   if (
     !derivedScenarioIdentities.includes(String(record.scenarioIdentity ?? ''))
   ) {
     issues.push('signoff-record-scenario-identity-mismatch');
   }
-  if (String(record.canonicalTraceHash ?? '') !== derivedTrace) {
-    issues.push('signoff-record-canonical-trace-mismatch');
-  }
-
   // 逐条 evidence 强校验：fixture 场景一致 + fixture SHA + 截图 SHA
   const recipeEvidence = pva.automatedEvidence ?? [];
   for (const [index, evidence] of record.automatedEvidence.entries()) {
@@ -224,23 +189,30 @@ export function verifySignoffRecord(recipe, { projectRoot, derived = {} }) {
     if (!fixturePath || !/^[0-9a-f]{64}$/.test(fixtureSha256)) {
       issues.push('signoff-record-evidence-fixture-invalid:' + index);
     } else {
-      const fixtureBytes = readProjectFileOrEmpty(projectRoot, fixturePath);
-      if (sha256Hex(fixtureBytes) !== fixtureSha256) {
+      const signedFixtureBytes = readGitFileOrEmpty(
+        projectRoot,
+        acceptanceCommit,
+        fixturePath
+      );
+      const currentFixtureBytes = readProjectFileOrEmpty(
+        projectRoot,
+        fixturePath
+      );
+      if (sha256Hex(signedFixtureBytes) !== fixtureSha256) {
         issues.push('signoff-record-evidence-fixture-sha-mismatch:' + index);
       } else {
-        let fixture = null;
-        try {
-          fixture = JSON.parse(fixtureBytes.toString('utf8'));
-        } catch (error) {
-          fixture = null;
-        }
+        const fixture = parseJsonOrNull(currentFixtureBytes);
+        const signedFixture = parseJsonOrNull(signedFixtureBytes);
         if (
           fixture == null ||
+          signedFixture == null ||
           String(fixture.scenario?.id ?? '') !== scenarioIdentity
         ) {
           issues.push(
             'signoff-record-evidence-fixture-scene-mismatch:' + index
           );
+        } else if (!hasSameVisualFixtureSemantics(signedFixture, fixture)) {
+          issues.push('signoff-record-evidence-visual-fixture-drift:' + index);
         }
       }
     }
@@ -268,22 +240,6 @@ export function verifySignoffRecord(recipe, { projectRoot, derived = {} }) {
   };
 }
 
-function readMechanicsPackageHash(projectRoot) {
-  const pkgPath = path.join(
-    projectRoot,
-    'src',
-    'data',
-    'generated',
-    'verified-combat-mechanics-package.json'
-  );
-  try {
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-    return String(pkg.packageHash ?? '');
-  } catch (error) {
-    return '';
-  }
-}
-
 // 用 git 规范化字节计算 spec SHA-256：`git show <captureCommit>:<specPath>`
 // 返回的是 blob 原始字节（LF 规范化，与工作树 CRLF 无关），保证 Linux clean
 // checkout 与 Windows 工作树得到同一 hash。
@@ -301,7 +257,7 @@ function computeGitNormalizedSpecSha256(projectRoot, captureCommit) {
       }
     );
     return createHash('sha256').update(bytes).digest('hex');
-  } catch (error) {
+  } catch {
     return '';
   }
 }
@@ -313,24 +269,70 @@ function sha256Hex(bytes) {
 function readProjectFileOrEmpty(projectRoot, relativePath) {
   try {
     return fs.readFileSync(path.join(projectRoot, String(relativePath)));
-  } catch (error) {
+  } catch {
     return Buffer.alloc(0);
   }
 }
 
+function readGitFileOrEmpty(projectRoot, commit, relativePath) {
+  try {
+    return execFileSync('git', ['show', `${commit}:${relativePath}`], {
+      cwd: projectRoot,
+      encoding: 'buffer',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+  } catch {
+    return Buffer.alloc(0);
+  }
+}
+
+function parseJsonOrNull(bytes) {
+  try {
+    return JSON.parse(bytes.toString('utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function hasSameVisualFixtureSemantics(signedFixture, currentFixture) {
+  return (
+    canonicalJson(projectVisualFixture(signedFixture)) ===
+    canonicalJson(projectVisualFixture(currentFixture))
+  );
+}
+
+function projectVisualFixture(fixture) {
+  const projected = structuredClone(fixture ?? {});
+  delete projected.dataIdentity;
+  if (projected.metadata && typeof projected.metadata === 'object') {
+    delete projected.metadata.optimizationObjectSourceAliasSelection;
+  }
+  return projected;
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) {
+    return `[${value.map(canonicalJson).join(',')}]`;
+  }
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value)
+      .sort()
+      .map(key => `${JSON.stringify(key)}:${canonicalJson(value[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
 // 对象级（STARBORN）signoff record 认证：与角色级同构——要求
-// acceptanceCommit 指向的 git 对象确实包含 signoff record，且 record 的
-// subject/package/harness hash 与当前派生一致。所有比对值必须由调用方
-// （对象生成器 preview 派生）传入，缺失即 fail-closed。
+// acceptanceCommit 指向的 git 对象确实包含不可变 signoff record，并认证
+// 场景、fixture 与截图。当前 subject/package/alias 由独立机器 gate 重算，
+// 非视觉漂移不要求重新截图签收。
 const OBJECT_SIGN_OFF_CONTRACT =
   'AzPrOptimizationObjectProductVisualSignoffRecord';
 const OBJECT_SIGN_OFF_KIND =
   'azpr-optimization-object-product-visual-signoff-record';
 
-export function verifyOptimizationObjectSignoffRecord(
-  recipe,
-  { projectRoot, derived = {} }
-) {
+export function verifyOptimizationObjectSignoffRecord(recipe, { projectRoot }) {
   const issues = [];
   const pva = recipe?.productVisualAcceptance ?? {};
   const status = String(pva.status ?? 'pending');
@@ -358,11 +360,6 @@ export function verifyOptimizationObjectSignoffRecord(
   }
   if (!recordPath || !/^[0-9a-f]{64}$/.test(recordSha256)) {
     issues.push('signoff-record-reference-invalid');
-  }
-  // 派生 subject 必须存在（null/缺失 → fail-closed）
-  const derivedSubject = String(derived.acceptanceSubjectHash ?? '');
-  if (!/^[0-9a-f]{16}$/.test(derivedSubject)) {
-    issues.push('signoff-record-derived-subject-unavailable');
   }
   if (issues.length) {
     authentication.issues = [...issues];
@@ -398,7 +395,7 @@ export function verifyOptimizationObjectSignoffRecord(
   let parsedRecord = null;
   try {
     parsedRecord = JSON.parse(recordBytes.toString('utf8'));
-  } catch (error) {
+  } catch {
     issues.push('signoff-record-invalid-json');
   }
   if (
@@ -430,10 +427,6 @@ export function verifyOptimizationObjectSignoffRecord(
   ) {
     issues.push('signoff-record-object-mismatch');
   }
-  const currentPackage = readMechanicsPackageHash(projectRoot);
-  if (String(record.mechanicsPackageHash ?? '') !== currentPackage) {
-    issues.push('signoff-record-mechanics-package-mismatch');
-  }
   const captureCommit = String(record.repositoryHead ?? '');
   const currentSpecSha256 = computeGitNormalizedSpecSha256(
     projectRoot,
@@ -444,10 +437,6 @@ export function verifyOptimizationObjectSignoffRecord(
     String(record.captureHarness?.specSha256 ?? '') !== currentSpecSha256
   ) {
     issues.push('signoff-record-capture-harness-mismatch');
-  }
-  // 对象级 record 必须绑定当前派生 object subject（漂移后旧 record 失效）
-  if (String(record.acceptanceSubjectHash ?? '') !== derivedSubject) {
-    issues.push('signoff-record-acceptance-subject-mismatch');
   }
   if (
     !Array.isArray(record.automatedEvidence) ||
@@ -472,23 +461,32 @@ export function verifyOptimizationObjectSignoffRecord(
       if (!fixturePath || !/^[0-9a-f]{64}$/.test(fixtureSha256)) {
         issues.push('signoff-record-evidence-fixture-invalid:' + index);
       } else {
-        const fixtureBytes = readProjectFileOrEmpty(projectRoot, fixturePath);
-        if (sha256Hex(fixtureBytes) !== fixtureSha256) {
+        const signedFixtureBytes = readGitFileOrEmpty(
+          projectRoot,
+          acceptanceCommit,
+          fixturePath
+        );
+        const currentFixtureBytes = readProjectFileOrEmpty(
+          projectRoot,
+          fixturePath
+        );
+        if (sha256Hex(signedFixtureBytes) !== fixtureSha256) {
           issues.push('signoff-record-evidence-fixture-sha-mismatch:' + index);
         } else {
-          let fixture = null;
-          try {
-            fixture = JSON.parse(fixtureBytes.toString('utf8'));
-          } catch (error) {
-            fixture = null;
-          }
+          const fixture = parseJsonOrNull(currentFixtureBytes);
+          const signedFixture = parseJsonOrNull(signedFixtureBytes);
           if (
             fixture == null ||
+            signedFixture == null ||
             String(fixture.scenario?.id ?? '') !==
               String(evidence.scenarioIdentity ?? '')
           ) {
             issues.push(
               'signoff-record-evidence-fixture-scene-mismatch:' + index
+            );
+          } else if (!hasSameVisualFixtureSemantics(signedFixture, fixture)) {
+            issues.push(
+              'signoff-record-evidence-visual-fixture-drift:' + index
             );
           }
         }

@@ -82,6 +82,29 @@ const SP_UNIT_RUNTIME_OUTPUT = path.join(
   'verified-sp-unit-runtime.js'
 );
 const CHARACTER_CATALOG_PATH = path.join(GENERATED_ROOT, 'characters.json');
+const SKILL_ASSET_EVIDENCE_PATH = path.join(
+  GENERATED_ROOT,
+  'skill-asset-evidence.json'
+);
+const CINEMATIC_TIME_SCALE_CONTRACT = Object.freeze({
+  schemaVersion: 1,
+  kind: 'azpr-client-cinematic-time-scale-contract',
+  status: 'client-cinematic-time-scale-contract-ready',
+  runtimeBehavior: 'Lens.Gameplay.Modules.BigWorld.CullEntityTimeScaleBehavior',
+  clockPolicy: Object.freeze({
+    scoreClock: 'wall-time-continues',
+    dungeonTimer: 'unity-time-continues-without-pause-world',
+    actorClock: 'client-camp-and-entity-filtered',
+    enemyClock: 'pause-during-filtered-zero-scale-window',
+    actionOccupancy: 'unchanged',
+  }),
+  runtimeRestrictions: Object.freeze({
+    multiplayerOnline: 'disabled',
+    kiboBattle: 'disabled',
+  }),
+  sourceIdentity:
+    'TC GameAssembly.dll#CullEntityTimeScaleBehavior.Start/Update/End|CommonDungeonTimer.Update|BasePlay.Update',
+});
 const AUDIT_OUTPUT = path.join(
   REPO_ROOT,
   'reports',
@@ -416,6 +439,14 @@ export async function createVerifiedCombatMechanicsBuild({
   assertRequiredInputs();
   const seed = readJson(path.join(GENERATED_ROOT, 'workbench-seed.json'));
   const characterCatalog = readJson(CHARACTER_CATALOG_PATH);
+  const skillAssetEvidence = readJson(SKILL_ASSET_EVIDENCE_PATH);
+  const cinematicTimeScaleEvidenceBySkillId = new Map(
+    (skillAssetEvidence.currentSkillControlEvidence ?? [])
+      .map(item => [Number(item.skillId), item.cinematicTimeScaleEvidence])
+      .filter(
+        ([skillId, evidence]) => Number.isInteger(skillId) && evidence != null
+      )
+  );
   const implementedPassiveSkillIds = new Set(
     (discoveredRecipes ?? []).flatMap(recipe => [
       ...(recipe.compiler?.passiveEffects ?? []).map(passive =>
@@ -761,6 +792,7 @@ export async function createVerifiedCombatMechanicsBuild({
         specialResourceCatalog,
         actionVariantGraph,
         characterCatalog,
+        cinematicTimeScaleEvidenceBySkillId,
         characterCombatOwnerCompilations: ownerCompilations,
       });
       assertUnnamedSecondaryPassiveRuntimeIsolation({
@@ -8900,6 +8932,7 @@ function createPackage({
   specialResourceCatalog,
   actionVariantGraph,
   characterCatalog,
+  cinematicTimeScaleEvidenceBySkillId = new Map(),
   characterCombatOwnerCompilations = [],
 }) {
   const prepareControlBinding = binding => {
@@ -8967,20 +9000,23 @@ function createPackage({
       candidate.ownerId,
       candidate.controlSkillId
     );
-    const mechanicsMapping = createActionMapping(candidate, control, {
-      defaultSelection,
-      resourceTransactions: specialResourceCatalog.operationBindings,
-      runtimeEffectBindings:
-        characterCombatCompilationByOwnerId.get(Number(candidate.ownerId))
-          ?.contracts?.runtimeEffectBindings ?? [],
-      variantModelStatus: classifyActionVariantModelStatus({
-        graph: actionVariantGraph,
-        ownerId: candidate.ownerId,
-        controlSkillId: candidate.controlSkillId,
-        control,
+    const mechanicsMapping = attachCinematicTimeScaleContract(
+      createActionMapping(candidate, control, {
+        defaultSelection,
+        resourceTransactions: specialResourceCatalog.operationBindings,
+        runtimeEffectBindings:
+          characterCombatCompilationByOwnerId.get(Number(candidate.ownerId))
+            ?.contracts?.runtimeEffectBindings ?? [],
+        variantModelStatus: classifyActionVariantModelStatus({
+          graph: actionVariantGraph,
+          ownerId: candidate.ownerId,
+          controlSkillId: candidate.controlSkillId,
+          control,
+        }),
+        variantConditionDiscovery,
       }),
-      variantConditionDiscovery,
-    });
+      cinematicTimeScaleEvidenceBySkillId.get(Number(candidate.controlSkillId))
+    );
     if (
       candidate.actionKind !== 'normal-attack' ||
       candidate.ownerKind !== 'actor'
@@ -9212,13 +9248,14 @@ function createPackage({
       specialResourceCatalog,
       actionVariantGraph,
       switchTriggerCatalog,
+      cinematicTimeScaleContract: CINEMATIC_TIME_SCALE_CONTRACT,
     })
   );
   return {
     schemaVersion: 1,
     kind: 'azpr-verified-combat-mechanics-package',
     packageId: `azpr-${String(evidence.region).toLowerCase()}-${evidence.date}`,
-    packageVersion: 15,
+    packageVersion: 16,
     status: 'verified-combat-mechanics-package-ready',
     region: evidence.region,
     clientBuild: 'il2cpp-tc-catch-20260709',
@@ -9259,6 +9296,7 @@ function createPackage({
       randomBranchesRequirePersistedRolls: true,
       spValueUnit: 'absolute-sp-points',
     },
+    cinematicTimeScaleContract: CINEMATIC_TIME_SCALE_CONTRACT,
     spUnitContract,
     staticPropertyCatalog,
     tuningMechanicsCatalog,
@@ -9349,6 +9387,12 @@ function createPackage({
         switchTriggerCatalog.summary.appliedProfileCount,
       unresolvedSwitchTriggerProfileCount:
         switchTriggerCatalog.summary.unresolvedProfileCount,
+      cinematicTimeScaleAppliedActionCount: actionMappings.filter(
+        mapping => mapping.cinematicTimeScale?.applied === true
+      ).length,
+      cinematicTimeScaleUnresolvedActionCount: actionMappings.filter(
+        mapping => mapping.cinematicTimeScale?.status === 'unresolved'
+      ).length,
       kiboProfileCount: kiboProfiles.length,
       actorProfileCount: actorProfiles.length,
       enemyProfileCount: enemyProfiles.length,
@@ -11755,6 +11799,103 @@ function resolveDefaultFrameCount(frameCounts) {
     }))
     .filter(value => value.frameCount > 0);
   return values.find(value => value.key === 0) ?? values[0] ?? null;
+}
+
+function attachCinematicTimeScaleContract(mapping, evidence) {
+  const windows = (evidence?.windows ?? [])
+    .map(window => {
+      const startFrame = nonNegativeIntegerOrNull(window.startFrame);
+      const durationFrames = positiveIntegerOrNull(window.durationFrames);
+      const frameRate = positiveIntegerOrNull(
+        window.frameRate ?? evidence?.frameRate
+      );
+      if (startFrame == null || durationFrames == null || frameRate == null) {
+        return null;
+      }
+      return {
+        startFrame,
+        endFrame: startFrame + durationFrames,
+        durationFrames,
+        frameRate,
+        durationMs: Number(((durationFrames / frameRate) * 1000).toFixed(6)),
+        timeScalePriority: Number(window.timeScalePriority),
+        timeScalePriorityName: window.timeScalePriorityName ?? null,
+        campTypeFilter: Number(window.campTypeFilter),
+        campTypeFilterName: window.campTypeFilterName ?? null,
+        entityTypeFilter: Number(window.entityTypeFilter),
+        entityTypeFilterNames: window.entityTypeFilterNames ?? [],
+        ignoreCameraTimeScale: window.ignoreCameraTimeScale === true,
+        ignoreSelfTimeScale: window.ignoreSelfTimeScale === true,
+        scaleMode: window.scaleMode ?? 'curve',
+        curveKeys: (window.curveKeys ?? []).map(key => ({
+          timeRaw: Number(key.timeRaw),
+          valueRaw: Number(key.valueRaw),
+          time: Number(key.time),
+          value: Number(key.value),
+        })),
+        curveWrapMode: Number(window.curveWrapMode),
+        affectsEnemyMonsterClock: window.affectsEnemyMonsterClock === true,
+        affectsPlayerHeroClock: window.affectsPlayerHeroClock === true,
+        sourceIdentity: window.sourceIdentity ?? null,
+      };
+    })
+    .filter(Boolean);
+
+  if (windows.length > 0) {
+    return {
+      ...mapping,
+      cinematicTimeScale: {
+        schemaVersion: 1,
+        kind: 'azpr-client-cinematic-time-scale-binding',
+        status: 'applied',
+        sourceKind: evidence.kind,
+        clockPolicy: CINEMATIC_TIME_SCALE_CONTRACT.clockPolicy,
+        runtimeRestrictions: CINEMATIC_TIME_SCALE_CONTRACT.runtimeRestrictions,
+        windows,
+        summary: {
+          windowCount: windows.length,
+          pausedWindowCount: windows.filter(
+            window => window.scaleMode === 'paused'
+          ).length,
+          enemyMonsterClockWindowCount: windows.filter(
+            window => window.affectsEnemyMonsterClock
+          ).length,
+          playerHeroClockWindowCount: windows.filter(
+            window => window.affectsPlayerHeroClock
+          ).length,
+        },
+        sourceIdentity: evidence.sourceIdentity ?? null,
+        reasons: [],
+        applied: true,
+      },
+    };
+  }
+
+  if (mapping.ownerKind === 'actor' && mapping.actionKind === 'ultimate') {
+    return {
+      ...mapping,
+      cinematicTimeScale: {
+        schemaVersion: 1,
+        kind: 'azpr-client-cinematic-time-scale-binding',
+        status: 'unresolved',
+        sourceKind:
+          evidence?.kind ?? 'azpr-client-cull-entity-time-scale-evidence',
+        clockPolicy: CINEMATIC_TIME_SCALE_CONTRACT.clockPolicy,
+        runtimeRestrictions: CINEMATIC_TIME_SCALE_CONTRACT.runtimeRestrictions,
+        windows: [],
+        summary: {
+          windowCount: 0,
+          pausedWindowCount: 0,
+          enemyMonsterClockWindowCount: 0,
+          playerHeroClockWindowCount: 0,
+        },
+        sourceIdentity: evidence?.sourceIdentity ?? null,
+        reasons: ['ultimate-cinematic-time-scale-source-missing'],
+        applied: false,
+      },
+    };
+  }
+  return mapping;
 }
 
 function createActionMapping(
@@ -15169,7 +15310,9 @@ function injectStackOverLimitElementFactor(source) {
   const insertion = [
     '  if (Number(input.attackerElementUp ?? 0) !== 0) {',
     '    const element = calculateElementFactor(input);',
-    '    raw = applyFactor(raw, BigInt(element.raw), \'element\', trace);',
+    // Generated source contains a nested single-quoted factor identity.
+    // eslint-disable-next-line quotes
+    "    raw = applyFactor(raw, BigInt(element.raw), 'element', trace);",
     '  }',
     marker,
   ].join('\n');

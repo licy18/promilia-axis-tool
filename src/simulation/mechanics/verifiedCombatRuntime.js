@@ -46,6 +46,7 @@ import {
   isActorJointAttack,
 } from '../../domain/verifiedJointAttackRuntimePair';
 import { evaluateVerifiedJointAttackRuntimeEligibility } from '../../domain/verifiedJointAttackRuntimeContract';
+import { advanceEnemyClockTime } from './cinematicTimeScaleRuntime';
 
 export { VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER };
 
@@ -165,6 +166,8 @@ export function createVerifiedCombatRuntime({
   const executionByActionId = new Map(
     (actionExecutionPlan?.actions ?? []).map(entry => [entry.actionId, entry])
   );
+  const cinematicTimeScaleRuntime =
+    actionVariantRuntime?.cinematicTimeScaleRuntime ?? null;
   const nonDamageProjectionOnly = runtimeMode === 'non-damage-event-projection';
   const actionResolutionById = new Map();
   const ordinaryDamageTransactionByKey = new Map(
@@ -391,7 +394,8 @@ export function createVerifiedCombatRuntime({
   }
 
   for (const dotGroup of groupVerifiedBattleEffectDotCommands(
-    effectGeneration?.dotCommands ?? []
+    effectGeneration?.dotCommands ?? [],
+    cinematicTimeScaleRuntime
   )) {
     descriptors.push(
       ...createVerifiedBattleEffectDotDescriptors({
@@ -401,6 +405,7 @@ export function createVerifiedCombatRuntime({
           scenario?.time?.fps ?? scenario?.time?.frameRate,
           FRAME_RATE
         ),
+        cinematicTimeScaleRuntime,
       })
     );
   }
@@ -968,8 +973,7 @@ export function createVerifiedCombatRuntime({
         event => event.type === 'VERIFIED_JOINT_ATTACK_ADMITTED'
       ).length,
       jointAttackAttachedToughnessClearCount: damageEvents.filter(
-        event =>
-          event.type === 'VERIFIED_JOINT_ATTACK_ATTACHED_TOUGHNESS_CLEAR'
+        event => event.type === 'VERIFIED_JOINT_ATTACK_ATTACHED_TOUGHNESS_CLEAR'
       ).length,
       breakWatcherArmCount: breakWatcherEvents.filter(
         event => event.type === 'VERIFIED_BREAK_TRIGGER_WATCHER_ARMED'
@@ -1081,8 +1085,7 @@ function createVerifiedJointAttackRuntimeDescriptors({
         numberOrNull(firstAnchor?.hit?.trigger?.startFrame) ?? null,
       anchorHitIdentity: anchorHitIdentities[0] ?? null,
       anchorHitIdentities: Object.freeze([...anchorHitIdentities]),
-      kiboResolutionIdentity:
-        kiboResolution?.actionBinding?.identity ?? null,
+      kiboResolutionIdentity: kiboResolution?.actionBinding?.identity ?? null,
     });
     const inputSourceSequencePath = resolvePairInputSourceSequencePath(pair);
     generated.push({
@@ -1092,10 +1095,7 @@ function createVerifiedJointAttackRuntimeDescriptors({
       sourceSequencePath: inputSourceSequencePath,
       jointAttackPair: runtimePair,
     });
-    const pairActionIds = new Set([
-      pair.actorActionId,
-      pair.kiboActionId,
-    ]);
+    const pairActionIds = new Set([pair.actorActionId, pair.kiboActionId]);
     const pairCostDescriptors = descriptors.filter(
       descriptor =>
         descriptor.kind === 'action-cost' &&
@@ -1117,7 +1117,9 @@ function createVerifiedJointAttackRuntimeDescriptors({
       descriptor.jointAttackSuppressToughness = true;
       descriptor.jointAttackKiboAnchorHit =
         String(descriptor.action?.id) === pair.kiboActionId &&
-        anchorHitIdentities.includes(resolveCriticalHitIdentity(descriptor.hit));
+        anchorHitIdentities.includes(
+          resolveCriticalHitIdentity(descriptor.hit)
+        );
     }
     generated.push({
       kind: 'joint-attack-atomic-cost',
@@ -1190,22 +1192,24 @@ function resolveUnannotatedDescriptorSourceSequencePath(descriptor) {
 }
 
 function resolvePairInputSourceSequencePath(pair) {
-  const root = compareSourceSequencePaths(
-    pair.actorSourceSequencePath,
-    pair.kiboSourceSequencePath
-  ) <= 0
-    ? [...pair.actorSourceSequencePath]
-    : [...pair.kiboSourceSequencePath];
+  const root =
+    compareSourceSequencePaths(
+      pair.actorSourceSequencePath,
+      pair.kiboSourceSequencePath
+    ) <= 0
+      ? [...pair.actorSourceSequencePath]
+      : [...pair.kiboSourceSequencePath];
   return [...root, -2];
 }
 
 function createPairStageSourceSequencePath(pair, stageOrder) {
-  const root = compareSourceSequencePaths(
-    pair.actorSourceSequencePath,
-    pair.kiboSourceSequencePath
-  ) <= 0
-    ? [...pair.actorSourceSequencePath]
-    : [...pair.kiboSourceSequencePath];
+  const root =
+    compareSourceSequencePaths(
+      pair.actorSourceSequencePath,
+      pair.kiboSourceSequencePath
+    ) <= 0
+      ? [...pair.actorSourceSequencePath]
+      : [...pair.kiboSourceSequencePath];
   return [...root, stageOrder];
 }
 
@@ -1237,11 +1241,7 @@ function applyVerifiedJointAttackAdmissionDescriptor({
   }
   const actorVital = state.actorVitals.get(String(pair.actorId));
   const kiboVital = state.kiboVitals.get(String(pair.actorId));
-  const kiboState = findKiboStateByActorId(
-    state,
-    pair.actorId,
-    pair.kiboId
-  );
+  const kiboState = findKiboStateByActorId(state, pair.actorId, pair.kiboId);
   const controlledActor = resolveControlledActorAt(
     controlledActorTimeline,
     descriptor.timeMs,
@@ -1326,9 +1326,7 @@ function recordVerifiedJointAttackAnchorHit({ descriptor, hitResult, state }) {
     return;
   }
   const hitIdentity = resolveCriticalHitIdentity(descriptor.hit);
-  state.jointAttackAppliedAnchorHits.add(
-    `${pair.pairIdentity}|${hitIdentity}`
-  );
+  state.jointAttackAppliedAnchorHits.add(`${pair.pairIdentity}|${hitIdentity}`);
 }
 
 function applyVerifiedJointAttackAtomicCostDescriptor({
@@ -1424,14 +1422,16 @@ function preflightVerifiedActionCostDescriptor({ descriptor, state }) {
   if (spCost == null) return { reason: 'verified-skill-cost-source-missing' };
   if (resolution.actionBinding.ownerKind === 'kibo') {
     const kiboState = findKiboStateByAction(state, action);
-    if (!kiboState) return { reason: 'verified-kibo-resource-owner-unresolved' };
+    if (!kiboState)
+      return { reason: 'verified-kibo-resource-owner-unresolved' };
     if (kiboState.current + Number.EPSILON < spCost) {
       return { reason: 'verified-kibo-resource-insufficient' };
     }
     return null;
   }
   const actorState = state.actorEnergy.get(action.actorId);
-  if (!actorState) return { reason: 'verified-actor-resource-owner-unresolved' };
+  if (!actorState)
+    return { reason: 'verified-actor-resource-owner-unresolved' };
   if (actorState.current + Number.EPSILON < spCost) {
     return { reason: 'verified-actor-resource-insufficient' };
   }
@@ -1552,12 +1552,11 @@ function createVerifiedJointAttackExecutionBlocks({
     actionId: action.id,
     actionName: action.name ?? action.id,
     actorId: action.actorId ?? pair.actorId,
-    ownerKind:
-      action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
+    ownerKind: action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
     ownerId:
       action.type === ACTION_TYPES.KIBO_EVENT
         ? pair.kiboId
-        : action.actor?.characterId ?? null,
+        : (action.actor?.characterId ?? null),
     timeMs: roundValue(descriptor.timeMs),
     absoluteFrame: descriptor.absoluteFrame,
     sourceSequencePath: descriptor.sourceSequencePath ?? null,
@@ -1904,7 +1903,10 @@ function qDivNearestPositive(left, right) {
 // 施加不替换），层数=窗口内累计施加（cap maxStacks），共享到期刷新为
 // max(旧到期, 本次施加+20s)，整组到期时全部层数一起消失。窗口断裂
 // （新施加晚于当前实例到期）则开启新实例（新 owner = 新实例首施加）。
-function groupVerifiedBattleEffectDotCommands(dotCommands) {
+function groupVerifiedBattleEffectDotCommands(
+  dotCommands,
+  cinematicTimeScaleRuntime = null
+) {
   const groups = new Map();
   for (const dotCommand of dotCommands ?? []) {
     const key = `${dotCommand?.target?.kind ?? '?'}:${
@@ -1932,12 +1934,12 @@ function groupVerifiedBattleEffectDotCommands(dotCommands) {
     let current = null;
     for (const application of applications) {
       const applyMs = nonNegativeNumber(application.timeMs);
-      const expiresAtMs =
-        applyMs + positiveNumber(application.durationMs, 20_000);
-      if (
-        current == null ||
-        applyMs >= current.sharedExpiresAtMs
-      ) {
+      const expiresAtMs = advanceEnemyClockTime(
+        cinematicTimeScaleRuntime,
+        applyMs,
+        positiveNumber(application.durationMs, 20_000)
+      );
+      if (current == null || applyMs >= current.sharedExpiresAtMs) {
         if (current != null) {
           instances.push(current);
         }
@@ -1972,15 +1974,20 @@ function createVerifiedBattleEffectDotDescriptors({
   dotGroup,
   durationMs,
   frameRate,
+  cinematicTimeScaleRuntime = null,
 }) {
   const intervalMs = positiveNumber(dotGroup?.tickIntervalMs, null);
-  const startMs = nonNegativeNumber(dotGroup?.instanceStartMs ?? dotGroup?.timeMs);
+  const startMs = nonNegativeNumber(
+    dotGroup?.instanceStartMs ?? dotGroup?.timeMs
+  );
   const unresolvedReasons = [];
   if (intervalMs == null) {
     unresolvedReasons.push('battle-effect-dot-interval-invalid');
   }
   if (dotGroup?.timeExeFirstFrame !== true) {
-    unresolvedReasons.push('battle-effect-dot-first-trigger-policy-unsupported');
+    unresolvedReasons.push(
+      'battle-effect-dot-first-trigger-policy-unsupported'
+    );
   }
   if (
     dotGroup?.target?.kind == null ||
@@ -2002,16 +2009,23 @@ function createVerifiedBattleEffectDotDescriptors({
       },
     ];
   }
-  // 本实例共享到期：max(各施加时刻 + durationMs)。
-  const relayDurationMs = Math.max(
-    0,
-    ...(dotGroup.applications ?? [dotGroup]).map(
-      application =>
-        nonNegativeNumber(application.timeMs) +
-        positiveNumber(application.durationMs, 20_000) -
-        startMs
-    )
+  // 本实例共享到期：按敌方实体时钟计算 max(各施加时刻 + durationMs)。
+  // 角色大招的 CullEntityTimeScaleBehavior 只暂停匹配的敌方实体时钟；
+  // 场景墙钟与动作占用仍继续，因此这里仅移动 DoT tick/到期，不改轴时长。
+  const sharedExpiresAtMs = nonNegativeNumber(
+    dotGroup.sharedExpiresAtMs ??
+      Math.max(
+        0,
+        ...(dotGroup.applications ?? [dotGroup]).map(application =>
+          advanceEnemyClockTime(
+            cinematicTimeScaleRuntime,
+            nonNegativeNumber(application.timeMs),
+            positiveNumber(application.durationMs, 20_000)
+          )
+        )
+      )
   );
+  const relayDurationMs = Math.max(0, sharedExpiresAtMs - startMs);
   const normalizedFrameRate = positiveNumber(frameRate, FRAME_RATE);
   const descriptors = [];
   // 按 thresholdMs < relayDurationMs 迭代（不漏非整秒余量的末次有效
@@ -2019,10 +2033,15 @@ function createVerifiedBattleEffectDotDescriptors({
   const maximumTick = Math.ceil(relayDurationMs / intervalMs) - 1;
   for (let tickIndex = 0; tickIndex <= maximumTick; tickIndex += 1) {
     const thresholdMs = tickIndex * intervalMs;
-    if (thresholdMs >= relayDurationMs) break;
+    const enemyClockDueMs = advanceEnemyClockTime(
+      cinematicTimeScaleRuntime,
+      startMs,
+      thresholdMs
+    );
     const frameIndex =
-      Math.floor(((startMs + thresholdMs) * normalizedFrameRate) / 1000) + 1;
+      Math.floor((enemyClockDueMs * normalizedFrameRate) / 1000) + 1;
     const timeMs = roundValue((frameIndex * 1000) / normalizedFrameRate);
+    if (timeMs >= sharedExpiresAtMs) break;
     if (timeMs > durationMs) break;
     descriptors.push({
       kind: 'battle-effect-dot-tick',
@@ -4345,9 +4364,7 @@ function createDirectVitalEvent({
       // 回血/护盾等直接效果需携带，否则验收场景断言无法匹配覆盖选择器。
       effectIdentity:
         directEvent?.effectIdentity ??
-        (effectElementId == null
-          ? null
-          : `battle-element:${effectElementId}`),
+        (effectElementId == null ? null : `battle-element:${effectElementId}`),
       before: roundValue(before),
       change: roundValue(change),
       after: roundValue(after),
@@ -4690,9 +4707,7 @@ function applyVerifiedBattleEffectDotTickDescriptor({ descriptor, state }) {
   // 层数 = 本实例窗口内、tick 时刻前已施加次数（cap maxStacks），
   // 不跨实例（窗口断裂后由新实例承接，层数从 1 重新开始）。
   const maxStacks = positiveIntegerOrNull(dot.maxStacks) ?? 3;
-  const instanceStartMs = nonNegativeNumber(
-    dot.instanceStartMs ?? dot.timeMs
-  );
+  const instanceStartMs = nonNegativeNumber(dot.instanceStartMs ?? dot.timeMs);
   const sharedExpiresAtMs = nonNegativeNumber(
     dot.sharedExpiresAtMs ??
       instanceStartMs + positiveNumber(dot.durationMs, 20_000)
@@ -4719,9 +4734,8 @@ function applyVerifiedBattleEffectDotTickDescriptor({ descriptor, state }) {
       1,
       // 聚合实例共享到期（整组同生共死）：实例到期前层数=累计施加
       // （cap maxStacks），不按单层独立到期衰减。
-      applications.filter(
-        application => timeMs >= Number(application.timeMs)
-      ).length
+      applications.filter(application => timeMs >= Number(application.timeMs))
+        .length
     )
   );
   // 首个施加者持有等级系数（后续施加只加层，不替换系数）。
@@ -4732,7 +4746,7 @@ function applyVerifiedBattleEffectDotTickDescriptor({ descriptor, state }) {
   const coefficientRaw =
     Number.isFinite(ratioAtLevel) && ratioAtLevel > 0
       ? ratioAtLevel
-      : (Number(valueByLevel[level]) || 0);
+      : Number(valueByLevel[level]) || 0;
   const kiboState = findKiboStateByActorId(
     state,
     owner.sourceActorId,
@@ -5596,9 +5610,10 @@ function applyTuningCombatDescriptor({
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
-  const toughnessDamage = descriptor.jointAttackSuppressToughness === true
-    ? 0
-    : calculatedToughnessDamage;
+  const toughnessDamage =
+    descriptor.jointAttackSuppressToughness === true
+      ? 0
+      : calculatedToughnessDamage;
   const {
     toughnessBefore,
     breakTriggered,
@@ -5665,8 +5680,7 @@ function applyTuningCombatDescriptor({
           descriptor.jointAttackPair?.pairIdentity ?? null,
         jointAttackAnchorFrame:
           descriptor.jointAttackSuppressToughness === true,
-        jointAttackKiboAnchorHit:
-          descriptor.jointAttackKiboAnchorHit === true,
+        jointAttackKiboAnchorHit: descriptor.jointAttackKiboAnchorHit === true,
         toughnessBefore,
         toughnessAfter: enemy.toughness,
         breakTriggered,
@@ -6013,9 +6027,10 @@ function applyHitDescriptor({
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
-  const toughnessDamage = descriptor.jointAttackSuppressToughness === true
-    ? 0
-    : calculatedToughnessDamage;
+  const toughnessDamage =
+    descriptor.jointAttackSuppressToughness === true
+      ? 0
+      : calculatedToughnessDamage;
   const {
     toughnessBefore,
     breakTriggered,
@@ -6126,8 +6141,7 @@ function applyHitDescriptor({
           descriptor.jointAttackPair?.pairIdentity ?? null,
         jointAttackAnchorFrame:
           descriptor.jointAttackSuppressToughness === true,
-        jointAttackKiboAnchorHit:
-          descriptor.jointAttackKiboAnchorHit === true,
+        jointAttackKiboAnchorHit: descriptor.jointAttackKiboAnchorHit === true,
         toughnessBefore,
         toughnessAfter: enemy.toughness,
         breakTriggered,

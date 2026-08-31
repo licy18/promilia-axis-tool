@@ -43,6 +43,28 @@ const extractorYooIndexRoot = path.join(
   'outputs',
   'axis-skill-yoo-index'
 );
+const CLIENT_ENTITY_TYPE_HERO = 2;
+const CLIENT_ENTITY_TYPE_MONSTER = 16384;
+const EXTERNAL_ELEMENT_RESOLVER_SOURCE_IDENTITY =
+  'scripts/resolve-azpr-element-objects.py';
+const CLIENT_ENTITY_TYPE_FILTERS = Object.freeze([
+  ['Hero', 2],
+  ['KiBoBoss', 4],
+  ['KiBoAiFriend', 8],
+  ['Formation', 16],
+  ['Throwable', 32],
+  ['Item', 64],
+  ['Summon', 256],
+  ['Player', 1024],
+  ['Pet', 2048],
+  ['Unknown4096', 4096],
+  ['Mount', 8192],
+  ['Monster', 16384],
+  ['GM', 32768],
+  ['BigWorldPet', 65536],
+  ['Independent', 131072],
+  ['KiBoMonster', 262144],
+]);
 
 const sourceFiles = {
   heroModules: path.join(
@@ -2610,6 +2632,14 @@ async function buildSkillAssetEvidenceIndex({
   const behaviorReferenceSkillCounts = summarizeBehaviorReferenceSkillCounts(
     currentSkillControlEvidence
   );
+  const cinematicTimeScaleSkills = currentSkillControlEvidence.filter(
+    item => item.cinematicTimeScaleEvidence?.summary?.windowCount > 0
+  );
+  const ultimateSkillIds = new Set(
+    skills
+      .filter(skill => Number(skill.displayType) === 2)
+      .map(skill => Number(skill.id))
+  );
   const currentSkillsWithSkillTableRow = skills.filter(skill =>
     skillTableById.has(Number(skill.id))
   );
@@ -2715,6 +2745,16 @@ async function buildSkillAssetEvidenceIndex({
         behaviorReferenceSkillCounts.resourceMapUnmatchedElementBaseRefs,
       scriptTypeCandidateSkills:
         behaviorReferenceSkillCounts.scriptTypeCandidateBehaviorRefs,
+      cinematicTimeScaleSkills: cinematicTimeScaleSkills.length,
+      cinematicTimeScaleUltimateSkills: cinematicTimeScaleSkills.filter(item =>
+        ultimateSkillIds.has(Number(item.skillId))
+      ).length,
+      ultimateSkillsWithoutCinematicTimeScale: currentSkillControlEvidence
+        .filter(item => ultimateSkillIds.has(Number(item.skillId)))
+        .filter(
+          item => !(item.cinematicTimeScaleEvidence?.summary?.windowCount > 0)
+        )
+        .map(item => Number(item.skillId)),
       elementTypeCatalogCandidates:
         elementTypeCatalogEvidence.elementTypes.length,
       externalElementObjectResolvedSkills:
@@ -2849,7 +2889,7 @@ async function resolveExternalElementObjectsBySkillIds({
       schemaVersion: 1,
       sourceKind: 'azpr-skill-external-element-object-evidence',
       status: 'resolver-script-missing',
-      resolverPath: normalizePath(resolverPath),
+      resolverPath: EXTERNAL_ELEMENT_RESOLVER_SOURCE_IDENTITY,
       summary: {
         skillCount: uniqueSkillIds.length,
         ...summaryExtras,
@@ -2894,7 +2934,7 @@ async function resolveExternalElementObjectsBySkillIds({
       schemaVersion: 1,
       sourceKind: 'azpr-skill-external-element-object-evidence',
       status: 'resolver-failed',
-      resolverPath: normalizePath(resolverPath),
+      resolverPath: EXTERNAL_ELEMENT_RESOLVER_SOURCE_IDENTITY,
       error: `${error?.name ?? 'Error'}: ${error?.message ?? String(error)}`,
       stderr: String(error?.stderr ?? '').slice(0, 2000),
       summary: {
@@ -3085,9 +3125,7 @@ async function buildSummonTargetSkillEvidence({
       skillLevelTable: normalizePath(sourceFiles.skillLevel),
       skillsubLogicTable: normalizePath(sourceFiles.skillsubLogic),
       skillsubEleValueTable: normalizePath(sourceFiles.skillsubEleValue),
-      externalElementResolver: normalizePath(
-        path.join(repoRoot, 'scripts', 'resolve-azpr-element-objects.py')
-      ),
+      externalElementResolver: EXTERNAL_ELEMENT_RESOLVER_SOURCE_IDENTITY,
       calculationBoundary:
         'Summon target skill evidence follows static battlefield_item.skillList and compact bundle preload refs only; target hit frames and runtime trigger conditions still need skill_control behavior or runtime capture.',
     },
@@ -5058,6 +5096,11 @@ async function buildSkillControlEvidenceItem(
     jsonFiles,
     monoBehaviourPayloadCache
   );
+  const cinematicTimeScaleEvidence = await buildCinematicTimeScaleEvidence({
+    monoBehaviourRoot,
+    jsonFiles,
+    monoBehaviourPayloadCache,
+  });
   let parsedJsonSampleFiles = 0;
   let unreadableJsonSampleFiles = 0;
 
@@ -5118,6 +5161,7 @@ async function buildSkillControlEvidenceItem(
     behaviorReferenceSummary: aggregate.behaviorReferenceSummary,
     effectLaneBehaviorChains: aggregate.behaviorChains,
     effectLaneBehaviorChainsByLane: aggregate.behaviorChainsByLane,
+    cinematicTimeScaleEvidence,
     stateTimingEvidence,
     frameRange: buildFrameRange(aggregate.startFrames, aggregate.endFrames),
     sampleNodeCandidates: aggregate.candidates.slice(
@@ -5125,6 +5169,156 @@ async function buildSkillControlEvidenceItem(
       SKILL_CONTROL_SAMPLE_NODE_LIMIT
     ),
   };
+}
+
+async function buildCinematicTimeScaleEvidence({
+  monoBehaviourRoot,
+  jsonFiles,
+  monoBehaviourPayloadCache,
+}) {
+  const windows = [];
+  let frameRate = null;
+
+  for (const fileName of jsonFiles) {
+    let payload;
+    try {
+      payload = await readMonoBehaviourPayload(
+        monoBehaviourRoot,
+        fileName,
+        monoBehaviourPayloadCache
+      );
+    } catch {
+      continue;
+    }
+    const value = payload?.json;
+    const sourceFrameRate = Number(value?.skillControlData?.framePerSecond);
+    if (sourceFrameRate > 0) {
+      frameRate = sourceFrameRate;
+    }
+    if (!isCullEntityTimeScaleData(value)) continue;
+
+    const startFrame = Number(value.startFrame);
+    const durationFrames = Number(value.frameCount);
+    const curveKeys = (value.animationCurve?.keys ?? [])
+      .map(key => ({
+        timeRaw: finiteNumberOrNull(key?.time?._serializedValue),
+        valueRaw: finiteNumberOrNull(key?.value?._serializedValue),
+        time: fixed1616NumberOrNull(key?.time?._serializedValue),
+        value: fixed1616NumberOrNull(key?.value?._serializedValue),
+      }))
+      .filter(key => key.time != null && key.value != null);
+    const campTypeFilter = Number(value.campTypeFilter);
+    const entityTypeFilter = Number(value.entityFilter);
+    const normalizedFrameRate = frameRate ?? 60;
+    const scaleValues = curveKeys.map(key => key.value);
+    const scaleMode =
+      scaleValues.length > 0 && scaleValues.every(scale => scale === 0)
+        ? 'paused'
+        : 'curve';
+
+    windows.push({
+      startFrame,
+      endFrame: startFrame + durationFrames,
+      durationFrames,
+      frameRate: normalizedFrameRate,
+      durationMs: Number(
+        ((durationFrames / normalizedFrameRate) * 1000).toFixed(6)
+      ),
+      timeScalePriority: Number(value.timeScalePriority),
+      timeScalePriorityName:
+        Number(value.timeScalePriority) === 0 ? 'UltimateSkill' : null,
+      campTypeFilter,
+      campTypeFilterName:
+        campTypeFilter === 2
+          ? 'Monster'
+          : campTypeFilter === 4
+            ? 'Player'
+            : null,
+      entityTypeFilter,
+      entityTypeFilterNames: decodeEntityTypeFilter(entityTypeFilter),
+      ignoreCameraTimeScale: Boolean(value.ignoreCameraTimeScale),
+      ignoreSelfTimeScale: Boolean(value.ignoreSelfTimeScale),
+      scaleMode,
+      curveKeys,
+      curveWrapMode: Number(value.animationCurve?.warpMode),
+      affectsEnemyMonsterClock:
+        campTypeFilter === 2 &&
+        (entityTypeFilter & CLIENT_ENTITY_TYPE_MONSTER) !== 0,
+      affectsPlayerHeroClock:
+        campTypeFilter === 4 &&
+        (entityTypeFilter & CLIENT_ENTITY_TYPE_HERO) !== 0,
+      sourceIdentity: `${normalizePath(
+        path.join(monoBehaviourRoot, fileName)
+      )}#CullEntityTimeScaleData`,
+    });
+  }
+
+  windows.sort(
+    (left, right) =>
+      left.startFrame - right.startFrame ||
+      left.durationFrames - right.durationFrames ||
+      left.campTypeFilter - right.campTypeFilter ||
+      left.entityTypeFilter - right.entityTypeFilter ||
+      left.sourceIdentity.localeCompare(right.sourceIdentity)
+  );
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-client-cull-entity-time-scale-evidence',
+    status:
+      windows.length > 0
+        ? 'client-cull-entity-time-scale-ready'
+        : 'client-cull-entity-time-scale-not-present',
+    runtimeClass: 'Lens.Gameplay.Modules.BigWorld.CullEntityTimeScaleBehavior',
+    dataClass: 'Lens.Gameplay.Modules.BigWorld.CullEntityTimeScaleData',
+    frameRate: frameRate ?? null,
+    windows,
+    summary: {
+      windowCount: windows.length,
+      pausedWindowCount: windows.filter(window => window.scaleMode === 'paused')
+        .length,
+      enemyMonsterClockWindowCount: windows.filter(
+        window => window.affectsEnemyMonsterClock
+      ).length,
+      playerHeroClockWindowCount: windows.filter(
+        window => window.affectsPlayerHeroClock
+      ).length,
+    },
+    sourceIdentity:
+      'TC GameAssembly.dll#CullEntityTimeScaleBehavior.Start/Update/End|dump.cs#CullEntityTimeScaleData',
+  };
+}
+
+function isCullEntityTimeScaleData(value) {
+  return Boolean(
+    value &&
+    typeof value === 'object' &&
+    Number.isInteger(Number(value.startFrame)) &&
+    Number(value.frameCount) > 0 &&
+    value.animationCurve?.keys &&
+    value.timeScalePriority != null &&
+    value.campTypeFilter != null &&
+    value.entityFilter != null &&
+    value.ignoreCameraTimeScale != null &&
+    value.ignoreSelfTimeScale != null
+  );
+}
+
+function decodeEntityTypeFilter(value) {
+  const mask = Number(value);
+  if (!Number.isInteger(mask) || mask < 0) return [];
+  return CLIENT_ENTITY_TYPE_FILTERS.filter(
+    ([, flag]) => (mask & flag) !== 0
+  ).map(([name]) => name);
+}
+
+function fixed1616NumberOrNull(value) {
+  const raw = finiteNumberOrNull(value);
+  return raw == null ? null : Number((raw / 65536).toFixed(8));
+}
+
+function finiteNumberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 async function extractSkillControlNodeEvidence(json, fileName, context) {

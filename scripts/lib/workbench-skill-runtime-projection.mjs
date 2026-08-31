@@ -301,7 +301,45 @@ function projectCurrentSkillControlEvidence(source) {
     behaviorReferenceSummary: projectBehaviorReferenceSummary(
       source.behaviorReferenceSummary
     ),
+    cinematicTimeScaleEvidence: projectCinematicTimeScaleEvidence(
+      source.cinematicTimeScaleEvidence
+    ),
     stateTimingEvidence: projectStateTimingEvidence(source.stateTimingEvidence),
+  };
+}
+
+function projectCinematicTimeScaleEvidence(source) {
+  if (!source) return null;
+  return {
+    schemaVersion: source.schemaVersion,
+    kind: source.kind,
+    status: source.status,
+    runtimeClass: source.runtimeClass,
+    dataClass: source.dataClass,
+    frameRate: source.frameRate,
+    windows: (source.windows ?? []).map(window => ({
+      startFrame: window.startFrame,
+      endFrame: window.endFrame,
+      durationFrames: window.durationFrames,
+      frameRate: window.frameRate,
+      durationMs: window.durationMs,
+      timeScalePriority: window.timeScalePriority,
+      timeScalePriorityName: window.timeScalePriorityName,
+      campTypeFilter: window.campTypeFilter,
+      campTypeFilterName: window.campTypeFilterName,
+      entityTypeFilter: window.entityTypeFilter,
+      entityTypeFilterNames: window.entityTypeFilterNames,
+      ignoreCameraTimeScale: window.ignoreCameraTimeScale,
+      ignoreSelfTimeScale: window.ignoreSelfTimeScale,
+      scaleMode: window.scaleMode,
+      curveKeys: window.curveKeys,
+      curveWrapMode: window.curveWrapMode,
+      affectsEnemyMonsterClock: window.affectsEnemyMonsterClock,
+      affectsPlayerHeroClock: window.affectsPlayerHeroClock,
+      sourceIdentity: window.sourceIdentity,
+    })),
+    summary: source.summary,
+    sourceIdentity: source.sourceIdentity,
   };
 }
 

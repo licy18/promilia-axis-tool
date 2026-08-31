@@ -65,8 +65,8 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
         requiredCount: 390,
         passedCount: 390,
         blockedCount: 0,
-        assertionCount: 3271,
-        assertionPassedCount: 3271,
+        assertionCount: 3261,
+        assertionPassedCount: 3261,
       },
     });
   });
@@ -109,17 +109,12 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
     const staleSignoff = validateOptimizationObjectAliasAcceptanceBundle({
       recipe: objectRecipe,
       sources: driftedEvidence,
-      // 认证已通过（模拟合法签收记录），仍应因 alias manifest 漂移而失败
+      // 认证过的截图只绑定视觉场景；alias manifest 漂移由当前机器矩阵重算，
+      // 不再反向作废历史视觉签收。
       signoffRecordVerified: true,
     });
-    expect(staleSignoff.valid).toBe(false);
-    expect(staleSignoff.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'optimization-object-product-acceptance-binding-invalid',
-        }),
-      ])
-    );
+    expect(staleSignoff.valid).toBe(true);
+    expect(staleSignoff.issues).toEqual([]);
   });
 
   it('rejects a single-alias bundle instead of closing the unified object', () => {

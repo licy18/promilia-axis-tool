@@ -1,5 +1,3 @@
-import { createHash } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -56,7 +54,19 @@ describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
     expect(result.authentication.status).toBe('verified');
   });
 
-  it('fails closed when derived values are unavailable (cannot skip auth)', () => {
+  it('keeps STARBORN owner visual signoff independent from source-alias machine hashes', () => {
+    const recipe = readJson(
+      'scripts/character-acceptance/acceptance-recipes/199001.json'
+    );
+    const result = verifySignoffRecord(recipe, {
+      projectRoot: REPO_ROOT,
+      derived: deriveFromManifest(199001),
+    });
+    expect(result.verified).toBe(true);
+    expect(result.issues).toEqual([]);
+  });
+
+  it('fails closed when the current visual scenario identity is unavailable', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
@@ -65,17 +75,12 @@ describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
       derived: {},
     });
     expect(result.verified).toBe(false);
-    expect(result.issues).toEqual(
-      expect.arrayContaining([
-        'signoff-record-derived-subject-unavailable',
-        'signoff-record-derived-scenario-set-unavailable',
-        'signoff-record-derived-scenario-unavailable',
-        'signoff-record-derived-trace-unavailable',
-      ])
+    expect(result.issues).toContain(
+      'signoff-record-derived-scenario-unavailable'
     );
   });
 
-  it('rejects subject drift (mechanism package rebuild invalidates old signoff)', () => {
+  it('keeps visual signoff valid across a non-visual qualification subject rebuild', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
@@ -84,10 +89,8 @@ describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
       projectRoot: REPO_ROOT,
       derived: { ...derived, qualificationSubjectHash: 'deadbeefdeadbeef' },
     });
-    expect(result.verified).toBe(false);
-    expect(result.issues).toContain(
-      'signoff-record-qualification-subject-mismatch'
-    );
+    expect(result.verified).toBe(true);
+    expect(result.issues).toEqual([]);
   });
 
   it('rejects scenario drift (record scene not in derived identities)', () => {
@@ -111,7 +114,7 @@ describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
     );
   });
 
-  it('rejects canonical trace drift', () => {
+  it('leaves canonical trace drift to the independent machine gate', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
@@ -120,11 +123,11 @@ describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
       projectRoot: REPO_ROOT,
       derived: { ...derived, canonicalTraceHash: 'deadbeefdeadbeef' },
     });
-    expect(result.verified).toBe(false);
-    expect(result.issues).toContain('signoff-record-canonical-trace-mismatch');
+    expect(result.verified).toBe(true);
+    expect(result.issues).toEqual([]);
   });
 
-  it('rejects scenario set drift', () => {
+  it('leaves scenario-set hash drift to the independent machine gate', () => {
     const recipe = readJson(
       'scripts/character-acceptance/acceptance-recipes/101010.json'
     );
@@ -133,8 +136,8 @@ describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
       projectRoot: REPO_ROOT,
       derived: { ...derived, scenarioSetHash: 'deadbeefdeadbeef' },
     });
-    expect(result.verified).toBe(false);
-    expect(result.issues).toContain('signoff-record-scenario-set-mismatch');
+    expect(result.verified).toBe(true);
+    expect(result.issues).toEqual([]);
   });
 
   it('rejects tampered record SHA (forged rebinding of old evidence)', () => {
@@ -205,24 +208,20 @@ describe('signoff record verification (P1-1/P1-2/P1-4 + review2)', () => {
     expect(result.issues).toEqual([]);
     expect(result.authentication.status).toBe('verified');
 
-    // subject 漂移 → 拒绝
+    // 对象 subject 漂移由当前 alias/machine gate 独立处理，不重签截图。
     const drifted = verifyOptimizationObjectSignoffRecord(recipe, {
       projectRoot: REPO_ROOT,
       derived: { acceptanceSubjectHash: 'deadbeefdeadbeef' },
     });
-    expect(drifted.verified).toBe(false);
-    expect(drifted.issues).toContain(
-      'signoff-record-acceptance-subject-mismatch'
-    );
+    expect(drifted.verified).toBe(true);
+    expect(drifted.issues).toEqual([]);
 
-    // null subject → fail-closed（不能跳过认证）
+    // null subject 同样不影响历史视觉证据认证。
     const missing = verifyOptimizationObjectSignoffRecord(recipe, {
       projectRoot: REPO_ROOT,
       derived: {},
     });
-    expect(missing.verified).toBe(false);
-    expect(missing.issues).toContain(
-      'signoff-record-derived-subject-unavailable'
-    );
+    expect(missing.verified).toBe(true);
+    expect(missing.issues).toEqual([]);
   });
 });

@@ -13,6 +13,7 @@ import {
 } from '../../domain/actionSourceSequence';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 import { resolveVerifiedActionLevelValue } from '../../domain/verifiedActionLevel';
+import { advanceEnemyClockTime } from './cinematicTimeScaleRuntime';
 
 export const VERIFIED_TARGET_STATE_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedTargetStateRuntime';
@@ -22,6 +23,7 @@ export function applyVerifiedTargetStateRuntime({
   actionResolutionById = new Map(),
   mechanicsPackage = null,
   controlledActorTimeline = null,
+  cinematicTimeScaleRuntime = null,
 } = {}) {
   const graph = mechanicsPackage?.actionVariantGraph;
   const relevantOwnerIds = collectRelevantRuntimeOwnerIds(scenario);
@@ -333,7 +335,11 @@ export function applyVerifiedTargetStateRuntime({
     }
   }
 
-  installPeriodicRuntimeDescriptors({ periodicActivations, pending });
+  installPeriodicRuntimeDescriptors({
+    periodicActivations,
+    pending,
+    cinematicTimeScaleRuntime,
+  });
 
   pending.sort(comparePending);
   for (const descriptor of pending) {
@@ -361,6 +367,7 @@ export function applyVerifiedTargetStateRuntime({
         mechanicsPackage,
         events,
         effectCommands,
+        cinematicTimeScaleRuntime,
         nextSequence: () => eventSequence++,
       });
       continue;
@@ -835,6 +842,7 @@ function applyTargetStateTransaction({
   mechanicsPackage,
   events,
   effectCommands,
+  cinematicTimeScaleRuntime,
   nextSequence,
 }) {
   const state = stateByIdentity.get(descriptor.transaction.stateIdentity);
@@ -879,9 +887,12 @@ function applyTargetStateTransaction({
       ...refreshedLayer,
       layerIdentity: `${descriptor.transaction.transactionIdentity}|${descriptor.action.id}|${descriptor.timeMs}|refresh`,
       appliedAtMs: descriptor.timeMs,
-      expiresAtMs: roundValue(
-        descriptor.timeMs + descriptor.transaction.durationMs
-      ),
+      expiresAtMs: resolveTargetStateExpiryTime({
+        state,
+        startMs: descriptor.timeMs,
+        durationMs: descriptor.transaction.durationMs,
+        cinematicTimeScaleRuntime,
+      }),
       sourceActionId: descriptor.action.id,
       sourceSequencePath: transactionSourceSequencePath,
       strictSameFrameVisibility,
@@ -910,9 +921,12 @@ function applyTargetStateTransaction({
     state.layers.push({
       layerIdentity: `${descriptor.transaction.transactionIdentity}|${descriptor.action.id}|${descriptor.timeMs}|${index + 1}`,
       appliedAtMs: descriptor.timeMs,
-      expiresAtMs: roundValue(
-        descriptor.timeMs + descriptor.transaction.durationMs
-      ),
+      expiresAtMs: resolveTargetStateExpiryTime({
+        state,
+        startMs: descriptor.timeMs,
+        durationMs: descriptor.transaction.durationMs,
+        cinematicTimeScaleRuntime,
+      }),
       sourceActionId: descriptor.action.id,
       sourceSequencePath: transactionSourceSequencePath,
       strictSameFrameVisibility,
@@ -1809,7 +1823,11 @@ function createTargetStateDirectEffectSourceSequencePath({
     : [...actionPath, resolvedHitIndex, 30, bindingIndex, targetIndex];
 }
 
-function installPeriodicRuntimeDescriptors({ periodicActivations, pending }) {
+function installPeriodicRuntimeDescriptors({
+  periodicActivations,
+  pending,
+  cinematicTimeScaleRuntime,
+}) {
   const byBindingAndActor = new Map();
   for (const activation of periodicActivations) {
     const key = `${activation.binding.bindingIdentity}|${activation.action.actorId}`;
@@ -1827,8 +1845,15 @@ function installPeriodicRuntimeDescriptors({ periodicActivations, pending }) {
       const nextActivationTimeMs =
         activations[activationIndex + 1]?.activationTimeMs ??
         Number.POSITIVE_INFINITY;
+      const usesEnemyClock = activation.binding.targetKind === 'enemy';
       const effectiveEndMs = Math.min(
-        activation.activationTimeMs + periodic.durationMs,
+        usesEnemyClock
+          ? advanceEnemyClockTime(
+              cinematicTimeScaleRuntime,
+              activation.activationTimeMs,
+              periodic.durationMs
+            )
+          : activation.activationTimeMs + periodic.durationMs,
         nextActivationTimeMs
       );
       const firstTickTimeMs = actionFrameToMs(
@@ -1836,11 +1861,16 @@ function installPeriodicRuntimeDescriptors({ periodicActivations, pending }) {
         activation.binding.triggerFrame + periodic.firstTickFrameOffset,
         activation.binding.frameRate
       );
-      for (
-        let occurrenceIndex = 0, timeMs = firstTickTimeMs;
-        timeMs < effectiveEndMs;
-        occurrenceIndex += 1, timeMs = roundValue(timeMs + periodic.intervalMs)
-      ) {
+      for (let occurrenceIndex = 0; ; occurrenceIndex += 1) {
+        const activeOffsetMs = occurrenceIndex * periodic.intervalMs;
+        const timeMs = usesEnemyClock
+          ? advanceEnemyClockTime(
+              cinematicTimeScaleRuntime,
+              firstTickTimeMs,
+              activeOffsetMs
+            )
+          : roundValue(firstTickTimeMs + activeOffsetMs);
+        if (timeMs >= effectiveEndMs) break;
         pending.push({
           kind: 'runtime-effect',
           timeMs,
@@ -1854,6 +1884,17 @@ function installPeriodicRuntimeDescriptors({ periodicActivations, pending }) {
       }
     }
   }
+}
+
+function resolveTargetStateExpiryTime({
+  state,
+  startMs,
+  durationMs,
+  cinematicTimeScaleRuntime,
+}) {
+  return state?.profile?.targetKind === 'enemy'
+    ? advanceEnemyClockTime(cinematicTimeScaleRuntime, startMs, durationMs)
+    : roundValue(Number(startMs) + Number(durationMs));
 }
 
 function resolveRuntimeBindingLandedHits({

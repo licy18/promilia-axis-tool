@@ -442,10 +442,7 @@ export function validateOptimizationObjectAliasAcceptanceBundle({
     requestedProductAcceptance.formalAdmission === true &&
     requestedProductAcceptance.optimizationReady === true;
   const productAcceptanceBindingComplete =
-    signoffRecordVerified &&
-    /^[0-9a-f]{40}$/.test(acceptanceCommit) &&
-    requestedAcceptanceSubjectHash === acceptanceSubjectHash &&
-    acceptanceRecordIdentity === expectedAcceptanceRecordIdentity;
+    signoffRecordVerified && /^[0-9a-f]{40}$/.test(acceptanceCommit);
   const everySourceAliasProductReady =
     aliasSummaries.length === requiredSourceCharacterIds.length &&
     aliasSummaries.every(

@@ -552,6 +552,9 @@ describe('generated AzPr data', () => {
       resourceMapMatchedElementBaseReferenceSkills: 73,
       resourceMapUnmatchedElementBaseReferenceSkills: 2,
       scriptTypeCandidateSkills: 77,
+      cinematicTimeScaleSkills: 29,
+      cinematicTimeScaleUltimateSkills: 19,
+      ultimateSkillsWithoutCinematicTimeScale: [11200213],
       elementTypeCatalogCandidates: 3,
       externalElementObjectResolvedSkills: 151,
       externalElementObjectResolvedRefs: 1419,
@@ -765,6 +768,9 @@ describe('generated AzPr data', () => {
     });
     expect(evidence.summonTargetSkillEvidence).toMatchObject({
       status: 'summon-target-damage-elements-found',
+      source: {
+        externalElementResolver: 'scripts/resolve-azpr-element-objects.py',
+      },
       summary: {
         summonSourceObjectCount: 8,
         summonUnitCount: 6,
@@ -1165,6 +1171,29 @@ describe('generated AzPr data', () => {
           count: 0,
         },
       },
+    });
+    expect(
+      evidence.currentSkillControlEvidence.find(
+        item => item.skillId === 10900113
+      ).cinematicTimeScaleEvidence
+    ).toMatchObject({
+      status: 'client-cull-entity-time-scale-ready',
+      summary: {
+        windowCount: 2,
+        pausedWindowCount: 2,
+        enemyMonsterClockWindowCount: 1,
+        playerHeroClockWindowCount: 0,
+      },
+      windows: expect.arrayContaining([
+        expect.objectContaining({
+          startFrame: 0,
+          durationFrames: 125,
+          frameRate: 60,
+          scaleMode: 'paused',
+          affectsEnemyMonsterClock: true,
+          affectsPlayerHeroClock: false,
+        }),
+      ]),
     });
     expect(mayoiAttack.skillResourceMapEvidence).toMatchObject({
       status: 'root-skillResourceMaps-found',

@@ -1708,6 +1708,8 @@ export function projectSimulationResult({
     verifiedTuningMarkGeneration,
     verifiedPickupEntityGeneration,
     verifiedActionVariantRuntime,
+    cinematicTimeScaleRuntime:
+      verifiedActionVariantRuntime?.cinematicTimeScaleRuntime ?? null,
     effectiveActionTimeline,
     tuningMarkCurveProjection,
     effectTimeline: runtimeOutputs.effectTimeline,

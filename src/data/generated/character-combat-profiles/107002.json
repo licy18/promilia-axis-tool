@@ -70,7 +70,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "d2eecacc7d1fb36ee1d9e561c9789e7c78c755d576ca46f8af0ffca62a42ef6e",
+    "packageHash": "dfc3a194a54e5de72318f1638109555d85b43aabbcf7c7b753cb13d869880891",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -9215,6 +9215,114 @@
             "applied": 2,
             "verified-zero": 11
           }
+        },
+        "cinematicTimeScale": {
+          "schemaVersion": 1,
+          "kind": "azpr-client-cinematic-time-scale-binding",
+          "status": "applied",
+          "sourceKind": "azpr-client-cull-entity-time-scale-evidence",
+          "clockPolicy": {
+            "scoreClock": "wall-time-continues",
+            "dungeonTimer": "unity-time-continues-without-pause-world",
+            "actorClock": "client-camp-and-entity-filtered",
+            "enemyClock": "pause-during-filtered-zero-scale-window",
+            "actionOccupancy": "unchanged"
+          },
+          "runtimeRestrictions": {
+            "multiplayerOnline": "disabled",
+            "kiboBattle": "disabled"
+          },
+          "windows": [
+            {
+              "startFrame": 0,
+              "endFrame": 101,
+              "durationFrames": 101,
+              "frameRate": 60,
+              "durationMs": 1683.333333,
+              "timeScalePriority": 0,
+              "timeScalePriorityName": "UltimateSkill",
+              "campTypeFilter": 2,
+              "campTypeFilterName": "Monster",
+              "entityTypeFilter": 121158,
+              "entityTypeFilterNames": [
+                "Hero",
+                "KiBoBoss",
+                "Item",
+                "Summon",
+                "Pet",
+                "Unknown4096",
+                "Monster",
+                "GM",
+                "BigWorldPet"
+              ],
+              "ignoreCameraTimeScale": false,
+              "ignoreSelfTimeScale": false,
+              "scaleMode": "paused",
+              "curveKeys": [
+                {
+                  "timeRaw": 0,
+                  "valueRaw": 0,
+                  "time": 0,
+                  "value": 0
+                },
+                {
+                  "timeRaw": 65536,
+                  "valueRaw": 0,
+                  "time": 1,
+                  "value": 0
+                }
+              ],
+              "curveWrapMode": 2,
+              "affectsEnemyMonsterClock": true,
+              "affectsPlayerHeroClock": false,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_4496992891546024419__4496992891546024419.json#CullEntityTimeScaleData"
+            },
+            {
+              "startFrame": 0,
+              "endFrame": 101,
+              "durationFrames": 101,
+              "frameRate": 60,
+              "durationMs": 1683.333333,
+              "timeScalePriority": 0,
+              "timeScalePriorityName": "UltimateSkill",
+              "campTypeFilter": 4,
+              "campTypeFilterName": "Player",
+              "entityTypeFilter": 64,
+              "entityTypeFilterNames": [
+                "Item"
+              ],
+              "ignoreCameraTimeScale": false,
+              "ignoreSelfTimeScale": false,
+              "scaleMode": "paused",
+              "curveKeys": [
+                {
+                  "timeRaw": 0,
+                  "valueRaw": 0,
+                  "time": 0,
+                  "value": 0
+                },
+                {
+                  "timeRaw": 65536,
+                  "valueRaw": 0,
+                  "time": 1,
+                  "value": 0
+                }
+              ],
+              "curveWrapMode": 2,
+              "affectsEnemyMonsterClock": false,
+              "affectsPlayerHeroClock": false,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_3083714812337109475__3083714812337109475.json#CullEntityTimeScaleData"
+            }
+          ],
+          "summary": {
+            "windowCount": 2,
+            "pausedWindowCount": 2,
+            "enemyMonsterClockWindowCount": 1,
+            "playerHeroClockWindowCount": 0
+          },
+          "sourceIdentity": "TC GameAssembly.dll#CullEntityTimeScaleBehavior.Start/Update/End|dump.cs#CullEntityTimeScaleData",
+          "reasons": [],
+          "applied": true
         },
         "mechanicsClassification": "applied",
         "actionTiming": {
@@ -49192,7 +49300,7 @@
       "recipeHash": "22c22d851c01f70ea54f84fd3f17ab9c9eed8764efed0dd90be4f7be7ededf32",
       "compilerInputHash": "9b4157d441acc5c874086e3cd1ec2c31fc98878e7b60cb3e87251708aeae2bab",
       "recipeContractHash": "b7a08d87e9910d498ca6cd50b34e4edf7c7340780dacfa5b4b022e871deee759",
-      "ownerContractHash": "8c06b2955183dc771e62b2d2738a7e26db42c6abe547a0f9a97d4dec5858040c"
+      "ownerContractHash": "fc39d0ec62717191bd0bfc7512969320198a654182c0494c5c9f4a6a34e7c075"
     },
     "operators": [
       "public-action-binding",
@@ -49214,7 +49322,7 @@
         "packagePath": "actionMappings",
         "operator": "public-action-binding",
         "recordCount": 10,
-        "recordsHash": "099e52bd8a26fab6acf29811b70180b035d434ea22381ce81c0fabdffd383afb"
+        "recordsHash": "198e03056fd0f1df661ce232ca7a977f2dbe141ea4466ac4fafe765d0a0d1e22"
       },
       {
         "packagePath": "actionVariantGraph.publicActionForms",
@@ -49289,7 +49397,7 @@
         "recordsHash": "3fbe6ca7fa45cd5b7ea413492616151de75abf69532d1a9de93c6989c281350f"
       }
     ],
-    "contractHash": "c10c1f8051ebc9c1a70add3f3f87344bbb814c61b9676a6a4d1f0f432036caac"
+    "contractHash": "317617e9ed68702795934232ed0da64c417970a66e76081896084d8715c50a6a"
   },
   "coverage": [
     {
@@ -50666,7 +50774,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "5f5f474d338e36bbba65e6dc6cf6e187b8c2f85f77ec3584bf081a45345da162"
+    "deterministicInputHash": "98452fbbadd4e708d61f32c50d5349bba90cee82c8ff798aa3a9255a9cabcc97"
   },
-  "profileHash": "924582c22e5fee32bedeaade4536f13fea9c4986de0ea8aa954e57ed535bac40"
+  "profileHash": "447db54bf8e910a71a8bf78eeada69d5fc06382e6de55bdc7b396aa9b8bb35f8"
 }

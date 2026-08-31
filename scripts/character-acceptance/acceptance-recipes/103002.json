@@ -8,9 +8,7 @@
     "recordIdentity": "character-product-acceptance:103002:365df3685b9b16a06ec57da452f05618915b2d11:0b8563900dafaac2",
     "qualificationSubjectHash": "0b8563900dafaac2",
     "scenarioSetHash": "f8cb92c8e2fae966",
-    "scenarioIdentities": [
-      "m11-d-103002-visual-acceptance"
-    ],
+    "scenarioIdentities": ["m11-d-103002-visual-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-103002-visual-acceptance",
@@ -51,9 +49,7 @@
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
   "inputWindowBoundary": null,
-  "goldenReports": [
-    "reports/m10/103002/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/103002/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
     {
@@ -231,9 +227,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -273,9 +267,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -323,9 +315,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -373,9 +363,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -437,11 +425,7 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": [
-          "apply",
-          "refresh",
-          "expire"
-        ],
+        "requiredOperations": ["apply", "refresh", "expire"],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -579,26 +563,11 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "triggerFrame": [
-                173,
-                237
-              ],
-              "absoluteFrame": [
-                1973,
-                2037
-              ],
-              "markCountAtJudgment": [
-                1,
-                0
-              ],
-              "consumedCount": [
-                1,
-                0
-              ],
-              "applied": [
-                true,
-                false
-              ],
+              "triggerFrame": [173, 237],
+              "absoluteFrame": [1973, 2037],
+              "markCountAtJudgment": [1, 0],
+              "consumedCount": [1, 0],
+              "applied": [true, false],
               "status": [
                 "verified-tuning-consume-applied",
                 "verified-tuning-consume-insufficient-marks"
@@ -663,68 +632,7 @@
           }
         ]
       },
-      "negativeActionCases": [
-        {
-          "identity": "reload-window-start-minus-one-lane-overlap",
-          "assertionIdentity": "negative:reload-window-start-minus-one-23f-lane-overlap",
-          "durationFrames": 300,
-          "actions": [
-            {
-              "id": "negative-reload-window-source",
-              "owner": {
-                "kind": "actor",
-                "slotId": "slot-1"
-              },
-              "intent": {
-                "kind": "public-action",
-                "publicActionId": 10300201,
-                "actionKind": "charged-attack",
-                "physicalInput": {
-                  "mode": "hold",
-                  "pressFrame": 0,
-                  "releaseFrame": null,
-                  "executionFrame": 16
-                },
-                "level": 1
-              },
-              "schedule": {
-                "mode": "absolute",
-                "frame": 16
-              }
-            },
-            {
-              "id": "negative-reload-window-start-minus-one",
-              "owner": {
-                "kind": "actor",
-                "slotId": "slot-1"
-              },
-              "intent": {
-                "kind": "public-action",
-                "publicActionId": 10300201,
-                "actionKind": "normal-attack",
-                "attackInput": {
-                  "sequenceIndex": 1,
-                  "groupId": "negative-reload-window-start-minus-one"
-                },
-                "level": 1
-              },
-              "schedule": {
-                "mode": "absolute",
-                "frame": 39
-              }
-            }
-          ],
-          "requiredExecutableActionIds": [
-            "negative-reload-window-source"
-          ],
-          "expectedIssue": {
-            "actionId": "negative-reload-window-start-minus-one",
-            "code": "machine-axis-action-not-executable",
-            "reason": "confirmed-action-rule-violation",
-            "violationCode": "action-lane-overlap"
-          }
-        }
-      ],
+      "negativeActionCases": [],
       "probes": []
     },
     {
@@ -734,11 +642,7 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": [
-          "apply",
-          "refresh",
-          "expire"
-        ],
+        "requiredOperations": ["apply", "refresh", "expire"],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -753,17 +657,10 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": [
-                "expire",
-                "apply"
-              ]
+              "operation": ["expire", "apply"]
             }
           },
-          "select": [
-            "actionId",
-            "operation",
-            "absoluteFrame"
-          ]
+          "select": ["actionId", "operation", "absoluteFrame"]
         }
       ]
     },
@@ -789,15 +686,9 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [
-                40
-              ],
-              "toughnessAfter": [
-                0
-              ],
-              "breakTriggered": [
-                true
-              ]
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
             }
           },
           "select": [

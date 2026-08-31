@@ -7822,7 +7822,6 @@ describe('verified soul essence effect generation', () => {
         command.sourceSoulEssenceId === 10175 &&
         command.sourceActionId === 'c7-r1-costed-ultimate-heal'
     );
-
     expect(cost?.payload).toMatchObject({
       beforeValue: 100,
       change: -100,
@@ -7853,14 +7852,27 @@ describe('verified soul essence effect generation', () => {
       },
     });
     expect(projectionRuntime.damageEvents).toEqual([]);
-    expect(afterHealEvents).toHaveLength(1);
-    expect(commands).toEqual([
-      expect.objectContaining({
-        sourceActorId: 'actor-112002',
-        targetId: 'actor-112002',
-        semanticTargetKind: 'event-target-actor',
-      }),
+    expect(afterHealEvents.map(event => event.timeMs)).toEqual([
+      frameToMs(180),
+      frameToMs(188),
     ]);
+    expect(commands).toHaveLength(2);
+    expect(commands).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceActorId: 'actor-112002',
+          targetId: 'actor-112002',
+          semanticTargetKind: 'event-target-actor',
+          timeMs: frameToMs(180),
+        }),
+        expect.objectContaining({
+          sourceActorId: 'actor-112002',
+          targetId: 'actor-112002',
+          semanticTargetKind: 'event-target-actor',
+          timeMs: frameToMs(188),
+        }),
+      ])
+    );
   });
 
   it('projects inherited wood-mark periodic healing without borrowing its source action skill tags', () => {

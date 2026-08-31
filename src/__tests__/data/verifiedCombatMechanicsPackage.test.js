@@ -39,7 +39,7 @@ describe('verified combat mechanics package', () => {
     });
     expect(mechanicsPackage).toMatchObject({
       packageId: 'azpr-tc-2026-07-18',
-      packageVersion: 15,
+      packageVersion: 16,
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
@@ -54,10 +54,12 @@ describe('verified combat mechanics package', () => {
         specialResourceProfileCount: 3,
         specialResourceOperationCount: 53,
         actionVariantNodeCount: 778,
-        actionVariantEdgeCount: 64,
+        actionVariantEdgeCount: 65,
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 20,
         unresolvedSwitchTriggerProfileCount: 0,
+        cinematicTimeScaleAppliedActionCount: 29,
+        cinematicTimeScaleUnresolvedActionCount: 1,
         battleEffectNodeCount: 3817,
         unresolvedActionCount: 12,
         actorProfileCount: 20,
@@ -318,7 +320,7 @@ describe('verified combat mechanics package', () => {
         ownerCount: 142,
         nodeCount: 778,
         edgeCount: 346,
-        appliedEdgeCount: 64,
+        appliedEdgeCount: 65,
         unresolvedEdgeCount: 286,
       },
     });
@@ -327,7 +329,7 @@ describe('verified combat mechanics package', () => {
       profileCount: 3,
       appliedProfileCount: 3,
       appliedOperationCount: 53,
-      appliedEdgeCount: 64,
+      appliedEdgeCount: 65,
     });
     expect(
       mechanicsPackage.ownerProfiles.actor.find(
@@ -365,6 +367,61 @@ describe('verified combat mechanics package', () => {
       status: 'verified-combat-mechanics-sync-audit-ready',
       packageId: mechanicsPackage.packageId,
       packageHash: mechanicsPackage.packageHash,
+    });
+  });
+
+  it('binds client cinematic time-scale windows without removing wall-clock time', () => {
+    // The normalized action bindings below already participate in packageHash.
+    // Do not bind the raw diagnostics report: it contains generated metadata
+    // and checkout-local provenance unrelated to the cinematic contract.
+    expect(
+      mechanicsPackage.sourceFiles.some(
+        source => source.id === 'skill-asset-evidence'
+      )
+    ).toBe(false);
+    expect(mechanicsPackage.cinematicTimeScaleContract).toMatchObject({
+      status: 'client-cinematic-time-scale-contract-ready',
+      clockPolicy: {
+        scoreClock: 'wall-time-continues',
+        dungeonTimer: 'unity-time-continues-without-pause-world',
+        enemyClock: 'pause-during-filtered-zero-scale-window',
+        actionOccupancy: 'unchanged',
+      },
+    });
+    const moyin = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.controlSkillId === 10900113 && mapping.actionKind === 'ultimate'
+    );
+    expect(moyin.cinematicTimeScale).toMatchObject({
+      status: 'applied',
+      applied: true,
+      summary: {
+        windowCount: 2,
+        enemyMonsterClockWindowCount: 1,
+        playerHeroClockWindowCount: 0,
+      },
+    });
+    expect(moyin.cinematicTimeScale.windows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          startFrame: 0,
+          durationFrames: 125,
+          frameRate: 60,
+          scaleMode: 'paused',
+          campTypeFilterName: 'Monster',
+          affectsEnemyMonsterClock: true,
+          affectsPlayerHeroClock: false,
+        }),
+      ])
+    );
+    const ainis = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.controlSkillId === 11200213 && mapping.actionKind === 'ultimate'
+    );
+    expect(ainis.cinematicTimeScale).toMatchObject({
+      status: 'unresolved',
+      applied: false,
+      reasons: ['ultimate-cinematic-time-scale-source-missing'],
     });
   });
 
@@ -977,6 +1034,24 @@ describe('verified combat mechanics package', () => {
         canonicalInput: 117,
         executionStart: 117,
         predecessorEnd: 117,
+      },
+      {
+        source: '10900112/sub0',
+        window: [40, 77],
+        semantics: 'immediate-continuous',
+        genericEnd: 60,
+        canonicalInput: 60,
+        executionStart: 60,
+        predecessorEnd: 60,
+      },
+      {
+        source: '10900121/sub0',
+        window: [108, 145],
+        semantics: 'immediate-continuous',
+        genericEnd: 133,
+        canonicalInput: 133,
+        executionStart: 133,
+        predecessorEnd: 133,
       },
       {
         source: '11200102/sub0',

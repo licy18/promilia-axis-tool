@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "01400e59a5966428f40df9fd02d957b1de85e0cfcab6aaf2f9dc9b6550917615",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m12-b3-109001-limit-window-offset-109",
+    "name": "末音极限反击追击窗口 109F 内侧验收轴",
+    "fps": 60,
+    "durationFrames": 500,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 109001,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": {
+      "controlledActor": {
+        "actorId": "actor-101010",
+        "characterId": 101010
+      },
+      "specialResourcesByActor": []
+    },
+    "critical": {
+      "policy": "sampled",
+      "seed": "m12-b3-109001-limit-window-109"
+    },
+    "projectile": { "targetDistance": 0, "defaultWillHit": true },
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    }
+  },
+  "actions": [
+    {
+      "id": "moyin-entry-switch",
+      "owner": { "kind": "actor", "slotId": "slot-2" },
+      "intent": {
+        "kind": "switch",
+        "targetSlotId": "slot-1"
+      },
+      "schedule": { "mode": "absolute", "frame": 0 }
+    },
+    {
+      "id": "limit-window-offset-109",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "limit-window-offset-109",
+          "contextActionId": "moyin-entry-switch--on-enter--actor-109001--star-carry"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 109 }
+    }
+  ],
+  "metadata": {
+    "phase": "M12-B3-E20-2-109001-limit-window-109",
+    "probeContract": "isolated-star-carry-input-window"
+  }
+}

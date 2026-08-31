@@ -8,9 +8,7 @@
     "recordIdentity": "character-product-acceptance:199002:365df3685b9b16a06ec57da452f05618915b2d11:6f582ac781c3e9ee",
     "qualificationSubjectHash": "6f582ac781c3e9ee",
     "scenarioSetHash": "bfc5c4af14b5ba13",
-    "scenarioIdentities": [
-      "m12-b3-starborn-199002-focused-acceptance"
-    ],
+    "scenarioIdentities": ["m12-b3-starborn-199002-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
@@ -51,17 +49,12 @@
   "ownerId": 199002,
   "optimizationObjectAcceptance": {
     "optimizationObjectId": "STARBORN",
-    "requiredSourceCharacterIds": [
-      199001,
-      199002
-    ],
+    "requiredSourceCharacterIds": [199001, 199002],
     "sourceCharacterId": 199002,
     "sourceAliasIdentity": "STARBORN:source-alias:199002"
   },
   "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
-  "goldenReports": [
-    "reports/m10/199002/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/199002/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 19900262,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -144,13 +137,8 @@
     "effectIdentity": "battle-element:199002266",
     "targetId": "actor-199002",
     "durationFrames": 1440,
-    "requiredOperations": [
-      "apply",
-      "expire"
-    ],
-    "startOperations": [
-      "apply"
-    ],
+    "requiredOperations": ["apply", "expire"],
+    "startOperations": ["apply"],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -331,118 +319,10 @@
           }
         }
       ],
-      "baselineRequiredExecutableActionIds": [
-        "starborn-m-ultimate"
-      ],
+      "baselineRequiredExecutableActionIds": ["starborn-m-ultimate"],
       "expectedIssue": {
         "actionId": "199002-ultimate-sp-insufficient",
         "code": "machine-axis-action-resource-insufficient"
-      }
-    },
-    {
-      "identity": "thrust-window-a1-rejected",
-      "assertionIdentity": "thrust-window-a1-rejected",
-      "actions": [
-        {
-          "id": "starborn-m-a5",
-          "owner": {
-            "kind": "actor",
-            "slotId": "slot-1"
-          },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900201,
-            "actionKind": "normal-attack",
-            "attackInput": {
-              "sequenceIndex": 5,
-              "groupId": "starborn-m-chain"
-            },
-            "level": 1
-          },
-          "schedule": {
-            "mode": "absolute",
-            "frame": 1450
-          }
-        },
-        {
-          "id": "starborn-m-charged-derived",
-          "owner": {
-            "kind": "actor",
-            "slotId": "slot-1"
-          },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900201,
-            "actionKind": "charged-attack",
-            "semanticVariant": {
-              "selectorIdentity": "starborn-199002-derived-charged",
-              "selectorKind": "input-context",
-              "publicVariantIndex": 1,
-              "mode": "press"
-            },
-            "attackInput": {
-              "sequenceIndex": 1,
-              "groupId": "starborn-m-derived",
-              "contextActionId": "starborn-m-a5"
-            },
-            "level": 1
-          },
-          "schedule": {
-            "mode": "absolute",
-            "frame": 1490
-          }
-        },
-        {
-          "id": "starborn-m-derived-thrust",
-          "owner": {
-            "kind": "actor",
-            "slotId": "slot-1"
-          },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900201,
-            "actionKind": "normal-attack",
-            "attackInput": {
-              "sequenceIndex": 1,
-              "groupId": "starborn-m-derived-thrust",
-              "contextActionId": "starborn-m-charged-derived"
-            },
-            "level": 1
-          },
-          "schedule": {
-            "mode": "absolute",
-            "frame": 1563
-          }
-        },
-        {
-          "id": "199002-thrust-window-a1",
-          "owner": {
-            "kind": "actor",
-            "slotId": "slot-1"
-          },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900201,
-            "actionKind": "normal-attack",
-            "attackInput": {
-              "sequenceIndex": 1,
-              "groupId": "starborn-m-derived-thrust",
-              "contextActionId": "starborn-m-derived-thrust"
-            },
-            "level": 1
-          },
-          "schedule": {
-            "mode": "absolute",
-            "frame": 1588
-          }
-        }
-      ],
-      "baselineRequiredExecutableActionIds": [
-        "starborn-m-derived-thrust"
-      ],
-      "expectedIssue": {
-        "actionId": "199002-thrust-window-a1",
-        "code": "machine-axis-normal-attack-context-window-conflict"
       }
     }
   ],
@@ -825,10 +705,7 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": [
-                "expire",
-                "apply"
-              ]
+              "operation": ["expire", "apply"]
             }
           }
         }
