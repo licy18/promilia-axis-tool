@@ -61,6 +61,13 @@ const DEFAULT_MAX_PERIOD_CYCLES = 4;
 const DEFAULT_MINIMUM_PERIOD_REPEATS = 3;
 const MIN_REPLAY_CYCLES = 4;
 const MAX_REPLAY_CYCLES = 32;
+const CYCLE_LOCAL_SYNTHETIC_DAMAGE_HIT_KINDS = new Set([
+  'verified-held-damage',
+  'verified-held-true-damage',
+  'verified-overlimit-damage',
+  'verified-overlimit-dot-damage',
+  'verified-overlimit-true-damage',
+]);
 
 export function normalizeMachineAxisCycleEnvelope(value = {}) {
   const source = isRecord(value) ? value : {};
@@ -997,13 +1004,39 @@ export function createCycleReplayStabilityProof({
   };
 }
 
-export function createCycleMetricSignature(cycle = {}) {
-  const contributionRows = key =>
-    (cycle[key] ?? []).map(row => ({
-      identity: row.identity ?? null,
-      hpDamage: roundMetric(row.hpDamage),
-      combatHitCount: Number(row.combatHitCount) || 0,
-    }));
+export function createCycleMetricSignature(
+  cycle = {},
+  { actionIdentityById = null } = {}
+) {
+  const cycleStartFrame = integerOrNull(cycle.startFrame);
+  const contributionRows = key => {
+    const byIdentity = new Map();
+    for (const row of cycle[key] ?? []) {
+      const identity = createCycleMetricContributionIdentity(key, row, {
+        actionIdentityById,
+        cycleStartFrame,
+      });
+      const current = byIdentity.get(identity) ?? {
+        identity,
+        hpDamage: 0,
+        combatHitCount: 0,
+      };
+      current.hpDamage += Number(row.hpDamage) || 0;
+      current.combatHitCount += Number(row.combatHitCount) || 0;
+      byIdentity.set(identity, current);
+    }
+    return [...byIdentity.values()]
+      .map(row => ({
+        ...row,
+        hpDamage: roundMetric(row.hpDamage),
+      }))
+      .sort((left, right) =>
+        String(left.identity ?? '').localeCompare(
+          String(right.identity ?? ''),
+          'en'
+        )
+      );
+  };
   return {
     hpDamage: roundMetric(cycle.hpDamage),
     combatHitCount: Number(cycle.combatHitCount) || 0,
@@ -1017,9 +1050,20 @@ export function createCycleMetricSignature(cycle = {}) {
     byAction: contributionRows('byAction'),
     byHit: contributionRows('byHit'),
     enemySettlement: (cycle.enemySettlementPackets ?? []).map(packet => ({
-      actionId: packet.actionId ?? null,
+      relativeFrame: createCycleLocalMetricFrame(
+        packet.absoluteFrame,
+        cycleStartFrame
+      ),
+      actionId: normalizeCycleActionReference(
+        packet.actionId,
+        actionIdentityById
+      ),
       actorId: packet.actorId ?? null,
-      hitIdentity: packet.hitIdentity ?? null,
+      hitIdentity: normalizeCycleMetricHitIdentity(packet.hitIdentity, {
+        actionIdentityById,
+        absoluteFrame: packet.absoluteFrame,
+        cycleStartFrame,
+      }),
       effectiveHpDamage: roundMetric(packet.effectiveHpDamage),
       toughnessDamage: roundMetric(packet.toughnessDamage),
       inBreakForHpDamage: packet.inBreakForHpDamage === true,
@@ -1027,11 +1071,80 @@ export function createCycleMetricSignature(cycle = {}) {
       breakTriggered: packet.breakTriggered === true,
     })),
     enemyStateTransitions: (cycle.enemyStateTransitions ?? []).map(event => ({
+      relativeFrame: createCycleLocalMetricFrame(
+        event.absoluteFrame,
+        cycleStartFrame
+      ),
       stateEventKind: event.stateEventKind ?? null,
       toughnessDamage: roundMetric(event.toughnessDamage),
       weaknessResult: event.weaknessResult ?? null,
     })),
   };
+}
+
+function createCycleMetricContributionIdentity(
+  key,
+  row,
+  { actionIdentityById = null, cycleStartFrame = null } = {}
+) {
+  if (key === 'byActor') {
+    return row.identity ?? row.actorId ?? null;
+  }
+  const actionId = normalizeCycleActionReference(
+    row.actionId ?? (key === 'byAction' ? row.identity : null),
+    actionIdentityById
+  );
+  if (key === 'byAction') return actionId;
+  const hitIdentity = normalizeCycleMetricHitIdentity(
+    row.hitIdentity ?? resolveContributionHitIdentity(row),
+    {
+      actionIdentityById,
+      absoluteFrame: row.firstFrame,
+      cycleStartFrame,
+    }
+  );
+  return `${String(actionId ?? '')}|${String(hitIdentity ?? '')}`;
+}
+
+function resolveContributionHitIdentity(row = {}) {
+  const identity = String(row.identity ?? '');
+  const actionId = String(row.actionId ?? '');
+  return actionId && identity.startsWith(`${actionId}|`)
+    ? identity.slice(actionId.length + 1)
+    : identity;
+}
+
+function normalizeCycleMetricHitIdentity(
+  value,
+  {
+    actionIdentityById = null,
+    absoluteFrame = null,
+    cycleStartFrame = null,
+  } = {}
+) {
+  if (value == null) return null;
+  const tokens = String(value)
+    .split('|')
+    .map(token => normalizeCycleActionReference(token, actionIdentityById));
+  if (
+    tokens.length >= 5 &&
+    CYCLE_LOCAL_SYNTHETIC_DAMAGE_HIT_KINDS.has(tokens[0])
+  ) {
+    const relativeFrame = createCycleLocalMetricFrame(
+      absoluteFrame,
+      cycleStartFrame
+    );
+    if (relativeFrame != null) {
+      tokens[tokens.length - 1] = `cycle-frame:${relativeFrame}`;
+    }
+  }
+  return tokens.join('|');
+}
+
+function createCycleLocalMetricFrame(absoluteFrame, cycleStartFrame) {
+  const frame = integerOrNull(absoluteFrame);
+  const start = integerOrNull(cycleStartFrame);
+  return frame == null || start == null ? null : frame - start;
 }
 
 export function createCycleBoundarySemanticProjection(
@@ -1676,6 +1789,10 @@ function evaluateEventualCycleReplay({
     loop: envelope.loop,
     durationFrames: loopPlan.durationFrames,
   });
+  const metricActionIdentityById = new Map([
+    ...loopPlan.actionIdToSourceActionId.entries(),
+    ...cyclePhaseActions.actionIdentityById.entries(),
+  ]);
   const executionProof = createRepeatedCycleExecutionProof({
     trace: replayPrepared.run.trace,
     actionIdsByCycle: loopPlan.actionIdsByCycle,
@@ -1710,7 +1827,12 @@ function evaluateEventualCycleReplay({
     {
       minimumRepeats: envelope.options.minimumPeriodRepeats,
       maxPeriodCycles: envelope.options.maxPeriodCycles,
-      signature: cycle => hashCanonicalValue(createCycleMetricSignature(cycle)),
+      signature: cycle =>
+        hashCanonicalValue(
+          createCycleMetricSignature(cycle, {
+            actionIdentityById: metricActionIdentityById,
+          })
+        ),
     }
   );
   const sharedDetails = {

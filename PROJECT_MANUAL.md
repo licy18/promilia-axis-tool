@@ -2245,5 +2245,6 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - `AzPrMachineAxisCycleDps` 不再要求排轴者把 `[startFrame,endFrame)` 人工旋转到单圈 Buff/DoT/韧性完全相等的边界。固定输入自动按 4→8→12 圈扩展，识别并剔除 transient/warmup；合同可显式设置 `maxReplayCycles/maxPeriodCycles/minimumPeriodRepeats`，且预算必须覆盖最大周期的确认次数。
 - 正式闭合拆为四层：相同输入始终可执行且 actual form 相同；SP/奇波能量/特殊资源不净亏；逐圈伤害与贡献进入最终周期；完整 score state 在同一周期复现。只有四层同时成立才输出 `status=closed/formalScore`，有限圈暂时可执行或仅数值看似稳定均不能晋升。
 - `steadyCycle` 是稳定周期总量除以周期圈数后的正式每圈值；`observedCycles[]` 保留暖机与各周期相位。一次性 Buff 可存在于 transient，但不进入分数；周期 `2/3` 交替时每圈伤害为 `2.5`。伤害来源、元素、超限、能量利用率、印记消费/覆盖等诊断使用相同窗口，比例由周期总分子/总分母计算。
+- 周期指标签名只比较 cycle-local semantic identity：同一 phase 的 replay/派生动作去除 `cycle-N:` 实例前缀，held/overlimit synthetic hit 的绝对时间转换为循环内相对帧；来源、相对帧、伤害、韧性与 break 结算仍必须一致。原始绝对 action/hit/time 继续保留在 `observedCycles[]`，不会因规范化丢失审计证据。
 - 多圈 replay 发现旧两圈样例中的真实远期反例：一条末音星鸣→追击轴到第 7 圈出现 `skill-cooldown-active` 并连带普攻链失配，现正确 fail closed。一次性韩大招暖机用例则自动在后续稳定伤害周期闭合。
 - 本项改变 tracked 生产评分语义和 cycle hash；旧 search authority、旧 cycle result 与查询库的 `cycle-boundary-runtime` source binding 均需在提交后失效并重新建立/审核。它不改变数据库内容，也不构成客户端实测或 `clientParityReady` 声明。

@@ -6,6 +6,7 @@ import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombat
 import {
   collectCycleDamageContributions,
   compareCycleBoundaryStates,
+  createCycleMetricSignature,
   createCyclePhaseActionIdentityMap,
   createCycleReplayStabilityProof,
   validateMachineAxisCycleEnvelope,
@@ -1175,6 +1176,57 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(first.hpDamage + second.hpDamage).toBe(15);
   });
 
+  it('compares replay-derived tuning damage by cycle-local semantic identity', () => {
+    const createCycle = ({ cycleNumber, startFrame }) => {
+      const actionId = `cycle-${cycleNumber}:switch--on-exit--actor-1--star-carry`;
+      const hitFrame = startFrame + 50;
+      const timeMs = Number(((hitFrame * 1000) / 60).toFixed(6));
+      return collectCycleDamageContributions(
+        [
+          {
+            actionId,
+            actorId: 'actor-1',
+            hitIdentity: `verified-held-damage|${actionId}|250|251|${timeMs}`,
+            absoluteFrame: hitFrame,
+            timeMs,
+            rawDamage: 1335,
+            effectiveHpDamage: 1335,
+            toughnessDamage: 0,
+          },
+        ],
+        {
+          startFrame,
+          endFrame: startFrame + 100,
+          fps: 60,
+        }
+      );
+    };
+    const actionIdentityById = new Map([
+      [
+        'cycle-2:switch--on-exit--actor-1--star-carry',
+        'cycle-phase:50:star-carry',
+      ],
+      [
+        'cycle-4:switch--on-exit--actor-1--star-carry',
+        'cycle-phase:50:star-carry',
+      ],
+    ]);
+    const cycle2 = createCycle({ cycleNumber: 2, startFrame: 100 });
+    const cycle4 = createCycle({ cycleNumber: 4, startFrame: 300 });
+    const options = { actionIdentityById };
+
+    expect(createCycleMetricSignature(cycle2, options)).toEqual(
+      createCycleMetricSignature(cycle4, options)
+    );
+
+    cycle4.byHit[0].firstFrame += 1;
+    cycle4.byHit[0].lastFrame += 1;
+    cycle4.enemySettlementPackets[0].absoluteFrame += 1;
+    expect(createCycleMetricSignature(cycle2, options)).not.toEqual(
+      createCycleMetricSignature(cycle4, options)
+    );
+  });
+
   it('rejects a consumable resource deficit even when values remain non-negative', () => {
     const result = compareCycleBoundaryStates(
       {
@@ -1880,29 +1932,27 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
-  it('separates a sustainable Ruby continuation from unresolved periodic metrics', () => {
+  it('scores a sustainable Ruby continuation with cycle-local periodic metrics', () => {
     installRubyProfileOverlay();
     const report = createMachineAxisService().evaluateCycle(
       createRubyAmmoDeficitEnvelope()
     );
 
-    expect(report.valid).toBe(false);
-    expect(report.status).toBe('rejected');
-    expect(report.issues).toContainEqual(
+    expect(report.valid).toBe(true);
+    expect(report.status).toBe('closed');
+    expect(report.formalScore).not.toBeNull();
+    expect(report.stabilization.samples).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-cycle-metrics-period-unresolved',
-        maxReplayCycles: 12,
-        candidateProofs: [
-          expect.objectContaining({
-            operationPeriod: expect.objectContaining({ closed: true }),
-            resourcePeriod: expect.objectContaining({ closed: true }),
-            metricPeriod: null,
-          }),
-        ],
+        operationPeriod: expect.objectContaining({ closed: true }),
+        resourcePeriod: expect.objectContaining({ closed: true }),
+        metricPeriod: expect.objectContaining({ stable: true }),
+        scoreStatePeriod: expect.objectContaining({ closed: true }),
       })
     );
     expect(report.issues).not.toContainEqual(
-      expect.objectContaining({ code: 'attack-input-context-conflict' })
+      expect.objectContaining({
+        code: 'machine-axis-cycle-metrics-period-unresolved',
+      })
     );
   }, 30_000);
 

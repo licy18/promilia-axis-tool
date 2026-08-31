@@ -27942,6 +27942,8 @@ scoreStatePeriod
 
 `operationPeriod` 要求所有重复输入实际执行且解析为同一 public/control/subskill/normal-input form；`resourcePeriod` 独立检查角色 SP、奇波能量和特殊资源在稳定周期中不净亏；`metricPeriod` 记录自动剔除的 `transientCycleCount`、周期圈数、逐相位伤害及平均伤害；`scoreStatePeriod` 对会影响后续结算的语义状态做周期确认，避免仅凭连续几个相同数字忽略延迟事件。任一动作在第 N 圈因 CD、SP、占用、普攻链或形态变化失效都会 fail closed。
 
+`metricPeriod` 的 hash 使用 cycle-local semantic identity：replay 派生动作先映射到同一 phase/source action identity，`cycle-N:` 实例前缀不进入比较；held/overlimit 等 synthetic damage hit 中的绝对时钟改投影为循环内相对帧。结算包仍保留 action/hit 来源、循环内帧位、伤害、韧性、break flag 与顺序，因此只消除“第几圈/全局几点发生”的实例噪声，不会把不同来源、不同相位或不同结算合并。`observedCycles[]` 继续保留原始绝对 trace 供审计。
+
 正式 `metrics.loopHpDamage`、`cycleDps`、贡献与 `optimizationDiagnostics` 改为稳定周期的每圈平均值。伤害/治疗/命中/回能/印记等可加量除以周期圈数；伤害占比、能量利用率、印记消费率/覆盖率等比例保留由完整稳定周期总量计算的加权结果，不对逐圈百分比做算术平均。`observedCycles[]` 保留全部探测圈，`steadyCycle` 保存正式每圈平均，旧 `firstCycle/secondCycle` 继续作为稳定期代表圈兼容诊断消费者。
 
 普通攻击 phase label 仍不单独充当边界门；`idle` 与 `reopen-window` 只要在所有稳定圈把同一左击解析为相同实际形态即可。A1→跨边界解析成 A2 或后续圈 cooldown/resource 失败继续拒绝。一次性暖机 Buff 只计入 `observedCycles` transient，不再抬高正式循环分数；双圈交替伤害按完整周期平均。

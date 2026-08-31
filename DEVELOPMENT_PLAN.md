@@ -904,6 +904,7 @@ Workbench 草稿快照与项目重建路径现在持久化并恢复 Machine Axis
 - 循环闭环是硬门而不是扣分项，但不再要求任意选择的单圈边界立即返回相同 Buff/伤害相位。固定输入按相同时序重复后，每个输入必须始终可执行并解析为同一实际动作形态；CD、充能、SP、弹药、特殊资源、切人、占用与普攻链不能在后续周期产生阻断。
 - Cycle evaluator 自适应重放 `4 → 8 → 12` 圈（合同最多 32 圈），自动剔除 transient/warmup，并寻找最终周期。操作状态、资源可持续性、指标序列和完整 score state 分别形成 proof；找不到周期时 fail closed 为 bounded unresolved，不能把有限多圈暂时可执行冒充无限循环。
 - 一次性暖机 Buff 可以影响 transient 圈，但不能进入稳定平均值。稳定伤害允许周期大于 1：例如后续 `2/3` 交替时每圈伤害按 `(2+3)/2` 计算；伤害来源、元素、能量与印记诊断使用同一稳定周期，比例从周期总分子/总分母重算而不是逐圈百分比取平均。
+- 指标周期比较必须先做 cycle-local identity 规范化：phase 相同的 replay/派生 action 不得因 `cycle-N:` 前缀不同而分裂，synthetic hit 的全局绝对时间必须投影为循环内相对帧；相对相位、来源、数值或结算状态不同仍必须形成不同签名并 fail closed。
 - 默认纯伤害暴击使用 `expected`；显式多 seed `sampled` 使用 cycle-local 共同随机数验证闭环、用各 seed 的独立 canonical run 统计 DPS，报告样本数、均值、样本方差、分位数及 actor/action/hit 贡献守恒。存在状态型暴击副作用时继续要求精确带权分支或显式多 seed，不能用单 seed 冒充循环期望。
 - 报告必须输出 authored warmup、自动 transient 圈数、稳定周期长度/逐圈值/确认次数、循环平均伤害与 DPS、逐角色/动作/hit 贡献、操作/资源/指标/score-state 四层证明、假设、hash 与 seed 集。
 - 验收必须覆盖：无循环节拒绝、资源净亏拒绝、后续任意重放圈 CD/动作形态阻断拒绝、延迟命中边界不重计、一次性 Buff 自动从稳定值剔除、单周期稳定、双周期交替平均及 sampled common-random 统计守恒。
